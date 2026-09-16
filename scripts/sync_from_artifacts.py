@@ -43,12 +43,13 @@ def fix_homepage_links(html: str) -> str:
     return tile_pat.sub(repl, html)
 
 
-def fix_subpage_brand_link(html: str) -> str:
+def fix_subpage_home_links(html: str) -> str:
+    # Covers both the logo anchor (class="brand") and the separate "Home"
+    # nav link -- both point at the claude.ai artifact URL in the raw export.
     return re.sub(
-        r'(class="brand" href=)"[^"]*"',
-        r'\1"index.html"',
+        r'href="https://claude\.ai/[^"]*"',
+        'href="index.html"',
         html,
-        count=1,
     )
 
 
@@ -69,7 +70,7 @@ def process(src_path: Path, dest_name: str, is_homepage: bool) -> None:
     if is_homepage:
         text = fix_homepage_links(text)
     else:
-        text = fix_subpage_brand_link(text)
+        text = fix_subpage_home_links(text)
     text = ensure_noindex(text)
     dest = REPO_ROOT / dest_name
     dest.write_text(text, encoding='utf-8')
