@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Precision Training Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">Pre-start</span>
+    <span class="chip on">Module 2 of 11</span>
+    <span class="chip">Checkpoint 2</span>
+  </div>
+  <h1>The Precision <span class="red">Training Model</span></h1>
+  <p class="lede">What every number on an athlete's energy report means. Module 6 teaches what you do about them.</p>
+  <div class="stats" role="list">
+    <div class="stat" role="listitem"><b>3,000+</b><span>Evaluations</span></div>
+    <div class="stat" role="listitem"><b>0.916</b><span>Correlation to velo</span></div>
+    <div class="stat" role="listitem"><b>85%</b><span>Of velo explained</span></div>
+    <div class="stat" role="listitem"><b>7</b><span>Levels of norms</span></div>
+  </div>
+</header>
+
+<!-- 2.1 -->
+<section id="chain">
+  <div class="sec-head">
+    <span class="num">2.1</span>
+    <h2>Velocity is an energy chain</h2>
+    <p>The body creates energy, moves it up the chain, and delivers it to the ball. A weak link anywhere caps velocity. The model finds the weakest link.</p>
+  </div>
+  <div class="fig" role="img" aria-label="Energy chain: Potential, Production, and Transference feed velocity, with Interference acting as a gate at the arm.">
+    <svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#766B63"/></marker>
+      </defs>
+      <!-- arrows -->
+      <line x1="140" y1="95" x2="228" y2="95" stroke="#766B63" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="332" y1="95" x2="420" y2="95" stroke="#766B63" stroke-width="2" marker-end="url(#ar)"/>
+      <line x1="524" y1="95" x2="650" y2="95" stroke="#766B63" stroke-width="2" marker-end="url(#ar)"/>
+      <!-- gate -->
+      <rect x="578" y="58" width="10" height="74" fill="#E5534B"/>
+      <text x="583" y="22" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="1" style="fill:#E5534B">INTERFERENCE</text>
+      <text x="583" y="40" text-anchor="middle" font-size="13" style="fill:#AA9F97">ArmCare · the brake on the arm</text>
+      <!-- hexes -->
+      <g font-size="13" font-weight="700" text-anchor="middle" letter-spacing=".5">
+        <polygon points="90,43 135,69 135,121 90,147 45,121 45,69" fill="#1B1714" stroke="#F1E9E4" stroke-width="2"/>
+        <text x="90" y="100">POTENTIAL</text>
+        <polygon points="280,43 325,69 325,121 280,147 235,121 235,69" fill="#1B1714" stroke="#F1E9E4" stroke-width="2"/>
+        <text x="280" y="100">PRODUCTION</text>
+        <polygon points="472,43 517,69 517,121 472,147 427,121 427,69" fill="#1B1714" stroke="#F1E9E4" stroke-width="2"/>
+        <text x="472" y="100" font-size="12">TRANSFERENCE</text>
+        <polygon points="705,43 750,69 750,121 705,147 660,121 660,69" fill="#E5534B" stroke="#E5534B" stroke-width="2"/>
+        <text x="705" y="92" style="fill:#fff">VELO</text>
+        <text x="705" y="110" font-size="13" style="fill:#fff">MPH</text>
+      </g>
+      <!-- tests -->
+      <g font-size="13" text-anchor="middle" style="fill:#AA9F97">
+        <text x="90" y="178">Height · Weight · H:W</text>
+        <text x="90" y="194">the body</text>
+        <text x="280" y="178">Force plates</text>
+        <text x="280" y="194">the engine</text>
+        <text x="472" y="178">Med balls + kneeling throw</text>
+        <text x="472" y="194">the delivery</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- 2.2 -->
+<section id="report">
+  <div class="sec-head">
+    <span class="num">2.2</span>
+    <h2>Reading the energy report</h2>
+    <p>This is a real report. Every athlete gets one after evaluation and every retest.</p>
+  </div>
+  <div class="report">
+    <div class="report-img">
+      <img src="assets/energy-report.png" alt="Energy report: 91.0 mph, Energy Potential 82.7, Energy Production 74.8, Total Energy 78.7, Energy Transference 88.0, Energy Interference 74.5, Energy Delta +12.3." width="489" height="539">
+      <span class="pin" style="left:69%;top:5%">1</span>
+      <span class="pin" style="left:8%;top:21%">2</span>
+      <span class="pin" style="left:92%;top:21%">3</span>
+      <span class="pin" style="left:8%;top:51%">4</span>
+      <span class="pin" style="left:92%;top:51%">5</span>
+      <span class="pin" style="left:50%;top:33%">6</span>
+      <span class="pin" style="left:69%;top:74%">7</span>
+    </div>
+    <div style="display:grid;gap:18px">
+      <ol class="keys">
+        <li><span class="n">1</span><div><b>MPH</b><p>What he actually throws.</p></div></li>
+        <li><span class="n">2</span><div><b>Energy Potential</b><p>What his body size supports.</p></div></li>
+        <li><span class="n">3</span><div><b>Energy Production</b><p>His engine, from the force plates. Sets Strength Level.</p></div></li>
+        <li><span class="n">4</span><div><b>Energy Transference</b><p>How well energy moves ground to ball.</p></div></li>
+        <li><span class="n">5</span><div><b>Energy Interference</b><p>Whether the arm can accept that energy.</p></div></li>
+        <li><span class="n">6</span><div><b>Total Energy</b><p>The four combined: the velocity his body should produce.</p></div></li>
+        <li><span class="n">7</span><div><b>Energy Delta</b><p>MPH minus Total Energy. The number you check first.</p></div></li>
+      </ol>
+      <div class="verdict">
+        <span class="label">How to read this one</span>
+        <h3>+12.3 is a red flag</h3>
+        <p>He throws 12.3 mph more than his body supports. Look for the lowest scores: Production (74.8) and Interference (74.5). A small engine and a weak brake, with the arm making up the difference.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2.3 -->
+<section id="components">
+  <div class="sec-head">
+    <span class="num">2.3</span>
+    <h2>The four components</h2>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <div class="top"><h3>Potential</h3><span class="test">Height · Weight · H:W</span></div>
+      <dl><dt>Tells you</dt><dd>His physical starting point.</dd>
+      <dt>Misread</dt><dd class="warn">Weight gain is not velo unless force and power rise with it.</dd></dl>
+    </article>
+    <article class="card">
+      <div class="top"><h3>Production</h3><span class="test">Force plates</span></div>
+      <dl><dt>Tells you</dt><dd>The size of the engine. Sets Strength Level.</dd>
+      <dt>Misread</dt><dd class="warn">A big engine means nothing if it doesn't transfer.</dd></dl>
+    </article>
+    <article class="card">
+      <div class="top"><h3>Transference</h3><span class="test">Med balls · Kneeling throw</span></div>
+      <dl><dt>Tells you</dt><dd>Where energy leaks on the way to the ball.</dd>
+      <dt>Misread</dt><dd class="warn">The two tests measure different segments. Never treat them as one.</dd></dl>
+    </article>
+    <article class="card">
+      <div class="top"><h3>Interference</h3><span class="test">ArmCare</span></div>
+      <dl><dt>Tells you</dt><dd>If the shoulder can accept the energy. Pre-college: no ceiling. Pros: 80+ baseline.</dd>
+      <dt>Misread</dt><dd class="warn">Fixed by general strength training, not a band routine.</dd></dl>
+    </article>
+  </div>
+
+  <div class="fig" role="img" aria-label="Med ball throws measure ground to pelvis. The kneeling throw removes the legs and measures trunk to arm.">
+    <svg viewBox="0 0 720 170" xmlns="http://www.w3.org/2000/svg">
+      <text x="20" y="22" font-size="14" font-weight="700" letter-spacing="1.5" style="fill:#AA9F97">TWO TRANSFERENCE TESTS, TWO SEGMENTS</text>
+      <!-- kneeling bracket above -->
+      <path d="M365 58 V48 H695 V58" fill="none" stroke="#A6E84A" stroke-width="2"/>
+      <text x="530" y="40" text-anchor="middle" font-size="15" font-weight="700" style="fill:#A6E84A">KNEELING THROW · TRUNK → ARM</text>
+      <!-- segments -->
+      <g font-size="16" font-weight="700" text-anchor="middle" letter-spacing="1">
+        <rect x="25" y="66" width="160" height="46" fill="#231E1A" stroke="#352D28"/>
+        <text x="105" y="95" style="fill:#766B63">GROUND</text>
+        <rect x="195" y="66" width="160" height="46" fill="#231E1A" stroke="#352D28"/>
+        <text x="275" y="95">PELVIS</text>
+        <rect x="365" y="66" width="160" height="46" fill="#231E1A" stroke="#352D28"/>
+        <text x="445" y="95">TRUNK</text>
+        <rect x="535" y="66" width="160" height="46" fill="#231E1A" stroke="#352D28"/>
+        <text x="615" y="95">ARM</text>
+      </g>
+      <!-- med ball bracket below -->
+      <path d="M25 120 V130 H355 V120" fill="none" stroke="#E5534B" stroke-width="2"/>
+      <text x="190" y="152" text-anchor="middle" font-size="15" font-weight="700" style="fill:#E5534B">MED BALLS (1 LB · 2 LB) · GROUND → PELVIS</text>
+      <text x="530" y="152" text-anchor="middle" font-size="13" style="fill:#AA9F97">Legs removed. Highest single correlation to velo.</text>
+    </svg>
+  </div>
+</section>
+
+<!-- 2.4 -->
+<section id="delta">
+  <div class="sec-head">
+    <span class="num">2.4</span>
+    <h2>Energy Delta</h2>
+  </div>
+  <div class="formula"><span>Actual MPH</span><span class="op">−</span><span>Total Energy</span><span class="op">=</span><span class="red">Delta</span></div>
+  <div class="fig" role="img" aria-label="Delta scale from minus 6 to plus 14. Below minus 1 is a leak, minus 1 to plus 1 is on target, plus 1 to plus 5 is monitor, above plus 5 is the flag. The example athlete sits at plus 12.3.">
+    <svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg">
+      <!-- x = 40 + (v+6)*32 -->
+      <rect x="40" y="44" width="160" height="22" fill="#7E93A6"/>
+      <rect x="200" y="44" width="64" height="22" fill="#A6E84A"/>
+      <rect x="264" y="44" width="128" height="22" fill="#E0C04A"/>
+      <rect x="392" y="44" width="288" height="22" fill="#E5534B"/>
+      <g font-size="14" text-anchor="middle" style="fill:#AA9F97">
+        <line x1="40" y1="66" x2="40" y2="74" stroke="#766B63"/><text x="40" y="90">−6</text>
+        <line x1="200" y1="66" x2="200" y2="74" stroke="#766B63"/><text x="200" y="90">−1</text>
+        <line x1="264" y1="66" x2="264" y2="74" stroke="#766B63"/><text x="264" y="90">+1</text>
+        <line x1="392" y1="66" x2="392" y2="74" stroke="#766B63"/><text x="392" y="90">+5</text>
+        <line x1="552" y1="66" x2="552" y2="74" stroke="#766B63"/><text x="552" y="90">+10</text>
+        <line x1="680" y1="66" x2="680" y2="74" stroke="#766B63"/><text x="680" y="90">+14</text>
+      </g>
+      <line x1="626" y1="30" x2="626" y2="74" stroke="#F1E9E4" stroke-width="3"/>
+      <text x="626" y="22" text-anchor="middle" font-size="15" font-weight="700">REPORT ABOVE · +12.3</text>
+    </svg>
+  </div>
+  <div class="zones">
+    <div class="zone" style="--c:#7E93A6"><b>Leak</b><span>Below −1</span><p>Energy he isn't using. Transference, mechanics, or skill.</p></div>
+    <div class="zone" style="--c:#A6E84A"><b>On target</b><span>−1 to +1</span><p>To throw harder, he needs more energy.</p></div>
+    <div class="zone" style="--c:#E0C04A"><b>Monitor</b><span>+1 to +5</span><p>Throwing above his energy. Watch it.</p></div>
+    <div class="zone" style="--c:#E5534B"><b>Flag</b><span>Above +5</span><p>Velo the body can't account for. Injury-risk conversation.</p></div>
+  </div>
+  <div class="rule"><span class="label">Rule</span><p>The kid throwing well above his energy is the one everyone gets excited about. Here, he is the one we protect first.</p></div>
+</section>
+
+<!-- 2.5 -->
+<section id="profiling">
+  <div class="sec-head">
+    <span class="num">2.5</span>
+    <h2>Energy profiling</h2>
+    <p>How he produces energy: through force or through speed.</p>
+  </div>
+  <img class="prof-img" src="assets/energy-profiling.png" alt="Energy Production Profiling scale: Force Reliant below 57%, Force Driven 57 to 61%, Balanced 61 to 63%, Power Driven 63 to 67%, Power Reliant above 67%." width="1059" height="588">
+  <div class="formula"><span>Peak Power</span><span class="op">÷</span><span>(Peak Force + Peak Power)</span></div>
+
+  <div class="calc">
+    <span class="label">Try it: enter force plate numbers</span>
+    <div class="calc-row">
+      <label class="field"><span class="label">Peak force</span><input id="pf" type="number" inputmode="decimal" value="2280" min="0"></label>
+      <label class="field"><span class="label">Peak power</span><input id="pp" type="number" inputmode="decimal" value="3720" min="0"></label>
+      <div class="result" aria-live="polite"><b id="pct">62.0%</b><span id="cat">Balanced</span></div>
+    </div>
+    <div>
+      <div class="bar" id="bar" aria-hidden="true">
+        <div style="background:#8B2A12"></div><div style="background:#E5534B"></div><div style="background:#D4F57A"></div><div style="background:#A6E84A"></div><div style="background:#9A9A34"></div>
+        <span class="marker" id="mk"></span>
+      </div>
+      <div class="bar-labels" id="bl" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="rule"><span class="label">Rule</span><p>Reliant athletes can't repeat their output. No pro lives in a reliant category. The goal is 57% to 67%.</p></div>
+</section>
+
+<!-- 2.6 -->
+<section id="metrics">
+  <div class="sec-head">
+    <span class="num">2.6</span>
+    <h2>Force plate metrics</h2>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Metric</th><th>Plain meaning</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td>Peak vertical force</td><td>Most force he pushes into the ground</td><td><span class="use">Profiling</span></td></tr>
+        <tr><td>Peak power</td><td>How fast he produces that force</td><td><span class="use">Profiling</span></td></tr>
+        <tr><td>Peak power / BM</td><td>Power relative to his size</td><td><span class="use">Applied Power</span></td></tr>
+        <tr><td>Eccentric impulse</td><td>How well he brakes on the way down</td><td><span class="use">CI:EI ratio</span></td></tr>
+        <tr><td>Concentric impulse</td><td>Force he produces on the way up</td><td><span class="use">CI:EI ratio</span></td></tr>
+        <tr><td>CI:EI ratio</td><td>Concentric ÷ eccentric impulse</td><td><span class="use">Level 3 routing (Module 6)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 2.7 -->
+<section id="timelines">
+  <div class="sec-head">
+    <span class="num">2.7</span>
+    <h2>When to expect change</h2>
+  </div>
+  <div class="fig" role="img" aria-label="Timeline in weeks: mechanical changes show in weeks 2 to 4; block re-diagnosis at week 4; weight gain judged over weeks 4 to 6.">
+    <svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg">
+      <!-- x = 40 + w*100 -->
+      <line x1="40" y1="70" x2="680" y2="70" stroke="#352D28" stroke-width="2"/>
+      <g font-size="14" text-anchor="middle" style="fill:#AA9F97">
+        <text x="40" y="96">WK 0</text><text x="140" y="96">1</text><text x="240" y="96">2</text><text x="340" y="96">3</text><text x="440" y="96">4</text><text x="540" y="96">5</text><text x="640" y="96">6</text>
+      </g>
+      <rect x="240" y="30" width="200" height="14" fill="#A6E84A"/>
+      <text x="240" y="22" font-size="14" font-weight="700" style="fill:#A6E84A">MECHANICAL CHANGES SHOW</text>
+      <rect x="440" y="108" width="200" height="14" fill="#E0C04A"/>
+      <text x="640" y="142" text-anchor="end" font-size="14" font-weight="700" style="fill:#E0C04A">WEIGHT GAIN JUDGED · FORCE + POWER MUST RISE</text>
+      <circle cx="440" cy="70" r="9" fill="#E5534B"/>
+      <text x="452" y="62" font-size="14" font-weight="700" style="fill:#E5534B">BLOCK RE-DIAGNOSIS</text>
+    </svg>
+  </div>
+  <p style="color:var(--muted)">Phase, split, and duration only change at re-diagnosis. <span class="tbc">TBC</span> Energy component retest every 2 weeks.</p>
+</section>
+
+<!-- 2.8 -->
+<section id="parent">
+  <div class="sec-head">
+    <span class="num">2.8</span>
+    <h2>Say it to a parent</h2>
+  </div>
+  <blockquote>
+    <span class="label">60 seconds. Make it yours, keep the structure.</span>
+    "Velocity is energy. Your son's body creates it, moves it up through his hips and trunk, and delivers it to the ball. We test every step, and our model predicts how hard he should throw with a lot of accuracy. When his velocity doesn't match what his body produces, we know exactly which part to work on. That's why his program looks different from his teammate's, and why we retest instead of guessing."
+  </blockquote>
+</section>
+
+<!-- checkpoint -->
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Checkpoint 2</span>
+  <h2>Prove it before Module 3</h2>
+  <p>Twelve questions, including calculations. Answer in your own words.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Start Checkpoint 2</a>
+  </div>
+</div>
+
+<footer>
+  <a href="module-01.html">← Module 1: Purpose &amp; Culture</a>
+  <a href="module-03.html">Module 3: The Throwing System →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  // Profiling calculator. Scale drawn from 51% to 73%.
+  var MIN=51, MAX=73, cuts=[57,61,63,67];
+  var bands=[[MIN,57,"Force-reliant"],[57,61,"Force-driven"],[61,63,"Balanced"],[63,67,"Power-driven"],[67,MAX,"Power-reliant"]];
+  var bar=document.getElementById("bar"), bl=document.getElementById("bl"), mk=document.getElementById("mk");
+  bar.style.gridTemplateColumns=bands.map(function(b){return (b[1]-b[0])+"fr"}).join(" ");
+  cuts.forEach(function(c){var s=document.createElement("span");s.textContent=c+"%";s.style.left=((c-MIN)/(MAX-MIN)*100)+"%";bl.appendChild(s)});
+  function calc(){
+    var f=parseFloat(document.getElementById("pf").value), p=parseFloat(document.getElementById("pp").value);
+    var pctEl=document.getElementById("pct"), catEl=document.getElementById("cat");
+    if(!(f>0)||!(p>0)){pctEl.textContent="--";catEl.textContent="Enter both numbers";mk.hidden=true;return}
+    var v=p/(f+p)*100, cat=v<57?"Force-reliant":v<61?"Force-driven":v<63?"Balanced":v<=67?"Power-driven":"Power-reliant";
+    pctEl.textContent=v.toFixed(1)+"%"; catEl.textContent=cat;
+    catEl.style.color=(v<57||v>67)?"#E5534B":"#A6E84A";
+    mk.hidden=false; mk.style.left=(Math.max(MIN,Math.min(MAX,v))-MIN)/(MAX-MIN)*100+"%";
+  }
+  document.getElementById("pf").addEventListener("input",calc);
+  document.getElementById("pp").addEventListener("input",calc);
+  calc();
+
+  // Checkpoint link: Typeform hidden fields ride in the URL hash.
+  var TYPEFORM=(window.VELOU_FORMS||{})["checkpoint-2"]||"https://form.typeform.com/to/REPLACE_CHECKPOINT_2";
+  var coach=document.getElementById("coach"), go=document.getElementById("go");
+  try{var saved=localStorage.getItem("velou_coach");if(saved)coach.value=saved}catch(e){}
+  function link(){
+    var n=coach.value.trim();
+    try{localStorage.setItem("velou_coach",n)}catch(e){}
+    go.href=TYPEFORM+"#coach_name="+encodeURIComponent(n)+"&module=2&date="+new Date().toISOString().slice(0,10);
+  }
+  coach.addEventListener("input",link); link();
+})();
+</script>
+</body>
+</html>

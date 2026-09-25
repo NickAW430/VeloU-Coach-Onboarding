@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Throwing Drives Strength</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script><style>
+/* Module 5 additions */
+.reads{display:grid;gap:10px}
+.read{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 18px;text-decoration:none}
+.read:hover{border-color:var(--red)}
+.read .tag{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.12em;padding:3px 8px;background:var(--red);color:#fff}
+.read .tag.rec{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.read b{font-family:var(--label);font-size:18px;font-weight:700;display:block}
+.read span{color:var(--muted);font-size:14.5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dial{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);padding:18px;display:grid;gap:8px;align-content:start}
+.dial .k{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.dial b{font-family:var(--display);font-weight:400;font-size:30px;text-transform:uppercase;line-height:1}
+.dial p{font-size:15.5px;color:var(--muted)}
+.dial .q{font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.03em}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+
+.lanes{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:10px;overflow-x:auto}
+.lane{display:grid;grid-template-columns:110px repeat(8,minmax(56px,1fr));gap:4px;align-items:stretch;min-width:620px}
+.lanes .lh{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center}
+.tp{background:var(--panel-2);border:1px solid var(--line);text-align:center;padding:8px 2px;font-family:var(--display);font-size:18px}
+.sp{grid-column:span 2;padding:10px 8px;display:grid;gap:2px;text-align:center;color:#100D0B;cursor:pointer;border:2px solid transparent;font:inherit;appearance:none}
+.sp b{font-family:var(--display);font-weight:400;font-size:19px;text-transform:uppercase;line-height:1.05}
+.sp span{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.sp[aria-pressed="true"]{border-color:var(--text);box-shadow:0 0 0 2px var(--bg) inset}
+.meter{display:grid;grid-template-columns:110px repeat(8,minmax(56px,1fr));gap:4px;align-items:end;height:64px;min-width:620px}
+.meter .lh{align-self:center}
+.meter i{display:block;background:linear-gradient(180deg,var(--red),#8B2A12)}
+
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{background:var(--panel);border:1px solid var(--line);padding:10px 6px;display:grid;gap:6px;justify-items:center;text-align:center;min-height:92px;align-content:start}
+.day .dn{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.1em;color:var(--faint)}
+.day .ty{font-family:var(--display);font-size:17px;text-transform:uppercase;line-height:1.05}
+.day.lift{border-top:3px solid var(--red)}
+.day.primer{border-top:3px solid var(--amber)}
+.day.off{opacity:.55}
+.day .sj{font-family:var(--label);font-size:12px;font-weight:700;color:var(--lime);letter-spacing:.06em}
+.week.cyc{grid-template-columns:repeat(6,1fr)}
+.splitcard>*,.day{min-width:0}
+.day .ty{overflow-wrap:anywhere}
+@media (max-width:560px){.week{grid-template-columns:repeat(4,1fr)}.week.cyc{grid-template-columns:repeat(3,1fr)}}
+.splitcard{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);padding:20px 22px;display:grid;gap:14px}
+.splitcard .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.splitcard h3{font-size:28px}
+
+.dials3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.d3{background:var(--panel);border:1px solid var(--line);padding:16px;display:grid;gap:10px;align-content:start}
+.d3 b{font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.04em}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;align-items:end;height:70px}
+.steps i{display:block;background:var(--c)}
+.steps-l{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;font-family:var(--label);font-size:11.5px;color:var(--faint);text-align:center;text-transform:uppercase;letter-spacing:.04em}
+.d3 p{font-size:14.5px;color:var(--muted)}
+@media (max-width:760px){.dials3{grid-template-columns:1fr}}
+
+.avail{overflow-x:auto;border:1px solid var(--line)}
+.avail table{min-width:520px}
+.avail td.y,.avail td.n{text-align:center;font-family:var(--label);font-weight:700;font-size:15px}
+.avail td.y{color:var(--green)}
+.avail td.n{color:var(--faint)}
+.avail td.n span{color:var(--red)}
+
+.season{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line)}
+.sn{padding:14px 12px;display:grid;gap:6px;border-right:1px solid var(--line);background:var(--panel)}
+.sn:last-child{border-right:0}
+.sn .k{font-family:var(--label);font-weight:700;font-size:12.5px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+.sn .ph{font-family:var(--display);font-size:22px;color:var(--green)}
+.sn .sp2{font-family:var(--label);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.03em}
+@media (max-width:640px){.season{grid-template-columns:1fr 1fr}.sn:nth-child(2){border-right:0}.sn:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+.shed{display:grid;gap:8px}
+.shed .row{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:12px 14px}
+.shed .n{font-family:var(--display);font-size:28px;color:var(--red);line-height:1}
+.shed b{font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.03em}
+.shed p{font-size:15px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">Pre-start</span>
+    <span class="chip on">Module 5 of 11</span>
+    <span class="chip">Checkpoint 5</span>
+  </div>
+  <h1>Throwing drives <span class="red">strength</span></h1>
+  <p class="lede">The throwing calendar decides how often, how much, and with what vehicle an athlete lifts.</p>
+  <div class="stats" role="list">
+    <div class="stat" role="listitem"><b>4</b><span>Splits</span></div>
+    <div class="stat" role="listitem"><b>6 → 4</b><span>Lift days as demand rises</span></div>
+    <div class="stat" role="listitem"><b>2</b><span>Vehicles</span></div>
+    <div class="stat" role="listitem"><b>3+</b><span>Sprint/jump days, always</span></div>
+  </div>
+</header>
+
+<!-- 5.1 -->
+<section id="two">
+  <div class="sec-head">
+    <span class="num">5.1</span>
+    <h2>Two separate decisions</h2>
+    <p>Every strength program is a phase and a split. They never influence each other.</p>
+  </div>
+  <div class="two">
+    <div class="dial" style="--c:var(--green)"><span class="k">Phase</span><b>His capacity</b><span class="q">Set by force plate diagnosis</span><p>Sets the load band and how each rep is executed (Module 4).</p></div>
+    <div class="dial" style="--c:var(--red)"><span class="k">Split</span><b>His throwing</b><span class="q">Set by the throwing calendar</span><p>Sets how many days he lifts, how much volume, and which vehicles.</p></div>
+  </div>
+  <div class="rule"><span class="label">Rule of thumb</span><p>Pick the split for the throwing period right now. Pick the phase for his capacity right now. Track the throwing calendar, not his lifting progress.</p></div>
+  <div class="rule"><span class="label">Exception</span><p>Movement Literacy splits are phase-locked. On ML, a phase change is a split change, because the shape of the week changes with the phase.</p></div>
+</section>
+
+<!-- 5.2 -->
+<section id="map">
+  <div class="sec-head">
+    <span class="num">5.2</span>
+    <h2>Throwing phase → strength split</h2>
+    <p>As throwing demand climbs, the split steps down. Tap a split to see its week.</p>
+  </div>
+  <div class="lanes">
+    <div class="lane"><span class="lh">Throwing</span>
+      <span class="tp">REVO</span><span class="tp">REIN</span><span class="tp">ENVO</span><span class="tp">ENIN</span><span class="tp">WATT</span><span class="tp">INT</span><span class="tp">REF</span><span class="tp">ENG</span>
+    </div>
+    <div class="meter" aria-hidden="true"><span class="lh">Demand</span>
+      <i style="height:18%"></i><i style="height:28%"></i><i style="height:42%"></i><i style="height:54%"></i><i style="height:74%"></i><i style="height:82%"></i><i style="height:90%"></i><i style="height:100%"></i>
+    </div>
+    <div class="lane" id="splitBtns" role="group" aria-label="Strength splits"><span class="lh">Strength</span></div>
+  </div>
+  <p style="color:var(--muted);font-size:15px">Demand bars show direction, not measured values. In-Season split: <span class="tbc">TBC</span></p>
+  <div class="splitcard" id="splitCard" aria-live="polite"></div>
+</section>
+
+<!-- 5.3 -->
+<section id="dials">
+  <div class="sec-head">
+    <span class="num">5.3</span>
+    <h2>What changes as demand rises</h2>
+    <p>Three dials turn together, left to right.</p>
+  </div>
+  <div class="dials3">
+    <div class="d3" style="--c:var(--red)"><b>Frequency</b>
+      <div class="steps" aria-hidden="true"><i style="height:100%"></i><i style="height:83%"></i><i style="height:67%"></i><i style="height:50%"></i></div>
+      <div class="steps-l"><span>6 lift</span><span>5 lift</span><span>4 + primer</span><span>3 + primer</span></div>
+      <p>Lift days drop so the arm gets the recovery.</p></div>
+    <div class="d3" style="--c:var(--amber)"><b>Volume</b>
+      <div class="steps" aria-hidden="true"><i style="height:100%"></i><i style="height:78%"></i><i style="height:62%"></i><i style="height:42%"></i></div>
+      <div class="steps-l"><span>Full</span><span>Lower steps back</span><span>Lower</span><span>Condensed</span></div>
+      <p>Energy consolidates lifting onto throw-anchor days. Refine/Engage runs a primary, a reduced second primary, and a third pattern as accessory.</p></div>
+    <div class="d3" style="--c:var(--cool)"><b>Spinal load</b>
+      <div class="steps" aria-hidden="true"><i style="height:100%"></i><i style="height:100%"></i><i style="height:40%"></i><i style="height:40%"></i></div>
+      <div class="steps-l"><span>Axial</span><span>Axial</span><span>Non-axial</span><span>Non-axial</span></div>
+      <p>Machines replace free bars (pendulum squat for back squat, trap bar RDL for BB RDL) exactly when arm and mound stress peak.</p></div>
+  </div>
+  <div class="rule"><span class="label">Protected</span><p>Sprint and jump stay at 3 days a week on every split, even when lifting drops. On a primer week, Friday gets a light top-speed prep.</p></div>
+</section>
+
+<!-- 5.4 -->
+<section id="primer">
+  <div class="sec-head">
+    <span class="num">5.4</span>
+    <h2>The Friday Primer</h2>
+    <p>Appears on every non-axial split.</p>
+  </div>
+  <div class="two">
+    <div class="dial" style="--c:var(--amber)"><span class="k">It is</span><b>Speed, not fatigue</b><p>An overcoming-iso hold superset into a light eccentric-tempo touch, with a short, light prep in front. Fewer rounds, long recovery.</p></div>
+    <div class="dial" style="--c:var(--red)"><span class="k">It is not</span><b>A lift day</b><p>Never add volume to it. If an athlete wants more on Friday, the answer is no.</p></div>
+  </div>
+</section>
+
+<!-- 5.5 -->
+<section id="season">
+  <div class="sec-head">
+    <span class="num">5.5</span>
+    <h2>Same phase, four splits</h2>
+    <p>It's normal for an athlete to stay in one phase all season while the split changes underneath him.</p>
+  </div>
+  <div class="season">
+    <div class="sn"><span class="k">REVO · REIN</span><span class="ph">AC P2</span><span class="sp2">Restructure 6D</span></div>
+    <div class="sn"><span class="k">ENVO · ENIN</span><span class="ph">AC P2</span><span class="sp2">Energy 5D axial</span></div>
+    <div class="sn"><span class="k">WATT · INT</span><span class="ph">AC P2</span><span class="sp2">5D non-axial</span></div>
+    <div class="sn"><span class="k">REF · ENG</span><span class="ph">AC P2</span><span class="sp2">4D non-axial</span></div>
+  </div>
+  <p style="color:var(--muted);font-size:15px">Illustrative. Acceleration is used because every one of its phases has all four splits built.</p>
+</section>
+
+<!-- 5.6 -->
+<section id="shed">
+  <div class="sec-head">
+    <span class="num">5.6</span>
+    <h2>What goes first</h2>
+    <p>When throwing demand spikes, the most fatiguing work is shed first.</p>
+  </div>
+  <div class="shed">
+    <div class="row"><span class="n">!</span><div><b>Applied Power P3 · French Contrast</b><p>The most fatiguing structure in the system.</p></div></div>
+    <div class="row"><span class="n">!</span><div><b>Force Control P3 · Eccentric Power</b><p>Near-max doubles and singles released to pins.</p></div></div>
+  </div>
+  <p style="color:var(--muted);font-size:15px">Full shed order across every program <span class="tbc">TBC</span></p>
+
+  <div class="sec-head" style="margin-top:8px"><h3>Which splits exist</h3><p>Not every program has a 4-day version. Check before a Refine/Engage block.</p></div>
+  <div class="avail">
+    <table>
+      <thead><tr><th>Program</th><th style="text-align:center">6D</th><th style="text-align:center">5D axial</th><th style="text-align:center">5D non-axial</th><th style="text-align:center">4D non-axial</th></tr></thead>
+      <tbody>
+        <tr><td>Movement Literacy</td><td class="y">✓</td><td class="n">phase-locked</td><td class="n">phase-locked</td><td class="n">phase-locked</td></tr>
+        <tr><td>Tension Literacy</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">P3 only</td></tr>
+        <tr><td>Force Control</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n"><span>none</span></td></tr>
+        <tr><td>Acceleration</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+        <tr><td>Applied Power</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">P2, P3</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 5.7 -->
+<section id="both">
+  <div class="sec-head">
+    <span class="num">5.7</span>
+    <h2>It runs both ways</h2>
+  </div>
+  <div class="two">
+    <div class="dial" style="--c:var(--red)"><span class="k">Throwing up</span><b>Lifting steps down</b><p>Follow the splits left to right as the throwing period advances. Move back as it resets.</p></div>
+    <div class="dial" style="--c:var(--green)"><span class="k">Weight room emphasis</span><b>Throwing steps down</b><p>When the weight room is the priority, throwing may drop to 1 day a week. Keep at least 2 cardio days a week, set from VO2 max.</p></div>
+  </div>
+  <div class="rule"><span class="label">Rule</span><p>Split changes happen at the re-diagnosis point, like every other block decision. The throwing calendar tells you which split the next block should be.</p></div>
+</section>
+
+<div class="reads" style="margin-top:40px">
+  <a class="read" href="../strength.html#loading_splits" target="_blank" rel="noopener">
+    <span class="tag rec">REFERENCE</span>
+    <div><b>VeloU Strength: Loading Splits</b><span>coachesvelou.com · every split's full week, per program</span></div>
+  </a>
+</div>
+
+<!-- checkpoint -->
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Checkpoint 5</span>
+  <h2>Prove it before Module 6</h2>
+  <p>Match splits to throwing phases and build a season on paper.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Start Checkpoint 5</a>
+  </div>
+</div>
+
+<footer>
+  <a href="module-04.html">← Module 4: The Strength System</a>
+  <a href="module-06.html">Module 6: Diagnostic Reasoning →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var S=[
+    {k:"Restructure",d:"6D",v:"Axial",c:"#E0C04A",tp:"REVO · REIN",period:"Low / building",
+      what:"Throwing load is near zero. Full axial loading, and every pattern gets a heavy and a light touch. Nothing is compromised for throwing yet.",
+      cycle:true, days:["Squat / Lunge","Press H / V","Hinge / Pull V","Lunge / Posterior","Press V / H","Pull H / Hinge"]},
+    {k:"Energy",d:"5D",v:"Axial",c:"#D4F57A",tp:"ENVO · ENIN",period:"Moderate",
+      what:"Throwing is building back up. Lifting consolidates onto the throw-anchor days, and lower-body volume steps back on those days. Still axial.",
+      week:["lift","lift","lift","off","lift","lift","off"]},
+    {k:"Wattage / Integrate",d:"5D",v:"Non-axial",c:"#A6E84A",tp:"WATT · INT",period:"High",
+      what:"Throwing intensity is high. Lower-body vehicles de-axialize (leg press, glute, Jefferson) to pull spinal load off exactly when arm and mound stress peak. Friday becomes a primer.",
+      week:["lift","lift","lift","off","primer","lift","off"]},
+    {k:"Refine / Engage",d:"4D",v:"Non-axial",c:"#E5534B",tp:"REF · ENG",period:"Peak",
+      what:"Competition is close. Three lift days, each a primary, a reduced second primary, and a third pattern as accessory. A speed-focused Friday Primer and two full recovery days. Sprint and jump still hit 3 days a week.",
+      week:["lift","off","lift","off","primer","lift","off"]}
+  ];
+  var DN=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], SJ={1:[0,1,4],2:[0,1,4],3:[4]};
+  var btns=document.getElementById("splitBtns"), card=document.getElementById("splitCard");
+  function show(i){
+    var s=S[i];
+    [].forEach.call(btns.querySelectorAll(".sp"),function(b,j){b.setAttribute("aria-pressed",j===i?"true":"false")});
+    var grid;
+    if(s.cycle){grid='<div class="week cyc">'+s.days.map(function(d,j){return '<div class="day lift"><span class="dn">D'+(j+1)+'</span><span class="ty" style="font-size:15px">'+d+'</span></div>'}).join("")+'</div><p style="color:var(--muted);font-size:15px">A 6-day cycle, not a calendar week. Space real rest days around it. Sprint and jump run on the lower days.</p>';}
+    else{grid='<div class="week">'+s.week.map(function(t,j){var lbl=t==="lift"?"Lift":t==="primer"?"Primer":"Off";return '<div class="day '+t+'"><span class="dn">'+DN[j]+'</span><span class="ty">'+lbl+'</span>'+(SJ[i].indexOf(j)>=0?'<span class="sj">SPRINT / JUMP</span>':'')+'</div>'}).join("")+'</div>';}
+    card.innerHTML='<div class="top"><h3>'+s.k+' · '+s.d+' '+s.v+'</h3><span class="label">Throwing: '+s.tp+' · '+s.period+'</span></div><p>'+s.what+'</p>'+grid;
+  }
+  S.forEach(function(s,i){var b=document.createElement("button");b.type="button";b.className="sp";b.style.background=s.c;
+    b.innerHTML='<b>'+s.k+'</b><span>'+s.d+' · '+s.v+'</span>';b.addEventListener("click",function(){show(i)});btns.appendChild(b)});
+  show(0);
+
+  var TYPEFORM=(window.VELOU_FORMS||{})["checkpoint-5"]||"https://form.typeform.com/to/REPLACE_CHECKPOINT_5";
+  var coach=document.getElementById("coach"),go=document.getElementById("go");
+  try{var s=localStorage.getItem("velou_coach");if(s)coach.value=s}catch(e){}
+  function link(){var n=coach.value.trim();try{localStorage.setItem("velou_coach",n)}catch(e){}
+    go.href=TYPEFORM+"#coach_name="+encodeURIComponent(n)+"&module=5&date="+new Date().toISOString().slice(0,10);}
+  coach.addEventListener("input",link);link();
+})();
+</script>
+</body>
+</html>

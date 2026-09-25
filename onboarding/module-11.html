@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Final Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script><style>
+/* Module 11 additions */
+.reads{display:grid;gap:10px}
+.read{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 18px;text-decoration:none}
+.read:hover{border-color:var(--red)}
+.read .tag{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.12em;padding:3px 8px;background:var(--red);color:#fff}
+.read .tag.rec{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.read b{font-family:var(--label);font-size:18px;font-weight:700;display:block}
+.read span{color:var(--muted);font-size:14.5px}
+.tl{display:grid;grid-template-columns:2fr 1fr .5fr 1.5fr;gap:0;border:1px solid var(--line)}
+.tlc{padding:16px;display:grid;gap:6px;align-content:start;border-right:1px solid var(--line);background:var(--panel)}
+.tlc:last-child{border-right:0}
+.tlc .k{font:700 12.5px var(--label);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.tlc b{font:400 24px/1.05 var(--display);text-transform:uppercase}
+.tlc p{font-size:14.5px;color:var(--muted)}
+.tlc .bar{height:6px;background:var(--c)}
+@media (max-width:760px){.tl{grid-template-columns:1fr}.tlc{border-right:0;border-bottom:1px solid var(--line)}}
+
+.recap{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.rc{background:var(--panel);border:1px solid var(--line);padding:14px;display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--text)}
+.rc:hover{border-color:var(--red)}
+.rc .n{font:400 26px/1 var(--display);color:var(--red)}
+.rc b{font:700 15px var(--label);text-transform:uppercase;letter-spacing:.03em;line-height:1.15}
+.rc span{font-size:13.5px;color:var(--muted);line-height:1.35}
+@media (max-width:900px){.recap{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:520px){.recap{grid-template-columns:1fr 1fr}}
+
+.case{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);padding:20px;display:grid;gap:18px}
+.case>*{min-width:0}
+.who{display:flex;flex-wrap:wrap;gap:8px}
+.who span{font:700 14px var(--label);letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);background:var(--panel-2);padding:6px 10px}
+.cgrid{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:18px;align-items:start}
+@media (max-width:760px){.cgrid{grid-template-columns:1fr}}
+.hexes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.hx{aspect-ratio:1/1.05;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--line);display:grid;place-items:center;padding:2px}
+.hx div{width:100%;height:100%;clip-path:inherit;background:var(--bg);display:grid;place-items:center;align-content:center;text-align:center;gap:2px}
+.hx b{font:400 26px/1 var(--display)}
+.hx span{font:700 10px var(--label);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1.1;padding:0 6px}
+.hx.mid{background:var(--red)}
+.hx.mid b{color:var(--red)}
+.hx.blank{background:transparent}
+.cdata{display:grid;gap:10px}
+.dt{overflow-x:auto;border:1px solid var(--line)}
+.dt table{min-width:0}
+.dt td:first-child{white-space:normal}
+.notes{display:grid;gap:6px}
+.notes div{background:var(--panel-2);border-left:3px solid var(--c);padding:10px 12px;font-size:15px}
+.notes b{font:700 13px var(--label);letter-spacing:.1em;text-transform:uppercase;color:var(--c);display:block;margin-bottom:2px}
+
+.dels{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.dl{background:var(--panel);border:1px solid var(--line);padding:14px;display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+.dl .n{font:400 28px/1 var(--display);color:var(--red)}
+.dl b{font:700 16px var(--label);text-transform:uppercase;letter-spacing:.03em;display:block}
+.dl p{font-size:14.5px;color:var(--muted);margin-top:2px}
+.dl .m{font:600 12.5px var(--label);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+@media (max-width:700px){.dels{grid-template-columns:1fr}}
+
+.out{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.oc{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c);padding:16px;display:grid;gap:6px;align-content:start}
+.oc b{font:400 24px/1.05 var(--display);text-transform:uppercase;color:var(--c)}
+.oc p{font-size:15px;color:var(--muted)}
+@media (max-width:700px){.out{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">End of Week 1</span>
+    <span class="chip on">Module 11 of 11</span>
+    <span class="chip">Certification</span>
+  </div>
+  <h1>Final review <span class="red">&amp; certification</span></h1>
+  <p class="lede">One athlete, start to finish. Everything from the last ten modules, in the order you'll actually use it.</p>
+</header>
+
+<!-- 11.1 -->
+<section id="path">
+  <div class="sec-head">
+    <span class="num">11.1</span>
+    <h2>Where you are</h2>
+  </div>
+  <div class="tl">
+    <div class="tlc" style="--c:var(--amber)"><div class="bar"></div><span class="k">2 weeks before</span><b>Modules 1-6</b><p>Remote. Knowledge checkpoints.</p></div>
+    <div class="tlc" style="--c:var(--lime)"><div class="bar"></div><span class="k">Week 1</span><b>Modules 7-10</b><p>In the building. Observed sign-offs.</p></div>
+    <div class="tlc" style="--c:var(--red)"><div class="bar"></div><span class="k">Now</span><b>11</b><p>Capstone.</p></div>
+    <div class="tlc" style="--c:var(--green)"><div class="bar"></div><span class="k">Week 6</span><b>Six-week review</b><p>On the floor, with real athletes. <span class="tbc">TBC</span> what's reviewed.</p></div>
+  </div>
+</section>
+
+<!-- 11.2 -->
+<section id="recap">
+  <div class="sec-head">
+    <span class="num">11.2</span>
+    <h2>One thing from each module</h2>
+    <p>If you remember nothing else.</p>
+  </div>
+  <div class="recap">
+    <a class="rc" href="module-01.html"><span class="n">1</span><b>Purpose</b><span>Break the link between velocity and injury.</span></a>
+    <a class="rc" href="module-02.html"><span class="n">2</span><b>The model</b><span>Delta above +5 is a flag. Protect first.</span></a>
+    <a class="rc" href="module-03.html"><span class="n">3</span><b>Throwing</b><span>Phase by calendar, Level by velo, Focus by your eyes.</span></a>
+    <a class="rc" href="module-04.html"><span class="n">4</span><b>Strength</b><span>The phase is current capacity, not a ladder.</span></a>
+    <a class="rc" href="module-05.html"><span class="n">5</span><b>Splits</b><span>Split follows throwing. Phase follows capacity.</span></a>
+    <a class="rc" href="module-06.html"><span class="n">6</span><b>Placement</b><span>77.5 · 87.5 · then CI:EI 2.8 / 3.2.</span></a>
+    <a class="rc" href="module-07.html"><span class="n">7</span><b>Assessment</b><span>A sloppy rep routes him wrong for a block.</span></a>
+    <a class="rc" href="module-08.html"><span class="n">8</span><b>The floor</b><span>Coach the rep as written. End the set when speed drops.</span></a>
+    <a class="rc" href="module-09.html"><span class="n">9</span><b>Populations</b><span>Growth, not velocity, is the youth risk.</span></a>
+    <a class="rc" href="module-10.html"><span class="n">10</span><b>Families</b><span>Make the value visible before they ask.</span></a>
+  </div>
+</section>
+
+<!-- 11.3 -->
+<section id="case">
+  <div class="sec-head">
+    <span class="num">11.3</span>
+    <h2>The capstone case</h2>
+    <p>Everything you need is on this page. Work it on your own, then submit it through the capstone form.</p>
+  </div>
+  <div class="case">
+    <div class="who"><span>Athlete: "M.R."</span><span>16 · high school junior</span><span>RHP</span><span>6'1" · 175 lb</span><span>Evaluation: late October</span></div>
+    <div class="cgrid">
+      <div class="hexes" role="img" aria-label="Energy report: 83.5 mph, Potential 81.2, Production 89.4, Total Energy 81.4, Transference 78.6, Interference 76.0, Delta plus 2.1">
+        <div class="hx blank"></div><div class="hx"><div><b>83.5</b><span>MPH</span></div></div><div class="hx blank"></div>
+        <div class="hx"><div><b>81.2</b><span>Energy Potential</span></div></div><div class="hx mid"><div><b>81.4</b><span>Total Energy</span></div></div><div class="hx"><div><b>89.4</b><span>Energy Production</span></div></div>
+        <div class="hx"><div><b>78.6</b><span>Energy Transference</span></div></div><div class="hx"><div><b>+2.1</b><span>Energy Delta</span></div></div><div class="hx"><div><b>76.0</b><span>Energy Interference</span></div></div>
+      </div>
+      <div class="cdata">
+        <div class="dt tbl"><table>
+          <thead><tr><th>Test</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>Peak force / peak power</td><td>2,650 / 4,250</td></tr>
+            <tr><td>CI : EI ratio</td><td>3.36</td></tr>
+            <tr><td>Med ball 1 lb / 2 lb</td><td>Above norm / at norm</td></tr>
+            <tr><td>Growth, last 12 months</td><td>+3.5 in</td></tr>
+          </tbody>
+        </table></div>
+        <div class="notes">
+          <div style="--c:var(--amber)"><b>Screen</b>Wide-stance, shallow squat. Prone hip IR 44° lead leg, 30° back leg; adductors grab and improve with reps; adductor test 50°. Lunge reach: arms can't reach his ears. Supine shoulder flexion: can't lay flat.</div>
+          <div style="--c:var(--cool)"><b>Family</b>Dad asks how fast he can get him to 88 for a showcase next summer.</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted)">Illustrative athlete for training. Numbers are invented to test your reasoning.</p>
+  </div>
+
+  <div class="sec-head" style="margin-top:6px"><h3>What you hand in</h3></div>
+  <div class="dels">
+    <div class="dl"><span class="n">1</span><div><b>Read the report</b><p>Delta zone, energy profile %, weakest links.</p><span class="m">Module 2</span></div></div>
+    <div class="dl"><span class="n">2</span><div><b>Strength placement</b><p>Level, program, and phase, with your reasoning.</p><span class="m">Module 6</span></div></div>
+    <div class="dl"><span class="n">3</span><div><b>Throwing program</b><p>Phase, Level, and how you'll choose his Focus.</p><span class="m">Module 3</span></div></div>
+    <div class="dl"><span class="n">4</span><div><b>Split and program code</b><p>Full code, and what his primary rep looks like on the floor.</p><span class="m">Modules 4, 5, 8</span></div></div>
+    <div class="dl"><span class="n">5</span><div><b>Screen findings</b><p>What they point to, what you'd confirm, and what it changes.</p><span class="m">Module 7</span></div></div>
+    <div class="dl"><span class="n">6</span><div><b>Flags</b><p>What you're protecting, and why.</p><span class="m">Modules 2, 9</span></div></div>
+    <div class="dl"><span class="n">7</span><div><b>Retest plan</b><p>When, what, and what would move him.</p><span class="m">Modules 4, 6</span></div></div>
+    <div class="dl"><span class="n">8</span><div><b>Message to Dad</b><p>Plain language. Answer the showcase question honestly. End with a date.</p><span class="m">Module 10</span></div></div>
+  </div>
+</section>
+
+<!-- 11.4 -->
+<section id="outcome">
+  <div class="sec-head">
+    <span class="num">11.4</span>
+    <h2>Three outcomes</h2>
+    <p>Nick or a senior coach reviews your capstone with your checkpoints and Week 1 sign-offs.</p>
+  </div>
+  <div class="out">
+    <div class="oc" style="--c:var(--green)"><b>Certified</b><p>You coach independently in your zone.</p></div>
+    <div class="oc" style="--c:var(--amber)"><b>Certified with conditions</b><p>You coach, with named areas reviewed again at six weeks.</p></div>
+    <div class="oc" style="--c:var(--red)"><b>Repeat modules</b><p>Specific modules to redo before you coach independently.</p></div>
+  </div>
+</section>
+
+<!-- 11.5 -->
+<section id="ask">
+  <div class="sec-head">
+    <span class="num">11.5</span>
+    <h2>Ask anything</h2>
+    <p>Relentless curiosity is a standard, not a courtesy. Every question you send improves this onboarding for the next coach.</p>
+  </div>
+  <div class="rule"><span class="label">How</span><p>Use the questions form below any time, not just today. Anything you flagged as unclear in a checkpoint comes to your final review.</p></div>
+</section>
+
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Capstone</span>
+  <h2>Submit your case</h2>
+  <p>Eight answers. Show your reasoning, not just the result.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Submit capstone</a>
+    <a class="btn" id="goQ" href="#" target="_blank" rel="noopener" style="background:transparent;border:1px solid #fff">Ask a question</a>
+  </div>
+</div>
+
+<footer>
+  <a href="module-10.html">← Module 10: Client Communication</a>
+  <a href="index.html">Onboarding home →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var CAP=(window.VELOU_FORMS||{})["capstone"]||"https://form.typeform.com/to/REPLACE_CAPSTONE"; var ASK=(window.VELOU_FORMS||{})["questions"]||"https://form.typeform.com/to/REPLACE_QUESTIONS";
+  var coach=document.getElementById("coach"),go=document.getElementById("go"),goQ=document.getElementById("goQ");
+  try{var v=localStorage.getItem("velou_coach");if(v)coach.value=v}catch(e){}
+  function link(){var n=coach.value.trim();try{localStorage.setItem("velou_coach",n)}catch(e){}
+    var h="#coach_name="+encodeURIComponent(n)+"&module=11&date="+new Date().toISOString().slice(0,10);go.href=CAP+h;goQ.href=ASK+h;}
+  coach.addEventListener("input",link);link();
+})();
+</script>
+</body>
+</html>

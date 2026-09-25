@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Client Communication</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script><style>
+/* Module 10 additions */
+.gap{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:10px}
+.gap svg{display:block;width:100%;height:auto}
+.gap svg text{font-family:var(--label)}
+.nums3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.n3{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);padding:16px;display:grid;gap:6px;align-content:start}
+.n3 b{font:400 40px/1 var(--display);color:var(--c)}
+.n3 span{font-size:15px;color:var(--muted)}
+@media (max-width:700px){.nums3{grid-template-columns:1fr}}
+
+.journey{display:grid;gap:8px}
+.jr{display:grid;grid-template-columns:150px 1fr auto;gap:14px;align-items:start;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);padding:14px 16px}
+.jr .when{font:700 16px var(--label);text-transform:uppercase;letter-spacing:.04em;color:var(--c)}
+.jr p{font-size:15.5px}
+.jr .who{font:700 12.5px var(--label);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+@media (max-width:640px){.jr{grid-template-columns:1fr}}
+
+.steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.s4{position:relative;background:var(--panel);border:1px solid var(--line);padding:16px 14px;display:grid;gap:6px;align-content:start}
+.s4+.s4{border-left:0}
+.s4::after{content:"";position:absolute;right:-9px;top:50%;width:16px;height:16px;background:var(--panel);border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:1}
+.s4:last-child::after{display:none}
+.s4 .n{font:400 30px/1 var(--display);color:var(--red)}
+.s4 b{font:700 17px var(--label);text-transform:uppercase;letter-spacing:.03em}
+.s4 p{font-size:14.5px;color:var(--muted)}
+@media (max-width:760px){.steps4{grid-template-columns:1fr 1fr}.s4:nth-child(3){border-left:1px solid var(--line)}.s4:nth-child(n+3){border-top:0}.s4::after{display:none}}
+blockquote{margin:0;background:var(--panel);border:1px solid var(--line);padding:20px 22px;font-size:17.5px;line-height:1.6;display:grid;gap:12px}
+blockquote .label{color:var(--red)}
+blockquote em{font-style:normal;color:var(--lime);font:700 13px var(--label);letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:4px}
+
+.xl{overflow-x:auto;border:1px solid var(--line)}
+.xl table{min-width:560px}
+.xl td.no{color:var(--muted)}
+.xl td.yes{color:var(--text)}
+.xl th.no{color:var(--red)}
+.xl th.yes{color:var(--green)}
+
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.t3{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);padding:16px;display:grid;gap:6px;align-content:start}
+.t3 .k{font:700 13px var(--label);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.t3 b{font:400 24px var(--display);text-transform:uppercase}
+.t3 p{font-size:15px;color:var(--muted)}
+@media (max-width:700px){.three{grid-template-columns:1fr}}
+.dash{display:flex;flex-wrap:wrap;gap:8px}
+.dash span{font:700 15px var(--label);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--panel-2);padding:8px 12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">Week 1</span>
+    <span class="chip on">Module 10 of 11</span>
+    <span class="chip">Sign off Week 1</span>
+  </div>
+  <h1>Client <span class="red">communication</span></h1>
+  <p class="lede">Families see our value clearly at the evaluation. This module is how you keep it just as clear in week 12.</p>
+</header>
+
+<!-- 10.1 -->
+<section id="gap">
+  <div class="sec-head">
+    <span class="num">10.1</span>
+    <h2>The value gap</h2>
+    <p>The work doesn't stop being valuable. It stops being visible.</p>
+  </div>
+  <div class="gap" role="img" aria-label="Illustration: a family's sense of value starts high at the evaluation. Without communication it fades over the weeks, especially after a bad outing. With steady communication it stays high.">
+    <svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg">
+      <line x1="50" y1="190" x2="700" y2="190" stroke="#352D28" stroke-width="2"/>
+      <line x1="50" y1="20" x2="50" y2="190" stroke="#352D28" stroke-width="2"/>
+      <text x="58" y="16" font-size="12" style="fill:#766B63">WHAT THE FAMILY SEES</text>
+      <path d="M60 45 C 180 50, 260 70, 340 95 C 390 110, 410 150, 440 150 C 520 150, 600 165, 690 172" fill="none" stroke="#766B63" stroke-width="3" stroke-dasharray="7 6"/>
+      <path d="M60 45 C 200 48, 300 55, 400 58 C 430 60, 440 75, 470 62 C 560 52, 630 50, 690 48" fill="none" stroke="#A6E84A" stroke-width="3"/>
+      <circle cx="60" cy="45" r="6" fill="#E5534B"/>
+      <text x="72" y="36" font-size="13" font-weight="700" style="fill:#E5534B">EVALUATION</text>
+      <line x1="420" y1="30" x2="420" y2="190" stroke="#E0C04A" stroke-dasharray="3 4"/>
+      <text x="420" y="208" text-anchor="middle" font-size="13" font-weight="700" style="fill:#E0C04A">BAD OUTING</text>
+      <text x="690" y="40" text-anchor="end" font-size="13" font-weight="700" style="fill:#A6E84A">STEADY, VISIBLE PROGRESS</text>
+      <text x="690" y="165" text-anchor="end" font-size="13" font-weight="700" style="fill:#AA9F97">SILENCE</text>
+      <text x="60" y="208" font-size="12" style="fill:#766B63">WEEK 1</text><text x="690" y="208" text-anchor="end" font-size="12" style="fill:#766B63">WEEK 12</text>
+    </svg>
+    <span style="font:600 12.5px var(--label);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)">Illustration, not measured data</span>
+  </div>
+  <div class="nums3">
+    <div class="n3" style="--c:var(--green)"><b>75%+</b><span>of families sign on after their evaluation. They see it.</span></div>
+    <div class="n3" style="--c:var(--red)"><b>~24%</b><span>renewal rate by revenue. Most don't stay.</span></div>
+    <div class="n3" style="--c:var(--amber)"><b>86¢</b><span>of every new recurring dollar just replaces a family we lost.</span></div>
+  </div>
+  <div class="rule"><span class="label">Why</span><p>We cost more than the average facility and deliver significantly more. When families stop seeing that difference, especially after their son has a bad game, the price is all that's left.</p></div>
+</section>
+
+<!-- 10.2 -->
+<section id="say">
+  <div class="sec-head">
+    <span class="num">10.2</span>
+    <h2>What every family should say</h2>
+    <p>From Module 1. Communication produces two of the four directly.</p>
+  </div>
+  <div class="three">
+    <div class="t3" style="--c:var(--green)"><span class="k">"Transparent and abundant communication"</span><b>Before they ask</b><p>They know what he's working on, why, and how it's going without having to chase you.</p></div>
+    <div class="t3" style="--c:var(--lime)"><span class="k">"Prepared guidance for the future"</span><b>What's next</b><p>They always know the next phase, the next retest, and the season plan.</p></div>
+    <div class="t3" style="--c:var(--amber)"><span class="k">"My son loves the atmosphere"</span><b>He tells them</b><p>A kid who feels seen talks about it at dinner. That's communication too.</p></div>
+  </div>
+</section>
+
+<!-- 10.3 -->
+<section id="moments">
+  <div class="sec-head">
+    <span class="num">10.3</span>
+    <h2>The moments that matter</h2>
+    <p>Each of these is a chance to make the value visible, or to lose it.</p>
+  </div>
+  <div class="journey">
+    <div class="jr" style="--c:var(--red)"><span class="when">Evaluation</span><p>Walk them through the energy report (Module 2). Where he is, where the chain is weakest, and what the first block targets.</p><span class="who">Owner <span class="tbc">TBC</span></span></div>
+    <div class="jr" style="--c:var(--amber)"><span class="when">During the block</span><p>Small wins, shared as they happen: a held position, a bar speed, a velo gate cleared.</p><span class="who">Cadence <span class="tbc">TBC</span></span></div>
+    <div class="jr" style="--c:var(--lime)"><span class="when">Retest</span><p>Every re-diagnosis gets a review: what changed, what it means, what's next (10.5).</p><span class="who">Every block end</span></div>
+    <div class="jr" style="--c:var(--green)"><span class="when">Program change</span><p>New phase, new split, or new Focus? Tell them why before they notice something's different.</p><span class="who">When it happens</span></div>
+    <div class="jr" style="--c:var(--cool)"><span class="when">Bad outing</span><p>The highest-risk moment for the relationship. Reach out first (10.4).</p><span class="who">Same week</span></div>
+    <div class="jr" style="--c:var(--red)"><span class="when">Pain or a flag</span><p>Any pain, or a Delta above +5 (Module 2). The family hears it from us, the same day.</p><span class="who">Same day</span></div>
+  </div>
+</section>
+
+<!-- 10.4 -->
+<section id="outing">
+  <div class="sec-head">
+    <span class="num">10.4</span>
+    <h2>"He threw badly on Saturday"</h2>
+    <p>Getting better in the building doesn't automatically show up in a game. Transfer takes time. Explain that before it sounds like an excuse.</p>
+  </div>
+  <div class="steps4">
+    <div class="s4"><span class="n">1</span><b>Acknowledge</b><p>Empathy first. It was a hard day for him and for them.</p></div>
+    <div class="s4"><span class="n">2</span><b>Separate</b><p>Training capacity and game performance are different things. Transfer takes time.</p></div>
+    <div class="s4"><span class="n">3</span><b>Show</b><p>The numbers that are moving. Real data, not reassurance.</p></div>
+    <div class="s4"><span class="n">4</span><b>Next step</b><p>What we're doing about it, and when they'll hear from you again.</p></div>
+  </div>
+  <blockquote>
+    <span class="label">Example. Make it yours, keep the structure.</span>
+    "I saw Saturday was rough, and I know that's frustrating for all of you. What we build in here doesn't show up in a game on a straight line. His body has to learn to use it under pressure, and that takes time. Here's what we know is moving: his Energy Production is up since his last test and his kneeling velo is climbing. This week we're adding more mound work so it starts transferring. I'll check in with you after his next outing."
+    <em>Numbers in the example are placeholders. Use his.</em>
+  </blockquote>
+</section>
+
+<!-- 10.5 -->
+<section id="review">
+  <div class="sec-head">
+    <span class="num">10.5</span>
+    <h2>The retest review</h2>
+    <p>Three questions, every time.</p>
+  </div>
+  <div class="three">
+    <div class="t3" style="--c:var(--red)"><span class="k">1</span><b>What changed?</b><p>Compare this report to the last one. Lead with the component that moved most.</p></div>
+    <div class="t3" style="--c:var(--amber)"><span class="k">2</span><b>What does it mean?</b><p>Put it in the energy chain. What's getting stronger, and what's still limiting him?</p></div>
+    <div class="t3" style="--c:var(--green)"><span class="k">3</span><b>What's next?</b><p>The next block, the next phase, and the date of the next retest.</p></div>
+  </div>
+  <div class="sec-head" style="margin-top:6px"><h3>The parent dashboard</h3><p>In development. What families will be able to see:</p></div>
+  <div class="dash"><span>Energy Score</span><span>Fastball Velocity</span><span>HRV</span><span>Recovery Score</span><span>Arm Score</span></div>
+</section>
+
+<!-- 10.6 -->
+<section id="language">
+  <div class="sec-head">
+    <span class="num">10.6</span>
+    <h2>Say it their way</h2>
+    <p>Our language is precise. Families need it plain. Translate every time.</p>
+  </div>
+  <div class="xl tbl">
+    <table>
+      <thead><tr><th class="no">We say</th><th class="yes">They hear</th></tr></thead>
+      <tbody>
+        <tr><td class="no">Energy Production is 74.8</td><td class="yes">"The engine is still small. That's what we're building."</td></tr>
+        <tr><td class="no">Delta is +6</td><td class="yes">"He's throwing harder than his body currently supports, so his arm is making up the difference."</td></tr>
+        <tr><td class="no">Kneeling throw is low</td><td class="yes">"Energy is leaking between his trunk and his arm."</td></tr>
+        <tr><td class="no">Force Control P2</td><td class="yes">"We're teaching him to brake, so he can safely produce more."</td></tr>
+        <tr><td class="no">Moving to a non-axial split</td><td class="yes">"His throwing is ramping up, so we're taking load off his spine."</td></tr>
+        <tr><td class="no">Re-diagnosis at W4</td><td class="yes">"We retest at the end of every block so we're never guessing."</td></tr>
+        <tr><td class="no">Power-reliant profile</td><td class="yes">"He can hit a big number once but can't repeat it yet. We're building the base under it."</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 10.7 -->
+<section id="remote">
+  <div class="sec-head">
+    <span class="num">10.7</span>
+    <h2>When he can't be here</h2>
+  </div>
+  <div class="rule"><span class="label">Remote+</span><p>Remote+ keeps athletes in the system when they can't train in the building, like college athletes or families who move. Know it well enough to recommend it. <span class="tbc">TBC</span> Who it fits and how to hand an athlete over.</p></div>
+</section>
+
+<!-- 10.8 -->
+<section id="signoff">
+  <div class="sec-head">
+    <span class="num">10.8</span>
+    <h2>Week 1 sign-off</h2>
+    <p>A senior coach watches you run one live retest review with a parent.</p>
+  </div>
+  <div class="three">
+    <div class="t3" style="--c:var(--green)"><span class="k">Structure</span><b>3 questions</b><p>Changed, means, next. In that order.</p></div>
+    <div class="t3" style="--c:var(--lime)"><span class="k">Language</span><b>Plain</b><p>No jargon the parent has to ask about.</p></div>
+    <div class="t3" style="--c:var(--amber)"><span class="k">Close</span><b>A date</b><p>They leave knowing when they'll hear from you next.</p></div>
+  </div>
+</section>
+
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Checkpoint 10</span>
+  <h2>Prove it before Module 11</h2>
+  <p>Write the messages. Handle the hard conversations.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Start Checkpoint 10</a>
+  </div>
+</div>
+
+<footer>
+  <a href="module-09.html">← Module 9: Special Populations</a>
+  <a href="module-11.html">Module 11: Final Review →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var TYPEFORM=(window.VELOU_FORMS||{})["checkpoint-10"]||"https://form.typeform.com/to/REPLACE_CHECKPOINT_10";var coach=document.getElementById("coach"),go=document.getElementById("go");
+  try{var v=localStorage.getItem("velou_coach");if(v)coach.value=v}catch(e){}
+  function link(){var n=coach.value.trim();try{localStorage.setItem("velou_coach",n)}catch(e){}go.href=TYPEFORM+"#coach_name="+encodeURIComponent(n)+"&module=10&date="+new Date().toISOString().slice(0,10);}
+  coach.addEventListener("input",link);link();
+})();
+</script>
+</body>
+</html>

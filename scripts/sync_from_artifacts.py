@@ -43,6 +43,28 @@ def fix_homepage_links(html: str) -> str:
     return tile_pat.sub(repl, html)
 
 
+ONBOARDING_TILE = '''  <a class="tile" href="onboarding/" style="grid-column: 1 / -1;">
+    <span class="tile-eyebrow">New Coaches</span>
+    <h2>Coach Onboarding</h2>
+    <p>Eleven modules, from purpose and standards to the capstone case. Start here before your first day on the floor.</p>
+    <span class="tile-cta">Open Coach Onboarding →</span>
+  </a>
+'''
+
+
+def ensure_onboarding_tile(html: str) -> str:
+    # The homepage is regenerated from the artifact each sync, which would
+    # otherwise drop the hand-added onboarding tile.
+    if 'href="onboarding/"' in html:
+        return html
+    marker = '</div>\n\n<footer>'
+    idx = html.rfind(marker)
+    if idx == -1:
+        print("WARNING: could not find tiles container end; onboarding tile not added")
+        return html
+    return html[:idx] + ONBOARDING_TILE + html[idx:]
+
+
 def fix_subpage_home_links(html: str) -> str:
     # Covers both the logo anchor (class="brand") and the separate "Home"
     # nav link -- both point at the claude.ai artifact URL in the raw export.
@@ -69,6 +91,7 @@ def process(src_path: Path, dest_name: str, is_homepage: bool) -> None:
     text = strip_outer_wrapper(text)
     if is_homepage:
         text = fix_homepage_links(text)
+        text = ensure_onboarding_tile(text)
     else:
         text = fix_subpage_home_links(text)
     text = ensure_noindex(text)

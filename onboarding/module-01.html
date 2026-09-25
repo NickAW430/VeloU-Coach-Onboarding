@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>VeloU Purpose &amp; Standards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script><style>
+/* Module 1 additions */
+.mission{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);padding:22px 24px;display:grid;gap:10px}
+.mission q{font-family:var(--display);text-transform:uppercase;font-size:clamp(24px,3.6vw,36px);line-height:1.12;quotes:none;text-wrap:balance}
+.mission q em{font-style:normal;color:var(--red)}
+
+.stack{display:grid;gap:8px;max-width:640px}
+.stack .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.blk{border:1px solid var(--line);background:var(--panel);padding:14px 16px;display:grid;gap:2px}
+.blk b{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:22px;letter-spacing:.02em}
+.blk span{font-family:var(--label);font-size:15px;color:var(--muted)}
+.blk .k{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.12em;color:var(--faint)}
+.blk.base{background:var(--red);border-color:var(--red)}
+.blk.base b,.blk.base span,.blk.base .k{color:#fff}
+.blk.base span{opacity:.9}
+
+.evid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.ev{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:14px;align-content:start}
+.ev h3{font-size:20px}
+.ev .src{font-family:var(--label);font-size:13px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+.hbar{display:grid;gap:8px}
+.hb{display:grid;grid-template-columns:110px 1fr 58px;gap:10px;align-items:center;font-family:var(--label);font-size:15px}
+.hb .lbl{color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-size:14px}
+.hb .trk{height:18px;background:var(--panel-2)}
+.hb .fill{height:100%;background:var(--c,var(--muted))}
+.hb .val{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.split{display:flex;height:40px;font-family:var(--label);font-weight:700;font-size:14px}
+.split div{display:grid;place-items:center;color:#141414;white-space:nowrap;overflow:hidden}
+.split-legend{display:flex;justify-content:space-between;font-family:var(--label);font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+@media (max-width:760px){.evid{grid-template-columns:1fr}}
+.reads{display:grid;gap:10px}
+.read{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 18px;text-decoration:none}
+.read:hover{border-color:var(--red)}
+.read .tag{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.12em;padding:3px 8px;background:var(--red);color:#fff}
+.read .tag.rec{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.read b{font-family:var(--label);font-size:18px;font-weight:700;display:block}
+.read span{color:var(--muted);font-size:14.5px}
+
+.layers{display:grid;gap:0;max-width:760px}
+.layer{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:18px;border:1px solid var(--line);background:var(--panel)}
+.layer+.layer{border-top:0}
+.layer .tier{font-family:var(--label);font-weight:700;letter-spacing:.12em;font-size:13px;color:var(--faint);text-transform:uppercase;padding-top:4px}
+.layer h3{font-size:26px}
+.layer p{color:var(--muted);font-size:16px;margin-top:4px}
+.layer.top{border-color:var(--red);background:var(--panel-2)}
+.layer.top .tier{color:var(--red)}
+@media (max-width:600px){.layer{grid-template-columns:1fr;gap:6px}}
+
+.eqs{display:grid;gap:10px}
+.eq{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-family:var(--display);text-transform:uppercase;font-size:clamp(18px,3vw,28px);letter-spacing:.02em}
+.eq .op{color:var(--red)}
+.eq .res{padding:2px 12px;border:2px solid currentColor}
+.eq.good .res{color:var(--green)}
+.eq.bad{color:var(--muted)}
+.eq.bad .res{color:var(--red)}
+
+.stds{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.std{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--red);padding:16px 14px;display:grid;gap:10px;align-content:start}
+.std h3{font-size:22px}
+.std p{font-size:15px;color:var(--muted)}
+.std .tag{font-family:var(--label);font-weight:700;font-size:15px;color:var(--text)}
+@media (max-width:980px){.stds{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.stds{grid-template-columns:1fr 1fr}}
+@media (max-width:420px){.stds{grid-template-columns:1fr}}
+
+.nos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.no{background:var(--panel);border:1px solid var(--line);padding:16px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.03em;line-height:1.2}
+.no svg{width:22px;height:22px}
+@media (max-width:760px){.nos{grid-template-columns:1fr 1fr}}
+.big-quote{overflow-wrap:anywhere;font-family:var(--display);text-transform:uppercase;font-size:clamp(30px,5.5vw,56px);line-height:1;color:var(--red);text-wrap:balance}
+
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s}
+.step{position:relative;background:var(--panel);border:1px solid var(--line);padding:18px 16px 18px;display:grid;gap:6px;align-content:start}
+.step+.step{border-left:0}
+.step::after{content:"";position:absolute;right:-9px;top:50%;width:16px;height:16px;background:var(--panel);border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:1}
+.step:last-child::after{display:none}
+.step .n{font-family:var(--display);font-size:34px;line-height:1;color:var(--red)}
+.step b{font-family:var(--label);font-size:18px;text-transform:uppercase;letter-spacing:.04em}
+.step p{font-size:15px;color:var(--muted)}
+@media (max-width:760px){.flow{grid-template-columns:1fr 1fr}.step:nth-child(3){border-left:1px solid var(--line)}.step:nth-child(n+3){border-top:0}.step::after{display:none}}
+.never{display:flex;flex-wrap:wrap;gap:10px}
+.never span{font-family:var(--label);font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--red);color:var(--red);padding:6px 12px;font-size:15px}
+
+.says{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.say{background:var(--panel);border:1px solid var(--line);padding:20px;display:grid;gap:12px;align-content:start}
+.say q{font-family:var(--display);text-transform:uppercase;font-size:26px;line-height:1.05;quotes:none}
+.say .how{display:grid;grid-template-columns:auto 1fr;gap:10px;font-size:15.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.say .how .label{color:var(--lime);padding-top:2px}
+@media (max-width:700px){.says{grid-template-columns:1fr}}
+.trust{overflow-wrap:anywhere;font-family:var(--display);text-transform:uppercase;font-size:clamp(22px,3.4vw,32px);line-height:1.15;max-width:30ch;text-wrap:balance}
+.trust em{font-style:normal;color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">Pre-start</span>
+    <span class="chip on">Module 1 of 11</span>
+    <span class="chip">Checkpoint 1</span>
+  </div>
+  <h1>Purpose, culture <span class="red">&amp; standards</span></h1>
+  <p class="lede">Why VeloU exists, who a VeloU coach is, and the standards you are held to from day one.</p>
+  <div class="mission">
+    <span class="label">Our mission</span>
+    <q>VeloU exists to <em>break the link between velocity and injury</em>, developing velocity safely and effectively at every stage of an athlete's development.</q>
+  </div>
+</header>
+
+<!-- 1.1 -->
+<section id="velocity">
+  <div class="sec-head">
+    <span class="num">1.1</span>
+    <h2>Velocity is the foundation</h2>
+    <p>Every pitcher improves on three objectives. The top two only work because of the one underneath.</p>
+  </div>
+  <div class="stack">
+    <div class="row">
+      <div class="blk"><span class="k">OBJECTIVE 2</span><b>More decisions</b><span>Add pitches to the arsenal</span></div>
+      <div class="blk"><span class="k">OBJECTIVE 3</span><b>Harder decisions</b><span>Tunneling and funneling</span></div>
+    </div>
+    <div class="blk base"><span class="k">OBJECTIVE 1</span><b>Velocity: shorten the decision window</b><span>Without the time crunch, a hitter adjusts to more pitches and better shapes.</span></div>
+  </div>
+</section>
+
+<!-- 1.2 -->
+<section id="problem">
+  <div class="sec-head">
+    <span class="num">1.2</span>
+    <h2>The problem is timing, not velocity</h2>
+    <p>Arm injuries have climbed with velocity. The evidence shows the damage is done in youth development, long before pro ball.</p>
+  </div>
+  <div class="evid">
+    <article class="ev">
+      <h3>Most UCL injuries happen before 20</h3>
+      <div>
+        <div class="split" role="img" aria-label="Under 15: 16 percent. Ages 15 to 19: 54 percent. 20 and older: 30 percent.">
+          <div style="width:16%;background:#E0C04A">16%</div>
+          <div style="width:54%;background:#E5534B;color:#fff">54% · AGES 15-19</div>
+          <div style="width:30%;background:#766B63;color:#F1E9E4">30%</div>
+        </div>
+        <div class="split-legend"><span>Under 15</span><span>20 and older</span></div>
+      </div>
+      <span class="src">Solomito et al., 2024</span>
+    </article>
+
+    <article class="ev">
+      <h3>Pro UCL injuries start as kids</h3>
+      <div class="hbar">
+        <p style="font-size:15px;color:var(--muted)">Had an elbow injury as a child or adolescent</p>
+        <div class="hb"><span class="lbl">Injured pros</span><div class="trk"><div class="fill" style="width:55%;--c:var(--red)"></div></div><span class="val">55%</span></div>
+        <div class="hb"><span class="lbl">Healthy pros</span><div class="trk"><div class="fill" style="width:18%"></div></div><span class="val">18%</span></div>
+      </div>
+      <span class="src">Vance et al., 2019</span>
+    </article>
+
+    <article class="ev">
+      <h3>Early surgery cuts MLB odds in half</h3>
+      <div class="hbar">
+        <p style="font-size:15px;color:var(--muted)">First-round picks who reached MLB after UCL reconstruction</p>
+        <div class="hb"><span class="lbl">Surgery by 19.5</span><div class="trk"><div class="fill" style="width:48.1%;--c:var(--red)"></div></div><span class="val">48.1%</span></div>
+        <div class="hb"><span class="lbl">Surgery later</span><div class="trk"><div class="fill" style="width:86.2%;--c:var(--green)"></div></div><span class="val">86.2%</span></div>
+      </div>
+      <p style="font-size:15px">Each healthy year after first hitting 90 mph: <b class="red">+24%</b> odds of reaching MLB.</p>
+      <span class="src">Kriz et al., 2023</span>
+    </article>
+
+    <article class="ev">
+      <h3>The link fades with maturity</h3>
+      <div class="hbar">
+        <p style="font-size:15px;color:var(--muted)">How much velocity explains elbow stress (R²)</p>
+        <div class="hb"><span class="lbl">High school</span><div class="trk"><div class="fill" style="width:90%;--c:var(--red)"></div></div><span class="val">0.36</span></div>
+        <div class="hb"><span class="lbl">College</span><div class="trk"><div class="fill" style="width:72.5%;--c:var(--amber)"></div></div><span class="val">0.29</span></div>
+        <div class="hb"><span class="lbl">Pro</span><div class="trk"><div class="fill" style="width:19%;--c:var(--green)"></div></div><span class="val">0.076</span></div>
+      </div>
+      <span class="src">Manzi et al., 2023 · Luera et al., 2018</span>
+    </article>
+  </div>
+
+  <div class="rule"><span class="label">Our answer</span><p>We don't chase velocity blindly and we don't avoid it out of fear. We build it precisely, measured, tested, and individualized, at every stage.</p></div>
+
+  <div class="reads">
+    <a class="read" href="https://www.baseballamerica.com/stories/is-velocity-really-the-culprit-behind-rising-baseball-injuries/" target="_blank" rel="noopener">
+      <span class="tag">REQUIRED</span>
+      <div><b>Is Velocity Really The Culprit Behind Rising Baseball Injuries?</b><span>Dr. Nick Serio · Baseball America · Feb 2026 · full reference list at the end</span></div>
+    </a>
+    <a class="read" href="https://www.baseballamerica.com/stories/college-recruiters-are-targeting-high-school-pitchers-less-than-ever-what-if-its-not-a-bad-thing/" target="_blank" rel="noopener">
+      <span class="tag rec">RECOMMENDED</span>
+      <div><b>College Recruiters Are Targeting HS Pitchers Less Than Ever. What If It's Not A Bad Thing?</b><span>Dr. Nick Serio · Baseball America · Jan 2026</span></div>
+    </a>
+  </div>
+
+  <div class="rule"><span class="label">In the weight room</span><p>Our goal is not to build great weightlifters. It is to build great pitchers. If a lift or a PR doesn't transfer to better and safer throwing, it isn't the point.</p></div>
+</section>
+
+<!-- 1.3 -->
+<section id="the-coach">
+  <div class="sec-head">
+    <span class="num">1.3</span>
+    <h2>The VeloU coach</h2>
+  </div>
+  <div class="layers">
+    <div class="layer top">
+      <span class="tier">What sets us apart</span>
+      <div><h3>Relentless, prepared problem solving</h3><p>You hunt for problems that need deep solutions, and you have the autonomy to test your theories. It never looks haphazard.</p></div>
+    </div>
+    <div class="layer">
+      <span class="tier">The requirement</span>
+      <div><h3>Mudita</h3><p>Genuine joy in someone else's success. Every great coach has it. Here it is the floor, not the ceiling.</p></div>
+    </div>
+  </div>
+  <div class="eqs">
+    <div class="eq good"><span>Curiosity</span><span class="op">+</span><span>Preparation</span><span class="op">=</span><span class="res">Autonomy</span></div>
+    <div class="eq bad"><span>Curiosity</span><span class="op">−</span><span>Preparation</span><span class="op">=</span><span class="res">Guessing</span></div>
+  </div>
+  <p style="color:var(--muted)">Same standard for a 13-year-old and a pro. Only the conversation outside of baseball changes, because the goal is a deep relationship with every athlete.</p>
+</section>
+
+<!-- 1.4 -->
+<section id="standards">
+  <div class="sec-head">
+    <span class="num">1.4</span>
+    <h2>The five standards</h2>
+    <p>You are held to these, and you hold everyone else to them.</p>
+  </div>
+  <div class="stds">
+    <article class="std"><h3>Mudita</h3><p>The vicarious joy for the success of others.</p></article>
+    <article class="std"><h3>Relentlessly curious</h3><p>Stop learning and complacency starts. Adjust theories, test, build from what you find, and do it fast.</p></article>
+    <article class="std"><h3>Accountability</h3><p>Own who you say you are and who you want to become. Hold others to the same bar, fearlessly.</p></article>
+    <article class="std"><h3>Preparation</h3><p>Preparation brings calm, and calm lets you see what others miss.</p></article>
+    <article class="std"><h3>Empathetic</h3><p>Before you judge, feel what the athlete, parent, or coach is feeling right now.</p></article>
+  </div>
+</section>
+
+<!-- 1.5 -->
+<section id="corrected">
+  <div class="sec-head">
+    <span class="num">1.5</span>
+    <h2>Corrected on the spot</h2>
+  </div>
+  <div class="nos">
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>Lack of focus</div>
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>Lack of energy</div>
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>Taking the easy route</div>
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>Acting inconvenienced</div>
+  </div>
+  <p class="big-quote">"Good enough" is the death of success.</p>
+  <p style="color:var(--muted)">An athlete bringing you a problem is the job, not an interruption of it.</p>
+</section>
+
+<!-- 1.6 -->
+<section id="disagree">
+  <div class="sec-head">
+    <span class="num">1.6</span>
+    <h2>When you disagree</h2>
+    <p>Disagreement is a sign you are thinking. Bring it forward this way.</p>
+  </div>
+  <div class="flow">
+    <div class="step"><span class="n">1</span><b>Senior Director</b><p>Take it to them first.</p></div>
+    <div class="step"><span class="n">2</span><b>Route</b><p>What you want to do differently.</p></div>
+    <div class="step"><span class="n">3</span><b>Logic</b><p>Why, from the athlete's data and the system.</p></div>
+    <div class="step"><span class="n">4</span><b>Test</b><p>How you'll measure if it worked.</p></div>
+  </div>
+  <div class="never"><span>Never change the plan alone</span><span>Never stay quiet</span></div>
+</section>
+
+<!-- 1.7 -->
+<section id="different">
+  <div class="sec-head">
+    <span class="num">1.7</span>
+    <h2>What makes us different</h2>
+  </div>
+  <p class="trust">A family trusted you with their son's development. <em>Every session earns that trust or spends it.</em></p>
+  <p style="color:var(--muted)">When a parent compares us to any other facility, they should say these four things. You produce each one.</p>
+  <div class="says">
+    <div class="say"><q>"Attention to detail"</q><div class="how"><span class="label">You</span><span>Coach every rep with intent, enter every number correctly, and leave nothing at "good enough."</span></div></div>
+    <div class="say"><q>"Transparent, abundant communication"</q><div class="how"><span class="label">You</span><span>Tell families what he's working on, why, and how he's progressing before they have to ask.</span></div></div>
+    <div class="say"><q>"Prepared guidance for the future"</q><div class="how"><span class="label">You</span><span>Make sure they know what comes next: the next phase, the next retest, the season plan.</span></div></div>
+    <div class="say"><q>"My son loves the atmosphere"</q><div class="how"><span class="label">You</span><span>Bring mudita, energy, and a real relationship so he wants to be in the building.</span></div></div>
+  </div>
+  <div class="rule"><span class="label">Rule</span><p>Families see our value clearly at the evaluation. Keep it just as visible in week 12.</p></div>
+</section>
+
+<!-- checkpoint -->
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Checkpoint 1</span>
+  <h2>Prove it before Module 2</h2>
+  <p>Twelve questions, mostly real scenarios. Answers that repeat this page back will be returned.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Start Checkpoint 1</a>
+  </div>
+</div>
+
+<footer>
+  <span></span>
+  <a href="module-02.html">Module 2: The Precision Training Model →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var TYPEFORM=(window.VELOU_FORMS||{})["checkpoint-1"]||"https://form.typeform.com/to/REPLACE_CHECKPOINT_1";
+  var coach=document.getElementById("coach"), go=document.getElementById("go");
+  try{var saved=localStorage.getItem("velou_coach");if(saved)coach.value=saved}catch(e){}
+  function link(){
+    var n=coach.value.trim();
+    try{localStorage.setItem("velou_coach",n)}catch(e){}
+    go.href=TYPEFORM+"#coach_name="+encodeURIComponent(n)+"&module=1&date="+new Date().toISOString().slice(0,10);
+  }
+  coach.addEventListener("input",link); link();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Special Populations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script><style>
+/* Module 9 additions */
+.reads{display:grid;gap:10px}
+.read{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 18px;text-decoration:none}
+.read:hover{border-color:var(--red)}
+.read .tag{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.12em;padding:3px 8px;background:var(--red);color:#fff}
+.read .tag.rec{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.read b{font-family:var(--label);font-size:18px;font-weight:700;display:block}
+.read span{color:var(--muted);font-size:14.5px}
+.ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pt{appearance:none;background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c);color:var(--muted);cursor:pointer;padding:14px 10px;display:grid;gap:4px;text-align:left}
+.pt b{font:400 24px/1 var(--display);text-transform:uppercase;color:var(--text)}
+.pt span{font:600 13px var(--label);letter-spacing:.06em;text-transform:uppercase}
+.pt:hover{background:var(--panel-2)}
+.pt[aria-selected="true"]{background:var(--panel-2);border-color:var(--c);border-top-width:4px}
+@media (max-width:760px){.ptabs{grid-template-columns:1fr 1fr}}
+.ppanel{display:grid;gap:16px}
+.ppanel>*{min-width:0}
+.ph9{display:grid;gap:6px}
+.ph9 h3{font-size:30px}
+.ph9 p{color:var(--muted)}
+.four{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.fc9{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);padding:16px;display:grid;gap:8px;align-content:start}
+.fc9 .k{font:700 13px var(--label);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.fc9 ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:15.5px}
+@media (max-width:700px){.four{grid-template-columns:1fr}}
+.viz{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:12px}
+.viz svg{display:block;width:100%;height:auto}
+.viz svg text{font-family:var(--label)}
+.src9{font:600 12.5px var(--label);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.flow9{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch}
+.fn{background:var(--panel-2);border:1px solid var(--line);padding:14px;display:grid;gap:4px;align-content:start}
+.fn .k{font:700 12.5px var(--label);letter-spacing:.1em;text-transform:uppercase;color:var(--lime)}
+.fn b{font:400 24px var(--display);text-transform:uppercase}
+.fn p{font-size:14.5px;color:var(--muted)}
+.fa{display:grid;place-items:center;font:400 24px var(--display);color:var(--red)}
+@media (max-width:760px){.flow9{grid-template-columns:1fr}.fa{transform:rotate(90deg)}}
+.ask{background:var(--panel);border:1px dashed var(--line);padding:18px;display:grid;gap:10px}
+.ask ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">Week 1</span>
+    <span class="chip on">Module 9 of 11</span>
+    <span class="chip">Checkpoint 9</span>
+  </div>
+  <h1>Special <span class="red">populations</span></h1>
+  <p class="lede">Same system, different rules at the edges. What changes for developing athletes, injured athletes, professionals, and teams.</p>
+  <div class="stats" role="list">
+    <div class="stat" role="listitem"><b>54%</b><span>UCL injuries at 15-19</span></div>
+    <div class="stat" role="listitem"><b>3 in/yr</b><span>Growth flag</span></div>
+    <div class="stat" role="listitem"><b>80+</b><span>Pro Interference baseline</span></div>
+    <div class="stat" role="listitem"><b>3×</b><span>Top RTT multiplier</span></div>
+  </div>
+</header>
+
+<section id="pops">
+  <div class="sec-head">
+    <span class="num">9.1</span>
+    <h2>Pick a population</h2>
+  </div>
+  <div class="ptabs" role="tablist" id="ptabs">
+    <button type="button" class="pt" role="tab" data-p="youth" style="--c:var(--amber)"><b>Developing</b><span>Youth · high school</span></button>
+    <button type="button" class="pt" role="tab" data-p="injured" style="--c:var(--red)"><b>Injured</b><span>Return to throw</span></button>
+    <button type="button" class="pt" role="tab" data-p="pro" style="--c:var(--green)"><b>Professional</b><span>Pro · mature arms</span></button>
+    <button type="button" class="pt" role="tab" data-p="teams" style="--c:var(--cool)"><b>Teams</b><span>Group training</span></button>
+  </div>
+
+  <!-- YOUTH -->
+  <div class="ppanel" data-panel="youth" role="tabpanel">
+    <div class="ph9"><h3>The developing athlete</h3><p>This is where most arm damage starts. Growth, not velocity, is the risk to manage.</p></div>
+    <div class="viz" role="img" aria-label="Injury risk rises 31 to 53 percent in the six months after peak height velocity. Athletes growing more than about 3 inches a year face 74 percent higher injury risk.">
+      <span class="label">The vulnerable window</span>
+      <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg">
+        <line x1="40" y1="150" x2="700" y2="150" stroke="#352D28" stroke-width="2"/>
+        <path d="M40 140 C 180 138, 260 120, 330 70 C 370 42, 400 42, 440 70 C 520 125, 600 138, 700 140" fill="none" stroke="#E0C04A" stroke-width="3"/>
+        <text x="380" y="30" text-anchor="middle" font-size="14" font-weight="700" style="fill:#E0C04A">PEAK HEIGHT VELOCITY</text>
+        <rect x="385" y="52" width="120" height="98" fill="#E5534B" opacity=".22"/><rect x="398" y="84" width="94" height="42" fill="#1B1714" opacity=".85"/>
+        <line x1="385" y1="52" x2="385" y2="150" stroke="#E5534B" stroke-width="2"/>
+        <text x="445" y="100" text-anchor="middle" font-size="15" font-weight="700" style="fill:#E5534B">+31 to 53%</text>
+        <text x="445" y="118" text-anchor="middle" font-size="13" style="fill:#F1E9E4">injury risk</text>
+        <text x="445" y="170" text-anchor="middle" font-size="13" style="fill:#AA9F97">6 months after PHV</text>
+        <text x="40" y="170" font-size="13" style="fill:#AA9F97">Growth rate over time</text>
+        <text x="700" y="170" text-anchor="end" font-size="13" style="fill:#AA9F97">Typically ages 13-17 in baseball</text>
+      </svg>
+      <span class="src9">Bult et al., 2018 · Cumming et al., 2017 · via Serio, Baseball America, Feb 2026</span>
+    </div>
+    <div class="four">
+      <div class="fc9" style="--c:var(--amber)"><span class="k">Watch</span><ul><li>Growth faster than about 3 in a year: 74% higher injury risk, in any sport.</li><li>The 6 months after a growth spurt are the most vulnerable.</li><li>"Adolescent awkwardness": command and coordination can drop because the body changed, not the mechanics.</li></ul></div>
+      <div class="fc9" style="--c:var(--lime)"><span class="k">Strength</span><ul><li>Energy Interference: build it with no ceiling.</li><li>Build physical preparation before velocity demands, not after an injury forces it.</li></ul></div>
+      <div class="fc9" style="--c:var(--green)"><span class="k">Throwing</span><ul><li>Match demands to biological readiness, not the recruiting calendar.</li><li>A younger arm may need a lower rolling Day Score baseline.</li></ul></div>
+      <div class="fc9" style="--c:var(--cool)"><span class="k">Nutrition</span><ul><li>Start the training first and let hunger rise on its own.</li><li>Point families to the free VeloU nutrition course.</li></ul></div>
+    </div>
+    <div class="rule"><span class="label">Why it matters</span><p>55% of pros who tore a UCL had elbow problems as kids. Surgery before about 19.5 cut first-rounders' odds of reaching MLB nearly in half. Protecting this window is the mission (Module 1).</p></div>
+  </div>
+
+  <!-- INJURED -->
+  <div class="ppanel" data-panel="injured" role="tabpanel" hidden>
+    <div class="ph9"><h3>The injured athlete</h3><p>Injured athletes never re-enter the season arc directly. The medical plan leads; we execute it.</p></div>
+    <div class="flow9">
+      <div class="fn"><span class="k">Injury-specific</span><b>RTT</b><p>Return to Throw. Keyed to the injury: UCL sprain grade, elbow pain, or UCL repair, revision, or hybrid.</p></div>
+      <div class="fa" aria-hidden="true">→</div>
+      <div class="fn"><span class="k">Graduation step</span><b>RTM</b><p>Return to Mound.</p></div>
+      <div class="fa" aria-hidden="true">→</div>
+      <div class="fn"><span class="k">Then</span><b>Season arc</b><p>Rejoins the standard phases (Module 3).</p></div>
+    </div>
+    <div class="viz" role="img" aria-label="Day Score multipliers by intent. RTT weights every intent much more heavily than the standard phases, reaching 2.25 times at 70 percent intent versus 1 times in standard phases.">
+      <span class="label">Every throw counts more in RTT</span>
+      <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" id="rttChart"></svg>
+      <span class="src9">Day Score multiplier by intent · VeloU Throwing, Return to Throw</span>
+    </div>
+    <div class="four">
+      <div class="fc9" style="--c:var(--red)"><span class="k">Throwing</span><ul><li>Velocity-gated. Radar gun at every session.</li><li>Intent read off his own RPE Conversion Chart. The gate is the safety mechanism.</li><li>Lower his rolling Day Score baseline.</li></ul></div>
+      <div class="fc9" style="--c:var(--lime)"><span class="k">Strength</span><ul><li>Regress without hesitation: P1, even if he trained at P3 before.</li><li>Force Control P1 and Acceleration P1 are built as re-entry points.</li></ul></div>
+      <div class="fc9" style="--c:var(--amber)"><span class="k">Coordinate</span><ul><li>The plan belongs to the medical and rehab staff and the referring surgeon.</li><li>Never substitute a standard phase for an RTT plan.</li></ul></div>
+      <div class="fc9" style="--c:var(--cool)"><span class="k">The first year back</span><ul><li>After Tommy John, MLB pitchers return with the same velocity and spin.</li><li>Fastball usage and performance dip in year one and normalize in year two. Trust in the arm takes longer than the tissue.</li></ul></div>
+    </div>
+    <div class="rule"><span class="label">Communication</span><p>Returning athletes and their families need more updates, not fewer. Every velocity gate cleared is progress they should hear about. <span class="tbc">TBC</span> Cadence with medical staff.</p></div>
+  </div>
+
+  <!-- PRO -->
+  <div class="ppanel" data-panel="pro" role="tabpanel" hidden>
+    <div class="ph9"><h3>The professional</h3><p>Mature tissue, adapted range of motion, and a career on the line. Read his numbers against pro norms.</p></div>
+    <div class="viz" role="img" aria-label="How much velocity explains elbow stress: 0.36 in high school, 0.29 in college, 0.076 in professionals.">
+      <span class="label">Velocity matters less to the elbow as athletes mature</span>
+      <svg viewBox="0 0 720 170" xmlns="http://www.w3.org/2000/svg">
+        <g font-size="15" font-weight="700">
+          <text x="150" y="42" text-anchor="end" style="fill:#AA9F97">HIGH SCHOOL</text><rect x="165" y="26" width="486" height="22" fill="#E5534B"/><text x="660" y="43" style="fill:#F1E9E4">0.36</text>
+          <text x="150" y="92" text-anchor="end" style="fill:#AA9F97">COLLEGE</text><rect x="165" y="76" width="391.5" height="22" fill="#E0C04A"/><text x="565" y="93" style="fill:#F1E9E4">0.29</text>
+          <text x="150" y="142" text-anchor="end" style="fill:#AA9F97">PRO</text><rect x="165" y="126" width="102.6" height="22" fill="#A6E84A"/><text x="277" y="143" style="fill:#F1E9E4">0.076</text>
+        </g>
+      </svg>
+      <span class="src9">R² of velocity vs. elbow varus torque · Manzi et al., 2023</span>
+    </div>
+    <div class="four">
+      <div class="fc9" style="--c:var(--green)"><span class="k">Reading his numbers</span><ul><li>Energy Interference baseline is 80+. ER/IR range-of-motion adaptations change how end-range testing reads.</li><li>A low kneeling throw in a pro points to hip clearance.</li><li>No pro lives in a reliant energy profile.</li></ul></div>
+      <div class="fc9" style="--c:var(--lime)"><span class="k">Why</span><ul><li>Pros use trunk and pelvis rotation to offload the elbow.</li><li>In VeloU's data, ages 23-25 still make up about 31% of Tommy John cases. Mature does not mean immune.</li></ul></div>
+      <div class="fc9" style="--c:var(--amber)"><span class="k">Programming</span><ul><li>Advanced athletes may live in P2 to P3 for good.</li><li>Shed the most fatiguing work first when throwing demand spikes (Module 5).</li></ul></div>
+      <div class="fc9" style="--c:var(--cool)"><span class="k">Working with his club</span><ul><li><span class="tbc">TBC</span> How we coordinate with an organization's staff and share data.</li></ul></div>
+    </div>
+  </div>
+
+  <!-- TEAMS -->
+  <div class="ppanel" data-panel="teams" role="tabpanel" hidden>
+    <div class="ph9"><h3>Teams</h3><p>Group training changes the room, not the standard.</p></div>
+    <div class="ask">
+      <span class="label">To be written with Nick</span>
+      <ol>
+        <li>Who counts as a team client (high school, travel, college, pro org)?</li>
+        <li>Does every athlete get an individual evaluation and program, or a team program?</li>
+        <li>How zones and coach counts change during a team session (Module 8).</li>
+        <li>Who communicates with the team's coach, and how often.</li>
+        <li>What stays non-negotiable no matter the group size.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="reads" style="margin-top:40px">
+  <a class="read" href="../throwing.html#phase-RTT" target="_blank" rel="noopener">
+    <span class="tag rec">REFERENCE</span>
+    <div><b>VeloU Throwing: Return to Throw / Return to Mound</b><span>coachesvelou.com · RPE conversion chart and RTT Day Score</span></div>
+  </a>
+</div>
+
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Checkpoint 9</span>
+  <h2>Prove it before Module 10</h2>
+  <p>Adjust the plan for the athlete in front of you.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Start Checkpoint 9</a>
+  </div>
+</div>
+
+<footer>
+  <a href="module-08.html">← Module 8: Coaching the Floor</a>
+  <a href="module-10.html">Module 10: Client Communication →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll(".pt")),panels=[].slice.call(document.querySelectorAll(".ppanel"));
+  function show(p){tabs.forEach(function(t){t.setAttribute("aria-selected",String(t.dataset.p===p))});panels.forEach(function(x){x.hidden=x.dataset.panel!==p})}
+  tabs.forEach(function(t){t.addEventListener("click",function(){show(t.dataset.p)})});show("youth");
+
+  // RTT vs standard multipliers, drawn to scale (0 to 3x)
+  var NS="http://www.w3.org/2000/svg",svg=document.getElementById("rttChart");
+  function el(t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e}
+  var rows=[["30%",1.25,.5],["40%",1.5,.5],["50%",1.75,.5],["60%",2,.75],["70%",2.25,1],["80%",2.5,1.25],["90%",2.75,1.5],["100%",3,2]];
+  var X0=60,W=600,Y0=190,H=160,max=3,bw=W/rows.length;
+  [0,1,2,3].forEach(function(v){var y=Y0-v/max*H;el("line",{x1:X0,y1:y,x2:X0+W,y2:y,stroke:"#352D28"});el("text",{x:X0-8,y:y+4,"text-anchor":"end","font-size":12,fill:"#766B63"},v+"×")});
+  rows.forEach(function(r,i){var x=X0+i*bw+bw*.14,w=bw*.34;
+    if(r[2]!=null){var h=r[2]/max*H;el("rect",{x:x,y:Y0-h,width:w,height:h,fill:"#766B63"})}
+    if(r[1]!=null){var h2=r[1]/max*H;el("rect",{x:x+w+3,y:Y0-h2,width:w,height:h2,fill:"#E5534B"})}
+    el("text",{x:X0+i*bw+bw/2,y:Y0+18,"text-anchor":"middle","font-size":13,fill:"#AA9F97"},r[0])});
+  el("rect",{x:X0,y:8,width:12,height:12,fill:"#766B63"});el("text",{x:X0+18,y:18,"font-size":13,fill:"#AA9F97"},"STANDARD PHASES");
+  el("rect",{x:X0+170,y:8,width:12,height:12,fill:"#E5534B"});el("text",{x:X0+188,y:18,"font-size":13,fill:"#AA9F97"},"RETURN TO THROW");
+  el("text",{x:X0+W,y:18,"text-anchor":"end","font-size":12,fill:"#766B63"},"RTT at 80%+: 0 volume in the worked example");
+
+  var TYPEFORM=(window.VELOU_FORMS||{})["checkpoint-9"]||"https://form.typeform.com/to/REPLACE_CHECKPOINT_9";var coach=document.getElementById("coach"),go=document.getElementById("go");
+  try{var v=localStorage.getItem("velou_coach");if(v)coach.value=v}catch(e){}
+  function link(){var n=coach.value.trim();try{localStorage.setItem("velou_coach",n)}catch(e){}go.href=TYPEFORM+"#coach_name="+encodeURIComponent(n)+"&module=9&date="+new Date().toISOString().slice(0,10);}
+  coach.addEventListener("input",link);link();
+})();
+</script>
+</body>
+</html>

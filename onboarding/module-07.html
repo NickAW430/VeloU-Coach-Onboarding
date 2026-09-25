@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Assessment Execution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script><style>
+/* Module 7 additions */
+.reads{display:grid;gap:10px}
+.read{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 18px;text-decoration:none}
+.read:hover{border-color:var(--red)}
+.read .tag{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.12em;padding:3px 8px;background:var(--red);color:#fff}
+.read .tag.rec{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.read b{font-family:var(--label);font-size:18px;font-weight:700;display:block}
+.read span{color:var(--muted);font-size:14.5px}
+.norms{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.nm{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--green);padding:12px;display:grid;gap:4px;align-content:start}
+.nm b{font-family:var(--display);font-weight:400;font-size:26px;line-height:1;color:var(--green)}
+.nm span{font-size:13.5px;color:var(--muted);line-height:1.35}
+@media (max-width:900px){.norms{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:480px){.norms{grid-template-columns:1fr 1fr}}
+.sytabs{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.sytab{appearance:none;background:var(--panel);border:1px solid var(--line);padding:0;cursor:pointer;display:grid;min-width:0;color:var(--muted);font:700 12.5px var(--label);letter-spacing:.04em;text-transform:uppercase;text-align:center;line-height:1.15}
+.sytab img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;filter:grayscale(.6) brightness(.8)}
+.sytab span{padding:8px 4px;overflow-wrap:anywhere}
+.sytab:hover{color:var(--text)}
+.sytab[aria-selected="true"]{border-color:var(--red);color:var(--text)}
+.sytab[aria-selected="true"] img{filter:none}
+@media (max-width:760px){.sytabs{grid-template-columns:repeat(4,1fr)}}
+.sypanel{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);display:grid;grid-template-columns:minmax(0,340px) 1fr}
+.sypanel>*{min-width:0}
+.sypanel .ph img{display:block;width:100%;height:100%;object-fit:cover}
+.sypanel .bd{padding:18px 20px;display:grid;gap:14px;align-content:start}
+.sypanel h3{font-size:28px;color:var(--red)}
+.sy2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sy2 .k,.sy4 .k{font-family:var(--label);font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.sy2 ul,.sy4 ul{margin:6px 0 0;padding-left:18px;display:grid;gap:4px;font-size:15px}
+.sy4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sy4>div{background:var(--panel-2);border-top:3px solid var(--c);padding:10px 12px}
+.sy4 .k{color:var(--c)}
+.sy4 ul{font-size:14px}
+@media (max-width:900px){.sypanel{grid-template-columns:1fr}.sypanel .ph img{max-height:320px}.sy4{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.sy2,.sy4{grid-template-columns:1fr}}
+.lk{display:grid;gap:8px}
+.lk details{background:var(--panel);border:1px solid var(--line)}
+.lk summary{cursor:pointer;padding:14px 16px;font-family:var(--label);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;gap:10px}
+.lk summary::after{content:"+";color:var(--red);font-family:var(--display);font-size:20px;line-height:1}
+.lk details[open] summary::after{content:"−"}
+.lk .rows{display:grid;border-top:1px solid var(--line)}
+.lk .r{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:15px;align-items:baseline}
+.lk .r:last-child{border-bottom:0}
+.lk .r .eq{font-family:var(--display);color:var(--red)}
+.lk .r b{font-family:var(--label);font-weight:700;font-size:15.5px;text-transform:uppercase;letter-spacing:.02em;color:var(--lime)}
+@media (max-width:560px){.lk .r{grid-template-columns:1fr}.lk .r .eq{display:none}}
+.rules4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rules4 div{background:var(--panel);border:1px solid var(--line);padding:14px;display:grid;gap:8px;align-content:start}
+.rules4 span{font-family:var(--display);font-size:26px;color:var(--red);line-height:1}
+.rules4 p{font-size:15px}
+@media (max-width:760px){.rules4{grid-template-columns:1fr 1fr}}
+
+.stds7{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.g7{background:var(--panel);border:1px solid var(--line);padding:14px;display:grid;gap:4px;justify-items:center;text-align:center}
+.g7 svg{width:110px;height:auto}
+.g7 b{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;color:var(--green)}
+.g7 span{font-family:var(--label);font-size:13.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+@media (max-width:700px){.stds7{grid-template-columns:1fr 1fr}}
+.xtabs{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.xtab{appearance:none;background:var(--panel);border:1px solid var(--line);color:var(--muted);font:700 13.5px var(--label);letter-spacing:.04em;text-transform:uppercase;padding:10px 6px;cursor:pointer;display:grid;gap:4px;justify-items:center;text-align:center;line-height:1.15}
+.xtab span{font-family:var(--display);font-size:22px;color:var(--faint);font-weight:400}
+.xtab:hover{color:var(--text)}
+.xtab[aria-selected="true"]{border-color:var(--red);color:var(--text);background:var(--panel-2)}
+.xtab[aria-selected="true"] span{color:var(--red)}
+.xtab{min-width:0;overflow-wrap:anywhere}
+@media (max-width:760px){.xtabs{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:480px){.xtabs{grid-template-columns:repeat(2,1fr)}}
+.xpanel>*{min-width:0}
+.xpanel{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);padding:20px 22px;display:grid;gap:16px}
+.xhead{display:flex;gap:16px;align-items:center}
+.xhead .xn{font-family:var(--display);font-size:52px;line-height:1;color:var(--red)}
+.xhead h3{font-size:30px}
+.xgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.xbox{background:var(--panel-2);border:1px solid var(--line);padding:12px 14px;display:grid;gap:4px}
+.xbox .k{font-family:var(--label);font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.xbox.pass{border-color:var(--green)}
+.xbox.pass .k{color:var(--green)}
+.xbox p{font-size:15.5px}
+@media (max-width:640px){.xgrid{grid-template-columns:1fr}}
+.xsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.xsteps div{border-top:2px solid var(--amber);padding-top:8px;display:grid;gap:4px}
+.xsteps b{font-family:var(--label);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--amber)}
+.xsteps p{font-size:15px;color:var(--muted)}
+.tr{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.tr .tr{margin:8px 0 0 22px;padding-left:14px;border-left:2px solid var(--line)}
+.br{display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(0,1.3fr);gap:10px;align-items:baseline;background:var(--panel-2);border:1px solid var(--line);padding:10px 12px}
+.br .if{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.1em;color:var(--bg);background:var(--red);padding:1px 6px}
+.br .ic{font-family:var(--label);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.02em}
+.br .ar{font-family:var(--display);color:var(--red);font-size:18px}
+.br .th{font-size:15px}
+@media (max-width:640px){.br{grid-template-columns:auto 1fr}.br .ar{display:none}.br .th{grid-column:1/-1}}
+.xnote{font-size:15px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.xnav{display:flex;justify-content:space-between;gap:10px}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text);cursor:pointer;font-size:14px;padding:10px 16px}
+.btn.ghost:hover{border-color:var(--red);background:transparent}
+.btn.ghost:disabled{opacity:.35;cursor:default}
+
+.flow7{display:grid;grid-template-columns:repeat(6,1fr);gap:0;counter-reset:st}
+.st7{position:relative;background:var(--panel);border:1px solid var(--line);padding:16px 12px;display:grid;gap:6px;align-content:start}
+.st7+.st7{border-left:0}
+.st7::after{content:"";position:absolute;right:-9px;top:50%;width:16px;height:16px;background:var(--panel);border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:1}
+.st7:last-child::after{display:none}
+.st7 .n{font-family:var(--display);font-size:30px;line-height:1;color:var(--red)}
+.st7 b{font-family:var(--label);font-weight:700;font-size:17px;text-transform:uppercase;letter-spacing:.03em;line-height:1.1}
+.st7 span{font-size:13.5px;color:var(--muted)}
+.st7 .comp{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+@media (max-width:860px){.flow7{grid-template-columns:repeat(3,1fr)}.st7:nth-child(4){border-left:1px solid var(--line)}.st7:nth-child(n+4){border-top:0}.st7::after{display:none}}
+@media (max-width:480px){.flow7{grid-template-columns:1fr 1fr}.st7{border-left:1px solid var(--line)!important;border-top:1px solid var(--line)!important}}
+
+.tests{display:grid;gap:10px}
+.test{background:var(--panel);border:1px solid var(--line);display:grid;grid-template-columns:230px 1fr}
+.test .side{padding:18px;border-right:1px solid var(--line);display:grid;gap:8px;align-content:start;background:var(--panel-2)}
+.test .side b{overflow-wrap:anywhere;font-family:var(--display);font-weight:400;font-size:22px;text-transform:uppercase;line-height:1.05}
+.test .side .comp{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.test .side p{font-size:14.5px;color:var(--muted)}
+.test .side .out{display:flex;flex-wrap:wrap;gap:6px}
+.test .side .out span{font-family:var(--label);font-weight:600;font-size:13px;border:1px solid var(--line);padding:2px 8px}
+.proto{display:grid;grid-template-columns:repeat(5,1fr)}
+.pf{padding:14px;border-right:1px solid var(--line);display:grid;gap:6px;align-content:start}
+.pf:last-child{border-right:0}
+.pf .k{font-family:var(--label);font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.pf p{font-size:14.5px}
+.pf .tbc{justify-self:start}
+@media (max-width:900px){.test{grid-template-columns:1fr}.test .side{border-right:0;border-bottom:1px solid var(--line)}.proto{grid-template-columns:1fr 1fr}.pf{border-bottom:1px solid var(--line)}}
+@media (max-width:480px){.proto{grid-template-columns:1fr}}
+
+.cliff{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:14px}
+.cliff-bar{position:relative;height:40px;display:grid;grid-template-columns:1fr 1fr}
+.cliff-bar div{display:grid;place-items:center;font-family:var(--display);font-size:18px;color:#100D0B}
+.cliff-bar .pin{position:absolute;top:-10px;width:3px;height:60px;background:var(--text);transform:translateX(-50%)}
+.cliff-bar .pin span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:var(--label);font-weight:700;font-size:14px;white-space:nowrap;color:var(--text)}
+.cliff-l{position:relative;height:18px;font-family:var(--label);font-size:13px;color:var(--muted)}
+.cliff-l span{position:absolute;transform:translateX(-50%)}
+
+.stops{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sp7{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--red);padding:16px;display:grid;gap:8px;align-content:start}
+.sp7 b{font-family:var(--display);font-weight:400;font-size:24px;text-transform:uppercase}
+.sp7 p{font-size:15px;color:var(--muted)}
+@media (max-width:700px){.stops{grid-template-columns:1fr}}
+
+.checks{background:var(--panel);border:1px solid var(--line);padding:6px 18px}
+.ck{display:grid;grid-template-columns:26px 1fr;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.ck:last-child{border-bottom:0}
+.ck input{width:20px;height:20px;accent-color:var(--red);margin:2px 0 0}
+.ck span{font-size:16px}
+.ck input:checked+span{color:var(--muted);text-decoration:line-through}
+.progress{display:flex;align-items:center;gap:12px;font-family:var(--label);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:14px;color:var(--muted)}
+.progress .bar{flex:1;height:8px;background:var(--panel-2)}
+.progress .bar i{display:block;height:100%;width:0;background:var(--green);transition:width .2s}
+@media (prefers-reduced-motion:reduce){.progress .bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">Read pre-start</span>
+    <span class="chip on">Module 7 of 11</span>
+    <span class="chip">Sign off Week 1</span>
+  </div>
+  <h1>Assessment <span class="red">execution</span></h1>
+  <p class="lede">Every placement in Module 6 is only as good as the numbers behind it. Know the evaluation before you walk in. Run it to protocol in Week 1.</p>
+  <div class="stats" role="list">
+    <div class="stat" role="listitem"><b>6</b><span>Stations</span></div>
+    <div class="stat" role="listitem"><b>7</b><span>Screen exams</span></div>
+    <div class="stat" role="listitem"><b>0</b><span>Variance between coaches</span></div>
+    <div class="stat" role="listitem"><b>1</b><span>Observed sign-off</span></div>
+  </div>
+</header>
+
+<!-- 7.1 -->
+<section id="why">
+  <div class="sec-head">
+    <span class="num">7.1</span>
+    <h2>A bad number routes him wrong</h2>
+    <p>Placement lines are sharp. A sloppy rep near a line puts an athlete in the wrong program for a full block.</p>
+  </div>
+  <div class="cliff" role="img" aria-label="Energy Production 87.2 places an athlete in Tension Literacy. 87.9 places him in a deficit program. A 0.7 point measurement error changes his program.">
+    <span class="label">Same athlete, two measurements</span>
+    <div style="padding-top:26px">
+      <div class="cliff-bar"><div style="background:#D4F57A">Tension Literacy</div><div style="background:#E5534B;color:#fff">Deficit program</div>
+        <span class="pin" style="left:40%"><span>87.2 · sloppy rep</span></span>
+        <span class="pin" style="left:63.3%"><span>87.9 · clean rep</span></span>
+      </div>
+    </div>
+    <div class="cliff-l"><span style="left:0;transform:none">86</span><span style="left:50%">87.5</span><span style="left:100%;transform:translateX(-100%)">89</span></div>
+  </div>
+  <div class="rule"><span class="label">Standard</span><p>Every coach runs every test the same way, every time. Same setup, same instructions, same number of trials, same rule for which trial counts. If two coaches test the same athlete, they get the same number.</p></div>
+</section>
+
+<!-- 7.2 -->
+<section id="flow">
+  <div class="sec-head">
+    <span class="num">7.2</span>
+    <h2>The evaluation, station by station</h2>
+    <p>Least fatiguing first, so no test is contaminated by the one before it. <span class="tbc">TBC</span> Nick to confirm order.</p>
+  </div>
+  <div class="flow7">
+    <div class="st7"><span class="n">1</span><b>Movement screen</b><span class="comp">Potential + screen</span><span>Height, weight, H:W, then 7 exams</span></div>
+    <div class="st7"><span class="n">2</span><b>ArmCare</b><span class="comp">Interference</span><span>Shoulder strength, before any throwing</span></div>
+    <div class="st7"><span class="n">3</span><b>Force plate</b><span class="comp">Production</span><span>Force, power, impulses, CI:EI</span></div>
+    <div class="st7"><span class="n">4</span><b>Med balls</b><span class="comp">Transference</span><span>1 lb and 2 lb, ground to pelvis</span></div>
+    <div class="st7"><span class="n">5</span><b>Kneeling throw</b><span class="comp">Transference</span><span>Legs removed, trunk to arm</span></div>
+    <div class="st7"><span class="n">6</span><b>Velocity</b><span class="comp">MPH</span><span>What he actually throws</span></div>
+  </div>
+</section>
+
+<!-- 7.3 -->
+<section id="screen">
+  <div class="sec-head">
+    <span class="num">7.3</span>
+    <h2>The movement screen</h2>
+    <p>Station 1. Height, weight, and H:W, then seven exams in this order. Each one confirms or questions what you saw in the one before.</p>
+  </div>
+
+  <div class="stds7" role="list" aria-label="Pass standards">
+    <div class="g7" role="listitem"><svg viewBox="0 0 120 70" aria-hidden="true" data-deg="45"></svg><b>45°</b><span>Hip IR, each leg</span></div>
+    <div class="g7" role="listitem"><svg viewBox="0 0 120 70" aria-hidden="true" data-deg="60"></svg><b>60°+</b><span>Adductor abduction</span></div>
+    <div class="g7" role="listitem"><svg viewBox="0 0 120 70" aria-hidden="true" data-deg="45"></svg><b>45°</b><span>T-spine rotation, dominant side</span></div>
+    <div class="g7" role="listitem"><svg viewBox="0 0 120 70" aria-hidden="true" data-deg="180"></svg><b>~180°</b><span>Shoulder ER + IR total arc</span></div>
+  </div>
+
+  <div class="xtabs" role="tablist" id="xtabs"></div>
+  <div class="xpanel" id="xpanel" role="tabpanel" aria-live="polite"></div>
+  <div class="xnav"><button type="button" class="btn ghost" id="xprev">← Previous exam</button><button type="button" class="btn ghost" id="xnext">Next exam →</button></div>
+
+  <div class="rule"><span class="label">Rule</span><p>The screen is a chain of evidence. Never call a finding from one exam alone. Confirm it with the next one or with a manual test.</p></div>
+</section>
+
+<!-- 7.4 -->
+<section id="shoulder">
+  <div class="sec-head">
+    <span class="num">7.4</span>
+    <h2>Reading the shoulder</h2>
+    <p>When shoulder flexion fails, the shirt comes off. Know what normal looks like, then match what you see to a syndrome.</p>
+  </div>
+
+  <div class="norms">
+    <div class="nm"><b>3"</b><span>Medial border to spine, parallel to it</span></div>
+    <div class="nm"><b>T2-T7</b><span>Where the scapula sits</span></div>
+    <div class="nm"><b>30°</b><span>Scapula rotated to the frontal plane, flat on the thorax</span></div>
+    <div class="nm"><b>&lt; 1/3</b><span>Humeral head in front of the acromion</span></div>
+    <div class="nm"><b>T1</b><span>Shoulders sit slightly below this horizontal line</span></div>
+    <div class="nm"><b>Palms in</b><span>Facing the body, humerus in neutral rotation</span></div>
+  </div>
+
+  <div class="sytabs" role="tablist" id="sytabs"></div>
+  <div class="sypanel" id="sypanel" role="tabpanel" aria-live="polite"></div>
+
+  <div class="sec-head" style="margin-top:6px"><h3>Quick lookup: if you see</h3><p>Tap a group. Each finding points to the muscle behind it.</p></div>
+  <div class="lk" id="lk"></div>
+
+  <div class="sec-head" style="margin-top:6px"><h3>Four rules for using this</h3></div>
+  <div class="rules4">
+    <div><span>1</span><p>Expect more than one dysfunction. Choose drills so fixing one doesn't work against another.</p></div>
+    <div><span>2</span><p>Inhibit the overactive muscle before you activate the underactive one.</p></div>
+    <div><span>3</span><p>Watch how global lifts affect the corrective work, like deadlifts for an athlete with shoulder depression syndrome.</p></div>
+    <div><span>4</span><p>No symptoms does not mean healthy.</p></div>
+  </div>
+
+  <a class="read" href="assets/shoulder/poster.jpg" target="_blank" rel="noopener">
+    <span class="tag rec">FULL POSTER</span>
+    <div><b>Understanding Shoulder Motion &amp; Dysfunction</b><span>Open the complete poster, including the muscles behind each motion</span></div>
+  </a>
+</section>
+
+<!-- 7.5 -->
+<section id="protocols">
+  <div class="sec-head">
+    <span class="num">7.5</span>
+    <h2>Test protocols</h2>
+    <p>Five things define every test after the screen. Learn them before Week 1.</p>
+  </div>
+  <div class="tests">
+    <article class="test">
+      <div class="side"><span class="comp">Energy Interference</span><b>ArmCare</b><div class="out"><span>Shoulder strength</span></div><p>Pros are read against an 80+ baseline.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Energy Production</span><b>Force plate</b><div class="out"><span>Peak force</span><span>Peak power</span><span>Power / BM</span><span>Ecc. impulse</span><span>Con. impulse</span><span>CI:EI</span></div></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Energy Transference</span><b>Med balls</b><div class="out"><span>1 lb</span><span>2 lb</span></div><p>Ground to pelvis. Compare the two against norms.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Energy Transference</span><b>Kneeling throw</b><div class="out"><span>Kneeling velo</span></div><p>Highest single correlation to velocity. Legs out of the throw.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Actual output</span><b>Velocity</b><div class="out"><span>MPH</span></div><p>Feeds Delta and Throwing Level.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- 7.4 -->
+<section id="stops">
+  <div class="sec-head">
+    <span class="num">7.6</span>
+    <h2>When to stop a test</h2>
+    <p>A number is never worth an athlete. Stop, record why, and tell your Senior Director.</p>
+  </div>
+  <div class="stops">
+    <div class="sp7"><b>Pain</b><p>Any pain, anywhere. Stop the test and the session's remaining tests on that area. The family hears about it the same day.</p></div>
+    <div class="sp7"><b>Compensation</b><p>He can't hold the position the test requires. The number would measure the wrong thing.</p></div>
+    <div class="sp7"><b>Fatigue</b><p>Output is dropping trial to trial. Later numbers would understate him.</p></div>
+  </div>
+</section>
+
+<!-- 7.5 -->
+<section id="data">
+  <div class="sec-head">
+    <span class="num">7.7</span>
+    <h2>After the test</h2>
+  </div>
+  <div class="stops">
+    <div class="sp7" style="border-top-color:var(--lime)"><b>Enter it now</b><p>Numbers go into the system before the athlete leaves. Nothing lives on a notepad.</p></div>
+    <div class="sp7" style="border-top-color:var(--lime)"><b>Check it</b><p>Does it make sense next to his other numbers and his last test? A strange number gets retested, not explained away.</p></div>
+    <div class="sp7" style="border-top-color:var(--lime)"><b>Flag it</b><p>A Delta above +5 or a big drop from last time goes to your Senior Director the same day.</p></div>
+  </div>
+  <div class="rule"><span class="label">Retest</span><p>Re-diagnosis at the end of every block (Module 4). <span class="tbc">TBC</span> Energy component retest every 2 weeks.</p></div>
+</section>
+
+<!-- 7.6 -->
+<section id="signoff">
+  <div class="sec-head">
+    <span class="num">7.8</span>
+    <h2>Week 1 sign-off</h2>
+    <p>A senior coach watches you run a full evaluation, then retests the same athlete. Use this to track your own readiness.</p>
+  </div>
+  <div class="progress"><span id="pc">0 of 8</span><div class="bar"><i id="pb"></i></div></div>
+  <div class="checks" id="checks">
+    <label class="ck"><input type="checkbox" id="c1"><span>Every station set up and checked before the athlete arrives</span></label>
+    <label class="ck"><input type="checkbox" id="c2"><span>Backup plan ready if a device fails</span></label>
+    <label class="ck"><input type="checkbox" id="c3"><span>Stations run in order</span></label>
+    <label class="ck"><input type="checkbox" id="c4"><span>Same cue, word for word, on every test</span></label>
+    <label class="ck"><input type="checkbox" id="c5"><span>Correct number of trials; the right trial counted</span></label>
+    <label class="ck"><input type="checkbox" id="c6"><span>Invalid reps caught and repeated</span></label>
+    <label class="ck"><input type="checkbox" id="c7"><span>All data entered before the athlete leaves</span></label>
+    <label class="ck"><input type="checkbox" id="c8"><span>Every number within tolerance of the senior coach's retest <span class="tbc">TBC</span></span></label>
+  </div>
+  <p style="color:var(--muted);font-size:15px">This checklist stays in your browser only. The senior coach records the official sign-off.</p>
+</section>
+
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Checkpoint 7</span>
+  <h2>Prove it before Week 1</h2>
+  <p>Work through screen findings the way you will on the table.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Start Checkpoint 7</a>
+  </div>
+</div>
+
+<footer style="margin-top:48px">
+  <a href="module-06.html">← Module 6: Diagnostic Reasoning</a>
+  <a href="module-08.html">Module 8: Coaching the Floor →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll("#checks input"));
+  function upd(){var n=boxes.filter(function(b){return b.checked}).length;
+    document.getElementById("pc").textContent=n+" of "+boxes.length;
+    document.getElementById("pb").style.width=(n/boxes.length*100)+"%";
+    try{localStorage.setItem("velou_m7",JSON.stringify(boxes.map(function(b){return b.checked})))}catch(e){}}
+  try{var s=JSON.parse(localStorage.getItem("velou_m7")||"[]");boxes.forEach(function(b,i){b.checked=!!s[i]})}catch(e){}
+  boxes.forEach(function(b){b.addEventListener("change",upd)}); upd();
+})();
+
+(function(){
+  // angle gauges
+  [].forEach.call(document.querySelectorAll(".g7 svg"),function(s){
+    var d=+s.dataset.deg, cx=60, cy=62, r=50, NS="http://www.w3.org/2000/svg";
+    function pt(a){var t=Math.PI*(1-a/180);return [cx+r*Math.cos(t),cy-r*Math.sin(t)]}
+    var bg=document.createElementNS(NS,"path");bg.setAttribute("d","M"+(cx-r)+" "+cy+" A"+r+" "+r+" 0 0 1 "+(cx+r)+" "+cy);bg.setAttribute("fill","none");bg.setAttribute("stroke","#352D28");bg.setAttribute("stroke-width","8");s.appendChild(bg);
+    var p=pt(Math.min(d,180)),fg=document.createElementNS(NS,"path");
+    fg.setAttribute("d","M"+(cx-r)+" "+cy+" A"+r+" "+r+" 0 0 1 "+p[0].toFixed(1)+" "+p[1].toFixed(1));fg.setAttribute("fill","none");fg.setAttribute("stroke","#A6E84A");fg.setAttribute("stroke-width","8");s.appendChild(fg);
+    var ln=document.createElementNS(NS,"line");ln.setAttribute("x1",cx);ln.setAttribute("y1",cy);ln.setAttribute("x2",p[0].toFixed(1));ln.setAttribute("y2",p[1].toFixed(1));ln.setAttribute("stroke","#F1E9E4");ln.setAttribute("stroke-width","2");s.appendChild(ln);
+  });
+
+  var X=[
+    {t:"Barefoot walk",pos:"Standing, barefoot",look:"Foot strength and congruency with the gait pattern.",
+      pass:"Arch holds through the walk.",
+      tree:[{i:"Arch flattens (he had an arch to begin with)",t:"Check whether the foot everts and the knee tracks with it.",sub:[
+        {i:"Knee does NOT track with the eversion",t:"Assume the problem is upstream at the hip."},
+        {i:"Knee tracks with the eversion",t:"The hip is strong enough to handle the foot position. Now ask whether the dysfunction is a byproduct of how he moves and produces force."}]}],
+      note:"An athlete who presents flat-footed from the start is a different finding. This path is for an arch that collapses."},
+    {t:"Barefoot squat",pos:"Standing, barefoot, his own stance",look:"Dorsiflexion and hip ROM under load. The stance he chooses.",
+      pass:"Full depth, feet organized, even on both sides.",
+      tree:[
+        {i:"Foot corrects out of the dysfunction as he lowers his center of mass",t:"Loading the foot fixed it. Train the feet to strengthen the arch."},
+        {i:"Foot does NOT correct",t:"Assume limited dorsiflexion. Confirm with a manual test.",sub:[
+          {i:"Structural block",t:"A jammed-up talus. Train to that."},
+          {i:"Soft tissue",t:"The soleus is limiting. Train to that."}]},
+        {i:"Deeper on one side",t:"That hip likely has more internal rotation."},
+        {i:"Narrow stance, reaches the bottom well",t:"Likely enough dorsiflexion, with sufficient or excessive hip IR."},
+        {i:"Wide stance, shallow squat",t:"Likely an ER-biased hip, possibly limited into IR.",sub:[
+          {i:"Manual hip IR test later shows NO IR limit",t:"The posterior chain is likely weak and not pulling him into posterior tilt on the way down."}]}],
+      note:"If gait or the foot's response to load hinted at limited dorsiflexion and the squat was poor, check the hip next, then confirm dorsiflexion with a manual test or a heel-elevated squat. If the heel lift does not improve the squat drastically, and the manual test shows limited dorsiflexion, the posterior chain is severely weak. The stance he chooses shapes how we train him."},
+    {t:"Prone hip IR / ER",pos:"Prone on the table",look:"Structural hip capacity. Confirms what the squat suggested.",
+      pass:"IR: 45° each leg. ER: the leg nearly lays flat, slightly above the opposite leg.",
+      tree:[
+        {i:"Adductors or hamstrings grab as you push into IR",t:"Move in and out of IR for several reps.",sub:[
+          {i:"ROM improves with reps",t:"Check adductor mobility and adductor brevis, both supine (below)."}]},
+        {i:"Lead leg IR greater than back leg IR",t:"Common in pitchers. Note it; it isn't automatically a problem."}],
+      steps:[
+        ["ER check (Craig's Test)","Hand on the posterior pelvis, same side. Rotate the leg toward the other side."],
+        ["Adductor","Supine. One leg straight. Passively move the other leg into horizontal abduction. Sufficient: 60° or more."],
+        ["Adductor brevis","Same leg: bend the knee, ankle just above the opposite knee, resting flat on the other thigh. One hand on the opposite pelvis, one on the bent knee, press apart. Sufficient: the bent knee comes in line with the straight knee without much effort."]]},
+    {t:"Exaggerated lunge reach",pos:"Pitching stance, reaching long",look:"Hip extension, then the whole anterior sling.",
+      steps:[
+        ["1 · Reach","Reach as far as he can in his pitching stance, until he feels very extended."],
+        ["2 · Straighten","Extend the back knee as much as possible. Can he get his hips square to the front? If not, you're already looking at a hip extension issue."],
+        ["3 · Arms up","Arms overhead. Bent elbows, or arms that can't reach his ears, means check shoulder flexion later."],
+        ["4 · Arch back","Arch back as far as he can, still in the lunge. This tests thoracic plus hip extension together."]],
+      pass:"The back knee stays straight, the arms stay straight, and his shoulders get at least over his glutes.",
+      tree:[{i:"Limited anywhere",t:"Ask if he's comfortable doing a back bridge. If yes, watch where the arch comes from.",sub:[
+        {i:"Downslope toward the arms",t:"Shoulder flexion is holding him back."},
+        {i:"Balanced throughout",t:"Pass."},
+        {i:"Downslope toward the legs",t:"Posterior chain is weak, or can't reciprocally inhibit the anterior chain enough to get there."}]}]},
+    {t:"Supine shoulder flexion",pos:"Supine, knees bent, feet on the table",look:"Clean shoulder flexion.",
+      pass:"Arms move cleanly overhead and lay flat on the table.",
+      tree:[{i:"Arms can't lay flat or move cleanly",t:"Have him stand and take his shirt off. Watch how the scapulae move, static and dynamic. Match what you see to the syndromes in 7.4 below."}]},
+    {t:"Tall-kneeling rotation",pos:"Tall kneeling, hands crossed on shoulders",look:"Thoracic rotation without the pelvis.",
+      steps:[["Set up","Hands on shoulders, criss-crossed. Squeeze the glutes so the pelvis can't rotate."],["Test","Rotate to the dominant side, then the non-dominant side."]],
+      pass:"At least 45° to the dominant side.",
+      tree:[{i:"Excessive to the dominant side, limited to the non-dominant side",t:"Acceptable, as long as it comes with sufficient or excessive IR in the front hip."}]},
+    {t:"Supine shoulder ER / IR",pos:"Supine",look:"Total rotational arc of the shoulder.",
+      pass:"ER + IR total arc around 180°. Slightly less is fine; he isn't fully warmed up yet.",
+      tree:[]}
+  ];
+
+  var tabs=document.getElementById("xtabs"),panel=document.getElementById("xpanel"),cur=0;
+  function tree(list){if(!list||!list.length)return "";return '<ul class="tr">'+list.map(function(n){return '<li><div class="br"><span class="if">If</span><span class="ic">'+n.i+'</span><span class="ar">→</span><span class="th">'+n.t+'</span></div>'+tree(n.sub)+'</li>'}).join("")+'</ul>'}
+  function show(i){
+    cur=i;var x=X[i];
+    [].forEach.call(tabs.children,function(b,j){b.setAttribute("aria-selected",j===i?"true":"false")});
+    var h='<div class="xhead"><span class="xn">'+(i+1)+'</span><div><h3>'+x.t+'</h3><span class="label">'+x.pos+'</span></div></div>'+
+      '<div class="xgrid"><div class="xbox"><span class="k">Looking for</span><p>'+x.look+'</p></div><div class="xbox pass"><span class="k">Pass</span><p>'+x.pass+'</p></div></div>';
+    if(x.steps)h+='<div class="xsteps">'+x.steps.map(function(s){return '<div><b>'+s[0]+'</b><p>'+s[1]+'</p></div>'}).join("")+'</div>';
+    if(x.tree&&x.tree.length)h+='<span class="label">Reasoning</span>'+tree(x.tree);
+    if(x.note)h+='<p class="xnote">'+x.note+'</p>';
+    panel.innerHTML=h;
+    document.getElementById("xprev").disabled=i===0;document.getElementById("xnext").disabled=i===X.length-1;
+  }
+  X.forEach(function(x,i){var b=document.createElement("button");b.type="button";b.className="xtab";b.setAttribute("role","tab");b.innerHTML='<span>'+(i+1)+'</span>'+x.t;b.addEventListener("click",function(){show(i)});tabs.appendChild(b)});
+  document.getElementById("xprev").addEventListener("click",function(){if(cur>0)show(cur-1)});
+  document.getElementById("xnext").addEventListener("click",function(){if(cur<X.length-1)show(cur+1)});
+  show(0);
+})();
+
+(function(){var TYPEFORM=(window.VELOU_FORMS||{})["checkpoint-7"]||"https://form.typeform.com/to/REPLACE_CHECKPOINT_7";var coach=document.getElementById("coach"),go=document.getElementById("go");
+try{var v=localStorage.getItem("velou_coach");if(v)coach.value=v}catch(e){}
+function link(){var n=coach.value.trim();try{localStorage.setItem("velou_coach",n)}catch(e){}go.href=TYPEFORM+"#coach_name="+encodeURIComponent(n)+"&module=7&date="+new Date().toISOString().slice(0,10);}
+coach.addEventListener("input",link);link();})();
+
+(function(){
+  var S=[
+    {id:"downward-rotation",n:"Scapular downward rotation",look:["Inferior medial border closer to the spine than the superior border","Shoulders lower at the acromion end than at the neck"],
+     confirm:["After 30° abduction and 60° flexion, the scapula re-enters downward rotation instead of continuing upward","Decreased humeral elevation in the final phase of flexion","Inferior angle doesn't reach midaxillary at the end of upward rotation"],
+     inh:["Rhomboids","Levator scapula","Pectoralis minor","Latissimus dorsi","Deltoid","Supraspinatus"],act:["Upper trapezius","Lower trapezius","Serratus anterior"],
+     use:["Vertical shrugs","Quadruped moves","Wall slide variations","Landmine presses","Shoulder flexion"],avoid:["Shrugs","Heavy carries","Frequent deadlifting","Pull / chin-up","Excessive scapular adduction"]},
+    {id:"depression",n:"Scapular depression",look:["Like downward rotation, but rhomboids and levator scapulae usually aren't short","Long neck; superior angle below T2","Lat dominance may be interfering with elevation"],
+     confirm:["Active-assisted scapular elevation separates out associated pain","Upper trap doesn't elevate the shoulder during elevation","Pain in the upper trap region"],
+     inh:["Pectoralis minor","Latissimus dorsi","Pectoralis major"],act:["Upper trapezius","Middle trapezius","Levator scapula"],
+     use:["Wall-assisted flexion","Quadruped moves","Wall slide variations","Landmine presses","OH carry"],avoid:["Shrugs","Heavy carries","Frequent deadlifting","Pull / chin-up","Prone trap raises"]},
+    {id:"abduction",n:"Scapular abduction",look:["Medial border more than 3\" from the spine","Scapula rotated more than 30° into the frontal plane"],
+     confirm:["Measure medial border to spine","Active-assisted adduction produces pain in shoulder flexion"],
+     inh:["Pectoralis major","Pectoralis minor","Deltoid","Supraspinatus","Serratus anterior"],act:["Upper trapezius","Middle trapezius","Rhomboids"],
+     use:["Horizontal rowing variations","Prone abduction","Heavy carries","Adducted goblet position"],avoid:["Zercher positioning","Serratus-dominant exercises","Overhead pressing"]},
+    {id:"winging",n:"Scapular winging & tilting",look:["Inferior angle protrudes (tilting)","Thoracic kyphosis (tilting)","Medial border protrudes from the thorax (winging)","Flat thoracic spine (winging)"],
+     confirm:["Scapula and humerus move 1:1","Insufficient posterior tilt even with passive guidance"],
+     inh:["Pectoralis minor","Rotator cuff","Deltoid","Serratus anterior*"],act:["Upper trapezius","Lower trapezius","Middle trapezius","Serratus anterior*","Rhomboids"],
+     use:["Prone trap raises","Wall slide variations","Quadruped movements","Wall press / push-up"],avoid:["Anything that lets winging continue during the rep"],
+     note:"*Serratus anterior appears on both sides on the poster."},
+    {id:"anterior-glide",n:"Humeral anterior glide",look:["More than 1/3 of the humeral head in front of the acromion","Distal humerus posterior to the proximal end","Usually with an anteriorly tilted scapula"],
+     confirm:["Passively correcting the glide reduces symptoms","A small indentation below the acromion on the back of the shoulder"],
+     inh:["Pectoralis minor","Pectoralis major"],act:["External rotators"],
+     use:["Banded ER + IR","Supine flexion","Horizontal row","T-spine mobility","Quadruped"],avoid:["Overhead pressing","Rowing with anterior glide","Heavy IR focus"]},
+    {id:"superior-glide",n:"Humeral superior glide",look:["Humeral head rides up into the acromion during elevation, flexion, and abduction"],
+     confirm:["Sharp pain at the front and side of the acromion in abduction and rotation","Correcting depressed shoulders doesn't change humeral head height","Symptoms in flexion drop with the elbows bent"],
+     inh:["Deltoid","Teres minor","Supraspinatus"],act:["Supraspinatus","Infraspinatus"],
+     use:["Wall slides + lift-offs","Prone ER lift-offs","Prone IR without superior glide","Prone trap raises"],avoid:["ER in adduction","Abduction with a straight elbow","Resisted flexion with a straight elbow"]},
+    {id:"medial-rotation",n:"Shoulder medial rotation",look:["Humerus medially rotated in the anatomical position","Elbows sit away from the body"],
+     confirm:["Shoulder flexion bends the elbow and flares it out","Less humeral lateral rotation during flexion","Palms face backward in the anatomical position"],
+     inh:["Latissimus dorsi","Pectoralis minor","Pectoralis major","Teres major"],act:["Lateral rotators"],
+     use:["Shoulder flexion","Wall slides","Quadruped movements","External rotation","Bottoms-up carries"],avoid:["Pull / chin-ups","OH pressing","Zercher positioning"]}
+  ];
+  function ul(a){return "<ul>"+a.map(function(x){return "<li>"+x+"</li>"}).join("")+"</ul>"}
+  var tabs=document.getElementById("sytabs"),panel=document.getElementById("sypanel");
+  function show(i){var s=S[i];
+    [].forEach.call(tabs.children,function(b,j){b.setAttribute("aria-selected",j===i?"true":"false")});
+    panel.innerHTML='<div class="ph"><img src="assets/shoulder/'+s.id+'.jpg" alt="'+s.n+' example"></div><div class="bd"><h3>'+s.n+'</h3>'+
+      '<div class="sy2"><div><span class="k">Look for</span>'+ul(s.look)+'</div><div><span class="k">Confirm</span>'+ul(s.confirm)+'</div></div>'+
+      '<div class="sy4"><div style="--c:#E5534B"><span class="k">Inhibit · short</span>'+ul(s.inh)+'</div><div style="--c:#A6E84A"><span class="k">Activate · weak</span>'+ul(s.act)+'</div><div style="--c:#D4F57A"><span class="k">Use</span>'+ul(s.use)+'</div><div style="--c:#E0C04A"><span class="k">Avoid</span>'+ul(s.avoid)+'</div></div>'+
+      (s.note?'<p style="font-size:13.5px;color:var(--muted)">'+s.note+'</p>':'')+'</div>';}
+  S.forEach(function(s,i){var b=document.createElement("button");b.type="button";b.className="sytab";b.setAttribute("role","tab");
+    b.innerHTML='<img src="assets/shoulder/'+s.id+'.jpg" alt=""><span>'+s.n+'</span>';b.addEventListener("click",function(){show(i)});tabs.appendChild(b)});
+  show(0);
+
+  var L=[
+    ["Scapula (thoracoscapular muscles)",[["Shoulder elevated + acromion lifted","Upper trap shortened"],["Shoulder elevated, acromion not lifted","Levator scapula shortened"],["Head rotates toward the shoulder in flexion","Levator scapula shortened"],["Shoulder depressed","Upper trap lengthened"],["Scapula adducts during external rotation","Rhomboid dominance"],["Not enough scapular abduction in shoulder flexion","Serratus weakness"]]],
+    ["Trunk to arm (thoracohumeral muscles)",[["Loses the last 1/3 of shoulder flexion","Pec minor + lat dominance"],["Excessive anterior glide of the humerus","Pec minor shortness"],["Loss of shoulder elevation","Pec minor + lat dominance"],["Low back extends during shoulder flexion","Shortened abdominals"]]],
+    ["Shoulder joint (scapulohumeral muscles)",[["Humeral head glides up in abduction","Deltoid dominance or weak rotator cuff"],["Humeral head glides forward in motion","Posterior deltoid dominance"],["Resting in medial rotation + abduction","Predisposed to impingement"],["Depressed shoulders + poor elevation","Shortened deltoid + supraspinatus"],["Shoulders depressed","Supraspinatus vulnerable to injury"],["Poor supine sleeper position (tight posterior capsule)","Lateral rotators shortened"],["Anterior glide from lat or pec major dominance","Lengthened or weak subscapularis"],["Center of rotation drops in flexion or abduction","Lengthened or weak teres major"],["Humerus medially rotated with good scapular position","Medial rotator dominance"]]]
+  ];
+  document.getElementById("lk").innerHTML=L.map(function(g,i){return '<details'+(i===0?' open':'')+'><summary>'+g[0]+'</summary><div class="rows">'+g[1].map(function(r){return '<div class="r"><span>'+r[0]+'</span><span class="eq">=</span><b>'+r[1]+'</b></div>'}).join("")+'</div></details>'}).join("");
+})();
+</script>
+</body>
+</html>

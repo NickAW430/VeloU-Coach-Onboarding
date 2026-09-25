@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>VeloU Throwing System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/velou.css">
+<script src="assets/forms.js"></script><style>
+/* Module 3 additions */
+.reads{display:grid;gap:10px}
+.read{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 18px;text-decoration:none}
+.read:hover{border-color:var(--red)}
+.read .tag{font-family:var(--label);font-weight:700;font-size:12px;letter-spacing:.12em;padding:3px 8px;background:var(--red);color:#fff}
+.read .tag.rec{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.read b{font-family:var(--label);font-size:18px;font-weight:700;display:block}
+.read span{color:var(--muted);font-size:14.5px}
+.axes{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1.2fr;gap:10px;align-items:stretch}
+.axis{background:var(--panel);border:1px solid var(--line);padding:16px;display:grid;gap:6px;align-content:start}
+.axis b{font-family:var(--display);font-weight:400;font-size:26px;text-transform:uppercase}
+.axis .by{font-family:var(--label);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.axis p{font-size:15px;color:var(--muted)}
+.axis.out{border-color:var(--red);background:var(--panel-2)}
+.axis.out .code{overflow-wrap:anywhere;font-family:var(--display);font-size:24px;color:var(--red);line-height:1.1}
+.opx{display:grid;place-items:center;font-family:var(--display);font-size:28px;color:var(--red)}
+@media (max-width:820px){.axes{grid-template-columns:1fr}.opx{padding:0}}
+
+.arc{display:grid;grid-template-columns:repeat(9,1fr);gap:6px}
+.ph{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:12px 6px 10px;display:grid;gap:4px;justify-items:center;cursor:pointer;font:inherit;position:relative}
+.ph:hover{border-color:var(--muted)}
+.ph[aria-pressed="true"]{border-color:var(--red);background:var(--panel-2)}
+.ph .c{font-family:var(--display);font-size:22px;letter-spacing:.02em}
+.ph .n{font-family:var(--label);font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;text-align:center;line-height:1.15}
+.ph .band{position:absolute;left:0;right:0;top:0;height:4px;background:var(--g)}
+.ph.planned{border-style:dashed}
+.groups{display:grid;grid-template-columns:2fr 2fr 1fr 1fr 1fr 1fr 1fr;gap:6px;font-family:var(--label);font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.groups span{border-top:1px solid var(--line);padding-top:6px;text-align:center}
+.freq{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;align-items:end;height:70px}
+.freq div{background:var(--faint);position:relative}
+.freq div span{position:absolute;top:-18px;left:0;right:0;text-align:center;font-family:var(--label);font-size:12.5px;color:var(--muted)}
+.freq-cap{font-family:var(--label);font-size:13px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+@media (max-width:760px){
+  .arc,.freq{grid-template-columns:repeat(3,1fr)}
+  .groups,.freq,.freq-cap{display:none}
+}
+.detail{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);padding:20px 22px;display:grid;gap:14px}
+.detail-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.detail h3{font-size:28px}
+.detail .obj{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline}
+.detail .obj .label{color:var(--lime)}
+.detail .obj b{font-family:var(--label);font-size:20px;text-transform:uppercase;letter-spacing:.03em}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.facts span{font-family:var(--label);font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);padding:4px 10px;color:var(--muted)}
+.deep{font-family:var(--label);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:var(--red);text-decoration:none}
+.deep:hover{text-decoration:underline}
+
+.levels{display:grid;gap:10px}
+.vbar{position:relative;display:grid;grid-template-columns:15fr 10fr 10fr;height:52px}
+.vbar div{display:grid;place-items:center;font-family:var(--display);font-size:22px;color:#100D0B}
+.vticks{position:relative;height:22px;font-family:var(--label);font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.vticks span{position:absolute;transform:translateX(-50%)}
+.vticks span:first-child{transform:none}
+.vticks span:last-child{transform:translateX(-100%)}
+.twolv{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lv{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:10px;align-content:start}
+.lv dl{margin:0;display:grid;grid-template-columns:96px 1fr;gap:6px 12px;font-size:15.5px}
+.lv dt{font-family:var(--label);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--faint);padding-top:2px}
+.lv dd{margin:0}
+.same{background:var(--panel-2);border:1px solid var(--red);padding:16px 18px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.same .pair{display:flex;gap:10px;flex-wrap:wrap}
+.same .pill{font-family:var(--display);font-size:22px;padding:6px 12px;border:2px solid currentColor;line-height:1}
+@media (max-width:700px){.twolv{grid-template-columns:1fr}.same{grid-template-columns:1fr}}
+
+.fgroup{display:grid;gap:10px}
+.fgroup h3{font-size:18px;color:var(--muted);font-family:var(--label);font-weight:700;letter-spacing:.12em}
+.fcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fcards.two{grid-template-columns:repeat(2,1fr)}
+.fc{background:var(--panel);border:1px solid var(--line);padding:16px;display:grid;gap:8px;align-content:start}
+.fc b{font-family:var(--display);font-weight:400;font-size:22px;text-transform:uppercase}
+.fc .see{display:flex;flex-wrap:wrap;gap:6px}
+.fc .see span{font-family:var(--label);font-size:14px;font-weight:600;background:var(--panel-2);border:1px solid var(--line);padding:3px 8px}
+.fc .note{font-size:14px;color:var(--amber)}
+.fc.global{border-color:var(--lime)}
+@media (max-width:760px){.fcards,.fcards.two{grid-template-columns:1fr}}
+
+.blocks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.bk{background:var(--panel);border:1px solid var(--line);padding:14px 16px;display:grid;gap:6px;align-content:start}
+.bk b{font-family:var(--label);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.03em}
+.bk p{font-size:14.5px;color:var(--muted)}
+
+.rpe-top{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rpe-top div{background:var(--panel);border:1px solid var(--line);padding:12px 14px}
+@media (max-width:560px){.rpe-top{grid-template-columns:1fr}}
+.rpe-top b{display:block;font-family:var(--display);font-weight:400;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.rpe-top span{font-family:var(--label);font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.hl td{background:var(--panel-2);color:var(--text)}
+tr.hl td:first-child{color:var(--red)}
+
+.dscalc{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:14px}
+.dsrows{display:grid;gap:6px}
+.dsr{display:grid;grid-template-columns:80px 60px 90px 1fr 70px;gap:10px;align-items:center;font-family:var(--label);font-size:16px;font-variant-numeric:tabular-nums}
+.dsr.head{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.dsr .mult{color:var(--lime);font-weight:700}
+.dsr input{background:var(--bg);color:var(--text);border:1px solid var(--line);padding:6px 8px;font:600 16px var(--label);width:80px;font-variant-numeric:tabular-nums}
+.dsr input:focus{border-color:var(--red);outline:none}
+.dsr .trk{height:12px;background:var(--panel-2)}
+.dsr .fill{height:100%;background:var(--red);transition:width .2s}
+.dsr .w{text-align:right;font-weight:700}
+.dsout{display:flex;flex-wrap:wrap;gap:22px;align-items:end;border-top:1px solid var(--line);padding-top:14px}
+.dsout div{display:grid;gap:2px}
+.dsout b{font-family:var(--display);font-weight:400;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.dsout b.red{color:var(--red)}
+@media (max-width:560px){.dsr{grid-template-columns:52px 48px 70px 1fr;gap:8px}.dsr .trk,.dsr.head span:nth-child(4){display:none}.dsr input{width:64px}}
+section>*,.dscalc>*{min-width:0}
+@media (prefers-reduced-motion:reduce){.dsr .fill{transition:none}}
+
+.heat{overflow-x:auto;border:1px solid var(--line);background:var(--panel)}
+.heat table{min-width:560px;background:transparent}
+.heat td.c{text-align:center;font-family:var(--label);font-weight:700;font-variant-numeric:tabular-nums;font-size:16px;padding:10px 6px}
+.legend{display:flex;align-items:center;gap:10px;font-family:var(--label);font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.legend i{display:block;height:10px;width:180px;background:linear-gradient(90deg,#4F7FAE,#1B1714 50%,#E5534B)}
+
+.rtt{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch}
+.rtt .axis b{font-size:22px}
+@media (max-width:760px){.rtt{grid-template-columns:1fr}}
+.ladders{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:700px){.ladders{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="crumbs">
+    <span class="chip">Pre-start</span>
+    <span class="chip on">Module 3 of 11</span>
+    <span class="chip">Checkpoint 3</span>
+  </div>
+  <h1>The Throwing <span class="red">System</span></h1>
+  <p class="lede">How a pitcher moves through a season: nine phases, three Levels, eight Focuses, and the Day Score that keeps the arm honest.</p>
+  <div class="stats" role="list">
+    <div class="stat" role="listitem"><b>9</b><span>Phases</span></div>
+    <div class="stat" role="listitem"><b>3</b><span>Throwing Levels</span></div>
+    <div class="stat" role="listitem"><b>8</b><span>Focuses</span></div>
+    <div class="stat" role="listitem"><b>4 wk</b><span>Per phase</span></div>
+  </div>
+</header>
+
+<!-- 3.1 -->
+<section id="axes">
+  <div class="sec-head">
+    <span class="num">3.1</span>
+    <h2>Three choices make a program</h2>
+    <p>Every throwing program is one Phase, one Level, and one Focus. Each is decided by something different.</p>
+  </div>
+  <div class="axes">
+    <div class="axis"><span class="by">Set by the calendar</span><b>Phase</b><p>Where he is in the season. Fixed order.</p></div>
+    <div class="opx" aria-hidden="true">+</div>
+    <div class="axis"><span class="by">Set by velocity</span><b>Level</b><p>How hard he throws right now.</p></div>
+    <div class="opx" aria-hidden="true">+</div>
+    <div class="axis"><span class="by">Set by your eyes</span><b>Focus</b><p>The movement fault you diagnose.</p></div>
+    <div class="opx" aria-hidden="true">=</div>
+    <div class="axis out"><span class="label">His program</span><span class="code">ENVO · L2 · Lower Rotation</span><p>Energy Volume, 75-85 mph, can't separate pelvis from torso.</p></div>
+  </div>
+  <div class="rule"><span class="label">Unlike strength</span><p>Strength programs are chosen by force plate diagnosis. Throwing phases are not. They run in calendar order, and only Level and Focus change with the athlete.</p></div>
+</section>
+
+<!-- 3.2 -->
+<section id="arc">
+  <div class="sec-head">
+    <span class="num">3.2</span>
+    <h2>The season arc</h2>
+    <p>Tap a phase to see its objective.</p>
+  </div>
+  <div style="display:grid;gap:8px">
+    <div class="groups" aria-hidden="true"><span>Restructure</span><span>Energy</span><span>Wattage</span><span>Integrate</span><span>Refine</span><span>Engage</span><span>Season</span></div>
+    <div class="arc" id="arcBtns" role="group" aria-label="Throwing phases"></div>
+    <div style="margin-top:22px;display:grid;gap:6px">
+      <div class="freq" id="freq" aria-hidden="true"></div>
+      <span class="freq-cap">Throwing days per week</span>
+    </div>
+  </div>
+  <div class="detail" id="detail" aria-live="polite"></div>
+</section>
+
+<!-- 3.3 -->
+<section id="level">
+  <div class="sec-head">
+    <span class="num">3.3</span>
+    <h2>Throwing Level</h2>
+    <p>Set by current velocity and retested. Level changes patterning complexity and implement weight, never the phase.</p>
+  </div>
+  <div class="levels" role="img" aria-label="Throwing Level by velocity: Level 1 is 60 to 75 mph, Level 2 is 75 to 85, Level 3 is 85 to 95.">
+    <div class="vbar"><div style="background:#E0C04A">L1</div><div style="background:#D4F57A">L2</div><div style="background:#A6E84A">L3</div></div>
+    <div class="vticks"><span style="left:0">60 mph</span><span style="left:42.857%">75</span><span style="left:71.43%">85</span><span style="left:100%">95</span></div>
+  </div>
+  <div class="twolv">
+    <div class="lv"><h3>Throwing Level</h3><dl><dt>Set by</dt><dd>Current throwing velocity</dd><dt>Changes</dt><dd>Mid-phase, when velo jumps. Move him up without changing phase.</dd><dt>Controls</dt><dd>Drill complexity and implement weight</dd></dl></div>
+    <div class="lv"><h3>Strength Level</h3><dl><dt>Set by</dt><dd>Energy Production at evaluation (below 77.5 / 77.5 to 87.5 / above 87.5)</dd><dt>Changes</dt><dd>Rarely</dd><dt>Controls</dt><dd>Where he enters the strength system (Module 4)</dd></dl></div>
+  </div>
+  <div class="same">
+    <span class="label">Module 2's athlete</span>
+    <div style="display:grid;gap:8px">
+      <div class="pair"><span class="pill" style="color:var(--green)">Throwing L3 · 91 mph</span><span class="pill" style="color:var(--red)">Strength L1 · EP 74.8</span></div>
+      <p style="color:var(--muted);font-size:15.5px">Same kid, opposite ends. Never assume one Level from the other.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3.4 -->
+<section id="focus">
+  <div class="sec-head">
+    <span class="num">3.4</span>
+    <h2>Choosing a Focus</h2>
+    <p>Watch him throw. Match what you see to the Focus.</p>
+  </div>
+  <div class="fgroup">
+    <h3>FORCE: CAPTURING ENERGY IN THE DRIVE LEG</h3>
+    <div class="fcards">
+      <div class="fc"><b>Vertical Force</b><div class="see"><span>Quad load</span><span>Early hip extension</span><span>COM drifts forward</span></div></div>
+      <div class="fc"><b>Linear Force</b><div class="see"><span>Tilted pelvis or shoulders</span><span>No drift</span><span>COM stuck back</span></div></div>
+      <div class="fc"><b>Lateral Force</b><div class="see"><span>Unstable drive leg</span><span>Inconsistent landing</span><span>Upper body compensates</span></div></div>
+    </div>
+  </div>
+  <div class="fgroup">
+    <h3>ROTATION: TURNING ENERGY TOWARD THE TARGET</h3>
+    <div class="fcards two">
+      <div class="fc"><b>Lower Rotation</b><div class="see"><span>Pelvis won't fully rotate</span><span>Early torso</span><span>Poor separation timing</span></div></div>
+      <div class="fc"><b>Upper Rotation</b><div class="see"><span>Stabby arm</span><span>Pushy arm</span></div><span class="note">Needs the most coach fine-tuning. Arm action is athlete-specific.</span></div>
+    </div>
+  </div>
+  <div class="fgroup">
+    <h3>DECELERATION: BRACING AND BLOCKING</h3>
+    <div class="fcards two">
+      <div class="fc"><b>Upper Deceleration</b><div class="see"><span>Pulls the glove early</span><span>Glove and arm planes don't match</span></div></div>
+      <div class="fc"><b>Lower Deceleration</b><div class="see"><span>Front leg collapses</span><span>Can't decelerate COM onto lead leg</span></div></div>
+    </div>
+  </div>
+  <div class="fcards" style="grid-template-columns:1fr">
+    <div class="fc global"><b>Global</b><p style="color:var(--muted);font-size:15.5px">Nothing specific stands out? Global is the right answer. Don't force a Focus onto an athlete who doesn't show one.</p></div>
+  </div>
+</section>
+
+<!-- 3.5 -->
+<section id="blocks">
+  <div class="sec-head">
+    <span class="num">3.5</span>
+    <h2>Drill blocks</h2>
+    <p>Days are built from named blocks, not drills picked on the fly.</p>
+  </div>
+  <div class="blocks">
+    <div class="bk"><b>Plyoblocks</b><p>Weighted-ball throws: positional control, then dynamic stability, then sequencing.</p></div>
+    <div class="bk"><b>Patterning</b><p>Pre-throw prep with water bag, med ball, and bands.</p></div>
+    <div class="bk"><b>Flowblocks</b><p>Momentum-based throws with more degrees of freedom.</p></div>
+    <div class="bk"><b>Catch Play (CPP)</b><p>Structured catch-play progressions.</p></div>
+    <div class="bk"><b>Long Toss</b><p>Extension and compression progressions.</p></div>
+    <div class="bk"><b>Wattage</b><p>Underweight mound work: compressions, turn and burn, tornado, rhythm pulldown.</p></div>
+    <div class="bk"><b>Mound Blend</b><p>Moves plyo work onto the mound, ending in an accuracy bullpen.</p></div>
+  </div>
+  <div class="rule"><span class="label">Rule</span><p>A block name means the same drill sequence every time it's programmed. If you change a block, you change it for every athlete who runs it.</p></div>
+</section>
+
+<!-- 3.6 -->
+<section id="intent">
+  <div class="sec-head">
+    <span class="num">3.6</span>
+    <h2>Intent is personal</h2>
+    <p>"70%" means a different speed for every athlete. Read it off his own RPE Conversion Chart, built from three tested numbers.</p>
+  </div>
+  <div class="rpe-top">
+    <div><b>90 mph</b><span>Top bullpen velo</span></div>
+    <div><b>300 ft</b><span>Top long toss</span></div>
+    <div><b>74.25 mph</b><span>Top kneeling velo</span></div>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Intent</th><th class="num">Baseball</th><th class="num">Long toss</th><th class="num">Kneeling</th><th class="num">8 oz plyo</th><th class="num">3 oz ball</th></tr></thead>
+      <tbody>
+        <tr><td>60%</td><td class="num">70-72</td><td class="num">220'</td><td class="num">57-59</td><td class="num">61-63</td><td class="num">73-75</td></tr>
+        <tr class="hl"><td>70%</td><td class="num">75-77</td><td class="num">240'</td><td class="num">61-63</td><td class="num">66-68</td><td class="num">79-81</td></tr>
+        <tr><td>80%</td><td class="num">79-81</td><td class="num">250'</td><td class="num">64-66</td><td class="num">69-71</td><td class="num">83-85</td></tr>
+        <tr><td>90%</td><td class="num">82-84</td><td class="num">260'</td><td class="num">67-69</td><td class="num">72-74</td><td class="num">86-88</td></tr>
+        <tr><td>100%</td><td class="num">87-90</td><td class="num">275'</td><td class="num">71-74</td><td class="num">76-79</td><td class="num">91-94</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="rule"><span class="label">Heads up</span><p>The "RPE" column in every program table is intent %, not a 1-10 effort scale. Translate it through the athlete's chart. Sample chart shown; every athlete gets his own.</p></div>
+</section>
+
+<!-- 3.7 -->
+<section id="dayscore">
+  <div class="sec-head">
+    <span class="num">3.7</span>
+    <h2>Day Score</h2>
+    <p>One number for how hard the arm worked today. Harder throws count for more.</p>
+  </div>
+  <div class="formula"><span>Σ (Throws × Multiplier)</span><span class="op">÷</span><span>12</span><span class="op">=</span><span class="red">Day Score</span></div>
+
+  <div class="dscalc">
+    <span class="label">Try it: the worked example is loaded. Change the throw counts.</span>
+    <div class="dsrows" id="dsrows">
+      <div class="dsr head"><span>Intent</span><span>Mult.</span><span>Throws</span><span>Weighted volume</span><span style="text-align:right">Wtd</span></div>
+    </div>
+    <div class="dsout">
+      <div><span class="label">Throws</span><b id="dsThrows">90</b></div>
+      <div><span class="label">Weighted volume</span><b id="dsW">112.5</b></div>
+      <div><span class="label">Day Score</span><b class="red" id="dsScore">9.38</b></div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:12px">
+    <h3>The rolling score</h3>
+    <p>Tracks the trend across days. The goal is to hover near zero.</p>
+  </div>
+  <div class="formula"><span>Yesterday</span><span class="op">+</span><span>Today</span><span class="op">−</span><span>Baseline (10)</span></div>
+  <div class="heat" id="heat"></div>
+  <div class="legend"><span>Underworked</span><i></i><span>Overworked</span></div>
+  <div class="rule"><span class="label">Rule</span><p>Athlete 4 climbs every day to +18. Back off intent or volume before it becomes an injury, not after. Lower the baseline for young or returning arms.</p></div>
+</section>
+
+<!-- 3.8 -->
+<section id="rtt">
+  <div class="sec-head">
+    <span class="num">3.8</span>
+    <h2>Return to Throw</h2>
+    <p>Injured athletes never re-enter the season arc directly.</p>
+  </div>
+  <div class="rtt">
+    <div class="axis"><span class="by">Injury-specific</span><b>RTT</b><p>UCL sprain grade, elbow pain, or UCL repair/revision. Radar gun every session.</p></div>
+    <div class="opx" aria-hidden="true">→</div>
+    <div class="axis"><span class="by">Graduation step</span><b>RTM</b><p>Return to Mound.</p></div>
+    <div class="opx" aria-hidden="true">→</div>
+    <div class="axis out"><span class="label">Then</span><b>Season arc</b><p>Rejoins the standard phases.</p></div>
+  </div>
+  <div class="ladders">
+    <div class="tbl"><table>
+      <thead><tr><th>Standard intent</th><th class="num">Mult.</th></tr></thead>
+      <tbody><tr><td>60%</td><td class="num">0.75×</td></tr><tr><td>70%</td><td class="num">1×</td></tr><tr><td>80%</td><td class="num">1.25×</td></tr><tr><td>100%</td><td class="num">2×</td></tr></tbody>
+    </table></div>
+    <div class="tbl"><table>
+      <thead><tr><th>RTT intent</th><th class="num">Mult.</th></tr></thead>
+      <tbody><tr><td>30%</td><td class="num">1.25×</td></tr><tr><td>50%</td><td class="num">1.75×</td></tr><tr><td>60%</td><td class="num">2×</td></tr><tr class="hl"><td>70%</td><td class="num">2.25×</td></tr></tbody>
+    </table></div>
+  </div>
+  <div class="rule"><span class="label">Rule</span><p>RTT counts every throw far heavier, and velocity gating is the safety mechanism. The plan belongs to the medical and rehab staff. Coordinate with them; never substitute a standard phase.</p></div>
+</section>
+
+<div class="reads" style="margin-top:40px">
+  <a class="read" href="../throwing.html#programs" target="_blank" rel="noopener">
+    <span class="tag rec">REFERENCE</span>
+    <div><b>VeloU Throwing: every program, week by week</b><span>coachesvelou.com · open it while you coach, not instead of this module</span></div>
+  </a>
+</div>
+
+<!-- checkpoint -->
+<div class="cta" id="checkpoint">
+  <span class="label" style="color:#fff">Checkpoint 3</span>
+  <h2>Prove it before Module 4</h2>
+  <p>Build programs, calculate a Day Score, and read a rolling week.</p>
+  <div class="cta-row">
+    <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>
+    <a class="btn" id="go" href="#" target="_blank" rel="noopener">Start Checkpoint 3</a>
+  </div>
+</div>
+
+<footer>
+  <a href="module-02.html">← Module 2: Precision Training Model</a>
+  <a href="module-04.html">Module 4: The Strength System →</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var REF="../throwing.html#phase-";
+  var P=[
+    {c:"REVO",n:"Restructure Volume",g:"#E0C04A",d:3,obj:"Kneeling velo",what:"Rebuild throwing capacity after the off-season deload. Constraint-led, heavy on seated and kneeling throws.",f:["3 days/wk","Velo testing wk 2 & 4"]},
+    {c:"REIN",n:"Restructure Intensity",g:"#E0C04A",d:3,obj:"Kneeling + standing velo",what:"Raise intensity now that drill packages are familiar. More standing throws, more frequency.",f:["3 days/wk","Velo testing wk 2 & 4"]},
+    {c:"ENVO",n:"Energy Volume",g:"#D4F57A",d:5,obj:"Long toss distance",what:"Build volume and add flow drills: more freedom, more momentum, more athleticism.",f:["4-6 days/wk","Velo testing wk 2 & 4"]},
+    {c:"ENIN",n:"Energy Intensity",g:"#D4F57A",d:5,obj:"Compression velo",what:"Raise intensity through long toss extension and compression. The athlete self-organizes timing and intent.",f:["4-6 days/wk","Velo testing wk 2 & 4"]},
+    {c:"WATT",n:"Wattage",g:"#A6E84A",d:5,obj:"Plyo mound velo",what:"The adaptation phase. Push intensity with momentum and underweight mound testing, while holding kneeling and standing velo.",f:["4-6 days/wk","Most strenuous phase"]},
+    {c:"INT",n:"Integrate",g:"#E5534B",d:5,obj:"Transfer to the mound",what:"Blend new patterns onto a slope. First bullpens, mostly fastballs at varying intents, for velo and command.",f:["4-6 days/wk","First bullpens"]},
+    {c:"REF",n:"Refine",g:"#E5534B",d:5,obj:"Mound capacity for live ABs",what:"Make the adaptations stick while building velo, pitch movement, accuracy, and in-game strategy.",f:["4-6 days/wk","Live ABs"]},
+    {c:"ENG",n:"Engage",g:"#E5534B",d:5,obj:"Win in competition",what:"Competition prep. Drill work is secondary; competing is the stimulus.",f:["4-6 days/wk","Compete often"]},
+    {c:"INS",n:"In-Season",g:"#766B63",d:0,obj:"Manage fatigue, keep skill",what:"Games carry the volume and intensity. Drill work is supplemental and based on need. Runs as long as the season.",f:["Length of season","Not built yet"],planned:true}
+  ];
+  var arc=document.getElementById("arcBtns"), detail=document.getElementById("detail"), freq=document.getElementById("freq");
+  function show(i){
+    var p=P[i];
+    [].forEach.call(arc.children,function(b,j){b.setAttribute("aria-pressed",j===i?"true":"false")});
+    detail.innerHTML='<div class="detail-top"><h3>'+p.c+' · '+p.n+'</h3><span class="label">Phase '+(i+1)+' of 9 · '+(p.planned?"Repeats all season":"4 weeks")+'</span></div>'+
+      '<div class="obj"><span class="label">Objective</span><b>'+p.obj+'</b></div><p>'+p.what+'</p>'+
+      '<div class="facts">'+p.f.map(function(x){return "<span>"+x+"</span>"}).join("")+'</div>'+
+      (p.planned?'':'<a class="deep" href="'+REF+p.c+'" target="_blank" rel="noopener">Open '+p.c+' programs →</a>');
+  }
+  P.forEach(function(p,i){
+    var b=document.createElement("button"); b.type="button"; b.className="ph"+(p.planned?" planned":"");
+    b.innerHTML='<span class="band" style="--g:'+p.g+'"></span><span class="c">'+p.c+'</span><span class="n">'+p.n+'</span>';
+    b.addEventListener("click",function(){show(i)}); arc.appendChild(b);
+    var f=document.createElement("div");
+    f.style.height=(p.d? (p.d===3?36:64):8)+"px"; f.style.background=p.d===3?"#E0C04A":p.d?"#A6E84A":"#352D28";
+    f.innerHTML="<span>"+(p.d===3?"3":p.d?"4-6":"games")+"</span>"; freq.appendChild(f);
+  });
+  show(0);
+
+  // Day Score calculator
+  var bands=[["≤60%",0.5,10],["60%",0.75,10],["70%",1,15],["80%",1.25,20],["90%",1.5,15],["95%",1.75,10],["100%",2,10]];
+  var rows=document.getElementById("dsrows"), inputs=[];
+  bands.forEach(function(b,i){
+    var r=document.createElement("div"); r.className="dsr";
+    r.innerHTML='<span>'+b[0]+'</span><span class="mult">'+b[1]+'×</span><input id="ds'+i+'" type="number" min="0" inputmode="numeric" value="'+b[2]+'" aria-label="Throws at '+b[0]+' intent"><div class="trk"><div class="fill"></div></div><span class="w"></span>';
+    rows.appendChild(r); inputs.push(r);
+  });
+  function ds(){
+    var tot=0,w=0,ws=[];
+    inputs.forEach(function(r,i){var v=Math.max(0,parseFloat(r.querySelector("input").value)||0);tot+=v;var x=v*bands[i][1];ws.push(x);w+=x});
+    inputs.forEach(function(r,i){r.querySelector(".fill").style.width=Math.min(100,ws[i]/40*100)+"%";r.querySelector(".w").textContent=+ws[i].toFixed(2)});
+    document.getElementById("dsThrows").textContent=tot;
+    document.getElementById("dsW").textContent=+w.toFixed(2);
+    document.getElementById("dsScore").textContent=(w/12).toFixed(2);
+  }
+  inputs.forEach(function(r){r.querySelector("input").addEventListener("input",ds)}); ds();
+
+  // Rolling week heatmap (baseline-subtracted values from the reference page)
+  var days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  var A=[[3,5,3,2,4,5,1],[-4,-3,-3,-5,-2,-1,-1],[-4,-2,1,4,4,6,6],[2,7,12,13,16,18,16],[-3,-3,4,5,0,1,4],[-2,-6,-1,0,-5,-6,1]];
+  function col(v){var t=Math.min(1,Math.abs(v)/14);var a=v>0?[229,83,75]:[79,127,174];var b=[27,23,20];
+    var c=b.map(function(x,k){return Math.round(x+(a[k]-x)*t)});return "rgb("+c.join(",")+")"}
+  var h='<table><thead><tr><th>Athlete</th>'+days.map(function(d){return '<th class="num" style="text-align:center">'+d+'</th>'}).join("")+'</tr></thead><tbody>';
+  A.forEach(function(r,i){h+='<tr'+(i===3?' class="hl"':'')+'><td>Athlete '+(i+1)+'</td>'+r.map(function(v){return '<td class="c" style="background:'+col(v)+'">'+(v>0?"+":"")+v+'</td>'}).join("")+'</tr>'});
+  document.getElementById("heat").innerHTML=h+'</tbody></table>';
+
+  // Checkpoint link
+  var TYPEFORM=(window.VELOU_FORMS||{})["checkpoint-3"]||"https://form.typeform.com/to/REPLACE_CHECKPOINT_3";
+  var coach=document.getElementById("coach"), go=document.getElementById("go");
+  try{var saved=localStorage.getItem("velou_coach");if(saved)coach.value=saved}catch(e){}
+  function link(){var n=coach.value.trim();try{localStorage.setItem("velou_coach",n)}catch(e){}
+    go.href=TYPEFORM+"#coach_name="+encodeURIComponent(n)+"&module=3&date="+new Date().toISOString().slice(0,10);}
+  coach.addEventListener("input",link); link();
+})();
+</script>
+</body>
+</html>
