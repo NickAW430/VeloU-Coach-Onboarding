@@ -132,3 +132,8 @@ blockquote .label{color:var(--red)}
 footer{margin-top:28px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{font-family:var(--label);text-transform:uppercase;letter-spacing:.1em;font-weight:600;text-decoration:none;color:var(--muted)}
 footer a:hover{color:var(--text)}
+
+/* home link */
+.homebar{padding-top:20px}
+.homelink{font-family:var(--label);font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.homelink:hover{color:var(--text)}
