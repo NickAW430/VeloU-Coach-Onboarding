@@ -43,7 +43,7 @@ def fix_homepage_links(html: str) -> str:
     return tile_pat.sub(repl, html)
 
 
-ONBOARDING_TILE = '''  <a class="tile" href="onboarding/" style="grid-column: 1 / -1;">
+ONBOARDING_TILE = '''  <a class="tile" href="onboarding/">
     <span class="tile-eyebrow">New Coaches</span>
     <h2>Coach Onboarding</h2>
     <p>Eleven modules, from purpose and standards to the capstone case. Start here before your first day on the floor.</p>
@@ -52,9 +52,23 @@ ONBOARDING_TILE = '''  <a class="tile" href="onboarding/" style="grid-column: 1 
 '''
 
 
+def ensure_three_up_tiles(html: str) -> str:
+    # The artifact ships a two-column tile grid; we run three equal tiles in one row.
+    html = html.replace(
+        ".tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 820px; width: 100%; }",
+        ".tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1120px; width: 100%; }",
+    )
+    html = html.replace(
+        "@media (max-width: 640px) {\n  .tiles { grid-template-columns: 1fr; }",
+        "@media (max-width: 860px) {\n  .tiles { grid-template-columns: 1fr; }",
+    )
+    return html
+
+
 def ensure_onboarding_tile(html: str) -> str:
     # The homepage is regenerated from the artifact each sync, which would
     # otherwise drop the hand-added onboarding tile.
+    html = ensure_three_up_tiles(html)
     if 'href="onboarding/"' in html:
         return html
     marker = '</div>\n\n<footer>'

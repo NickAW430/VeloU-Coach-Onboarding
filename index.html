@@ -61,7 +61,7 @@ h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0
 .logo { height: 64px; width: auto; margin-bottom: 22px; }
 h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
-.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 820px; width: 100%; }
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1120px; width: 100%; }
 .tile {
   display: flex;
   flex-direction: column;
@@ -82,7 +82,7 @@ h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tile-cta { font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: var(--day-bg); margin-top: 8px; }
 .tile:hover .tile-cta { color: var(--day-bg-dark); }
 footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: center; }
-@media (max-width: 640px) {
+@media (max-width: 860px) {
   .tiles { grid-template-columns: 1fr; }
 }
 </style>
@@ -106,7 +106,7 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
     <p>The season-long throwing arc — nine phases, three velocity-based levels, eight movement-fault focuses — straight from the throwing database.</p>
     <span class="tile-cta">Open VeloU Throwing →</span>
   </a>
-  <a class="tile" href="onboarding/" style="grid-column: 1 / -1;">
+  <a class="tile" href="onboarding/">
     <span class="tile-eyebrow">New Coaches</span>
     <h2>Coach Onboarding</h2>
     <p>Eleven modules, from purpose and standards to the capstone case. Start here before your first day on the floor.</p>
