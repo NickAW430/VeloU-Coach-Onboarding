@@ -136,6 +136,42 @@ def fix_subpage_home_links(html: str) -> str:
     )
 
 
+SITE_URL = "https://coachesvelou.com"
+SHARE_IMAGE = SITE_URL + "/assets/og-image.png"
+
+
+def ensure_share_meta(html: str, page_path: str, description: str) -> str:
+    # Link previews (iMessage, Slack, etc.) otherwise grab the transparent white logo on a white card.
+    if 'property="og:image"' in html:
+        return html
+    m = re.search(r'<title>([^<]*)</title>', html)
+    title = m.group(1) if m else "VeloU"
+    tags = (
+        f'<meta property="og:type" content="website">\n'
+        f'<meta property="og:site_name" content="VeloU">\n'
+        f'<meta property="og:title" content="{title}">\n'
+        f'<meta property="og:description" content="{description}">\n'
+        f'<meta property="og:url" content="{SITE_URL}/{page_path.removesuffix("index.html")}">\n'
+        f'<meta property="og:image" content="{SHARE_IMAGE}">\n'
+        f'<meta property="og:image:width" content="1200">\n'
+        f'<meta property="og:image:height" content="630">\n'
+        f'<meta name="twitter:card" content="summary_large_image">\n'
+        f'<meta name="twitter:image" content="{SHARE_IMAGE}">\n'
+        f'<meta name="description" content="{description}">\n'
+    )
+    robots = '<meta name="robots" content="noindex, nofollow">'
+    if robots in html:
+        return html.replace(robots, robots + "\n" + tags, 1)
+    return html.replace('</title>', '</title>\n' + tags, 1)
+
+
+PAGE_DESCRIPTIONS = {
+    'index.html': 'VeloU coaching reference and new coach onboarding.',
+    'strength.html': 'VeloU Strength: every program, phase, split, and duration.',
+    'throwing.html': 'VeloU Throwing: the season-long throwing arc, phases, levels, and focuses.',
+}
+
+
 def ensure_noindex(html: str) -> str:
     if 'name="robots"' in html:
         return html
@@ -160,6 +196,7 @@ def process(src_path: Path, dest_name: str, is_homepage: bool) -> None:
         text = ensure_wordmark(text)
         text = ensure_always_dark(text)
     text = ensure_noindex(text)
+    text = ensure_share_meta(text, dest_name, PAGE_DESCRIPTIONS[dest_name])
     dest = REPO_ROOT / dest_name
     dest.write_text(text, encoding='utf-8')
     print(f"wrote {dest} ({len(text):,} bytes)")
