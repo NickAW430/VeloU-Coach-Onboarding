@@ -52,7 +52,15 @@ ONBOARDING_TILE = '''  <a class="tile" href="onboarding/">
 '''
 
 
-MAIN_LOGO_TAG = '<img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="1273">'
+MAIN_LOGO_TAG = '<img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">'
+
+
+# The logo is white on transparent: a dark plate keeps it visible in light mode; in dark mode it sits directly on the page.
+MAIN_LOGO_CSS = (
+    ".logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; padding: 26px 34px; background: #0d0d0d; border-radius: 14px; }\n"
+    "@media (prefers-color-scheme: dark) { :root:not([data-theme=\"light\"]) .logo { background: transparent; padding: 0; } }\n"
+    ":root[data-theme=\"dark\"] .logo { background: transparent; padding: 0; }"
+)
 
 
 def ensure_main_logo(html: str) -> str:
@@ -65,8 +73,21 @@ def ensure_main_logo(html: str) -> str:
         return html
     return new.replace(
         ".logo { height: 64px; width: auto; margin-bottom: 22px; }",
-        ".logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; border-radius: 14px; }",
+        MAIN_LOGO_CSS,
     )
+
+
+def ensure_wordmark(html: str) -> str:
+    # Strength/Throwing top bars use the VeloU wordmark only (transparent PNG), not the embedded logo.
+    new = re.sub(
+        r'(<a class="brand"[^>]*>)<img src="data:image/[a-z]+;base64,[^"]*"[^>]*>',
+        r'\1<img src="assets/velou-wordmark.png" alt="VeloU" width="110" height="34">',
+        html,
+        count=1,
+    )
+    if new == html and 'assets/velou-wordmark.png' not in html:
+        print("WARNING: top bar logo <img> not found; wordmark not swapped")
+    return new
 
 
 def ensure_three_up_tiles(html: str) -> str:
@@ -126,6 +147,7 @@ def process(src_path: Path, dest_name: str, is_homepage: bool) -> None:
         text = ensure_main_logo(text)
     else:
         text = fix_subpage_home_links(text)
+        text = ensure_wordmark(text)
     text = ensure_noindex(text)
     dest = REPO_ROOT / dest_name
     dest.write_text(text, encoding='utf-8')

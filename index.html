@@ -58,7 +58,9 @@ body {
   padding: 40px 20px;
 }
 h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0.01em; }
-.logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; border-radius: 14px; }
+.logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; padding: 26px 34px; background: #0d0d0d; border-radius: 14px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo { background: transparent; padding: 0; } }
+:root[data-theme="dark"] .logo { background: transparent; padding: 0; }
 h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
 .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1120px; width: 100%; }
@@ -89,7 +91,7 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
 </head>
 <body>
 
-<img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="1273">
+<img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">
 <h1>VeloU</h1>
 <p class="tagline">Pick a program to open its full coaching reference.</p>
 
