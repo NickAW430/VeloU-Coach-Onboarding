@@ -52,6 +52,23 @@ ONBOARDING_TILE = '''  <a class="tile" href="onboarding/">
 '''
 
 
+MAIN_LOGO_TAG = '<img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="1273">'
+
+
+def ensure_main_logo(html: str) -> str:
+    # The artifact embeds the old logo as base64; the home page uses the two-state logo instead.
+    if 'assets/velou-logo.webp' in html:
+        return html
+    new = re.sub(r'<img class="logo" src="data:image/png;base64,[^"]*"[^>]*>', MAIN_LOGO_TAG, html, count=1)
+    if new == html:
+        print("WARNING: home page logo <img> not found; logo not swapped")
+        return html
+    return new.replace(
+        ".logo { height: 64px; width: auto; margin-bottom: 22px; }",
+        ".logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; border-radius: 14px; }",
+    )
+
+
 def ensure_three_up_tiles(html: str) -> str:
     # The artifact ships a two-column tile grid; we run three equal tiles in one row.
     html = html.replace(
@@ -106,6 +123,7 @@ def process(src_path: Path, dest_name: str, is_homepage: bool) -> None:
     if is_homepage:
         text = fix_homepage_links(text)
         text = ensure_onboarding_tile(text)
+        text = ensure_main_logo(text)
     else:
         text = fix_subpage_home_links(text)
     text = ensure_noindex(text)
