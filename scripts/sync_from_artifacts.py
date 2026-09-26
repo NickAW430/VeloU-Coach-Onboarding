@@ -172,6 +172,58 @@ PAGE_DESCRIPTIONS = {
 }
 
 
+TAP_CUE_CSS = """/* TAP-CUES */
+.tapcue { display: flex; align-items: center; gap: 10px; width: fit-content; max-width: 100%; margin: 14px 0 10px; padding: 7px 14px 7px 12px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: rgba(225, 6, 0, 0.12); border: 1px solid var(--day-bg); border-radius: 6px; }
+.tapcue::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--day-bg); animation: tapPulse 1.8s ease-out infinite; }
+@keyframes tapPulse { 0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7); } 70%, 100% { box-shadow: 0 0 0 9px rgba(225, 6, 0, 0); } }
+@media (prefers-reduced-motion: reduce) { .tapcue::before { animation: none; } }
+details > summary { cursor: pointer; transition: background-color .15s, box-shadow .15s; }
+details.duration > summary::before, details.ladder > summary::before { content: "\\25B8  "; color: var(--day-bg); }
+details.duration[open] > summary::before, details.ladder[open] > summary::before { content: "\\25BE  "; }
+details.program > summary:hover, details.level > summary:hover, details.duration > summary:hover, details.ladder > summary:hover { box-shadow: inset 3px 0 0 var(--day-bg); }
+details.level[open] > summary::before { content: "\\25BE  "; }
+.guide-card-title::after, .phase-summary-name::after { content: "  \\2192"; }
+.jump-row a { border: 1px solid var(--border); }
+"""
+
+STRENGTH_CUE = 'Tap a program to open it, then a duration for the week-by-week table'
+THROWING_CUE = 'Tap a Level to open it, then a Focus, then a duration for the drill table'
+
+
+def _cue(text: str) -> str:
+    return f'<div class="tapcue">{text}</div>\n'
+
+
+def ensure_tap_cues(html: str, page: str) -> str:
+    # Marks every expandable section so it is clear what can be tapped or clicked.
+    if 'TAP-CUES' in html:
+        return html
+    html = html.replace('</style>', TAP_CUE_CSS + '</style>', 1)
+    if page == 'strength.html':
+        out, pos = [], 0
+        for m in re.finditer(r'<div class="phase-block"', html):
+            d = html.find('<details class="program">', m.end())
+            nxt = html.find('<div class="phase-block"', m.end())
+            if d == -1 or (nxt != -1 and d > nxt):
+                continue
+            out.append(html[pos:d])
+            out.append(_cue(STRENGTH_CUE))
+            pos = d
+        out.append(html[pos:])
+        return ''.join(out)
+    if page == 'throwing.html':
+        out, pos = [], 0
+        for m in re.finditer(r'<details class="level">', html):
+            if html[:m.start()].rstrip().endswith('</details>'):
+                continue
+            out.append(html[pos:m.start()])
+            out.append(_cue(THROWING_CUE))
+            pos = m.start()
+        out.append(html[pos:])
+        return ''.join(out)
+    return html
+
+
 def ensure_noindex(html: str) -> str:
     if 'name="robots"' in html:
         return html
@@ -194,6 +246,7 @@ def process(src_path: Path, dest_name: str, is_homepage: bool) -> None:
     else:
         text = fix_subpage_home_links(text)
         text = ensure_wordmark(text)
+        text = ensure_tap_cues(text, dest_name)
         text = ensure_always_dark(text)
     text = ensure_noindex(text)
     text = ensure_share_meta(text, dest_name, PAGE_DESCRIPTIONS[dest_name])

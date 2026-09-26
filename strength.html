@@ -378,6 +378,18 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
   .level-band { grid-template-columns: 32px 90px 1fr; }
   .pipeline-arrow, .phase-ramp-arrow { display: none; }
 }
+/* TAP-CUES */
+.tapcue { display: flex; align-items: center; gap: 10px; width: fit-content; max-width: 100%; margin: 14px 0 10px; padding: 7px 14px 7px 12px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: rgba(225, 6, 0, 0.12); border: 1px solid var(--day-bg); border-radius: 6px; }
+.tapcue::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--day-bg); animation: tapPulse 1.8s ease-out infinite; }
+@keyframes tapPulse { 0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7); } 70%, 100% { box-shadow: 0 0 0 9px rgba(225, 6, 0, 0); } }
+@media (prefers-reduced-motion: reduce) { .tapcue::before { animation: none; } }
+details > summary { cursor: pointer; transition: background-color .15s, box-shadow .15s; }
+details.duration > summary::before, details.ladder > summary::before { content: "\25B8  "; color: var(--day-bg); }
+details.duration[open] > summary::before, details.ladder[open] > summary::before { content: "\25BE  "; }
+details.program > summary:hover, details.level > summary:hover, details.duration > summary:hover, details.ladder > summary:hover { box-shadow: inset 3px 0 0 var(--day-bg); }
+details.level[open] > summary::before { content: "\25BE  "; }
+.guide-card-title::after, .phase-summary-name::after { content: "  \2192"; }
+.jump-row a { border: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -1359,7 +1371,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
       </div>
     </div>
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>ML•Axial•P1•6D - Movement Literacy <span class="muted">(ML Split 1 · Circuit)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -2294,7 +2307,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
     </div>
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>ML•Axial•P2•6D - Movement Literacy <span class="muted">(ML Split 2 · Switch)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -3325,7 +3339,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
     </div>
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>ML•Axial•P3•6D - Movement Literacy <span class="muted">(ML Split 3 · Narrow)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -3964,7 +3979,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>TL•Prep•P1•6D - Tension Literacy <span class="muted">(TL Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -6513,7 +6529,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>TL•Prep•P2•6D - Tension Literacy <span class="muted">(TL Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -9062,7 +9079,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>TL•Prep•P3•6D - Tension Literacy <span class="muted">(TL Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -12270,7 +12288,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>FC•Prep•P1•6D - Force Control <span class="muted">(FC Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -14819,7 +14838,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>FC•Prep•P2•6D - Force Control <span class="muted">(FC Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -17368,7 +17388,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>FC•Prep•P3•6D - Force Control <span class="muted">(FC Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -19948,7 +19969,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>AC•Prep•P1•6D - Acceleration <span class="muted">(AC Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -22959,7 +22981,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>AC•Prep•P2•6D - Acceleration <span class="muted">(AC Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -25646,7 +25669,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>AC•Prep•P3•6D - Acceleration <span class="muted">(AC Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -28526,7 +28550,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>AP•Prep•P1•6D - Applied Power <span class="muted">(AP Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -30526,7 +30551,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>AP•Prep•P2•6D - Applied Power <span class="muted">(AP Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">
@@ -33564,7 +33590,8 @@ footer code { background: var(--hdr-bg); padding: 1px 5px; border-radius: 3px; }
 
 
 
-    <details class="program">
+    <div class="tapcue">Tap a program to open it, then a duration for the week-by-week table</div>
+<details class="program">
       <summary>AP•Prep•P3•6D - Applied Power <span class="muted">(AP Prep · 6D)</span></summary>
       <div class="program-body">
         <div class="two-col">

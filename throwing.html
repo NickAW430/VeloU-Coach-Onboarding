@@ -237,6 +237,18 @@ details.level > summary:hover { background: var(--note-bg); }
   .level-band { grid-template-columns: 32px 90px 1fr; }
   .pipeline-arrow { display: none; }
 }
+/* TAP-CUES */
+.tapcue { display: flex; align-items: center; gap: 10px; width: fit-content; max-width: 100%; margin: 14px 0 10px; padding: 7px 14px 7px 12px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: rgba(225, 6, 0, 0.12); border: 1px solid var(--day-bg); border-radius: 6px; }
+.tapcue::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--day-bg); animation: tapPulse 1.8s ease-out infinite; }
+@keyframes tapPulse { 0% { box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.7); } 70%, 100% { box-shadow: 0 0 0 9px rgba(225, 6, 0, 0); } }
+@media (prefers-reduced-motion: reduce) { .tapcue::before { animation: none; } }
+details > summary { cursor: pointer; transition: background-color .15s, box-shadow .15s; }
+details.duration > summary::before, details.ladder > summary::before { content: "\25B8  "; color: var(--day-bg); }
+details.duration[open] > summary::before, details.ladder[open] > summary::before { content: "\25BE  "; }
+details.program > summary:hover, details.level > summary:hover, details.duration > summary:hover, details.ladder > summary:hover { box-shadow: inset 3px 0 0 var(--day-bg); }
+details.level[open] > summary::before { content: "\25BE  "; }
+.guide-card-title::after, .phase-summary-name::after { content: "  \2192"; }
+.jump-row a { border: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -580,7 +592,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase is to build throwing capacity following an extended end of season deload. Drills will be targeted to the focus and rely on contraint lead heavily relying on seated and kneeling throws. Athletes objective is to increase their kneeling throw velocity.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
@@ -16040,7 +16053,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase is to continuously increase intensity of throwing sessions as athletes are now accustomed to their drill packages and patterning. Athletes will be progressing to more complex drills and introduced to more standing throw variations as intensity and frequency of throwing sessions increases. Objective of this phase is to increase kneeling and standing throw velocity.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
@@ -35641,7 +35655,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase is to continuously progress volume accumulation while introducing more implicit style drills increasing degrees of freedom and allowing for the utilization of momentum. (flow drills that will increase coordination and athleticism) Objective of this phase is to increase long toss distance.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
@@ -60462,7 +60477,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase to progress intensity through long toss extension/compression programs allowing for self organization and finding timing and intent through various movement strategies. Objective of this phase is to maintain gains from previous phases and increase compression velocity.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
@@ -84845,7 +84861,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase that pushed intensity through increased momentum and underweight mound testing. This is a strenuous phase of throwing where an athlete is looking to make an adaptation. In this phase the objective is to increase plyoball mound velo while maintaining or increasing kneeling, standing and momentum based throwing velocities.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
@@ -107548,7 +107565,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase is to blend patterns from previous phases to the skills of throwing from a slope. This will be the athlete&#39;s first introduction to bullpens where objective will be to transfer new movement patterns to the mound with increased velocity and improved command. Athletes will primarily be throwing fastballs at varying intents through this phase.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
@@ -129536,7 +129554,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase is to get patterns and adaptations from previous phases to stick as they develop velocity, command and pitch movement strategies. Primary objective of this phase is to build appropriate mound capacity for live ab&#39;s while increasing velocity, pitch movement, accuracy and developing strategies for in-game execution.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
@@ -152191,7 +152210,8 @@ details.level > summary:hover { background: var(--note-bg); }
   </div>
   <p>The goal of this phase is competition preparation. Drill work should be a secondary focus as competition should continuously be utilized as often as possible to build resiliance under pressure. In this phase, the objective is to win in competition or build strategies for improvement and growth in game scenarios.</p>
 
-  <details class="level">
+  <div class="tapcue">Tap a Level to open it, then a Focus, then a duration for the drill table</div>
+<details class="level">
     <summary>Level 1</summary>
     <div class="level-body">
       <details class="program">
