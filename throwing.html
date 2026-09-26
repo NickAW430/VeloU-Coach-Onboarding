@@ -58,6 +58,19 @@
   --page-bg: color-mix(in srgb, var(--black) 96%, var(--grey) 4%);
   --card-bg: color-mix(in srgb, var(--black) 90%, var(--grey) 10%);
 }
+/* ALWAYS-DARK */
+:root { color-scheme: dark;
+  --ink: color-mix(in srgb, var(--white) 92%, var(--grey) 8%);
+  --hdr-bg: color-mix(in srgb, var(--black) 82%, var(--grey) 18%);
+  --tick-bg: color-mix(in srgb, var(--black) 72%, var(--blue) 28%);
+  --note-bg: color-mix(in srgb, var(--black) 90%, var(--grey) 10%);
+  --rec-bg: color-mix(in srgb, var(--black) 87%, var(--grey) 13%);
+  --border: color-mix(in srgb, var(--black) 55%, var(--grey) 45%);
+  --muted: color-mix(in srgb, var(--grey) 70%, var(--white) 30%);
+  --page-bg: color-mix(in srgb, var(--black) 96%, var(--grey) 4%);
+  --card-bg: color-mix(in srgb, var(--black) 90%, var(--grey) 10%);
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--page-bg); color: var(--ink); font-family: var(--font-body); line-height: 1.6; font-size: 16px; }

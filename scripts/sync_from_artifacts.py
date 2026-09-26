@@ -55,12 +55,8 @@ ONBOARDING_TILE = '''  <a class="tile" href="onboarding/">
 MAIN_LOGO_TAG = '<img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">'
 
 
-# The logo is white on transparent: a dark plate keeps it visible in light mode; in dark mode it sits directly on the page.
-MAIN_LOGO_CSS = (
-    ".logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; padding: 26px 34px; background: #0d0d0d; border-radius: 14px; }\n"
-    "@media (prefers-color-scheme: dark) { :root:not([data-theme=\"light\"]) .logo { background: transparent; padding: 0; } }\n"
-    ":root[data-theme=\"dark\"] .logo { background: transparent; padding: 0; }"
-)
+# The logo is white on transparent; the site is always dark, so it sits directly on the page.
+MAIN_LOGO_CSS = ".logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; }"
 
 
 def ensure_main_logo(html: str) -> str:
@@ -75,6 +71,19 @@ def ensure_main_logo(html: str) -> str:
         ".logo { height: 64px; width: auto; margin-bottom: 22px; }",
         MAIN_LOGO_CSS,
     )
+
+
+def ensure_always_dark(html: str) -> str:
+    # The site stays dark regardless of the viewer's light/dark setting: the artifact's
+    # dark palette is copied onto bare :root (after it, so it wins) and color-scheme is pinned.
+    if 'ALWAYS-DARK' in html:
+        return html
+    m = re.search(r':root\[data-theme="dark"\] \{([^}]*)\}', html)
+    if not m:
+        print("WARNING: dark palette block not found; site not locked to dark")
+        return html
+    block = "/* ALWAYS-DARK */\n:root { color-scheme: dark;" + m.group(1) + "}\n"
+    return html[:m.end()] + "\n" + block + html[m.end():]
 
 
 def ensure_wordmark(html: str) -> str:
@@ -145,9 +154,11 @@ def process(src_path: Path, dest_name: str, is_homepage: bool) -> None:
         text = fix_homepage_links(text)
         text = ensure_onboarding_tile(text)
         text = ensure_main_logo(text)
+        text = ensure_always_dark(text)
     else:
         text = fix_subpage_home_links(text)
         text = ensure_wordmark(text)
+        text = ensure_always_dark(text)
     text = ensure_noindex(text)
     dest = REPO_ROOT / dest_name
     dest.write_text(text, encoding='utf-8')
