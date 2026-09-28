@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=4">
-<script src="assets/interactive.js?v=6" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=5">
+<script src="assets/interactive.js?v=7" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 10 additions */
 .gap{background:var(--panel);border:1px solid var(--line);padding:18px;display:grid;gap:10px}
@@ -68,6 +68,14 @@ blockquote em{font-style:normal;color:var(--lime);font:700 13px var(--label);let
 @media (max-width:700px){.three{grid-template-columns:1fr}}
 .dash{display:flex;flex-wrap:wrap;gap:8px}
 .dash span{font:700 15px var(--label);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--panel-2);padding:8px 12px}
+
+.me{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mcol{display:grid;gap:8px;align-content:start}
+.mcol h3{font-family:var(--label);font-weight:700;font-size:15px;letter-spacing:.12em;padding:10px 14px;color:#100D0B}
+.mi{background:var(--panel);border:1px solid var(--line);padding:12px 14px;display:grid;gap:4px}
+.mi b{font-family:var(--label);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.02em}
+.mi span{font-size:14.5px;color:var(--muted)}
+@media (max-width:700px){.me{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -76,9 +84,9 @@ blockquote em{font-style:normal;color:var(--lime);font:700 13px var(--label);let
 
 <header>
   <div class="crumbs">
-    <span class="chip">Week 1</span>
+    <span class="chip">Live</span>
     <span class="chip on">Module 10 of 11</span>
-    <span class="chip">Sign off Week 1</span>
+    <span class="chip">Sign off Live</span>
   </div>
   <h1>Client <span class="red">communication</span></h1>
   <p class="lede">Families see our value clearly at the evaluation. This module is how you keep it just as clear in week 12.</p>
@@ -207,9 +215,31 @@ blockquote em{font-style:normal;color:var(--lime);font:700 13px var(--label);let
 </section>
 
 <!-- 10.7 -->
-<section id="remote">
+<section id="comms">
   <div class="sec-head">
     <span class="num">10.7</span>
+    <h2>Professional communication</h2>
+    <p>Most athletes here are minors. Every message is written like a parent could read it, because eventually one will.</p>
+  </div>
+  <div class="me">
+    <div class="mcol"><h3 style="background:var(--green)">YOU CAN TEXT ABOUT</h3>
+      <div class="mi"><b>Scheduling</b><span>Session times, makeups, running late.</span></div>
+      <div class="mi"><b>What he's working on</b><span>The phase, the split, the focus, in plain language (10.6).</span></div>
+      <div class="mi"><b>Logistics for the family</b><span>What to bring, what changed for next session.</span></div>
+    </div>
+    <div class="mcol"><h3 style="background:var(--red);color:#fff">NEVER TEXT ABOUT</h3>
+      <div class="mi"><b>Anything personal, outside training</b><span>No relationship exists outside the floor. Keep it that way in writing too.</span></div>
+      <div class="mi"><b>A promise about performance or results</b><span>Never say what velocity he'll hit, when he'll get there, or that a college or pro outcome is coming. Talk about the process, not a guarantee.</span></div>
+      <div class="mi"><b>Anything you'd escalate in person</b><span>Pain, a flag, a complaint, a disagreement (1.6, 1.7). Those get a call or a conversation, not a text.</span></div>
+    </div>
+  </div>
+  <div class="rule"><span class="label">Rule</span><p>Text the athlete's parent, not the athlete directly, unless the family has told you otherwise. Keep every message something you'd be comfortable reading out loud to your Senior Coach.</p></div>
+</section>
+
+<!-- 10.8 -->
+<section id="remote">
+  <div class="sec-head">
+    <span class="num">10.8</span>
     <h2>When he can't be here</h2>
   </div>
   <div class="rule"><span class="label">Remote+</span><p>Remote+ is for athletes who likely live more than 30 minutes away, or athletes for whom the full on-site price is too expensive. They can train on-site 8 times a month, so it works like our hybrid option. Know it well enough to recommend it.</p></div>
@@ -218,8 +248,8 @@ blockquote em{font-style:normal;color:var(--lime);font:700 13px var(--label);let
 <!-- 10.8 -->
 <section id="signoff">
   <div class="sec-head">
-    <span class="num">10.8</span>
-    <h2>Week 1 sign-off</h2>
+    <span class="num">10.9</span>
+    <h2>Live sign-off</h2>
     <p>A senior coach watches you run one live retest review with a parent.</p>
   </div>
   <div class="three">

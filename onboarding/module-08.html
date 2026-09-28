@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=4">
-<script src="assets/interactive.js?v=6" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=5">
+<script src="assets/interactive.js?v=7" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 8 additions */
 .zwrap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
@@ -115,9 +115,9 @@
 
 <header>
   <div class="crumbs">
-    <span class="chip">Read pre-start</span>
+    <span class="chip">Pre-start</span>
     <span class="chip on">Module 8 of 11</span>
-    <span class="chip">Sign off Week 1</span>
+    <span class="chip">Sign off Live</span>
   </div>
   <h1>Coaching <span class="red">the floor</span></h1>
   <p class="lede">The program only works if the rep looks the way it was written. This is how every rep type should look, what breaks it, and what you do about it.</p>
@@ -130,9 +130,34 @@
 </header>
 
 <!-- 8.1 -->
-<section id="session">
+<section id="setup">
   <div class="sec-head">
     <span class="num">8.1</span>
+    <h2>Opening and closing the floor</h2>
+    <p>Draft — tell Nick what to add or cut. The floor should look the same at open and at close.</p>
+  </div>
+  <div class="me">
+    <div class="mcol"><h3 style="background:var(--green)">OPENING</h3>
+      <div class="mi"><b>Lights, music, temperature</b><span>On and set before the first athlete walks in.</span></div>
+      <div class="mi"><b>Tech powered on and logged in</b><span>Force plates, ArmCare, laser, and any tablet or laptop you enter data on.</span></div>
+      <div class="mi"><b>Stations set for today's sessions</b><span>Equipment for the first block's programs is out and in place. Nothing improvised at the rack after the athlete arrives.</span></div>
+      <div class="mi"><b>Walk the floor once</b><span>Anything left out, broken, or missing from the night before gets fixed or flagged before Session 1.</span></div>
+    </div>
+    <div class="mcol"><h3 style="background:var(--red);color:#fff">CLOSING</h3>
+      <div class="mi"><b>Every piece of equipment back where it belongs</b><span>Nothing stays out on the floor overnight.</span></div>
+      <div class="mi"><b>Racks, benches, and mats reset</b><span>Left how you'd want to find them tomorrow.</span></div>
+      <div class="mi"><b>Tech synced and put away</b><span>Data saved before you power down. Tablets charging.</span></div>
+      <div class="mi"><b>Common areas ready for tomorrow</b><span>Lobby and bathrooms included, not just the floor (8.8).</span></div>
+    </div>
+  </div>
+  <div class="rule"><span class="label">Between sessions</span><p>Reset each station to its base state before the next athlete: weights racked, attachments back on their hooks. Nothing carries over from one athlete's setup into the next.</p></div>
+  <div class="rule"><span class="label">What the floor should look like, always</span><p>Every rack matches what's in front of it. Walkways clear. Nothing on the floor that isn't being used right now.</p></div>
+</section>
+
+<!-- 8.2 -->
+<section id="session">
+  <div class="sec-head">
+    <span class="num">8.2</span>
     <h2>Every session, in order</h2>
     <p>The order is part of the program. Don't rearrange it.</p>
   </div>
@@ -149,7 +174,7 @@
 <!-- 8.2 -->
 <section id="reps">
   <div class="sec-head">
-    <span class="num">8.2</span>
+    <span class="num">8.3</span>
     <h2>Know the rep</h2>
     <p>Pick a rep type. The graph shows bar position over time. Match what you see on the floor to the shape.</p>
   </div>
@@ -163,7 +188,7 @@
 <!-- 8.3 -->
 <section id="vbt">
   <div class="sec-head">
-    <span class="num">8.3</span>
+    <span class="num">8.4</span>
     <h2>Velocity-based training</h2>
     <p>When a lift is VBT-tracked, the bar speed is the prescription. Coach the speed, not a count.</p>
   </div>
@@ -179,7 +204,7 @@
 <!-- 8.4 -->
 <section id="safety">
   <div class="sec-head">
-    <span class="num">8.4</span>
+    <span class="num">8.5</span>
     <h2>Never run these short-staffed</h2>
   </div>
   <div class="me">
@@ -192,7 +217,7 @@
 <!-- 8.5 -->
 <section id="floor">
   <div class="sec-head">
-    <span class="num">8.5</span>
+    <span class="num">8.6</span>
     <h2>Your zone</h2>
     <p>The floor is split by how many coaches are working. Pick the number on the floor today and see who owns what.</p>
   </div>
@@ -207,6 +232,10 @@
     </div>
     <div class="zlist" id="zlist" aria-live="polite"></div>
   </div>
+  <div class="sec-head" style="margin-top:8px"><h3>Covering for each other</h3><p>Zones don't move. Coaches do, and there's a way to do it.</p></div>
+  <p style="color:var(--muted)">Stepping away for the bathroom or to eat? Get another coach's attention first and tell them you're leaving. They now cover both zones until you're back, and reposition so they can see both.</p>
+  <p style="color:var(--muted)">When there are more coaches on the floor than zones need, or Sam or Nick is on the floor, that extra coach is the floater. The floater might work directly with a specific athlete, or send an athlete to a specific coach for something.</p>
+  <div class="rule"><span class="label">1:1 coverage</span><p>Any time you need to leave your zone to work one-on-one with an athlete, the floater takes your zone. You never leave it uncovered.</p></div>
   <a class="read" href="coaching-zones.html" target="_blank" rel="noopener">
     <span class="tag">3D MAP</span>
     <div><b>Walk the zones in 3D</b><span>Orbit the floor, toggle coaches, and fly to any zone</span></div>
@@ -217,7 +246,7 @@
 <!-- 8.6 -->
 <section id="adjust">
   <div class="sec-head">
-    <span class="num">8.6</span>
+    <span class="num">8.7</span>
     <h2>Adjust or escalate</h2>
     <p>Some calls are yours on the floor. Some never are.</p>
   </div>
@@ -239,8 +268,8 @@
 <!-- 8.7 -->
 <section id="signoff">
   <div class="sec-head">
-    <span class="num">8.7</span>
-    <h2>Week 1 sign-off</h2>
+    <span class="num">8.8</span>
+    <h2>Live sign-off</h2>
     <p>You run 3 sessions across different phases while a senior coach scores you. Track your own readiness here.</p>
   </div>
   <div class="progress"><span id="pc">0 of 8</span><div class="bar"><i id="pb"></i></div></div>
@@ -266,7 +295,7 @@
 
 <div class="cta" id="checkpoint">
   <span class="label" style="color:#fff">Checkpoint 8</span>
-  <h2>Prove it before Week 1</h2>
+  <h2>Prove it before Live</h2>
   <p>Spot the fault, name the fix, make the call.</p>
   <div class="cta-row">
     <label class="field"><span class="label">Your name</span><input id="coach" type="text" autocomplete="name" placeholder="First Last" style="width:220px"></label>

@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=4">
-<script src="assets/interactive.js?v=6" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=5">
+<script src="assets/interactive.js?v=7" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 1 additions */
 .mission{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);padding:22px 24px;display:grid;gap:10px}
@@ -113,6 +113,13 @@
 @media (max-width:700px){.says{grid-template-columns:1fr}}
 .trust{overflow-wrap:anywhere;font-family:var(--display);text-transform:uppercase;font-size:clamp(22px,3.4vw,32px);line-height:1.15;max-width:30ch;text-wrap:balance}
 .trust em{font-style:normal;color:var(--red)}
+
+.routes{display:grid;border:1px solid var(--line)}
+.route{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+.route:last-child{border-bottom:0}
+.route b{font-family:var(--label);font-weight:600;font-size:15.5px}
+.route span{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--red);text-align:right;white-space:nowrap}
+@media (max-width:560px){.route{grid-template-columns:1fr}.route span{text-align:left}}
 </style>
 </head>
 <body>
@@ -291,9 +298,31 @@
 </section>
 
 <!-- 1.7 -->
-<section id="different">
+<section id="routes">
   <div class="sec-head">
     <span class="num">1.7</span>
+    <h2>Who to go to</h2>
+    <p>Know exactly who a question goes to. If it isn't listed here, it goes to your Senior Coach.</p>
+  </div>
+  <div class="routes">
+    <div class="route"><b>Athlete programming questions</b><span>Senior Coach</span></div>
+    <div class="route"><b>Throwing or mechanical questions</b><span>Senior Coach</span></div>
+    <div class="route"><b>Strength &amp; conditioning questions</b><span>Senior Coach</span></div>
+    <div class="route"><b>Injury or pain concerns</b><span>Senior Coach, same day</span></div>
+    <div class="route"><b>Scheduling problems</b><span>Tom or Sam</span></div>
+    <div class="route"><b>Billing or membership questions</b><span>Sam, General Manager</span></div>
+    <div class="route"><b>Parent complaints</b><span>Senior Coach</span></div>
+    <div class="route"><b>Technology or app problems</b><span>Tom</span></div>
+    <div class="route"><b>Facility or equipment issues</b><span>Tom or Sam</span></div>
+    <div class="route"><b>Emergencies</b><span>Sam — Tom if Sam isn't available</span></div>
+  </div>
+  <div class="rule"><span class="label">Handle it yourself</span><p>Anything you were trained on, happening in real time on your floor. Everything else on this list gets a person immediately. Never sit on it.</p></div>
+</section>
+
+<!-- 1.8 -->
+<section id="different">
+  <div class="sec-head">
+    <span class="num">1.8</span>
     <h2>What makes us different</h2>
   </div>
   <p class="trust">A family trusted you with their son's development. <em>Every session earns that trust or spends it.</em></p>
@@ -305,6 +334,29 @@
     <div class="say"><q>"My son loves the atmosphere"</q><div class="how"><span class="label">You</span><span>Bring mudita, energy, and a real relationship so he wants to be in the building.</span></div></div>
   </div>
   <div class="rule"><span class="label">Rule</span><p>Families see our value clearly at the evaluation. Keep it just as visible in week 12.</p></div>
+</section>
+
+<!-- 1.9 -->
+<section id="on-the-floor">
+  <div class="sec-head">
+    <span class="num">1.9</span>
+    <h2>On the floor</h2>
+    <p>The standards mean nothing if the room doesn't feel like this.</p>
+  </div>
+  <div class="nos">
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>Buried in your phone</div>
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>Standing off to the side while an athlete works alone</div>
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>A flat greeting instead of using his name</div>
+    <div class="no"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5L19 19M19 5L5 19" stroke="#E5534B" stroke-width="3" fill="none"/></svg>Correcting with an edge, in front of the room</div>
+  </div>
+  <div class="says">
+    <div class="say"><q>"Energy"</q><div class="how"><span class="label">You</span><span>Bring it every session, not just when someone's watching. Athletes and parents can tell the difference.</span></div></div>
+    <div class="say"><q>"Present, not just on the clock"</q><div class="how"><span class="label">You</span><span>Even when you aren't directly coaching someone, you're watching, spotting, and correcting from across the floor. Never sitting, never on your phone.</span></div></div>
+    <div class="say"><q>"Every athlete, by name"</q><div class="how"><span class="label">You</span><span>Learn names fast. The greeting is the first data point of the session, for him and for the parent watching.</span></div></div>
+    <div class="say"><q>"The behavior, never the person"</q><div class="how"><span class="label">You</span><span>Direct and specific about what gets corrected (1.5), delivered like you're on his side, not looking down at him.</span></div></div>
+    <div class="say"><q>"A room he wants to be in"</q><div class="how"><span class="label">You</span><span>The atmosphere is part of the product. An athlete who wants to be here trains harder than one who's enduring it.</span></div></div>
+    <div class="say"><q>"Always being watched"</q><div class="how"><span class="label">You</span><span>Parents and athletes are evaluating the experience from the parking lot to the door. Assume every rep is on camera, because to them, it is.</span></div></div>
+  </div>
 </section>
 
 <!-- checkpoint -->
