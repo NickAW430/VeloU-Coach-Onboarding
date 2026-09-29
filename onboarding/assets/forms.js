@@ -12,6 +12,8 @@ window.VELOU_FORMS = {
   "checkpoint-8": "https://velouniversity.typeform.com/mod8chkpnt8",
   "checkpoint-9": "https://velouniversity.typeform.com/mod9chkpnt9",
   "checkpoint-10": "https://velouniversity.typeform.com/mod10chckpnt10",
+  "checkpoint-11": "https://form.typeform.com/to/REPLACE_CHECKPOINT_11",
+  "checkpoint-12": "https://form.typeform.com/to/REPLACE_CHECKPOINT_12",
   "capstone": "https://velouniversity.typeform.com/mod11capstone",
   "questions": "https://velouniversity.typeform.com/mod11capstone"
 };
