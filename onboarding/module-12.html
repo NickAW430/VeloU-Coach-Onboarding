@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=7">
-<script src="assets/interactive.js?v=9" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=8">
+<script src="assets/interactive.js?v=10" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 12 additions */
 .dels{display:grid;gap:8px}
@@ -30,6 +30,8 @@
 .dl b{font:700 16px var(--label);text-transform:uppercase;letter-spacing:.03em;display:block}
 .dl p{font-size:14.5px;color:var(--muted);margin-top:2px}
 .dl .m{font:600 12.5px var(--label);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+.card dd ul{margin:6px 0 0;padding-left:16px;display:grid;gap:4px}
+.card dd li{font-size:14.5px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -64,16 +66,36 @@
     <p>Your senior coach walks you through the board live, on a real account.</p>
   </div>
   <div class="cards">
-    <div class="card"><div class="top"><span class="test">Pipeline</span></div><dl><dt>The pipeline</dt><dd>Understand every stage an athlete passes through, from first contact to on the floor.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Pipeline</span></div><dl><dt>New athlete onboarding</dt><dd>Know what has to happen, and in what order, before a new athlete's first session.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Status</span></div><dl><dt>Evaluation status</dt><dd>Where he is in evaluation, from booked to reported (Module 2, Module 7).</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Status</span></div><dl><dt>Programming status</dt><dd>Whether he's programmed, and whether that program matches what the evaluation actually said.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Notes</span></div><dl><dt>Athlete notes</dt><dd>Write what the next person touching this athlete needs to know, including his goals, injury history, and where he sits in his training cycle.</dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Pipeline</span></div><dl><dt>The pipeline</dt><dd>Understand every stage an athlete passes through, from first contact to on the floor. Know:<ul>
+      <li>How an athlete actually arrives here, and the process behind it</li>
+      <li>What automations run on their own, without a coach touching anything</li>
+      <li>The point where you need to start paying attention to him</li>
+      <li>How and why an athlete ends up assigned to you specifically</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Pipeline</span></div><dl><dt>New athlete onboarding</dt><dd>Know the order a new athlete moves through:<ul>
+      <li>Introduced to the building</li>
+      <li>Introduced to training</li>
+      <li>Moved through the weight room</li>
+      <li>Introduced to the other coaches</li>
+      <li>Handed to you, his primary coach</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Status</span></div><dl><dt>Evaluation status</dt><dd>Know:<ul>
+      <li>Where and how to see the notes from his evaluation</li>
+      <li>How to interpret what they say</li>
+      <li>How to actually use that information once you have it</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Status</span></div><dl><dt>Programming status</dt><dd>Know how to adjust his status in Monday.com so it stays current with what's actually happened in Everfit (Module 11).</dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Notes</span></div><dl><dt>Athlete notes</dt><dd>Know where and how to reference or leave a note on an athlete, including his goals, injury history, and where he sits in his training cycle.</dd></dl></div>
     <div class="card"><div class="top"><span class="test">Notes</span></div><dl><dt>Documenting conversations</dt><dd>A conversation that mattered gets written down here, not just remembered.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Ownership</span></div><dl><dt>Tasks and responsibilities</dt><dd>Know what's assigned to you, and what you're handing off to someone else.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Ownership</span></div><dl><dt>Internal communication</dt><dd>Communicate a concern here so the right person sees it, not just whoever you happened to run into.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Upkeep</span></div><dl><dt>Updating athlete information</dt><dd>Keep the record current. Stale information is worse than no information.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Upkeep</span></div><dl><dt>Daily and weekly</dt><dd>Know exactly what needs an update today versus what's a weekly pass, so nothing gets missed on either cadence.</dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Ownership</span></div><dl><dt>Tasks and responsibilities</dt><dd>Know where and how to reference your tasks and responsibilities in Monday.com, including what's assigned to you and what you're handing off to someone else.</dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Ownership</span></div><dl><dt>Internal communication</dt><dd>Know how to use Monday.com to communicate with other coaches and with management, so the right person sees a concern instead of just whoever you happened to run into.</dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Upkeep</span></div><dl><dt>Updating athlete information</dt><dd>Stale information is worse than no information. Know:<ul>
+      <li>When something needs to change</li>
+      <li>How, and what exactly, to change</li>
+      <li>How you get notified something changed</li>
+      <li>Who you need to notify when you're the one who changed it</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Upkeep</span></div><dl><dt>Daily and weekly</dt><dd>Know exactly how often each kind of update needs to happen, so nothing gets missed on a daily or a weekly pass.</dd></dl></div>
   </div>
   <div class="rule"><span class="label">Ownership</span><p>An accurate board is how you create ownership over an athlete's experience: everyone touching him sees the same real picture, not a version filtered through you.</p></div>
 </section>
