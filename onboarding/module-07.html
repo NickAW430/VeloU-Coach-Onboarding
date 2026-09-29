@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=7">
-<script src="assets/interactive.js?v=9" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=8">
+<script src="assets/interactive.js?v=10" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 7 additions */
 .reads{display:grid;gap:10px}
@@ -225,7 +225,7 @@
   </div>
   <div class="flow7">
     <div class="st7"><span class="n">1</span><b>Movement screen</b><span class="comp">Potential + screen</span><span>Height, weight, H:W, then 7 exams</span></div>
-    <div class="st7"><span class="n">2</span><b>Force plate</b><span class="comp">Production</span><span>Force, power, impulses, CI:EI</span></div>
+    <div class="st7"><span class="n">2</span><b>Force plate</b><span class="comp">Production</span><span>CMJ, IMTP, squat jump, rebound jump, plyo push-up</span></div>
     <div class="st7"><span class="n">3</span><b>ArmCare</b><span class="comp">Interference</span><span>Shoulder strength, before any throwing</span></div>
     <div class="st7"><span class="n">4</span><b>Med balls</b><span class="comp">Transference</span><span>1 lb and 2 lb, ground to pelvis</span></div>
     <div class="st7"><span class="n">5</span><b>Kneeling throw</b><span class="comp">Transference</span><span>Legs removed, trunk to arm</span></div>
@@ -301,53 +301,93 @@
   </div>
   <div class="tests">
     <article class="test">
-      <div class="side"><span class="comp">Energy Production</span><b>Force plate</b><div class="out"><span>Peak force</span><span>Peak power</span><span>Power / BM</span><span>Ecc. impulse</span><span>Con. impulse</span><span>CI:EI</span></div></div>
+      <div class="side"><span class="comp">Energy Production</span><b>Force plate · CMJ</b><div class="out"><span>Peak power</span><span>Power / BM</span><span>Ecc. impulse</span><span>Con. impulse</span><span>CI:EI</span></div><p>Countermovement jump. Feeds the CI:EI ratio used in Module 6.</p></div>
       <div class="proto">
-        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Setup</span><span>The athlete waits for the plates to zero, then stands centered, feet shoulder-width apart, hands on hips, and stays still while body weight is recorded.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Keeping your hands on your hips and feet on the plate, jump as high as possible."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>2-3 maximal jumps, with 15-30 sec rest between trials.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Stable starting position, valid countermovement depth, maximal effort, hands remain on hips, feet remain on the plate, landing occurs on the plate.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>Feet move before takeoff, hands leave hips, multiple jumps occur, the landing is incomplete, there's excessive movement at start or end, or an obvious technical error.</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Energy Production</span><b>Force plate · IMTP</b><div class="out"><span>Peak force</span><span>Force / BM</span></div><p>Isometric mid-thigh pull.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span>Athlete stands on the plates, feet hip-width apart, in the most natural athletic knee/hip position; bar height is set to mid-thigh, hands gripping the bar.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Brace hard with your chest up, remove all slack from the bar, then pull as hard and as fast as possible against the fixed bar."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>1-2 maximal pulls, with 1 min rest between trials.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Stable setup, correct joint angles, continuous maximal effort, and no visible movement of the bar or repositioning of the feet.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>Joint position changes substantially, feet move, grip changes, the bar moves, a countermovement occurs, or the athlete fails to sustain a maximal effort. Straps aren't permitted; chalk is fine.</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Energy Production</span><b>Force plate · Squat jump</b><div class="out"><span>Peak power</span><span>Jump height</span></div><p>No countermovement — isolates concentric output.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span>Athlete stands centered, feet shoulder-width apart, hands on hips; descends to the prescribed squat depth and holds briefly before jumping.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Get into a comfortable squat position, hold still, then jump straight up as high and as fast as possible. Land naturally and stay balanced."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>2-3 maximal jumps, with 15-30 sec rest between trials.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Stable starting position, no countermovement, maximal vertical jump effort, hands remain on hips, and a controlled landing.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>A countermovement occurs before takeoff, the feet reposition, hands leave hips, multiple jumps occur, the starting position isn't held, or the landing is uncontrolled.</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Energy Production</span><b>Force plate · CMJ rebound</b><div class="out"><span>Reactive strength</span><span>Ground contact time</span></div><p>Two jumps back to back. Reads how fast he reuses force.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span>Athlete stands centered, feet hip-width apart, hands on hips, from a stable upright start.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Jump as high as possible, land, and immediately rebound into another maximal jump. Minimize ground contact time and try to repeat your first jump height."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>2-3 maximal rebound-jump pairs, with 15-30 sec rest between trials.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Maximal jump effort, a quick transition from landing to takeoff, minimal ground contact time, hands remain on hips, and a stable, controlled landing.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>An excessive pause between jumps, extra steps or shuffling, hands leave hips, loss of balance, multiple contacts, or a failure to perform a true maximal rebound.</span></div>
+      </div>
+    </article>
+    <article class="test">
+      <div class="side"><span class="comp">Energy Production</span><b>Force plate · Plyo push-up</b><div class="out"><span>Peak power</span><span>Flight time</span></div><p>Upper-body reactive power.</p></div>
+      <div class="proto">
+        <div class="pf"><span class="k">Setup</span><span>After body weight is recorded, the athlete steps off, then sets up in the top of a push-up position with hands centered on the plates.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Push off the plates as explosively as possible and get your hands as high off the ground as you can. Land back on the plates with straight arms and absorb the landing."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>2-3 maximal repetitions, with 5-10 sec rest between trials.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Consistent start position, an aggressive but controlled descent, a maximal explosive push, clear hand separation from the plates, and a stable landing.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>Hands move or reposition before takeoff, the body position breaks substantially, there's no clear hand separation, contact is uneven or partial, an extra repetition occurs, or control is lost on landing.</span></div>
       </div>
     </article>
     <article class="test">
       <div class="side"><span class="comp">Energy Interference</span><b>ArmCare</b><div class="out"><span>Shoulder strength</span></div><p>Pros are read against an 80+ baseline.</p></div>
       <div class="proto">
-        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Setup</span><span>Supine, head down, feet straight. IR and ER: elbow slightly elevated on a pad at 90°. Scaption: arm straight at roughly 45°, still supine. Grip: half-kneeling, gripping the device with two fingers and the thumb.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Keep your head down and feet straight. After the countdown, push as hard as you can into the device and maintain maximal force for 2-3 seconds."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>Two trials per exercise. If the two are far apart, run a third.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Total strength and strength relative to body weight matter most. Strength ratios are then read to identify imbalances and where extra supplemental work is needed.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>The athlete's head leaves the ground, the feet aren't straight, or the athlete isn't properly aligned in the testing position.</span></div>
       </div>
     </article>
     <article class="test">
       <div class="side"><span class="comp">Energy Transference</span><b>Med balls</b><div class="out"><span>1 lb</span><span>2 lb</span></div><p>Ground to pelvis. Compare the two against norms.</p></div>
       <div class="proto">
-        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Setup</span><span>Athlete assumes the prescribed throwing position with the 1 lb, then the 2 lb ball — on the mound for pitchers, from position for position players.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Set up in a natural position, then throw the ball as fast as possible. Keep two hands on the med ball for the entire throw."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>3 maximal throws per ball, with 30 sec rest between trials.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Correct starting position, prescribed throwing technique, maximal effort, and a clearly measurable throw.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>The starting position isn't held, the athlete steps outside the designated area, the throw is released incorrectly, the ball is dropped, or the athlete performs a movement that violates the protocol.</span></div>
       </div>
     </article>
     <article class="test">
       <div class="side"><span class="comp">Energy Transference</span><b>Kneeling throw</b><div class="out"><span>Kneeling velo</span></div><p>Highest single correlation to velocity. Legs out of the throw.</p></div>
       <div class="proto">
-        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Setup</span><span>Athlete starts in a half-kneeling position: front foot flat, rear knee on the ground, torso upright.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Keeping your back knee on the ground, rotate and throw the ball as hard and as fast as possible."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>3 maximal throws per side, with 30 sec rest between trials.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Correct half-kneeling position, a stable base, full-intent explosive throw, and consistent throwing technique.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>The rear knee or front foot moves, the athlete rises out of the half-kneeling position, there's excessive lower-body assistance, the throw is mishandled, or the starting position isn't held.</span></div>
       </div>
     </article>
     <article class="test">
       <div class="side"><span class="comp">Actual output</span><b>Bullpen velocity</b><div class="out"><span>MPH</span></div><p>Feeds Delta and Throwing Level.</p></div>
       <div class="proto">
-        <div class="pf"><span class="k">Setup</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Athlete cue</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Trials</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">What counts</span><span class="tbc">TBC</span></div>
-        <div class="pf"><span class="k">Invalid if</span><span class="tbc">TBC</span></div>
+        <div class="pf"><span class="k">Setup</span><span>Regulation mound and rubber, with a catcher or target at the prescribed distance. Trackman positioned correctly and turned on.</span></div>
+        <div class="pf"><span class="k">Athlete cue</span><span>"Use your normal pitching delivery and throw with game-intent. Stay consistent with your mechanics and attack the target. Showcase each pitch and try to execute."</span></div>
+        <div class="pf"><span class="k">Trials</span><span>15-20 pitches, multiple of each offering, normal recovery between pitches. Both windup and stretch.</span></div>
+        <div class="pf"><span class="k">What counts</span><span>Legal delivery, full-intent pitch, the ball reaches the catcher or target, and pitch metrics are successfully captured when applicable.</span></div>
+        <div class="pf"><span class="k">Invalid if</span><span>A balk or illegal delivery, an obvious slip or interruption, the pitch is intentionally aborted, the ball isn't thrown toward the target, equipment fails to capture the pitch, or the athlete is disrupted by an outside factor.</span></div>
       </div>
     </article>
   </div>
