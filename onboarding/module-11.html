@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=7">
-<script src="assets/interactive.js?v=9" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=8">
+<script src="assets/interactive.js?v=10" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 11 additions */
 .dels{display:grid;gap:8px}
@@ -30,6 +30,8 @@
 .dl b{font:700 16px var(--label);text-transform:uppercase;letter-spacing:.03em;display:block}
 .dl p{font-size:14.5px;color:var(--muted);margin-top:2px}
 .dl .m{font:600 12.5px var(--label);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+.card dd ul{margin:6px 0 0;padding-left:16px;display:grid;gap:4px}
+.card dd li{font-size:14.5px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -64,17 +66,55 @@
     <p>Your senior coach walks you through each of these live, on your own account.</p>
   </div>
   <div class="cards">
-    <div class="card"><div class="top"><span class="test">Setup</span></div><dl><dt>Profiles</dt><dd>Every athlete's profile is the source of truth: level, phase, program, and history. Check it before you check anything else.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Setup</span></div><dl><dt>Finding programs</dt><dd>Find the exact program, phase, and split from Modules 4 and 5, fast, without guessing at the code.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Setup</span></div><dl><dt>Assigning programs</dt><dd>Assign the right one to the right athlete. A wrong assignment is a wrong program on the floor tomorrow.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Substitutions</span></div><dl><dt>Making substitutions</dt><dd>Swap an exercise without breaking the phase's intent. If you're not sure it's an equal swap, ask before you make it.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">On the floor</span></div><dl><dt>Logging workouts</dt><dd>Log what actually happened, not what was planned. That gap between planned and logged is a coaching note in itself.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">On the floor</span></div><dl><dt>Exercise videos</dt><dd>Point an athlete to the demo before you re-explain a cue from scratch. It's faster and it's consistent.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Monitoring</span></div><dl><dt>Athlete compliance</dt><dd>Checking training compliance is part of knowing your athletes. A skipped session unlogged is worse than one flagged.</dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Setup</span></div><dl><dt>Profiles</dt><dd>Every athlete's profile is the source of truth. Know:<ul>
+      <li>Where to find a profile</li>
+      <li>What's inside it: level, phase, program, and history</li>
+      <li>How to build one, by hand</li>
+      <li>What builds itself: which fields fill in automatically, and from where</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Setup</span></div><dl><dt>Finding programs</dt><dd>Find the exact program, phase, and split from Modules 4 and 5, fast, without guessing at the code. Know:<ul>
+      <li>How program names map to what you learned in Modules 4 and 5</li>
+      <li>How to search for one</li>
+      <li>How to adjust a program once you've found it</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Setup</span></div><dl><dt>Assigning programs</dt><dd>Assign the right one to the right athlete. A wrong assignment is a wrong program on the floor tomorrow. Know:<ul>
+      <li>How to assign a program to an athlete</li>
+      <li>How to alter it once it's assigned</li>
+      <li>When altering it is the right call, versus reassigning or escalating</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Substitutions</span></div><dl><dt>Making substitutions</dt><dd>Swap an exercise without breaking the phase's intent. Know:<ul>
+      <li>How to create a substitution</li>
+      <li>How to use one you've already created</li>
+      <li>The typical reasons a substitution exists, and which possibilities are actually equal swaps</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">On the floor</span></div><dl><dt>Logging workouts</dt><dd>Know:<ul>
+      <li>How to recognize whether an athlete is logging his workouts at all</li>
+      <li>Where to view his stats</li>
+      <li>Where to find any notes he's left</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">On the floor</span></div><dl><dt>Exercise videos</dt><dd>Know:<ul>
+      <li>How to double-check a video against the actual exercise</li>
+      <li>How to recognize a correct video from an incorrect one</li>
+      <li>How to adjust or replace one</li>
+      <li>How to import a new one</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Monitoring</span></div><dl><dt>Athlete compliance</dt><dd>Checking training compliance is part of knowing your athletes. Know:<ul>
+      <li>How to recognize what he's actually completed</li>
+      <li>How to read how successful he's been at it</li>
+      <li>How to spot the issues he's running into</li>
+    </ul></dd></dl></div>
     <div class="card"><div class="top"><span class="test">Monitoring</span></div><dl><dt>Falling behind</dt><dd>Following up when an athlete misses sessions, or compliance drops, is your job, not a system alert's.</dd></dl></div>
     <div class="card"><div class="top"><span class="test">Monitoring</span></div><dl><dt>Training history</dt><dd>Review history before you write a coach note. Know what he's already been through before you decide what's next.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Communication</span></div><dl><dt>Coach notes</dt><dd>Write the note the next coach needs, not the one that's fastest to type.</dd></dl></div>
-    <div class="card"><div class="top"><span class="test">Communication</span></div><dl><dt>Athlete communication</dt><dd>Know what's fine to say to the athlete directly in-app, and what belongs in a call instead (Module 10.7).</dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Communication</span></div><dl><dt>Coach notes</dt><dd>Write the note the next coach needs, not the one that's fastest to type. Know:<ul>
+      <li>How to leave a note</li>
+      <li>Where it lives, so the next coach actually finds it</li>
+      <li>How to make sure the athlete knows it's there, when he should</li>
+    </ul></dd></dl></div>
+    <div class="card"><div class="top"><span class="test">Communication</span></div><dl><dt>Athlete communication</dt><dd>Know:<ul>
+      <li>Where and how you actually message an athlete in-app</li>
+      <li>The procedure around it</li>
+      <li>What's fine to say directly, and what belongs in a call instead (Module 10.7)</li>
+    </ul></dd></dl></div>
   </div>
 </section>
 
