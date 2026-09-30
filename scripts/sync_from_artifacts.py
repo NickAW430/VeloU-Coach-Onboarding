@@ -46,7 +46,7 @@ def fix_homepage_links(html: str) -> str:
 ONBOARDING_TILE = '''  <a class="tile" href="onboarding/">
     <span class="tile-eyebrow">New Coaches</span>
     <h2>Coach Onboarding</h2>
-    <p>Eleven modules, from purpose and standards to the capstone case. Start here before your first day on the floor.</p>
+    <p>Thirteen modules, from purpose and standards to the capstone case. Start here before your first day on the floor.</p>
     <span class="tile-cta">Open Coach Onboarding →</span>
   </a>
 '''
@@ -114,16 +114,17 @@ def ensure_three_up_tiles(html: str) -> str:
 
 def ensure_onboarding_tile(html: str) -> str:
     # The homepage is regenerated from the artifact each sync, which would
-    # otherwise drop the hand-added onboarding tile.
+    # otherwise drop the hand-added onboarding tile. It goes first in the row.
     html = ensure_three_up_tiles(html)
     if 'href="onboarding/"' in html:
         return html
-    marker = '</div>\n\n<footer>'
-    idx = html.rfind(marker)
+    marker = '<div class="tiles">\n'
+    idx = html.find(marker)
     if idx == -1:
-        print("WARNING: could not find tiles container end; onboarding tile not added")
+        print("WARNING: could not find tiles container start; onboarding tile not added")
         return html
-    return html[:idx] + ONBOARDING_TILE + html[idx:]
+    insert_at = idx + len(marker)
+    return html[:insert_at] + ONBOARDING_TILE + html[insert_at:]
 
 
 def fix_subpage_home_links(html: str) -> str:
