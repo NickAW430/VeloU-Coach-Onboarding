@@ -735,13 +735,15 @@ const SLOTS={
   teal:{c:'#3FD6C4',area:'Force plate, presses, rig'},
   green:{c:'#77D46E',area:'Rig, benches, dumbbells, cardio'}
 };
+// n = zone number (0 hides the slot), r = [x0,x1,z0,z1], p = coach pin, col = slot whose color to wear (so a zone made of
+// two slots reads as one), np = 1 hides this slot's pin. Coach 1 works the far (north) side of the racks with 4 and 3 coaches.
 const CFG={
   5:{orange:{n:3,r:[.25,10,...TOP],p:[10,26.5]},pink:{n:1,r:[10,36.08,...TOP],p:[24,36.6]},blue:{n:2,r:[36.08,69.1,...TOP],p:[48.2,36.6]},
      teal:{n:5,r:[.25,30.5,...BOT],p:[17,43.2]},green:{n:4,r:[30.5,65.5,...BOT],p:[40,42.6]}},
-  4:{orange:{n:2,r:[.25,10,...TOP],p:[10,26.5]},pink:{n:1,r:[10,69.1,...TOP],p:[36,36.6]},blue:{n:0,r:[69.1,69.1,...TOP],p:[69.1,36.6]},
-     teal:{n:4,r:[.25,30.5,...BOT],p:[17,43.2]},green:{n:3,r:[30.5,65.5,...BOT],p:[40,42.6]}},
-  3:{orange:{n:2,r:[.25,10,...TOP],p:[10,26.5]},pink:{n:1,r:[10,69.1,...TOP],p:[36,36.6]},blue:{n:0,r:[69.1,69.1,...TOP],p:[69.1,36.6]},
-     teal:{n:0,r:[4.2,4.2,...BOT],p:[4.2,43.2]},green:{n:3,r:[4.2,65.5,...BOT],p:[31,42.6]}}
+  4:{orange:{n:3,r:[.25,10,...TOP],p:[8,38.8]},pink:{n:1,r:[10,36.08,...TOP],p:[24,20.8]},blue:{n:2,r:[36.08,69.1,...TOP],p:[48.2,36.6]},
+     teal:{n:3,r:[.25,30.5,...BOT],p:[8,38.8],col:'orange',np:1},green:{n:4,r:[30.5,65.5,...BOT],p:[40,42.6]}},
+  3:{orange:{n:0,r:[.25,.25,...TOP],p:[.25,26.5]},pink:{n:1,r:[.25,36.08,...TOP],p:[24,20.8]},blue:{n:2,r:[36.08,69.1,...TOP],p:[48.2,36.6]},
+     teal:{n:0,r:[4.2,4.2,...BOT],p:[4.2,43.2]},green:{n:3,r:[4.2,65.5,...BOT],p:[31,42.6],col:'orange'}}
 };
 function labelTex(text,sub,color){const c=document.createElement('canvas'),x=c.getContext('2d');c.width=512;c.height=sub?300:200;
   x.fillStyle=color;x.textAlign='center';x.textBaseline='middle';x.font='400 150px "Anton","Barlow Condensed",sans-serif';x.fillText(text,256,sub?110:100);
@@ -764,27 +766,29 @@ Object.keys(SLOTS).forEach(k=>{const col=new THREE.Color(SLOTS[k].c);
   const ring=new THREE.Mesh(new THREE.RingGeometry(1.2,1.5,40),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.9,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.08;pin.add(ring);
   const tagS=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,depthTest:false}));tagS.renderOrder=25;tagS.position.y=7.1;pin.add(tagS);
   scene.add(pin);
-  ZONES[k]={fill,fillM,edges,edgeM,num,numM,pin,tagS,r:[0,0,0,0],p:[0,0],o:0,n:-1,from:null,to:null};
+  ZONES[k]={fill,fillM,edges,edgeM,num,numM,pin,tagS,bodyM:body.material,ringM:ring.material,r:[0,0,0,0],p:[0,0],o:0,po:0,n:-1,from:null,to:null};
 });
-function drawZone(z,r,p,o){const [x0,x1,z0,z1]=r,w=Math.max(x1-x0,.001),d=z1-z0,cx=(x0+x1)/2,cz=(z0+z1)/2;
+function drawZone(z,r,p,o,po){const [x0,x1,z0,z1]=r,w=Math.max(x1-x0,.001),d=z1-z0,cx=(x0+x1)/2,cz=(z0+z1)/2;
   z.fill.scale.set(w,d,1);z.fill.position.x=cx;z.fill.position.z=cz;z.fillM.opacity=.34*o;
   const t=.35,h=.28,e=z.edges;
   e[0].scale.set(w,h,t);e[0].position.set(cx,h/2,z0);e[1].scale.set(w,h,t);e[1].position.set(cx,h/2,z1);
   e[2].scale.set(t,h,d);e[2].position.set(x0,h/2,cz);e[3].scale.set(t,h,d);e[3].position.set(x1,h/2,cz);
   z.edgeM.opacity=o;e.forEach(m=>m.visible=o>.02);
   const s=Math.min(w*.8,d*.55,16);z.num.scale.set(s*512/(z.numH||200),s,1);z.num.position.x=cx;z.num.position.z=cz+(d>20?-4:0);z.numM.opacity=.9*o;z.num.visible=o>.02;
-  z.pin.position.set(p[0],0,p[1]);z.pin.scale.setScalar(Math.max(o,.001));z.pin.visible=o>.02}
+  z.pin.position.set(p[0],0,p[1]);z.pin.scale.setScalar(Math.max(po,.001));z.pin.visible=po>.02}
 let coachCount=5,ztween=null;
 function setCoaches(n,instant){coachCount=n;const cfg=CFG[n];
   Object.keys(ZONES).forEach(k=>{const z=ZONES[k],c=cfg[k];
-    z.from={r:z.r.slice(),p:z.p.slice(),o:z.o};z.to={r:c.r.slice(),p:c.p.slice(),o:c.n?1:0};
-    if(c.n){z.n=c.n;const tex=labelTex(String(c.n),'ZONE',SLOTS[k].c);z.numH=300;z.numM.map=tex;z.numM.needsUpdate=true;
-      const pt=pinTex('ZONE '+c.n+' COACH',SLOTS[k].c);z.tagS.material.map=pt.t;z.tagS.material.needsUpdate=true;z.tagS.scale.set(1.2*pt.a,1.2,1)}});
+    z.from={r:z.r.slice(),p:z.p.slice(),o:z.o,po:z.po};z.to={r:c.r.slice(),p:c.p.slice(),o:c.n?1:0,po:c.n&&!c.np?1:0};
+    if(c.n){z.n=c.n;const hex=SLOTS[c.col||k].c,col=new THREE.Color(hex);
+      [z.fillM,z.edgeM,z.bodyM,z.ringM].forEach(m=>m.color.copy(col));
+      const tex=labelTex(String(c.n),'ZONE',hex);z.numH=300;z.numM.map=tex;z.numM.needsUpdate=true;
+      const pt=pinTex('ZONE '+c.n+' COACH',hex);z.tagS.material.map=pt.t;z.tagS.material.needsUpdate=true;z.tagS.scale.set(1.2*pt.a,1.2,1)}});
   ztween={s:performance.now(),d:(instant||reduceMotion)?1:850};renderZoneList()}
 const reduceMotion=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 function zoneTick(){if(!ztween)return;const k=Math.min(1,(performance.now()-ztween.s)/ztween.d),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
   Object.keys(ZONES).forEach(key=>{const z=ZONES[key],f=z.from,t=z.to;if(!f||!t)return;
-    z.r=f.r.map((v,i)=>v+(t.r[i]-v)*e);z.p=f.p.map((v,i)=>v+(t.p[i]-v)*e);z.o=f.o+(t.o-f.o)*e;drawZone(z,z.r,z.p,z.o)});
+    z.r=f.r.map((v,i)=>v+(t.r[i]-v)*e);z.p=f.p.map((v,i)=>v+(t.p[i]-v)*e);z.o=f.o+(t.o-f.o)*e;z.po=f.po+(t.po-f.po)*e;drawZone(z,z.r,z.p,z.o,z.po)});
   if(k>=1)ztween=null}
 function zoneOf(x,zc){const cfg=CFG[coachCount];for(const k in cfg){const c=cfg[k];if(!c.n)continue;const r=c.r;
   if(x>=r[0]&&x<r[1]+.01&&zc>=r[2]&&zc<=r[3])return k}return null}
@@ -792,16 +796,21 @@ function contents(){const out={},loose=[];
   for(const key in CAT){if(key==='mound')continue;CAT[key].objs.forEach(o=>{const b=new THREE.Box3().setFromObject(o),c=b.getCenter(new THREE.Vector3());
     const z=zoneOf(c.x,c.z),nm=CAT[key].n;if(!z){loose.push(nm);return}(out[z]=out[z]||{});out[z][nm]=(out[z][nm]||0)+1})}
   return {out,loose}}
+function zoneColor(cfg,k){return SLOTS[cfg[k].col||k].c}
 function renderZoneList(){const el=$('#zoneList');if(!el)return;const cfg=CFG[coachCount],{out,loose}=contents();
-  const keys=Object.keys(cfg).filter(k=>cfg[k].n).sort((a,b)=>cfg[a].n-cfg[b].n);
-  el.innerHTML=keys.map(k=>{const items=out[k]||{};const list=Object.keys(items).map(n=>n+(items[n]>1?' ×'+items[n]:'')).join(' · ');
-    return `<button class="zcard" data-z="${k}" style="--zc:${SLOTS[k].c}"><span class="zn">${cfg[k].n}</span><span class="zb"><b>Zone ${cfg[k].n}</b><small>${list||'Open floor'}</small></span></button>`}).join('')+
+  const keys=Object.keys(cfg).filter(k=>cfg[k].n),nums=[...new Set(keys.map(k=>cfg[k].n))].sort((a,b)=>a-b);
+  el.innerHTML=nums.map(num=>{const mine=keys.filter(k=>cfg[k].n===num),items={};
+    mine.forEach(k=>Object.entries(out[k]||{}).forEach(([nm,c])=>items[nm]=(items[nm]||0)+c));
+    const list=Object.keys(items).map(nm=>nm+(items[nm]>1?' ×'+items[nm]:'')).join(' · ');
+    return `<button class="zcard" data-z="${mine[0]}" style="--zc:${zoneColor(cfg,mine[0])}"><span class="zn">${num}</span><span class="zb"><b>Zone ${num}</b><small>${list||'Open floor'}</small></span></button>`}).join('')+
     (loose.length?`<p class="note">Outside every zone: ${[...new Set(loose)].join(', ')}.</p>`:'');
   el.querySelectorAll('.zcard').forEach(b=>b.addEventListener('click',()=>focusZone(b.dataset.z)));
-  $('#coachSum').textContent=coachCount+' coaches · '+keys.length+' zones'}
-function focusZone(k){if(walk)exitWalk();const r=CFG[coachCount][k].r,cx=(r[0]+r[1])/2,cz=(r[2]+r[3])/2,w=r[1]-r[0];
+  $('#coachSum').textContent=coachCount+' coaches · '+nums.length+' zones'}
+function focusZone(k){if(walk)exitWalk();const cfg=CFG[coachCount],mine=Object.keys(cfg).filter(j=>cfg[j].n===cfg[k].n);
+  const r=[Math.min(...mine.map(j=>cfg[j].r[0])),Math.max(...mine.map(j=>cfg[j].r[1])),Math.min(...mine.map(j=>cfg[j].r[2])),Math.max(...mine.map(j=>cfg[j].r[3]))],
+    cx=(r[0]+r[1])/2,cz=(r[2]+r[3])/2,w=Math.max(r[1]-r[0],(r[3]-r[2])*.6);
   flyTo([cx-2,Math.max(26,w*.75),cz+Math.max(22,w*.55)],[cx,0,cz]);setPressed('');
-  const z=ZONES[k];let n=0;const base=z.fillM.opacity;const iv=setInterval(()=>{n++;z.fillM.opacity=n%2?.62:.34;if(n>5){clearInterval(iv);z.fillM.opacity=.34}},170)}
+  let n=0;const zs=mine.map(j=>ZONES[j]);const iv=setInterval(()=>{n++;zs.forEach(z=>z.fillM.opacity=n%2?.62:.34);if(n>5){clearInterval(iv);zs.forEach(z=>z.fillM.opacity=.34)}},170)}
 
 /* ---------- labels ---------- */
 const decals=[],tags=[];
