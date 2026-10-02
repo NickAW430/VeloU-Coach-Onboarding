@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=10">
-<script src="assets/interactive.js?v=12" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=11">
+<script src="assets/interactive.js?v=13" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 8 additions */
 .zwrap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
@@ -383,18 +383,18 @@
   var CFG={
     5:{orange:[3,[.25,10].concat(TOP),[10,26.5]],pink:[1,[10,36.08].concat(TOP),[24,36.6]],blue:[2,[36.08,69.1].concat(TOP),[48.2,36.6]],teal:[5,[.25,30.5].concat(BOT),[17,43.2]],green:[4,[30.5,65.5].concat(BOT),[40,42.6]]},
     4:{orange:[3,[.25,10].concat(TOP),[8,38.8]],pink:[1,[10,36.08].concat(TOP),[24,20.8]],blue:[2,[36.08,69.1].concat(TOP),[48.2,36.6]],teal:[3,[.25,30.5].concat(BOT),[8,38.8],"orange",1],green:[4,[30.5,65.5].concat(BOT),[40,42.6]]},
-    3:{orange:[0,[.25,.25].concat(TOP),[.25,26.5]],pink:[1,[.25,36.08].concat(TOP),[24,20.8]],blue:[2,[36.08,69.1].concat(TOP),[48.2,36.6]],teal:[0,[4.2,4.2].concat(BOT),[4.2,43.2]],green:[3,[4.2,65.5].concat(BOT),[31,42.6],"orange"]}
+    3:{orange:[0,[.25,.25].concat(TOP),[.25,26.5]],pink:[1,[.25,24].concat(TOP),[17,20.8]],blue:[2,[24,69.1].concat(TOP),[42,36.6]],teal:[0,[4.2,4.2].concat(BOT),[4.2,43.2]],green:[3,[4.2,65.5].concat(BOT),[31,42.6],"orange"]}
   };
   var LEGS="Pendulum squat, linear leg press, power squat, linear hack squat";
   var LEFT_UB="Force plate, Viking press, assisted pull-up, chest press/lat pulldown, left side of the rig";
   var TXT={
     5:{1:"Squat racks 1-4, sissy squat, multi-hip",2:"Squat racks 5-8, 45° back extensions, GHD, leg extension/curl, glute bridge",3:LEGS,4:"Right side of the rig, benches, dumbbells, bikes, treadmills",5:LEFT_UB},
     4:{1:"Squat racks 1-4, sissy squat, multi-hip",2:"Squat racks 5-8, 45° back extensions, GHD, leg extension/curl, glute bridge",3:"The leg machines (" +LEGS.toLowerCase()+") and the upper body machines below them ("+LEFT_UB.charAt(0).toLowerCase()+LEFT_UB.slice(1)+")",4:"Right side of the rig, benches, dumbbells, bikes, treadmills"},
-    3:{1:"Squat racks 1-4, sissy squat, multi-hip, plus the leg machines ("+LEGS.toLowerCase()+")",2:"Squat racks 5-8, 45° back extensions, GHD, leg extension/curl, glute bridge",3:"Rig and lat pulldowns, Viking press, assisted pull-up, chest press, benches, dumbbells, bikes, treadmills"}
+    3:{1:"The first rack (squat racks 1-2) and the leg machines ("+LEGS.toLowerCase()+")",2:"The other three racks (squat racks 3-8), sissy squat, multi-hip, 45° back extensions, GHD, leg extension/curl, glute bridge",3:"Rig and lat pulldowns, Viking press, assisted pull-up, chest press, benches, dumbbells, bikes, treadmills"}
   };
   var NOTE={
     4:"Zone 1 coach works from the opposite side of the power racks.",
-    3:"Zone 1 coach works from the opposite side of the power racks and also covers the leg machines. Zone 3 coach stands with their back to the racks. The force plate sits outside every zone."
+    3:"Zone 1 coach works from the opposite side of the power racks. Zone 2 coach covers three racks, Zone 1 coach only the first. Zone 3 coach stands with their back to the racks. The force plate sits outside every zone."
   };
   var NS="http://www.w3.org/2000/svg",svg=document.getElementById("zsvg"),list=document.getElementById("zlist");
   function el(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
