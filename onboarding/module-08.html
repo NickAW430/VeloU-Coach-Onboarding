@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/velou.css?v=11">
-<script src="assets/interactive.js?v=13" defer></script>
+<link rel="stylesheet" href="assets/velou.css?v=12">
+<script src="assets/interactive.js?v=14" defer></script>
 <script src="assets/forms.js"></script><style>
 /* Module 8 additions */
 .zwrap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
@@ -390,11 +390,11 @@
   var TXT={
     5:{1:"Squat racks 1-4, sissy squat, multi-hip",2:"Squat racks 5-8, 45° back extensions, GHD, leg extension/curl, glute bridge",3:LEGS,4:"Right side of the rig, benches, dumbbells, bikes, treadmills",5:LEFT_UB},
     4:{1:"Squat racks 1-4, sissy squat, multi-hip",2:"Squat racks 5-8, 45° back extensions, GHD, leg extension/curl, glute bridge",3:"The leg machines (" +LEGS.toLowerCase()+") and the upper body machines below them ("+LEFT_UB.charAt(0).toLowerCase()+LEFT_UB.slice(1)+")",4:"Right side of the rig, benches, dumbbells, bikes, treadmills"},
-    3:{1:"The first rack (squat racks 1-2) and the leg machines ("+LEGS.toLowerCase()+")",2:"The other three racks (squat racks 3-8), sissy squat, multi-hip, 45° back extensions, GHD, leg extension/curl, glute bridge",3:"Rig and lat pulldowns, Viking press, assisted pull-up, chest press, benches, dumbbells, bikes, treadmills"}
+    3:{1:"Squat racks 1-2 and the leg machines ("+LEGS.toLowerCase()+")",2:"Squat racks 3-8, sissy squat, multi-hip, 45° back extensions, GHD, leg extension/curl, glute bridge",3:"Rig and lat pulldowns, Viking press, assisted pull-up, chest press, benches, dumbbells, bikes, treadmills"}
   };
   var NOTE={
     4:"Zone 1 coach works from the opposite side of the power racks.",
-    3:"Zone 1 coach works from the opposite side of the power racks. Zone 2 coach covers three racks, Zone 1 coach only the first. Zone 3 coach stands with their back to the racks. The force plate sits outside every zone."
+    3:"Zone 1 coach works from the opposite side of the power racks. Zone 3 coach stands with their back to the racks. The force plate sits outside every zone."
   };
   var NS="http://www.w3.org/2000/svg",svg=document.getElementById("zsvg"),list=document.getElementById("zlist");
   function el(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
