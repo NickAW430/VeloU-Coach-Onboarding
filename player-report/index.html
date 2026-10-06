@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#000000;color:#FFFFFF;font-family:'Barlow',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;background-color:#000000;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:48px 48px;color:#FFFFFF;font-family:'Barlow',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:#E10600}a:hover{color:#FFFFFF}
 *{box-sizing:border-box}
 @media print{
@@ -37,7 +37,7 @@ a{color:#E10600}a:hover{color:#FFFFFF}
         <input value="{{ searchVal }}" placeholder="Search athletes…" onFocus="{{ onSearchFocus }}" onChange="{{ onSearch }}" onKeyDown="{{ onSearchKey }}" onBlur="{{ onSearchBlur }}" style="width:100%;font:600 14px 'Barlow',sans-serif;color:#FFFFFF;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14);padding:7px 30px 7px 10px;outline:none" style-focus="border-color:#E10600">
         <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;color:rgba(255,255,255,.62);pointer-events:none">▾</span>
         <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
-          <div style="position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:50;max-height:320px;overflow-y:auto;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);box-shadow:0 12px 32px rgba(0,0,0,.6)">
+          <div style="position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:50;max-height:320px;overflow-y:auto;background:#000000;border:1px solid rgba(91,103,112,.55);box-shadow:0 12px 32px rgba(0,0,0,.6)">
             <sc-for list="{{ searchResults }}" as="o">
               <div onMouseDown="{{ o.pick }}" style="padding:8px 12px;font-size:14px;color:{{ o.c }};background:{{ o.bg }};cursor:pointer" style-hover="background:rgba(225,6,0,.14)">{{ o.v }}</div>
             </sc-for>
