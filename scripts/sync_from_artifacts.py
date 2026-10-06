@@ -52,6 +52,15 @@ ONBOARDING_TILE = '''  <a class="tile" href="onboarding/">
 '''
 
 
+PLAYER_TILE = '''  <a class="tile" href="player-report/">
+    <span class="tile-eyebrow">Evaluations</span>
+    <h2>Player Report</h2>
+    <p>Each athlete's on-site evaluation, energy scores, force plate, arm strength, and Trackman pitching data, live from the mainframe.</p>
+    <span class="tile-cta">Open Player Report →</span>
+  </a>
+'''
+
+
 MAIN_LOGO_TAG = '<img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">'
 
 
@@ -100,10 +109,15 @@ def ensure_wordmark(html: str) -> str:
 
 
 def ensure_three_up_tiles(html: str) -> str:
-    # The artifact ships a two-column tile grid; we run three equal tiles in one row.
+    # The artifact ships a two-column tile grid. We run four tiles (onboarding, strength,
+    # throwing, player report), which read best as two equal columns.
     html = html.replace(
         ".tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 820px; width: 100%; }",
+        ".tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; max-width: 900px; width: 100%; }",
+    )
+    html = html.replace(
         ".tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1120px; width: 100%; }",
+        ".tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; max-width: 900px; width: 100%; }",
     )
     html = html.replace(
         "@media (max-width: 640px) {\n  .tiles { grid-template-columns: 1fr; }",
@@ -117,14 +131,27 @@ def ensure_onboarding_tile(html: str) -> str:
     # otherwise drop the hand-added onboarding tile. It goes first in the row.
     html = ensure_three_up_tiles(html)
     if 'href="onboarding/"' in html:
-        return html
+        return ensure_player_tile(html)
     marker = '<div class="tiles">\n'
     idx = html.find(marker)
     if idx == -1:
         print("WARNING: could not find tiles container start; onboarding tile not added")
         return html
     insert_at = idx + len(marker)
-    return html[:insert_at] + ONBOARDING_TILE + html[insert_at:]
+    html = html[:insert_at] + ONBOARDING_TILE + html[insert_at:]
+    return ensure_player_tile(html)
+
+
+def ensure_player_tile(html: str) -> str:
+    # The Player Report tile goes last in the row.
+    if 'href="player-report/"' in html:
+        return html
+    marker = '</div>\n\n<footer'
+    idx = html.find(marker)
+    if idx == -1:
+        print("WARNING: could not find end of tiles container; player report tile not added")
+        return html
+    return html[:idx] + PLAYER_TILE + html[idx:]
 
 
 def fix_subpage_home_links(html: str) -> str:

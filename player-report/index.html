@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>VeloU Player Report</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="omelette-owns-print" content="true">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#000000;color:#FFFFFF;font-family:'Barlow',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#E10600}a:hover{color:#FFFFFF}
+*{box-sizing:border-box}
+@media print{
+  html,body{background:#000000 !important}
+  body{width:1180px !important}
+  [style*="overflow-x:auto"]{overflow:visible !important}
+  svg{break-inside:auto}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+  [data-noprint]{display:none !important}
+}
+</style>
+</helmet>
+<div style="max-width:1180px;margin:0 auto;padding:32px 28px 96px;display:flex;flex-direction:column;gap:40px">
+
+  <div data-noprint="true" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:10px 14px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <a href="../" style="font:600 12px 'Barlow',sans-serif;color:rgba(255,255,255,.62);text-decoration:none;border:1px solid rgba(91,103,112,.55);padding:6px 10px" title="Back to the VeloU home page">&larr; Home</a>
+      <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">ATHLETE</span>
+      <div style="position:relative;min-width:260px">
+        <input value="{{ searchVal }}" placeholder="Search athletes…" onFocus="{{ onSearchFocus }}" onChange="{{ onSearch }}" onKeyDown="{{ onSearchKey }}" onBlur="{{ onSearchBlur }}" style="width:100%;font:600 14px 'Barlow',sans-serif;color:#FFFFFF;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14);padding:7px 30px 7px 10px;outline:none" style-focus="border-color:#E10600">
+        <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;color:rgba(255,255,255,.62);pointer-events:none">▾</span>
+        <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:50;max-height:320px;overflow-y:auto;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);box-shadow:0 12px 32px rgba(0,0,0,.6)">
+            <sc-for list="{{ searchResults }}" as="o">
+              <div onMouseDown="{{ o.pick }}" style="padding:8px 12px;font-size:14px;color:{{ o.c }};background:{{ o.bg }};cursor:pointer" style-hover="background:rgba(225,6,0,.14)">{{ o.v }}</div>
+            </sc-for>
+            <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:10px 12px;font-size:13px;color:rgba(255,255,255,.62)">No athletes match</div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="display:flex;align-items:center;gap:8px;font:400 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)"><span style="width:8px;height:8px;border-radius:50%;background:{{ statusColor }}"></span>{{ statusText }}</span>
+      <button onClick="{{ printPdf }}" style="font:600 12px 'Barlow',sans-serif;border:0;background:#E10600;color:#FFFFFF;padding:7px 14px;cursor:pointer" style-hover="background:#B80500">Download PDF</button>
+      <button onClick="{{ refresh }}" style="font:500 12px 'Barlow',sans-serif;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14);color:#E10600;padding:6px 12px;cursor:pointer" style-hover="background:rgba(225,6,0,.14)">Refresh</button>
+    </div>
+  </div>
+
+  <header data-screen-label="Header" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid #E10600;padding-bottom:10px">
+      <span style="font:500 12px 'Barlow Condensed',monospace;letter-spacing:.12em;color:#E10600">VELOU · ON-SITE EVALUATION · PLAYER REPORT</span>
+      <span style="font:400 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">Last evaluation {{ evalDate }}</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:28px;align-items:end">
+      <div style="display:flex;align-items:center;gap:22px;min-width:0">
+      <sc-if value="{{ hasPhoto }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;width:112px;height:112px;border-radius:50%;padding:3px;background:#E10600">
+          <div role="img" aria-label="{{ name }}" style="width:100%;height:100%;border-radius:50%;border:3px solid #000000;background-color:rgba(91,103,112,.14);background-image:{{ photoBg }};background-size:cover;background-position:center 30%;filter:saturate(.85)"></div>
+        </div>
+      </sc-if>
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <h1 style="margin:0;font-size:60px;line-height:.95;font-weight:600;letter-spacing:-.03em;color:#FFFFFF">{{ name }}</h1>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:15px;color:rgba(255,255,255,.82)">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px"><span>{{ position }}</span><span style="color:#5B6770">·</span><span>{{ team }}</span><span style="color:#5B6770">·</span><span>{{ level }}</span></div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px"><span>Age {{ age }}</span><span style="color:#5B6770">·</span><span>{{ heightTxt }}</span><span style="color:#5B6770">·</span><span>{{ bwTxt }}</span><span style="color:#5B6770">·</span><span>{{ residence }}</span></div>
+        </div>
+      </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:rgba(91,103,112,.36);border:1px solid rgba(91,103,112,.55)">
+        <sc-for list="{{ headerFacts }}" as="f" hint-placeholder-count="6">
+          <div style="background:rgba(91,103,112,.14);padding:12px 14px;display:flex;flex-direction:column;gap:4px">
+            <span style="font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ f.k }}</span>
+            <span style="font-size:16px;font-weight:600;color:{{ f.c }}">{{ f.v }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </header>
+
+  <nav data-noprint="true" style="display:flex;gap:28px;border-bottom:1px solid rgba(91,103,112,.55);margin-top:-12px">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="2">
+      <button onClick="{{ t.onClick }}" style="background:none;border:0;border-bottom:3px solid {{ t.bd }};margin-bottom:-1px;padding:10px 0;font:600 16px 'Barlow',sans-serif;color:{{ t.c }};cursor:pointer" style-hover="color:#FFFFFF">{{ t.label }}</button>
+    </sc-for>
+  </nav>
+
+  <sc-if value="{{ isEval }}" hint-placeholder-val="{{ true }}">
+  <div style="display:flex;flex-direction:column;gap:40px">
+  <section data-screen-label="Total Energy" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:20px;align-items:stretch">
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:20px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">ENERGY PROFILE</span><span style="font-size:12px;color:rgba(255,255,255,.62)">Select a score to see its breakdown</span></div>
+        <div style="position:relative;width:100%;max-width:560px;margin:8px auto 0;aspect-ratio:1/1.08">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+            <polygon points="50,7 89,28 89,72 50,93 11,72 11,28" fill="rgba(225,6,0,.14)" stroke="rgba(225,6,0,.45)" stroke-width="1.2" vector-effect="non-scaling-stroke"></polygon>
+            <line x1="50" y1="50" x2="11" y2="28" stroke="rgba(225,6,0,.45)" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+            <line x1="50" y1="50" x2="89" y2="28" stroke="rgba(225,6,0,.45)" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+            <line x1="50" y1="50" x2="11" y2="72" stroke="rgba(225,6,0,.45)" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+            <line x1="50" y1="50" x2="89" y2="72" stroke="rgba(225,6,0,.45)" stroke-width="1" vector-effect="non-scaling-stroke"></line>
+            <line x1="50" y1="7" x2="50" y2="93" stroke="rgba(225,6,0,.45)" stroke-width="1" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"></line>
+          </svg>
+          <sc-for list="{{ hexNodes }}" as="h" hint-placeholder-count="7">
+            <button onClick="{{ h.onClick }}" style="position:absolute;left:{{ h.l }};top:{{ h.t }};transform:translate(-50%,-50%);width:{{ h.w }};aspect-ratio:1.155;padding:0;border:0;background:transparent;cursor:{{ h.cursor }};font-family:'Barlow',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#FFFFFF" style-hover="filter:brightness(1.12)">
+              <svg viewBox="0 0 115.5 100" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                <path d="M57.75,3.5 L84.6,3.5 L111.5,50 L84.6,96.5 L30.9,96.5 L4,50 L30.9,3.5 Z" fill="{{ h.inner }}" stroke="{{ h.track }}" stroke-width="5" stroke-linejoin="round"></path>
+                <path d="M57.75,3.5 L84.6,3.5 L111.5,50 L84.6,96.5 L30.9,96.5 L4,50 L30.9,3.5 Z" fill="none" stroke="{{ h.fillC }}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" stroke-dasharray="{{ h.dash }}" stroke-opacity="{{ h.pO }}" style="filter:drop-shadow(0 0 4px {{ h.fillC }})"></path>
+              </svg>
+              <span style="position:relative;font:600 9px 'Barlow Condensed',monospace;letter-spacing:.05em;text-align:center;line-height:1.25;padding:0 16%;color:{{ h.lc }}">{{ h.name }}</span>
+              <span style="position:relative;font-size:{{ h.fs }};line-height:1.05;font-weight:600;letter-spacing:-.02em">{{ h.score }}</span>
+              <span style="position:relative;font:500 10px 'Barlow Condensed',monospace;color:{{ h.cc }}">{{ h.chg }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);border-top:4px solid {{ det.color }};padding:22px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font:600 11px 'Barlow Condensed',monospace;letter-spacing:.08em;color:{{ det.color }}">{{ det.name }}</span>
+            <span style="font-size:14px;color:rgba(255,255,255,.62)">{{ det.sub }}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+            <span style="font-size:48px;line-height:1;font-weight:600;letter-spacing:-.03em">{{ det.score }}</span>
+            <span style="font:500 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ det.meta }}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(91,103,112,.55)">
+          <div style="display:grid;grid-template-columns:minmax(0,1.4fr) 80px minmax(0,1fr) 52px;gap:12px;padding:10px 0;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.04em;border-bottom:1px solid rgba(91,103,112,.55)">
+            <span>METRIC</span><span style="text-align:right">VALUE</span><span>AGE PERCENTILE</span><span></span>
+          </div>
+          <sc-for list="{{ det.rows }}" as="r" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:minmax(0,1.4fr) 80px minmax(0,1fr) 52px;gap:12px;padding:11px 0;align-items:center;border-bottom:1px solid rgba(91,103,112,.32);font-size:14px">
+              <span>{{ r.label }}</span>
+              <span style="font:500 13px 'Barlow Condensed',monospace;text-align:right">{{ r.v }}</span>
+              <div style="height:6px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ r.w }};background:{{ det.color }}"></div></div>
+              <span style="font:400 12px 'Barlow Condensed',monospace;text-align:right">{{ r.p }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+          <sc-if value="{{ hasGood }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="font:600 11px 'Barlow Condensed',monospace;letter-spacing:.08em;color:#88E0C6">STRENGTHS</span>
+              <sc-for list="{{ sumGood }}" as="g"><div style="display:flex;gap:8px;font-size:13px;line-height:1.45;color:rgba(255,255,255,.82);text-wrap:pretty"><span style="flex:none;width:6px;height:6px;margin-top:7px;border-radius:50%;background:#88E0C6"></span><span>{{ g }}</span></div></sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ hasFix }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="font:600 11px 'Barlow Condensed',monospace;letter-spacing:.08em;color:#FFFFFF">AREAS TO IMPROVE</span>
+              <sc-for list="{{ sumFix }}" as="g"><div style="display:flex;gap:8px;font-size:13px;line-height:1.45;color:rgba(255,255,255,.82);text-wrap:pretty"><span style="flex:none;width:6px;height:6px;margin-top:7px;border-radius:50%;background:#FFFFFF"></span><span>{{ g }}</span></div></sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ det.hasLink }}" hint-placeholder-val="{{ true }}">
+          <a href="{{ det.href }}" style="align-self:flex-start;font:600 13px 'Barlow',sans-serif;color:#FFFFFF;background:{{ det.color }};padding:9px 14px;text-decoration:none" style-hover="filter:brightness(0.92)">Open full {{ det.short }} section ↓</a>
+        </sc-if>
+      </div>
+    </div>
+    <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">
+        <p style="margin:0">This chart breaks down the 4 key areas of your development and shows us where the biggest gaps are between your body's potential and what you're actually throwing. These four inputs are used in a linear regression model based on their correlation to throwing velocity to estimate the Total Energy Score. Our best guess at what we believe your body is capable of throwing based upon these inputs. This equation is tested on over 500 unique athletes has shown a .89 correlation to throwing velocity.</p>
+        <p style="margin:0">The difference between your current velocity and what your body should be capable of throwing is your Energy Delta. A large delta means your body has more to give -- we just need to unlock it. A small delta means that we can take a closer look at the four inputs and decide which area to attack with unique precision.</p>
+      </div>
+    </sc-if>
+  </section>
+
+  <section id="potential" data-screen-label="Energy Potential" style="display:flex;flex-direction:column;gap:18px;border-top:1px solid rgba(91,103,112,.55);padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <h2 style="margin:0;font-size:26px;font-weight:600">Energy Potential <span style="color:rgba(255,255,255,.62);font-weight:400">· Body Composition</span></h2>
+      <span style="display:flex;align-items:baseline;gap:8px"><span style="font:500 11px 'Barlow Condensed',monospace;letter-spacing:.08em;color:rgba(255,255,255,.62)">SCORE</span><span style="font-size:44px;line-height:1;font-weight:600;letter-spacing:-.03em;color:#E10600">{{ ep }}</span></span>
+    </div>
+    <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}">
+      <p style="margin:0;max-width:820px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">Your bodyweight -- especially how it relates to your height -- is one of the biggest performance drivers in developing throwers. Pitchers who throw hard usually fall within a weight to height ratio of 2.5 to 3.0 If you're outside that range, it doesn't mean you're doing anything wrong, it just tells us there's likely room to grow through improved nutrition, strength training or both. Adding the right kind of weight gives you more potential energy to turn into velocity.</p>
+    </sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px">
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:18px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">WEIGHT–HEIGHT RATIO</span><span style="font-size:12px;color:rgba(255,255,255,.62)">Target 2.6–3.0 · ideal 2.8</span></div>
+          <div style="position:relative;width:100%;max-width:340px;margin:4px auto 0">
+            <svg viewBox="0 0 200 112" style="display:block;width:100%;height:auto;overflow:visible">
+              <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="rgba(91,103,112,.38)" stroke-width="14"></path>
+              <path d="M69.38,26.09 A80,80 0 0 1 130.62,26.09" fill="none" stroke="#88E0C6" stroke-width="14"></path>
+              <line x1="100" y1="10" x2="100" y2="30" stroke="#FFFFFF" stroke-width="2"></line>
+              <text x="20" y="111" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="7" fill="rgba(255,255,255,.62)">2.0</text>
+              <text x="180" y="111" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="7" fill="rgba(255,255,255,.62)">3.6</text>
+              <text x="61" y="13" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="7" fill="rgba(255,255,255,.62)">2.6</text>
+              <text x="139" y="13" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="7" fill="rgba(255,255,255,.62)">3.0</text>
+              <text x="100" y="6" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="7" fill="#FFFFFF">2.8</text>
+              <g transform="rotate({{ whrDeg }} 100 100)">
+                <line x1="100" y1="100" x2="100" y2="32" stroke="{{ whrColor }}" stroke-width="3" stroke-linecap="round"></line>
+              </g>
+              <circle cx="100" cy="100" r="5" fill="{{ whrColor }}"></circle>
+            </svg>
+          </div>
+          <span style="text-align:center;font-size:34px;font-weight:600;line-height:1;color:{{ whrColor }}">{{ whr }}</span>
+          <span style="text-align:center;font:500 12px 'Barlow Condensed',monospace;color:{{ whrColor }}">{{ whrNote }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ potentialPct }}" as="r" hint-placeholder-count="3">
+            <div style="display:grid;grid-template-columns:120px minmax(0,1fr) 56px;gap:12px;align-items:center;font-size:13px">
+              <span>{{ r.label }}</span>
+              <div style="height:6px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ r.w }};background:#E10600"></div></div>
+              <span style="font-family:'Barlow Condensed',monospace;text-align:right">{{ r.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <sc-for list="{{ potentialCharts }}" as="c" hint-placeholder-count="1">
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ c.title }}</span>
+            <span style="font:500 12px 'Barlow Condensed',monospace;color:#FFFFFF">{{ c.latest }} <span style="color:{{ c.chgColor }}">{{ c.chg }}</span></span>
+          </div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <sc-for list="{{ c.series }}" as="s"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:14px;height:3px;background:{{ s.color }}"></span>{{ s.name }}</span></sc-for>
+          </div>
+          <div style="position:relative;height:150px;margin:20px 6px 4px">
+            <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(91,103,112,.55)"></div>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+              <sc-for list="{{ c.series }}" as="s"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline><path d="{{ s.dotPath }}" fill="none" stroke="{{ s.color }}" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+            </svg>
+            <sc-for list="{{ c.dots }}" as="p">
+              <span style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:{{ p.tf }};font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.82);white-space:nowrap">{{ p.label }}</span>
+            </sc-for>
+          </div>
+          <div style="position:relative;height:14px;margin:0 6px">
+            <sc-for list="{{ c.ticks }}" as="k"><span style="position:absolute;left:{{ k.l }};transform:{{ k.tf }};font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ k.label }}</span></sc-for>
+          </div>
+          <sc-if value="{{ c.hasExtras }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:1px;background:rgba(91,103,112,.36);border:1px solid rgba(91,103,112,.55);margin-top:8px">
+              <sc-for list="{{ c.extras }}" as="k">
+                <div style="background:rgba(91,103,112,.14);padding:10px 12px;display:flex;flex-direction:column;gap:4px">
+                  <span style="font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.04em">{{ k.label }}</span>
+                  <span style="font-size:18px;font-weight:600">{{ k.v }}</span>
+                  <span style="font:500 11px 'Barlow Condensed',monospace;color:{{ k.dc }}">{{ k.d }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-top:6px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <h3 style="margin:0;font-size:20px;font-weight:600">Movement Screen</h3>
+        <span style="font:500 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ screenSummary }}</span>
+      </div>
+      <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}">
+      <p style="margin:0;max-width:820px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">In your movement screen, we aren't just checking flexibility--we're seeing how well your body moves through the positions needed to throw hard and train effectively. If a joint is restricted or a movement is limited, your body will find ways to compensate--which can potentially lead to injury or underperformance. This screen helps us to identify potential issues early so that we can design your program around your needs--not someone else's. The better you move, the more efficiently you'll train and throw.</p>
+    </sc-if>
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">MOVEMENT SCREEN BY JOINT</span>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.82)">
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#88E0C6"></span>Sufficient</span>
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#FFFFFF"></span>Limited</span>
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#FFFFFF"></span>Informational</span>
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#5B6770"></span>Not tested</span>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <div style="position:relative;width:100%;min-width:680px;aspect-ratio:1000/620">
+          <svg viewBox="0 0 1000 620" style="position:absolute;inset:0;display:block;width:100%;height:100%">
+            <text x="30" y="40" font-family="Barlow Condensed, monospace" font-size="11" letter-spacing="1" fill="rgba(255,255,255,.62)">BACK LEG · THROWING SIDE</text>
+            <text x="970" y="40" text-anchor="end" font-family="Barlow Condensed, monospace" font-size="11" letter-spacing="1" fill="rgba(255,255,255,.62)">STRIDE LEG · GLOVE SIDE</text>
+            <path d="M0,588 L1000,588" stroke="rgba(91,103,112,.38)" stroke-width="1"></path>
+            <path d="M330,588 Q380,586 420,588" stroke="rgba(91,103,112,.55)" stroke-width="3" fill="none"></path>
+            <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="464,208 412,192 416,124" stroke="rgba(91,103,112,.55)" stroke-width="26"></polyline>
+              <polyline points="528,214 588,204 600,246" stroke="rgba(91,103,112,.55)" stroke-width="26"></polyline>
+              <polyline points="506,380 568,458 612,566 640,574" stroke="rgba(91,103,112,.55)" stroke-width="34"></polyline>
+              <polyline points="476,380 436,466 388,556 372,576" stroke="rgba(91,103,112,.55)" stroke-width="34"></polyline>
+              <polyline points="500,186 500,160" stroke="rgba(91,103,112,.55)" stroke-width="24"></polyline>
+            </g>
+            <path d="M462,200 Q500,190 532,206 L520,300 Q516,360 512,384 L470,384 Q470,350 474,300 Z" fill="#000000" stroke="rgba(91,103,112,.55)" stroke-width="2" stroke-linejoin="round"></path>
+            <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="464,208 412,192 416,124" stroke="#000000" stroke-width="22"></polyline>
+              <polyline points="528,214 588,204 600,246" stroke="#000000" stroke-width="22"></polyline>
+              <polyline points="506,380 568,458 612,566 640,574" stroke="#000000" stroke-width="30"></polyline>
+              <polyline points="476,380 436,466 388,556 372,576" stroke="#000000" stroke-width="30"></polyline>
+              <polyline points="500,186 500,160" stroke="#000000" stroke-width="20"></polyline>
+              <line x1="498" y1="200" x2="493" y2="370" stroke="rgba(91,103,112,.55)" stroke-width="2" stroke-dasharray="4 5"></line>
+            </g>
+            <ellipse cx="604" cy="252" rx="14" ry="11" fill="#000000" stroke="rgba(91,103,112,.55)" stroke-width="2"></ellipse>
+            <circle cx="417" cy="110" r="8" fill="rgba(91,103,112,.55)" stroke="#5B6770" stroke-width="1.5"></circle><path d="M411,105 Q417,110 411,115 M423,105 Q417,110 423,115" fill="none" stroke="#5B6770" stroke-width="1"></path>
+            <circle cx="512" cy="140" r="28" fill="#000000" stroke="rgba(91,103,112,.55)" stroke-width="2"></circle>
+            <path d="M488,132 Q512,104 538,128" fill="none" stroke="rgba(91,103,112,.55)" stroke-width="5" stroke-linecap="round"></path>
+            <sc-for list="{{ bodyTests }}" as="t" hint-placeholder-count="15">
+              <polyline points="{{ t.line }}" fill="none" stroke="{{ t.c }}" stroke-opacity=".55" stroke-width="1.5"></polyline>
+              <line x1="{{ t.x0 }}" y1="{{ t.ry }}" x2="{{ t.x1 }}" y2="{{ t.ry }}" stroke="rgba(91,103,112,.38)" stroke-width="1"></line>
+            </sc-for>
+            <sc-for list="{{ bodyJoints }}" as="j" hint-placeholder-count="10">
+              <circle cx="{{ j.x }}" cy="{{ j.y }}" r="9" fill="{{ j.c }}" stroke="#000000" stroke-width="3"></circle>
+            </sc-for>
+          </svg>
+          <sc-for list="{{ bodyTests }}" as="t" hint-placeholder-count="15">
+            <div style="position:absolute;left:{{ t.l }};width:33%;top:{{ t.t }};transform:translateY(-78%);display:flex;justify-content:space-between;align-items:baseline;gap:8px;white-space:nowrap">
+              <span style="font-size:14px;color:#FFFFFF">{{ t.name }}</span>
+              <span style="font:500 12px 'Barlow Condensed',monospace;color:{{ t.c }}">{{ t.v }}</span>
+            </div>
+          </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="production" data-screen-label="Energy Production" style="display:flex;flex-direction:column;gap:18px;border-top:1px solid rgba(91,103,112,.55);padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <h2 style="margin:0;font-size:26px;font-weight:600">Energy Production <span style="color:rgba(255,255,255,.62);font-weight:400">· Force &amp; Power</span></h2>
+      <span style="display:flex;align-items:baseline;gap:8px"><span style="font:500 11px 'Barlow Condensed',monospace;letter-spacing:.08em;color:rgba(255,255,255,.62)">SCORE</span><span style="font-size:44px;line-height:1;font-weight:600;letter-spacing:-.03em;color:#88E0C6">{{ eprod }}</span></span>
+    </div>
+    <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}">
+      <p style="margin:0;max-width:820px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">We utilize our force plates for several tests to measure key traits that show up in high velocity throwers. Ultimately, we are looking to assess how much raw strength can you generate coupled with how fast can you apply that strength. These metrics help us understand what you're working with in the weight room. Strength without speed won't move the needle and speed without strength usually doesn't last. Tracking this over time shows us if your training is actually building the engine behind your velocity.</p>
+    </sc-if>
+        <div style="overflow-x:auto"><div style="display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:20px;min-width:1020px">
+      <sc-for list="{{ productionCharts }}" as="c" hint-placeholder-count="5">
+        <div style="grid-column:{{ c.span }};background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:{{ c.chartDisp }};flex-direction:column;gap:8px;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ c.title }}</span>
+            <span style="font:500 12px 'Barlow Condensed',monospace;color:#FFFFFF">{{ c.latest }} <span style="color:{{ c.chgColor }}">{{ c.chg }}</span></span>
+          </div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <sc-for list="{{ c.series }}" as="s"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:14px;height:3px;background:{{ s.color }}"></span>{{ s.name }}</span></sc-for>
+          </div>
+          <div style="display:{{ c.lineDisp }};flex-direction:column">
+          <div style="position:relative;height:150px;margin:20px 6px 4px">
+            <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(91,103,112,.55)"></div>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+              <sc-for list="{{ c.series }}" as="s"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline><path d="{{ s.dotPath }}" fill="none" stroke="{{ s.color }}" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+            </svg>
+            <sc-for list="{{ c.dots }}" as="p">
+              <span style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:{{ p.tf }};font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.82);white-space:nowrap">{{ p.label }}</span>
+            </sc-for>
+          </div>
+          <div style="position:relative;height:14px;margin:0 6px">
+            <sc-for list="{{ c.ticks }}" as="k"><span style="position:absolute;left:{{ k.l }};transform:{{ k.tf }};font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ k.label }}</span></sc-for>
+          </div>
+          </div>
+            <div style="display:{{ c.stackDisp }};flex-direction:column;gap:6px;margin-top:14px">
+              <div style="display:flex;align-items:stretch;gap:6px;height:300px;border-bottom:1px solid rgba(91,103,112,.55)">
+                <sc-for list="{{ c.bars }}" as="b">
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;gap:4px">
+                    <div style="height:{{ b.h }};display:flex;flex-direction:column-reverse;gap:2px">
+                      <sc-for list="{{ b.segs }}" as="g">
+                        <div style="flex:{{ g.f }};background:{{ g.c }};display:flex;align-items:center;justify-content:center;overflow:hidden;font:600 11px 'Barlow Condensed',monospace;color:{{ g.tc }}">{{ g.label }}</div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:6px">
+                <sc-for list="{{ c.bars }}" as="b"><span style="flex:1;min-width:0;text-align:center;font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ b.date }}</span></sc-for>
+              </div>
+            </div>
+          <sc-if value="{{ c.hasExtras }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:1px;background:rgba(91,103,112,.36);border:1px solid rgba(91,103,112,.55);margin-top:8px">
+              <sc-for list="{{ c.extras }}" as="k">
+                <div style="background:rgba(91,103,112,.14);padding:10px 12px;display:flex;flex-direction:column;gap:4px">
+                  <span style="font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.04em">{{ k.label }}</span>
+                  <span style="font-size:18px;font-weight:600">{{ k.v }}</span>
+                  <span style="font:500 11px 'Barlow Condensed',monospace;color:{{ k.dc }}">{{ k.d }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="grid-column:{{ c.span }};display:{{ c.tileDisp }};background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);border-top:4px solid #88E0C6;padding:22px;flex-direction:column;justify-content:space-between;gap:16px;min-width:0">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font:600 11px 'Barlow Condensed',monospace;color:#88E0C6;letter-spacing:.1em">AGE PERCENTILE</span>
+            <span style="font:500 13px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.08em">{{ c.tLabel }}</span>
+          </div>
+          <span style="font-size:64px;line-height:.9;font-weight:600;letter-spacing:-.04em;color:#FFFFFF">{{ c.tV }}</span>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="height:12px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ c.tW }};background:{{ c.tC }}"></div></div>
+            <span style="font-size:12px;color:rgba(255,255,255,.62)">{{ c.tSub }}</span>
+          </div>
+        </div>
+      </sc-for>
+
+    </div></div>
+    <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);border-top:4px solid #88E0C6;padding:22px 24px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+        <span style="font:600 13px 'Barlow Condensed',monospace;color:#88E0C6;letter-spacing:.1em">AGE PERCENTILES</span>
+        <span style="font-size:13px;color:rgba(255,255,255,.62)">Compared with athletes the same age</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:1px;background:rgba(91,103,112,.36);border:1px solid rgba(91,103,112,.55)">
+        <sc-for list="{{ productionPct }}" as="r" hint-placeholder-count="4">
+          <div style="background:rgba(91,103,112,.14);padding:22px 22px 20px;display:flex;flex-direction:column;gap:16px">
+            <span style="font:500 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.08em">{{ r.label }}</span>
+            <span style="font-size:64px;line-height:.9;font-weight:600;letter-spacing:-.04em;color:#FFFFFF">{{ r.v }}</span>
+            <div style="height:12px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ r.w }};background:{{ r.c }}"></div></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="interference" data-screen-label="Energy Interference" style="display:flex;flex-direction:column;gap:18px;border-top:1px solid rgba(91,103,112,.55);padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <h2 style="margin:0;font-size:26px;font-weight:600">Energy Interference <span style="color:rgba(255,255,255,.62);font-weight:400">· Arm Strength</span></h2>
+      <span style="display:flex;align-items:baseline;gap:8px"><span style="font:500 11px 'Barlow Condensed',monospace;letter-spacing:.08em;color:rgba(255,255,255,.62)">SCORE</span><span style="font-size:44px;line-height:1;font-weight:600;letter-spacing:-.03em;color:#FFFFFF">{{ ei }}</span></span>
+    </div>
+    <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}">
+      <p style="margin:0;max-width:820px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">Think of your shoulder, elbow and forearm like a filter--if it's not strong enough to handle what your body produces, you're either going to get hurt or hit a wall in performance. We measure internal/external rotation strength, scaption and grip using the ArmCare dynamometer. Then we calculate your Arm Score (how strong your arm is relative to your bodyweight). If your score is below 85%, it tells us your shoulder needs to be stronger or that you may be fatigued. This directly affects how much throwing you can handle and how hard you can train. Arm care programs are tailored based on any relative or absolute weaknesses from the 4 tests.</p>
+    </sc-if>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:20px;align-items:stretch">
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:18px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">MOST RECENT ARM SCORE</span><span style="font:600 12px 'Barlow Condensed',monospace;letter-spacing:.04em;color:{{ armColor }}">{{ armZone }}</span></div>
+        <span style="font-size:52px;line-height:1;font-weight:600;color:{{ armColor }}">{{ armScore }}</span>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="position:relative;height:30px">
+            <div style="position:absolute;left:0;right:0;top:8px;height:12px;display:grid;grid-template-columns:28.57fr 21.43fr 21.43fr 28.57fr;gap:2px">
+              <div style="background:#E10600;opacity:{{ armOp.severe }}"></div>
+              <div style="background:#FFFFFF;opacity:{{ armOp.risk }}"></div>
+              <div style="background:#56B7E6;opacity:{{ armOp.ok }}"></div>
+              <div style="background:#88E0C6;opacity:{{ armOp.ideal }}"></div>
+            </div>
+            <div style="position:absolute;left:{{ armPos }};top:0;width:4px;height:28px;margin-left:-2px;background:#FFFFFF;border:1px solid #000000"></div>
+          </div>
+          <div style="position:relative;height:14px;font:400 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">
+            <span style="position:absolute;left:28.57%;transform:translateX(-50%)">70</span>
+            <span style="position:absolute;left:50%;transform:translateX(-50%)">85</span>
+            <span style="position:absolute;left:71.43%;transform:translateX(-50%)">100</span>
+          </div>
+          <div style="display:grid;grid-template-columns:28.57fr 21.43fr 21.43fr 28.57fr;gap:2px;font:500 10px 'Barlow Condensed',monospace;letter-spacing:.03em;text-align:center">
+            <span style="color:#E10600">SEVERE RISK</span><span style="color:#FFFFFF">AT RISK</span><span style="color:#56B7E6">ACCEPTABLE</span><span style="color:#88E0C6">IDEAL</span>
+          </div>
+        </div>
+        <div style="flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:1px;background:rgba(91,103,112,.36);border:1px solid rgba(91,103,112,.55)">
+          <sc-for list="{{ arm }}" as="a" hint-placeholder-count="5">
+            <div style="grid-column:{{ a.span }};background:rgba(91,103,112,.14);padding:12px 14px;display:flex;flex-direction:column;justify-content:center;gap:4px">
+              <span style="font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.04em">{{ a.label }}</span>
+              <span style="font-size:22px;font-weight:600">{{ a.v }} <span style="font-size:12px;font-weight:400;color:rgba(255,255,255,.62)">lb</span></span>
+              <span style="font:500 11px 'Barlow Condensed',monospace;color:{{ a.dc }}">{{ a.d }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+        <sc-for list="{{ armCharts }}" as="c" hint-placeholder-count="2">
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ c.title }}</span>
+            <span style="font:500 12px 'Barlow Condensed',monospace;color:#FFFFFF">{{ c.latest }} <span style="color:{{ c.chgColor }}">{{ c.chg }}</span></span>
+          </div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <sc-for list="{{ c.series }}" as="s"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:14px;height:3px;background:{{ s.color }}"></span>{{ s.name }}</span></sc-for>
+          </div>
+          <div style="position:relative;height:150px;margin:20px 6px 4px">
+            <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(91,103,112,.55)"></div>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+              <sc-for list="{{ c.series }}" as="s"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline><path d="{{ s.dotPath }}" fill="none" stroke="{{ s.color }}" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+            </svg>
+            <sc-for list="{{ c.dots }}" as="p">
+              <span style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:{{ p.tf }};font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.82);white-space:nowrap">{{ p.label }}</span>
+            </sc-for>
+          </div>
+          <div style="position:relative;height:14px;margin:0 6px">
+            <sc-for list="{{ c.ticks }}" as="k"><span style="position:absolute;left:{{ k.l }};transform:{{ k.tf }};font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ k.label }}</span></sc-for>
+          </div>
+        </div>
+      </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="transference" data-screen-label="Energy Transference" style="display:flex;flex-direction:column;gap:18px;border-top:1px solid rgba(91,103,112,.55);padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <h2 style="margin:0;font-size:26px;font-weight:600">Energy Transference <span style="color:rgba(255,255,255,.62);font-weight:400">· Rotational Capacity</span></h2>
+      <span style="display:flex;align-items:baseline;gap:8px"><span style="font:500 11px 'Barlow Condensed',monospace;letter-spacing:.08em;color:rgba(255,255,255,.62)">SCORE</span><span style="font-size:44px;line-height:1;font-weight:600;letter-spacing:-.03em;color:#56B7E6">{{ et }}</span></span>
+    </div>
+    <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}">
+      <p style="margin:0;max-width:820px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">Throwing is all about transferring energy from the ground through body and into the baseball. We test that through our medicine ball tests and stationary throwing tests. If your medicine ball throw velocity is low, we are likely looking at a sequencing issue--your body isn't connecting the chain efficiently. If your kneeling throw is low, it likely means your arm speed or torso to shoulder connection needs more attention. These tests help us to figure out where your energy is leaking and how to fix it.</p>
+    </sc-if>
+    <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:4px 18px;overflow-x:auto">
+      <div style="min-width:480px">
+        <div style="display:grid;grid-template-columns:minmax(130px,1.2fr) minmax(0,3fr) 80px;gap:16px;padding:12px 0;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.04em;border-bottom:1px solid rgba(91,103,112,.55)">
+          <span>TEST</span><span>EST. VELOCITY (50–100 MPH)</span><span style="text-align:right">AGE PCT</span>
+        </div>
+        <sc-for list="{{ transfer }}" as="t" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:minmax(130px,1.2fr) minmax(0,3fr) 80px;gap:16px;padding:13px 0;align-items:center;border-bottom:1px solid rgba(91,103,112,.32);font-size:14px">
+            <span style="font-weight:500">{{ t.label }}</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="flex:1;height:8px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ t.w }};background:#56B7E6"></div></div>
+              <span style="font:500 13px 'Barlow Condensed',monospace;width:40px;text-align:right">{{ t.est }}</span>
+            </div>
+                        <span style="font-family:'Barlow Condensed',monospace;text-align:right">{{ t.pct }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:20px">
+      <sc-for list="{{ transferCharts }}" as="c" hint-placeholder-count="4">
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap">
+            <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ c.title }}</span>
+            <span style="font:500 12px 'Barlow Condensed',monospace;color:#FFFFFF">{{ c.latest }} <span style="color:{{ c.chgColor }}">{{ c.chg }}</span></span>
+          </div>
+          <div style="position:relative;height:130px;margin:20px 6px 4px">
+            <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(91,103,112,.32)"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(91,103,112,.55)"></div>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+              <sc-for list="{{ c.series }}" as="s"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline><path d="{{ s.dotPath }}" fill="none" stroke="{{ s.color }}" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+            </svg>
+            <sc-for list="{{ c.dots }}" as="p">
+              <span style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:{{ p.tf }};font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.82);white-space:nowrap">{{ p.label }}</span>
+            </sc-for>
+          </div>
+          <div style="position:relative;height:14px;margin:0 6px">
+            <sc-for list="{{ c.ticks }}" as="k"><span style="position:absolute;left:{{ k.l }};transform:{{ k.tf }};font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ k.label }}</span></sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isPitch }}" hint-placeholder-val="{{ false }}">
+  <section id="pitching" data-screen-label="Pitching" style="display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <h2 style="margin:0;font-size:26px;font-weight:600">Pitching <span style="color:rgba(255,255,255,.62);font-weight:400">· Trackman</span></h2>
+        <span style="font:400 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ arsenalMeta }}</span>
+      </div>
+      <div style="display:flex;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
+        <sc-for list="{{ rangeOpts }}" as="r" hint-placeholder-count="5">
+          <button onClick="{{ r.onClick }}" style="border:0;background:{{ r.bg }};color:{{ r.c }};font:500 12px 'Barlow',sans-serif;padding:8px 12px;cursor:pointer;white-space:nowrap">{{ r.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ noArsenal }}" hint-placeholder-val="{{ false }}">
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:18px;font-size:14px;color:rgba(255,255,255,.82)">No Trackman pitches found for this athlete in this date range. Top recorded velocity: <b>{{ topVelo }} mph</b>.</div>
+    </sc-if>
+    <sc-if value="{{ hasArsenal }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}"><p style="margin:0;max-width:860px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">Utilizing Trackman, we are able to measure pitch velocity, spin rate and how efficiently the baseball is leaving your hand. A single bullpen gives a snap shot on your output and where your performance is at while measuring things over time shows progress and how changes in the body and throw are effecting the output. Some pitches perform better with higher spin and higher efficiency while others require less. Crafting an arsenal becomes about understanding how to best utilize these metrics to build a plan of attack that suits your strengths.</p></sc-if>
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">PITCH VELOCITY AND SPIN METRICS</span><div style="overflow-x:auto;margin:0 -2px"><div style="min-width:640px">
+            <div style="display:grid;grid-template-columns:1.4fr repeat(6,minmax(0,1fr));gap:10px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">PITCH TYPE</span><span>USAGE</span><span>MAX VELO</span><span>AVG VELO</span><span>AVG SPIN</span><span>AVG EFFICIENCY</span><span>AVG GYRO°</span></div>
+            <sc-for list="{{ pitches }}" as="p" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:1.4fr repeat(6,minmax(0,1fr));gap:10px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);text-align:right;align-items:center;font:400 13px 'Barlow Condensed',monospace"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.usage }}</span><span>{{ p.max }}</span><span>{{ p.avg }}</span><span>{{ p.spin }}</span><span>{{ p.eff }}</span><span>{{ p.gyro }}</span></div>
+            </sc-for>
+          </div></div></div>
+        <sc-for list="{{ veloChart }}" as="c" hint-placeholder-count="1">
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0">
+            <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ c.title }}</span>
+            <div style="display:flex;gap:6px 16px;flex-wrap:wrap">
+              <sc-for list="{{ c.series }}" as="s"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:14px;height:3px;background:{{ s.color }}"></span>{{ s.name }}</span></sc-for>
+            </div>
+            <div style="position:relative;height:260px;margin:16px 6px 4px 40px">
+              <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+              <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(91,103,112,.32)"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(91,103,112,.55)"></div>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                <sc-for list="{{ c.series }}" as="s"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline><path d="{{ s.dotPath }}" fill="none" stroke="{{ s.color }}" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+              </svg>
+              <sc-for list="{{ c.dots }}" as="p"><span style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:{{ p.tf }};font:600 10px 'Barlow Condensed',monospace;color:{{ p.c }};white-space:nowrap;pointer-events:none;text-shadow:0 0 3px #000000,0 0 3px #000000">{{ p.label }}</span></sc-for>
+              <span style="position:absolute;left:-4px;top:0;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ c.yHi }}</span>
+              <span style="position:absolute;left:-4px;bottom:0;transform:translate(-100%,50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ c.yLo }}</span>
+            </div>
+            <div style="position:relative;height:14px;margin:0 6px 0 40px">
+              <sc-for list="{{ c.ticks }}" as="k"><span style="position:absolute;left:{{ k.l }};transform:{{ k.tf }};font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ k.label }}</span></sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}"><p style="margin:0;max-width:860px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">Being an effective pitcher is also about creating deception through movement and angles. Understanding how each of your pitches move and the areas in the strike zone where they are most effective gives a player clarity in how they set their targets in both the training and game environment. Using these movement metrics also gives insights on what potential pitches could be added to enhance your performance in games.</p></sc-if>
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">PITCH MOVEMENT AND ANGLE METRICS</span><div style="overflow-x:auto;margin:0 -2px"><div style="min-width:640px">
+            <div style="display:grid;grid-template-columns:1.4fr repeat(6,minmax(0,1fr));gap:10px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">PITCH TYPE</span><span>AVG IVB</span><span>AVG HB</span><span>AVG VAA</span><span>AVG HAA</span><span>AVG VRA</span><span>AVG HRA</span></div>
+            <sc-for list="{{ pitches }}" as="p" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:1.4fr repeat(6,minmax(0,1fr));gap:10px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);text-align:right;align-items:center;font:400 13px 'Barlow Condensed',monospace"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.ivb }}</span><span>{{ p.hb }}</span><span>{{ p.vaa }}</span><span>{{ p.haa }}</span><span>{{ p.vra }}</span><span>{{ p.hra }}</span></div>
+            </sc-for>
+          </div></div></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:20px">
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">MOVEMENT PROFILE BY PITCH TYPE</span><span style="font:400 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">IVB, HB (in)</span></div>
+            <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ pitches }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
+            <div style="padding:0 0 18px 26px">
+              <div style="position:relative;aspect-ratio:1;width:100%;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
+                <div style="position:absolute;left:50%;top:0;bottom:0;border-left:1px solid rgba(91,103,112,.55)"></div>
+                <div style="position:absolute;top:50%;left:0;right:0;border-top:1px solid rgba(91,103,112,.55)"></div>
+                <div style="position:absolute;left:30%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;left:70%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div>
+                <div style="position:absolute;top:30%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;top:70%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                  <sc-for list="{{ pitches }}" as="p"><path d="{{ p.mvPath }}" fill="none" stroke="{{ p.c }}" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+                </svg>
+                <sc-for list="{{ pitches }}" as="p"><div style="position:absolute;left:{{ p.x }};top:{{ p.y }};width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:{{ p.c }};border:2px solid #FFFFFF;box-shadow:0 0 0 2px #000000"></div></sc-for>
+                <sc-for list="{{ pitches }}" as="p"><span style="position:absolute;left:{{ p.x }};top:{{ p.y }};transform:{{ p.lt }};font:600 10px 'Barlow Condensed',monospace;color:#FFFFFF;background:rgba(0,0,0,.85);padding:1px 4px;border-left:2px solid {{ p.c }};white-space:nowrap;pointer-events:none">{{ p.mvLabel }}</span></sc-for>
+                <span style="position:absolute;left:10%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-20</span>
+                <span style="position:absolute;left:30%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-10</span>
+                <span style="position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                <span style="position:absolute;left:70%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">10</span>
+                <span style="position:absolute;left:90%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">20</span>
+                <span style="position:absolute;top:10%;left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">20</span>
+                <span style="position:absolute;top:30%;left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">10</span>
+                <span style="position:absolute;top:50%;left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                <span style="position:absolute;top:70%;left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-10</span>
+                <span style="position:absolute;top:90%;left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-20</span>
+              </div>
+            </div></div>
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">APPROACH ANGLE BY PITCH TYPE</span><span style="font:400 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">VAA, HAA (°)</span></div>
+            <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ pitches }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
+            <div style="padding:0 0 18px 26px">
+              <div style="position:relative;aspect-ratio:1;width:100%;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
+                <div style="position:absolute;left:50%;top:0;bottom:0;border-left:1px solid rgba(91,103,112,.55)"></div>
+                <div style="position:absolute;left:30%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;left:70%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div>
+                <div style="position:absolute;top:33.3%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;top:66.7%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                  <sc-for list="{{ pitches }}" as="p"><path d="{{ p.aaPath }}" fill="none" stroke="{{ p.c }}" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+                </svg>
+                <sc-for list="{{ pitches }}" as="p"><div style="position:absolute;left:{{ p.aaX }};top:{{ p.aaY }};width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:{{ p.c }};border:2px solid #FFFFFF;box-shadow:0 0 0 2px #000000"></div></sc-for>
+                <sc-for list="{{ pitches }}" as="p"><span style="position:absolute;left:{{ p.aaX }};top:{{ p.aaY }};transform:{{ p.aaLt }};font:600 10px 'Barlow Condensed',monospace;color:#FFFFFF;background:rgba(0,0,0,.85);padding:1px 4px;border-left:2px solid {{ p.c }};white-space:nowrap;pointer-events:none">{{ p.aaLabel }}</span></sc-for>
+                <span style="position:absolute;left:10%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-6</span>
+                <span style="position:absolute;left:30%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-3</span>
+                <span style="position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                <span style="position:absolute;left:70%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">3</span>
+                <span style="position:absolute;left:90%;bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">6</span>
+                <span style="position:absolute;top:0;left:-6px;transform:translate(-100%,0);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                <span style="position:absolute;top:33.3%;left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-5</span>
+                <span style="position:absolute;top:66.7%;left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-10</span>
+                <span style="position:absolute;bottom:0;left:-6px;transform:translate(-100%,0);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-15</span>
+              </div>
+            </div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:20px">
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">RELEASE POINT BY PITCH TYPE</span><span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">SIDE × HEIGHT (ft)</span></div>
+            <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ pitches }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
+            <div style="padding:0 0 18px 30px">
+              <div style="position:relative;aspect-ratio:8/4.5;width:100%;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
+                <div style="position:absolute;left:25%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;left:75%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div>
+                <div style="position:absolute;top:33.3%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;top:66.7%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                  <sc-for list="{{ pitches }}" as="p"><path d="{{ p.relPath }}" fill="none" stroke="{{ p.c }}" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+                </svg>
+                <sc-for list="{{ pitches }}" as="p"><div style="position:absolute;left:{{ p.relX }};top:{{ p.relY }};width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:{{ p.c }};border:2px solid #FFFFFF;box-shadow:0 0 0 2px #000000"></div></sc-for>
+                <sc-for list="{{ relTX }}" as="k"><span style="position:absolute;left:{{ k.l }};bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ k.v }}</span></sc-for>
+                <sc-for list="{{ relTY }}" as="k"><span style="position:absolute;top:{{ k.t }};left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ k.v }}</span></sc-for>
+              </div>
+            </div>
+            <div style="overflow-x:auto"><div style="min-width:360px">
+              <div style="display:grid;grid-template-columns:1.2fr repeat(5,minmax(0,1fr));gap:4px;padding:6px 0 8px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">PITCH</span><span>HEIGHT</span><span>SIDE</span><span>EXT</span><span>HT VAR</span><span>SIDE VAR</span></div>
+              <sc-for list="{{ pitches }}" as="p"><div style="display:grid;grid-template-columns:1.2fr repeat(5,minmax(0,1fr));gap:4px;padding:8px 0;border-bottom:1px solid rgba(91,103,112,.32);text-align:right;align-items:center;font:400 12px 'Barlow Condensed',monospace"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.relH }}</span><span>{{ p.relS }}</span><span>{{ p.ext }}</span><span>{{ p.relHsd }}</span><span>{{ p.relSsd }}</span></div></sc-for>
+            </div></div>
+            <span style="font-size:12px;color:rgba(255,255,255,.62)">VAR is the standard deviation in inches. Lower means a more repeatable release.</span></div>
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">SPIN AXIS CLOCK</span><span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">PITCHER VIEW · LENGTH = SPIN RATE</span></div>
+            <div style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:center">
+              <svg viewBox="0 0 200 200" style="width:100%;height:auto;display:block">
+                <circle cx="100" cy="100" r="78" fill="#000000" stroke="rgba(91,103,112,.55)" stroke-width="1"></circle>
+                <circle cx="100" cy="100" r="52" fill="none" stroke="rgba(91,103,112,.38)" stroke-dasharray="2 3"></circle>
+                <circle cx="100" cy="100" r="26" fill="none" stroke="rgba(91,103,112,.38)" stroke-dasharray="2 3"></circle>
+                <line x1="100.0" y1="28.0" x2="100.0" y2="22.0" stroke="#5B6770" stroke-width="1"></line><text x="100.0" y="15.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">12</text><line x1="136.0" y1="37.6" x2="139.0" y2="32.5" stroke="#5B6770" stroke-width="1"></line><text x="144.0" y="26.8" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">1</text><line x1="162.4" y1="64.0" x2="167.5" y2="61.0" stroke="#5B6770" stroke-width="1"></line><text x="176.2" y="59.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">2</text><line x1="172.0" y1="100.0" x2="178.0" y2="100.0" stroke="#5B6770" stroke-width="1"></line><text x="188.0" y="103.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">3</text><line x1="162.4" y1="136.0" x2="167.5" y2="139.0" stroke="#5B6770" stroke-width="1"></line><text x="176.2" y="147.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">4</text><line x1="136.0" y1="162.4" x2="139.0" y2="167.5" stroke="#5B6770" stroke-width="1"></line><text x="144.0" y="179.2" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">5</text><line x1="100.0" y1="172.0" x2="100.0" y2="178.0" stroke="#5B6770" stroke-width="1"></line><text x="100.0" y="191.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">6</text><line x1="64.0" y1="162.4" x2="61.0" y2="167.5" stroke="#5B6770" stroke-width="1"></line><text x="56.0" y="179.2" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">7</text><line x1="37.6" y1="136.0" x2="32.5" y2="139.0" stroke="#5B6770" stroke-width="1"></line><text x="23.8" y="147.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">8</text><line x1="28.0" y1="100.0" x2="22.0" y2="100.0" stroke="#5B6770" stroke-width="1"></line><text x="12.0" y="103.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">9</text><line x1="37.6" y1="64.0" x2="32.5" y2="61.0" stroke="#5B6770" stroke-width="1"></line><text x="23.8" y="59.0" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">10</text><line x1="64.0" y1="37.6" x2="61.0" y2="32.5" stroke="#5B6770" stroke-width="1"></line><text x="56.0" y="26.8" text-anchor="middle" font-family="Barlow Condensed, monospace" font-size="8" fill="rgba(255,255,255,.62)">11</text>
+                <sc-for list="{{ pitches }}" as="p">
+                  <line x1="100" y1="100" x2="{{ p.clkX2 }}" y2="{{ p.clkY2 }}" stroke="{{ p.c }}" stroke-width="3" stroke-linecap="round"></line>
+                  <circle cx="{{ p.clkX2 }}" cy="{{ p.clkY2 }}" r="4.5" fill="{{ p.c }}" stroke="#FFFFFF" stroke-width="1.2"></circle>
+                </sc-for>
+                <circle cx="100" cy="100" r="3" fill="#FFFFFF"></circle>
+              </svg>
+              <div style="display:flex;flex-direction:column">
+                <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:6px;padding:4px 0 6px;border-bottom:1px solid rgba(91,103,112,.55);font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span>PITCH</span><span style="text-align:right">TILT</span><span style="text-align:right">RPM</span></div>
+                <sc-for list="{{ pitches }}" as="p"><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:6px;padding:7px 0;border-bottom:1px solid rgba(91,103,112,.32);align-items:center;font:400 12px 'Barlow Condensed',monospace"><span style="display:flex;align-items:center;gap:6px;font:600 13px 'Barlow',sans-serif"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span style="text-align:right">{{ p.tilt }}</span><span style="text-align:right">{{ p.spin }}</span></div></sc-for>
+              </div>
+            </div></div>
+        </div>
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">PITCH TUNNELING</span><span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">RELEASE → PLATE</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:13px;color:rgba(255,255,255,.82);text-wrap:pretty">Release direction (HRA × VRA). Pitches that cluster here look the same out of the hand.</span>
+              <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ pitches }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
+              <div style="padding:0 0 18px 30px">
+              <div style="position:relative;aspect-ratio:1.3;width:100%;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
+                <div style="position:absolute;left:25%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;left:75%;top:0;bottom:0;border-left:1px dashed rgba(91,103,112,.32)"></div>
+                <div style="position:absolute;top:25%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;top:50%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div><div style="position:absolute;top:75%;left:0;right:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                  <sc-for list="{{ pitches }}" as="p"><path d="{{ p.tunPath }}" fill="none" stroke="{{ p.c }}" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+                </svg>
+                <sc-for list="{{ pitches }}" as="p"><div style="position:absolute;left:{{ p.tunX }};top:{{ p.tunY }};width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:{{ p.c }};border:2px solid #FFFFFF;box-shadow:0 0 0 2px #000000"></div></sc-for>
+                <sc-for list="{{ tunTX }}" as="k"><span style="position:absolute;left:{{ k.l }};bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ k.v }}</span></sc-for>
+                <sc-for list="{{ tunTY }}" as="k"><span style="position:absolute;top:{{ k.t }};left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ k.v }}</span></sc-for>
+              </div>
+            </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <span style="font-size:13px;color:rgba(255,255,255,.82);text-wrap:pretty">Release angle (left) to approach angle at the plate (right). Lines that start together and finish apart are pitches that tunnel: they look the same out of the hand and separate late.</span>
+              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+                <sc-for list="{{ tunSlopes }}" as="sl" hint-placeholder-count="2">
+                  <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                    <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ sl.title }}</span>
+                    <div style="position:relative;height:220px;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55)">
+                      <div style="position:absolute;left:12%;top:0;bottom:0;border-left:1px solid rgba(91,103,112,.55)"></div>
+                      <div style="position:absolute;left:70%;top:0;bottom:0;border-left:1px solid rgba(91,103,112,.55)"></div>
+                      <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                        <sc-for list="{{ sl.items }}" as="it"><path d="{{ it.d }}" fill="none" stroke="{{ it.c }}" stroke-width="2.5" vector-effect="non-scaling-stroke"></path><path d="{{ it.lead }}" fill="none" stroke="{{ it.c }}" stroke-width="1" stroke-opacity=".7" vector-effect="non-scaling-stroke"></path></sc-for>
+                      </svg>
+                      <sc-for list="{{ sl.items }}" as="it"><div style="position:absolute;left:12%;top:{{ it.y1 }};width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:{{ it.c }};border:1.5px solid #FFFFFF"></div><div style="position:absolute;left:70%;top:{{ it.y2 }};width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:{{ it.c }};border:1.5px solid #FFFFFF"></div><span style="position:absolute;left:79%;top:{{ it.ly }};transform:translateY(-50%);font:600 10px 'Barlow Condensed',monospace;color:{{ it.c }};white-space:nowrap">{{ it.v2 }}</span></sc-for>
+                    </div>
+                    <div style="position:relative;height:12px;font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)"><span style="position:absolute;left:12%;transform:translateX(-50%)">{{ sl.left }}</span><span style="position:absolute;left:70%;transform:translateX(-50%)">{{ sl.right }}</span></div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column">
+                <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr 0.8fr;gap:10px;padding:6px 0 8px;border-bottom:1px solid rgba(91,103,112,.55);font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em;text-align:right"><span style="text-align:left">{{ tunRefLabel }}</span><span>GAP AT RELEASE</span><span>GAP AT PLATE</span><span>SEPARATION</span></div>
+                <sc-for list="{{ tunRows }}" as="p">
+                  <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr 0.8fr;gap:10px;padding:8px 0;border-bottom:1px solid rgba(91,103,112,.32);align-items:center;text-align:right;font:400 12px 'Barlow Condensed',monospace"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.rel }}</span><span>{{ p.plate }}</span><span style="font-weight:600;color:{{ p.sc }}">{{ p.sep }}</span></div>
+                </sc-for>
+                <span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);padding-top:8px;text-wrap:pretty">Gaps are the combined angle difference from the reference pitch. Separation = gap at plate ÷ gap at release. Higher means a better tunnel.</span>
+              </div>
+            </div>
+          </div></div>
+        <sc-if value="{{ showNarrative }}" hint-placeholder-val="{{ true }}"><p style="margin:0;max-width:860px;font-size:14px;line-height:1.55;color:rgba(255,255,255,.82);text-wrap:pretty">Commanding the baseball is not just about throwing strikes, its the ability to place the baseball where we want to. This allows a pitcher to attack hitters in the strike zone and expand the strike zone to induce swing and misses. We not only measure how many strikes you are throwing but how often the pitches you throw are competitive and where your common misses are. This gives incredible insights to both the player and coach to make adjustments on mechanics, visuals and mindsight.</p></sc-if>
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">COMMAND TRACKING</span><div style="overflow-x:auto"><div style="min-width:560px">
+            <div style="display:grid;grid-template-columns:1.2fr 2fr 2fr;gap:20px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span>PITCH TYPE</span><span>IN-ZONE %</span><span>COMPETITIVE PITCH %</span></div>
+            <sc-for list="{{ pitches }}" as="p" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:1.2fr 2fr 2fr;gap:20px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);align-items:center"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span>
+                <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:8px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ p.zoneW }};background:#E10600"></div></div><span style="font:500 13px 'Barlow Condensed',monospace;width:56px;text-align:right">{{ p.zone }}</span></div>
+                <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:8px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ p.compW }};background:#88E0C6"></div></div><span style="font:500 13px 'Barlow Condensed',monospace;width:56px;text-align:right">{{ p.comp }}</span></div>
+              </div>
+            </sc-for>
+            <div style="display:grid;grid-template-columns:1.2fr 2fr 2fr;gap:20px;padding:12px 0 2px;align-items:center">
+              <span style="font-size:14px;font-weight:600">Grand total</span>
+              <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:8px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ totalZoneW }};background:#E10600"></div></div><span style="font:600 13px 'Barlow Condensed',monospace;width:56px;text-align:right">{{ totalZone }}</span></div>
+              <div style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:8px;background:rgba(91,103,112,.28);position:relative"><div style="position:absolute;inset:0 auto 0 0;width:{{ totalCompW }};background:#88E0C6"></div></div><span style="font:600 13px 'Barlow Condensed',monospace;width:56px;text-align:right">{{ totalComp }}</span></div>
+            </div>
+          </div></div></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:16px">
+          <sc-for list="{{ locGroups }}" as="g" hint-placeholder-count="6">
+            <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ g.name }}</span><span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ g.n }}</span></div>
+              <div style="display:flex;gap:6px 12px;flex-wrap:wrap"><sc-for list="{{ g.series }}" as="s"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ s.c }}"></span>{{ s.name }}</span></sc-for></div>
+              <div style="padding:0 0 16px 18px">
+                <div style="position:relative;aspect-ratio:5/6;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55)">
+                  <svg viewBox="0 0 100 120" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                    <sc-for list="{{ g.heat }}" as="h"><rect x="{{ h.x }}" y="{{ h.y }}" width="{{ h.w }}" height="{{ h.h }}" stroke="#000000" stroke-width=".4" fill="{{ h.c }}" fill-opacity="{{ h.o }}"></rect></sc-for>
+                    <sc-for list="{{ g.series }}" as="s"><path d="{{ s.path }}" fill="none" stroke="{{ s.c }}" stroke-opacity=".9" stroke-width="4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+                  </svg>
+                  <div style="position:absolute;left:33.4%;width:33.2%;top:41.7%;height:33.3%;border:1.5px solid #FFFFFF"></div>
+                  <span style="position:absolute;left:10%;bottom:-15px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-2</span>
+                  <span style="position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                  <span style="position:absolute;left:90%;bottom:-15px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">2</span>
+                  <span style="position:absolute;top:0;left:-5px;transform:translateX(-100%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">6</span>
+                  <span style="position:absolute;top:50%;left:-5px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">3</span>
+                  <span style="position:absolute;bottom:0;left:-5px;transform:translateX(-100%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ tmLoading }}" hint-placeholder-val="{{ false }}">
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:18px;font:400 13px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">Loading Trackman pitches… this can take 15–20 seconds.</div>
+    </sc-if>
+  </section>
+  </sc-if>
+
+  <sc-if value="{{ isData }}" hint-placeholder-val="{{ false }}">
+  <section id="in-season" data-screen-label="In-Season" style="display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <h2 style="margin:0;font-size:26px;font-weight:600">{{ xTitle }} <span style="color:rgba(255,255,255,.62);font-weight:400">· Game Data</span></h2>
+        <span style="font:400 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ xMeta }}</span>
+      </div>
+      <div style="display:flex;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
+        <sc-for list="{{ xRangeOpts }}" as="r" hint-placeholder-count="5">
+          <button onClick="{{ r.onClick }}" style="border:0;background:{{ r.bg }};color:{{ r.c }};font:500 12px 'Barlow',sans-serif;padding:8px 12px;cursor:pointer;white-space:nowrap">{{ r.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ xEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:18px;font-size:14px;color:rgba(255,255,255,.82)">{{ xEmptyMsg }}</div>
+    </sc-if>
+    <sc-if value="{{ xHas }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <sc-for list="{{ xSplits }}" as="sp" hint-placeholder-count="1">
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ sp.title }}</span><div data-noprint="true" style="display:flex;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)"><sc-for list="{{ xSideOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="border:0;background:{{ o.bg }};color:{{ o.c }};font:500 12px 'Barlow',sans-serif;padding:6px 12px;cursor:pointer;white-space:nowrap">{{ o.label }}</button></sc-for></div></div><div style="overflow-x:auto;margin:0 -2px"><div style="min-width:820px">
+            <div style="display:grid;grid-template-columns:1.4fr repeat(9,minmax(0,1fr));gap:10px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">PITCH TYPE</span><span>USAGE</span><span>MAX VELO</span><span>AVG VELO</span><span>STRIKE %</span><span>SL %</span><span>WHIFF %</span><span>CSW %</span><span>xISO</span><span>xwOBA</span></div>
+            <sc-for list="{{ sp.rows }}" as="p" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:1.4fr repeat(9,minmax(0,1fr));gap:10px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);text-align:right;align-items:center;font:400 13px 'Barlow Condensed',monospace"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.usage }}</span><span>{{ p.max }}</span><span>{{ p.avg }}</span><span>{{ p.str }}</span><span>{{ p.sl }}</span><span>{{ p.wh }}</span><span>{{ p.csw }}</span><span>{{ p.xi }}</span><span>{{ p.xw }}</span></div>
+            </sc-for>
+            <div style="display:grid;grid-template-columns:1.4fr repeat(9,minmax(0,1fr));gap:10px;padding:10px 0;text-align:right;align-items:center;font:600 13px 'Barlow Condensed',monospace;color:#FFFFFF"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px">Total</span><span>{{ sp.total.usage }}</span><span>{{ sp.total.max }}</span><span>{{ sp.total.avg }}</span><span>{{ sp.total.str }}</span><span>{{ sp.total.sl }}</span><span>{{ sp.total.wh }}</span><span>{{ sp.total.csw }}</span><span>{{ sp.total.xi }}</span><span>{{ sp.total.xw }}</span></div>
+          </div></div></div>
+        </sc-for>
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ xCountTitle }}</span>
+            <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ xTypes }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
+          </div>
+          <div style="overflow-x:auto;margin:0 -2px"><div style="min-width:820px">
+            <div style="display:grid;grid-template-columns:130px minmax(0,1fr) repeat(4,72px);gap:14px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">COUNT</span><span style="text-align:left">PITCH MIX</span><span>STRIKE %</span><span>WHIFF %</span><span>CSW %</span><span>xwOBA</span></div>
+            <sc-for list="{{ xCounts }}" as="cr" hint-placeholder-count="7">
+              <div style="display:grid;grid-template-columns:130px minmax(0,1fr) repeat(4,72px);gap:14px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);align-items:center;text-align:right;font:400 13px 'Barlow Condensed',monospace;color:#FFFFFF">
+                <div style="text-align:left;display:flex;flex-direction:column;gap:2px"><span style="font:600 14px 'Barlow',sans-serif">{{ cr.label }}</span><span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ cr.n }}</span></div>
+                <div style="display:flex;height:26px;gap:2px;min-width:0">
+                  <sc-for list="{{ cr.segs }}" as="g"><div title="{{ g.tip }}" style="flex:0 0 {{ g.w }};background:{{ g.c }};display:flex;align-items:center;justify-content:center;overflow:hidden;font:600 11px 'Barlow Condensed',monospace;color:#000000;min-width:0">{{ g.lbl }}</div></sc-for>
+                </div>
+                <span>{{ cr.str }}</span><span>{{ cr.wh }}</span><span>{{ cr.csw }}</span><span>{{ cr.xw }}</span>
+              </div>
+            </sc-for>
+          </div></div>
+        </div>
+        <sc-for list="{{ xVelo }}" as="c" hint-placeholder-count="2">
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0">
+            <span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ c.title }}</span>
+            <div style="display:flex;gap:6px 16px;flex-wrap:wrap">
+              <sc-for list="{{ c.series }}" as="s"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:14px;height:3px;background:{{ s.color }}"></span>{{ s.name }}</span></sc-for>
+            </div>
+            <div style="position:relative;height:260px;margin:16px 6px 4px 40px">
+              <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
+              <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(91,103,112,.32)"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(91,103,112,.55)"></div>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                <sc-for list="{{ c.series }}" as="s"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline><path d="{{ s.dotPath }}" fill="none" stroke="{{ s.color }}" stroke-width="6" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+              </svg>
+              <sc-for list="{{ c.dots }}" as="p"><span style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:{{ p.tf }};font:600 10px 'Barlow Condensed',monospace;color:{{ p.c }};white-space:nowrap;pointer-events:none;text-shadow:0 0 3px #000000,0 0 3px #000000">{{ p.label }}</span></sc-for>
+              <span style="position:absolute;left:-4px;top:0;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ c.yHi }}</span>
+              <span style="position:absolute;left:-4px;bottom:0;transform:translate(-100%,50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ c.yLo }}</span>
+            </div>
+            <div style="position:relative;height:14px;margin:0 6px 0 40px">
+              <sc-for list="{{ c.ticks }}" as="k"><span style="position:absolute;left:{{ k.l }};transform:{{ k.tf }};font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);white-space:nowrap">{{ k.label }}</span></sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">AVERAGE PITCH MOVEMENT AND ANGLES</span><div style="overflow-x:auto;margin:0 -2px"><div style="min-width:760px">
+          <div style="display:grid;grid-template-columns:1.4fr repeat(8,minmax(0,1fr));gap:10px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">PITCH TYPE</span><span>AVG SPIN</span><span>SPIN DIR</span><span>AVG IVB</span><span>AVG HB</span><span>AVG VAA</span><span>AVG HAA</span><span>AVG VRA</span><span>AVG HRA</span></div>
+          <sc-for list="{{ xTypes }}" as="p" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:1.4fr repeat(8,minmax(0,1fr));gap:10px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);text-align:right;align-items:center;font:400 13px 'Barlow Condensed',monospace"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.spin }}</span><span>{{ p.sd }}</span><span>{{ p.ivb }}</span><span>{{ p.hb }}</span><span>{{ p.vaa }}</span><span>{{ p.haa }}</span><span>{{ p.vra }}</span><span>{{ p.hra }}</span></div>
+          </sc-for>
+        </div></div></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:20px">
+          <sc-for list="{{ xScatters }}" as="sc" hint-placeholder-count="4">
+            <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ sc.title }}</span><span style="font:400 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ sc.unit }}</span></div>
+              <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ xTypes }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
+              <div style="padding:0 0 18px 34px">
+                <div style="position:relative;aspect-ratio:1;width:100%;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
+                  <sc-for list="{{ sc.xt }}" as="k"><div style="position:absolute;left:{{ k.l }};top:0;bottom:0;border-left:1px {{ k.ls }} {{ k.lc }}"></div></sc-for>
+                  <sc-for list="{{ sc.yt }}" as="k"><div style="position:absolute;top:{{ k.t }};left:0;right:0;border-top:1px {{ k.ls }} {{ k.lc }}"></div></sc-for>
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                    <sc-for list="{{ sc.pts }}" as="p"><path d="{{ p.path }}" fill="none" stroke="{{ p.c }}" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+                  </svg>
+                  <sc-for list="{{ sc.pts }}" as="p"><div style="position:absolute;left:{{ p.mx }};top:{{ p.my }};width:{{ p.sz }};height:{{ p.sz }};margin:{{ p.mg }};border-radius:50%;background:{{ p.c }};border:2px solid #FFFFFF;box-shadow:0 0 0 2px #000000"></div></sc-for>
+                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none"><sc-for list="{{ sc.pts }}" as="p"><path d="{{ p.lead }}" fill="none" stroke="{{ p.c }}" stroke-width="1.25" vector-effect="non-scaling-stroke"></path></sc-for></svg>
+                  <sc-for list="{{ sc.pts }}" as="p"><sc-if value="{{ p.lbl }}"><span style="position:absolute;left:{{ p.ll }};top:{{ p.lt2 }};transform:{{ p.lt }};font:600 11px 'Barlow Condensed',monospace;color:#FFFFFF;background:#000000;padding:2px 6px;border:1px solid {{ p.c }};border-left-width:3px;box-shadow:0 1px 4px rgba(0,0,0,.6);white-space:nowrap;pointer-events:none;z-index:2">{{ p.lbl }}</span></sc-if></sc-for>
+                  <sc-for list="{{ sc.xt }}" as="k"><span style="position:absolute;left:{{ k.l }};bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ k.label }}</span></sc-for>
+                  <sc-for list="{{ sc.yt }}" as="k"><span style="position:absolute;top:{{ k.t }};left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ k.label }}</span></sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-for list="{{ xZones }}" as="z" hint-placeholder-count="3">
+          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ z.c }}"></span>{{ z.name }}</span><span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ z.n }}</span></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px">
+              <sc-for list="{{ z.panels }}" as="g">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;justify-content:space-between;gap:8px"><span style="font:500 11px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ g.title }}</span><span style="font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">{{ g.n }}</span></div>
+                  <div style="padding:0 0 16px 18px">
+                    <div style="position:relative;aspect-ratio:5/6;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55)">
+                      <svg viewBox="0 0 100 120" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+                        <sc-for list="{{ g.heat }}" as="hc"><rect x="{{ hc.x }}" y="{{ hc.y }}" width="{{ hc.w }}" height="{{ hc.h }}" stroke="#000000" stroke-width=".4" fill="{{ hc.c }}" fill-opacity="{{ hc.o }}"></rect></sc-for>
+                        <sc-for list="{{ g.dots }}" as="s"><path d="{{ s.path }}" fill="none" stroke="{{ s.c }}" stroke-opacity=".9" stroke-width="4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
+                      </svg>
+                      <div style="position:absolute;left:{{ xZoneBox.l }};width:{{ xZoneBox.w }};top:{{ xZoneBox.t }};height:{{ xZoneBox.h }};border:1.5px solid #FFFFFF"></div>
+                      <span style="position:absolute;left:0;bottom:-15px;font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-2.5</span>
+                      <span style="position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                      <span style="position:absolute;right:0;bottom:-15px;font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">2.5</span>
+                      <span style="position:absolute;top:0;left:-5px;transform:translateX(-100%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">3</span>
+                      <span style="position:absolute;top:50%;left:-5px;transform:translate(-100%,-50%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">0</span>
+                      <span style="position:absolute;bottom:0;left:-5px;transform:translateX(-100%);font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">-3</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <sc-for list="{{ g.legend }}" as="lg"><span style="display:flex;align-items:center;gap:6px;font:400 10px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)"><span style="width:8px;height:8px;border-radius:50%;background:{{ lg.c }};flex:none"></span>{{ lg.label }}</span></sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        </div>
+    </sc-if>
+  </section>
+  </sc-if>
+
+  <footer style="border-top:3px solid #E10600;padding-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font:400 12px 'Barlow Condensed',monospace;color:rgba(255,255,255,.62)">
+    <span>VeloU · {{ name }}</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showNarrative&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;highlightFlags&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;refreshMinutes&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[0,1,5,15],&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;dataTabLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;In-Season&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data tab&quot;}}">
+const SHEET_ID = 'athletes';
+const EXTRA_ID = 'inseason';
+const nKey = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+let SEQ = 0;
+const C = { ink: '#FFFFFF', muted: 'rgba(255,255,255,.62)', indigo: '#E10600', green: '#88E0C6', orange: '#FFFFFF', flag: '#FFFFFF', blue: '#56B7E6', teal: '#56B7E6', yellow: '#56B7E6', lightblue: '#56B7E6' };
+const num = s => { if (s == null || s === '') return null; const n = parseFloat(String(s).replace(/[,%\s]/g, '')); return isNaN(n) ? null : n; };
+const pD = s => { const t = String(s ?? '').trim(); if (!t) return null; let m = t.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:\s+(\d+):(\d+))?/); if (m) { const y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return new Date(y, m[1] - 1, +m[2], +(m[4] || 0), +(m[5] || 0)); } m = t.match(/(\d{4})-(\d{1,2})-(\d{1,2})(?:[T\s](\d+):(\d+))?/); if (m) return new Date(+m[1], m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0)); m = t.match(/^Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+))?/); if (m) return new Date(+m[1], +m[2], +m[3], +(m[4] || 0), +(m[5] || 0)); if (/[a-z]{3}/i.test(t) && /\d{4}/.test(t)) { const d = new Date(t); if (!isNaN(d)) return d; } return null; };
+const fD = d => d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+const fDs = d => d ? d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '';
+const fMD = d => d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+const ser = (rows, di, vi) => {
+  const m = new Map();
+  (rows || []).forEach(r => { const d = pD(r[di]); const v = num(r[vi]); if (!d || v == null) return; const k = +new Date(d.getFullYear(), d.getMonth(), d.getDate()); if (!m.has(k) || v > m.get(k)) m.set(k, v); });
+  return [...m.entries()].sort((a, b) => a[0] - b[0]).map(([k, v]) => ({ d: new Date(k), v }));
+};
+const last = s => s.length ? s[s.length - 1].v : null;
+const chgFirst = s => { if (!(s.length > 1 && s[0].v)) return null; const c = (last(s) - s[0].v) / Math.abs(s[0].v) * 100; return Math.abs(c) < 0.05 ? null : c; };
+const fChg = c => c == null ? '' : (c >= 0 ? '+' : '−') + Math.abs(c).toFixed(1) + '%';
+
+function chart(title, defs, fmt, unit = '', withLabels = false, flm = false) {
+  const dates = [...new Set(defs.flatMap(s => s.data.map(p => +p.d)))].sort((a, b) => a - b);
+  const n = dates.length;
+  const all = defs.flatMap(s => s.data.map(p => p.v));
+  const mn = Math.min(...all), mx = Math.max(...all);
+  const pad = (mx - mn) * 0.18 || Math.abs(mx) * 0.05 || 1;
+  const lo = mn - pad, hi = mx + pad;
+  const X = i => n === 1 ? 50 : 2 + 96 * i / (n - 1);
+  const Y = v => 100 - (v - lo) / (hi - lo) * 100;
+  const dots = [];
+  const placed = [];
+  const valAt = (si, dt) => { const p = defs[si].data.find(q => +q.d === dt); return p ? p.v : null; };
+  const series = defs.map((s, si) => {
+    const pts = s.data.map(p => ({ x: X(dates.indexOf(+p.d)), y: Y(p.v), v: p.v, dt: +p.d }));
+    const m = pts.length;
+    let order = [];
+    if (withLabels && m <= 20) order = pts.map((_, i) => i);
+    else if (m) {
+      const vs = pts.map(p => p.v);
+      const iMax = vs.indexOf(Math.max(...vs)), iMin = vs.indexOf(Math.min(...vs));
+      order = flm ? [iMax, m - 1, 0] : defs.length > 2 ? [m - 1] : [m - 1, 0, iMax, iMin];
+    }
+    const keep = new Set();
+    order.forEach(i => {
+      if (keep.has(i)) return;
+      const minGap = withLabels ? 0 : 10;
+      if ([...keep].some(k => Math.abs(pts[k].x - pts[i].x) < minGap)) return;
+      keep.add(i);
+    });
+    pts.forEach((p, i) => {
+      let lbl = '', tf = 'translate(-50%,-170%)';
+      if (keep.has(i)) {
+        let up;
+        if (defs.length === 2) { const o = valAt(1 - si, p.dt); up = o == null ? p.y > 50 : p.v >= o; }
+        else up = p.y > 30;
+        const hx = p.x < 8 ? '-10%' : p.x > 92 ? '-90%' : '-50%';
+        const cands = flm
+          ? [{ dx: 0, dy: -7, tf: 'translate(' + hx + ',-170%)' }, { dx: 0, dy: 7, tf: 'translate(' + hx + ',70%)' }, { dx: 4, dy: 0, tf: 'translate(8px,-50%)' }, { dx: -4, dy: 0, tf: 'translate(calc(-100% - 8px),-50%)' }]
+          : [{ dx: 0, dy: up ? -9 : 9, tf: 'translate(' + hx + ',' + (up ? '-170%' : '70%') + ')' }];
+        const gx = flm ? 4 : 9, gy = flm ? 6 : 9;
+        for (const c of cands) {
+          const lx = p.x + c.dx, ly = p.y + c.dy;
+          if (!placed.some(q => Math.abs(q.x - lx) < gx && Math.abs(q.y - ly) < gy)) { placed.push({ x: lx, y: ly }); lbl = fmt(p.v); tf = c.tf; break; }
+        }
+      }
+      dots.push({ l: p.x + '%', t: p.y + '%', c: s.color, label: lbl, tf });
+    });
+    return { name: s.name, color: s.color, points: pts.map(p => p.x.toFixed(2) + ',' + p.y.toFixed(2)).join(' '), dotPath: pts.map(p => 'M' + p.x.toFixed(2) + ' ' + p.y.toFixed(2) + 'h0').join(' ') };
+  });
+  const tickIdx = n <= 1 ? [0] : n <= 4 ? dates.map((_, i) => i) : [0, Math.floor((n - 1) / 2), n - 1];
+  const ticks = n ? tickIdx.map(i => ({ l: X(i) + '%', label: fDs(new Date(dates[i])), tf: i === 0 && n > 1 ? 'translateX(-6%)' : i === n - 1 && n > 1 ? 'translateX(-94%)' : 'translateX(-50%)' })) : [];
+  const s0 = defs[0]?.data || [];
+  const c = chgFirst(s0);
+  return { tLabel: '', tV: '', tW: '0%', tSub: '', chartDisp: 'flex', tileDisp: 'none', span: 'auto', lineDisp: 'flex', stackDisp: 'none', title, series, dots, ticks, yHi: all.length ? fmt(hi) : '', yLo: all.length ? fmt(lo) : '', latest: s0.length ? fmt(last(s0)) + unit : 'No data', chg: c == null ? '' : fChg(c) + ' since first', chgColor: c != null && c < 0 ? C.flag : C.green };
+}
+
+function stackChart(title, defs, fmt) {
+  const dates = [...new Set(defs.flatMap(s => s.data.map(p => +p.d)))].sort((a, b) => a - b);
+  const totals = dates.map(dt => defs.reduce((a, s) => a + (s.data.find(p => +p.d === dt)?.v || 0), 0));
+  const max = Math.max(...totals, 0) || 1;
+  const multiYear = dates.length && new Date(dates[0]).getFullYear() !== new Date(dates[dates.length - 1]).getFullYear();
+  const bars = dates.map(dt => ({
+    total: fmt(totals[dates.indexOf(dt)]), h: (totals[dates.indexOf(dt)] / max * 88) + '%',
+    date: new Date(dt).toLocaleDateString('en-US', multiYear ? { month: 'numeric', day: 'numeric', year: '2-digit' } : { month: 'short', day: 'numeric' }),
+    segs: defs.map(s => { const v = s.data.find(p => +p.d === dt)?.v; return v == null ? null : { f: v, c: s.color, tc: s.tc || '#FFFFFF', label: fmt(v) }; }).filter(Boolean)
+  }));
+  const s0 = defs[0]?.data || [];
+  const c = chgFirst(s0);
+  return { tLabel: '', tV: '', tW: '0%', tSub: '', chartDisp: 'flex', tileDisp: 'none', span: 'span 2', lineDisp: 'none', stackDisp: 'flex', title, bars, series: defs.map(s => ({ name: s.name, color: s.color })), dots: [], ticks: [],
+    latest: s0.length ? fmt(last(s0)) : 'No data', chg: c == null ? '' : fChg(c) + ' since first', chgColor: c != null && c < 0 ? C.flag : C.green };
+}
+
+const TRACKMAN_ID = 'trackman';
+const PITCH_COLORS = { Fastball: '#E10600', FourSeamFastBall: '#E10600', Sinker: '#FF8A85', TwoSeamFastBall: '#FF8A85', Cutter: '#FFFFFF', Slider: '#56B7E6', Sweeper: '#A9DBF3', Curveball: '#88E0C6', KnuckleCurve: '#88E0C6', ChangeUp: '#C3F0E3', Changeup: '#C3F0E3', Splitter: '#B8C0C6', Knuckleball: '#5B6770' };
+const EXTRA_COLORS = ['#B80500', '#3E8FB8', '#5BB89E', '#8A949B', '#D5D9DC'];
+// tm row: 0 name,1 date,2 type,3 velo,4 spin,5 ivb,6 hb,7 locH,8 locS,9 vaa,10 gyro,11 eff,12 iz,13 comp,14 haa,15 vra,16 hra
+const RANGES = ['All', 'Season', '90 days', '30 days', 'Last session'];
+const LOC_GROUPS = [['Fastball', ['Fastball', 'FourSeamFastBall']], ['Sinker & 2-Seam', ['Sinker', 'TwoSeamFastBall']], ['Cutter', ['Cutter']], ['ChangeUp & Splitter', ['ChangeUp', 'Changeup', 'Splitter']], ['Slider & Sweeper', ['Slider', 'Sweeper']], ['Curveball', ['Curveball', 'KnuckleCurve']]];
+function filterRange(rows, range) {
+  const ds = (rows || []).map(r => pD(r[1])).filter(Boolean);
+  if (!ds.length || range === 'All') return rows || [];
+  const max = new Date(Math.max(...ds));
+  const min = range === 'Season' ? new Date(max.getFullYear(), 0, 1) : range === '90 days' ? new Date(+max - 90 * 864e5) : range === '30 days' ? new Date(+max - 30 * 864e5) : new Date(max.getFullYear(), max.getMonth(), max.getDate());
+  return rows.filter(r => { const d = pD(r[1]); return d && d >= min; });
+}
+const clamp = (v, a = 0, b = 100) => Math.max(a, Math.min(b, v));
+const dotPath = (rs, fx, fy) => rs.map(r => { const x = fx(r), y = fy(r); return x == null || y == null ? '' : 'M' + x.toFixed(1) + ' ' + y.toFixed(1) + 'h0'; }).join(' ');
+function heatCells(rs) {
+  const zb = [-0.83, 0.83, 1.5, 3.5], cw = (zb[1] - zb[0]) / 3, ch = (zb[3] - zb[2]) / 3;
+  const x0 = zb[0] - Math.ceil((zb[0] + 2.5) / cw - 1e-9) * cw, y0 = zb[3] + Math.ceil((6 - zb[3]) / ch - 1e-9) * ch;
+  const nc = Math.ceil((2.5 - x0) / cw - 1e-9), nr = Math.ceil(y0 / ch - 1e-9), grid = new Array(nc * nr).fill(0);
+  const SX = v => (v + 2.5) / 5 * 100, SY = v => (6 - v) / 6 * 120;
+  rs.forEach(r => {
+    const x = num(r[8]), y = num(r[7]); if (x == null || y == null) return;
+    const cx = Math.floor((x - x0) / cw), cy = Math.floor((y0 - y) / ch);
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+      const gx = cx + dx, gy = cy + dy; if (gx < 0 || gy < 0 || gx >= nc || gy >= nr) continue;
+      grid[gy * nc + gx] += (dx === 0 && dy === 0) ? 1 : (dx && dy ? 0.25 : 0.5);
+    }
+  });
+  const max = Math.max(...grid) || 1;
+  return grid.map((v, i) => { if (!v) return null; const ci = i % nc, cj = Math.floor(i / nc);
+    const lx = Math.max(-2.5, x0 + ci * cw), rx = Math.min(2.5, x0 + (ci + 1) * cw), ty = Math.min(6, y0 - cj * ch), by = Math.max(0, y0 - (cj + 1) * ch);
+    return { x: SX(lx).toFixed(2), y: SY(ty).toFixed(2), w: Math.max(0, SX(rx) - SX(lx)).toFixed(2), h: Math.max(0, SY(by) - SY(ty)).toFixed(2), o: (0.1 + 0.8 * v / max).toFixed(2), c: v / max > 0.66 ? '#E10600' : v / max > 0.33 ? '#F5342B' : '#FF8A85' }; }).filter(Boolean);
+}
+function buildArsenal(rows) {
+  const valid = (rows || []).filter(r => r[2] && !/^(undefined|other)$/i.test(r[2]) && num(r[3]) != null);
+  const total = valid.length;
+  const groups = {};
+  valid.forEach(r => (groups[r[2]] = groups[r[2]] || []).push(r));
+  const avg = (rs, i) => { const xs = rs.map(r => num(r[i])).filter(x => x != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; };
+  const pct = (rs, i) => { const xs = rs.map(r => num(r[i])).filter(x => x != null); if (!xs.length) return null; const m = xs.reduce((a, b) => a + b, 0) / xs.length; return Math.max(...xs) > 1 ? m : m * 100; };
+  const f = (x, dp, suf = '') => x == null ? '—' : x.toFixed(dp) + suf;
+  let ei = 0;
+  const list = Object.entries(groups).map(([name, rs]) => {
+    const velos = rs.map(r => num(r[3])).filter(x => x != null);
+    const ivb = avg(rs, 5), hb = avg(rs, 6), e = avg(rs, 11), iz = pct(rs, 12), cp = pct(rs, 13);
+    return {
+      name, n: rs.length, rs, c: PITCH_COLORS[name] || EXTRA_COLORS[ei++ % EXTRA_COLORS.length],
+      usage: (rs.length / total * 100).toFixed(1) + '%',
+      max: f(Math.max(...velos), 1), avg: f(avg(rs, 3), 1), spin: avg(rs, 4) == null ? '—' : Math.round(avg(rs, 4)).toLocaleString(),
+      eff: e == null ? '—' : (e <= 1.5 ? e * 100 : e).toFixed(1) + '%', gyro: f(avg(rs, 10), 1),
+      ivb: f(ivb, 1), hb: f(hb, 1), vaa: f(avg(rs, 9), 2), haa: f(avg(rs, 14), 2), vra: f(avg(rs, 15), 2), hra: f(avg(rs, 16), 2),
+      zone: f(iz, 1, '%'), zoneW: (iz || 0) + '%', comp: f(cp, 1, '%'), compW: (cp || 0) + '%',
+      ivbN: ivb ?? 0, hbN: hb ?? 0,
+      ...(() => {
+        const sd = i => { const xs = rs.map(r => num(r[i])).filter(x => x != null); if (xs.length < 2) return null; const m = xs.reduce((a, b) => a + b, 0) / xs.length; return Math.sqrt(xs.reduce((a, b) => a + (b - m) ** 2, 0) / (xs.length - 1)); };
+        const rh = avg(rs, 18), rsd = avg(rs, 19), ex = avg(rs, 20), vra = avg(rs, 15), hra = avg(rs, 16);
+        const dv = (() => { const xs = rs.map(r => num(r[15]) != null && num(r[9]) != null ? num(r[15]) - num(r[9]) : null).filter(x => x != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; })();
+        const dh = (() => { const xs = rs.map(r => num(r[16]) != null && num(r[14]) != null ? num(r[16]) - num(r[14]) : null).filter(x => x != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; })();
+        const axes = rs.map(r => num(r[17])).filter(x => x != null);
+        let ax = null; if (axes.length) { const sx = axes.reduce((a, d) => a + Math.sin(d * Math.PI / 180), 0), cx = axes.reduce((a, d) => a + Math.cos(d * Math.PI / 180), 0); ax = (Math.atan2(sx, cx) * 180 / Math.PI + 360) % 360; }
+        const th = ax == null ? null : (ax + 180) % 360;
+        const spin = avg(rs, 4) || 0, R = 78 * Math.min(spin, 3000) / 3000;
+        const tilt = th == null ? '—' : (() => { let mins = Math.round(th * 2 / 15) * 15; let hh = Math.floor(mins / 60) % 12, mm = mins % 60; return (hh === 0 ? 12 : hh) + ':' + String(mm).padStart(2, '0'); })();
+        return {
+          relH: f(rh, 2) + ' ft', relS: f(rsd, 2) + ' ft', ext: f(ex, 2) + ' ft', relHsd: f(sd(18) == null ? null : sd(18) * 12, 1) + '″', relSsd: f(sd(19) == null ? null : sd(19) * 12, 1) + '″',
+          relX: clamp(((rsd ?? 0) + 4) / 8 * 100) + '%', relY: clamp((7.5 - (rh ?? 0)) / 4.5 * 100) + '%',
+          relPath: dotPath(rs, r => num(r[19]) == null ? null : clamp((num(r[19]) + 4) / 8 * 100), r => num(r[18]) == null ? null : clamp((7.5 - num(r[18])) / 4.5 * 100)),
+          tunX: clamp(((hra ?? 0) + 6) / 12 * 100) + '%', tunY: clamp((4 - (vra ?? 0)) / 8 * 100) + '%',
+          tunPath: dotPath(rs, r => num(r[16]) == null ? null : clamp((num(r[16]) + 6) / 12 * 100), r => num(r[15]) == null ? null : clamp((4 - num(r[15])) / 8 * 100)),
+          tn: { vra, hra, vaa: avg(rs, 9), haa: avg(rs, 14) }, vra: f(vra, 2) + '°', hra: f(hra, 2) + '°', dv: f(dv, 2) + '°', dh: f(dh, 2) + '°', dvW: clamp(Math.abs(dv || 0) / 12 * 100) + '%', dhW: clamp(Math.abs(dh || 0) / 6 * 100) + '%',
+          tilt, axis: f(ax, 0) + '°', clkX2: (100 + R * Math.sin((th || 0) * Math.PI / 180)).toFixed(1), clkY2: (100 - R * Math.cos((th || 0) * Math.PI / 180)).toFixed(1), hasAxis: th != null
+        };
+      })(),
+      mvLabel: f(ivb, 1) + ', ' + f(hb, 1), aaLabel: f(avg(rs, 9), 1) + '°, ' + f(avg(rs, 14), 1) + '°',
+      aaX: clamp(((avg(rs, 14) ?? 0) + 7.5) / 15 * 100) + '%', aaY: clamp(-(avg(rs, 9) ?? 0) / 15 * 100) + '%',
+      mvPath: dotPath(rs, r => num(r[6]) == null ? null : clamp((num(r[6]) + 25) / 50 * 100), r => num(r[5]) == null ? null : clamp((25 - num(r[5])) / 50 * 100)),
+      aaPath: dotPath(rs, r => num(r[14]) == null ? null : clamp((num(r[14]) + 7.5) / 15 * 100), r => num(r[9]) == null ? null : clamp(-num(r[9]) / 15 * 100)),
+      locPath: dotPath(rs, r => num(r[8]) == null ? null : clamp((num(r[8]) + 2.5) / 5 * 100), r => num(r[7]) == null ? null : clamp((6 - num(r[7])) / 6 * 120, 0, 120))
+    };
+  }).sort((a, b) => b.n - a.n);
+  const placed = [];
+  list.forEach(p => {
+    const x = clamp((p.hbN + 25) / 50 * 100, 2, 98), y = clamp((25 - p.ivbN) / 50 * 100, 2, 98);
+    let dy = 0, guard = 0;
+    while (guard++ < 12 && placed.some(q => Math.abs(q.x - x) < 22 && Math.abs(q.y + q.dy / 4 - (y + dy / 4)) < 4)) dy += 14;
+    placed.push({ x, y, dy });
+    Object.assign(p, { x: x + '%', y: y + '%', lt: `translate(${x > 75 ? 'calc(-100% - 12px)' : '12px'}, calc(-50% + ${dy}px))` });
+  });
+  const locGroups = list.map(p => ({ name: p.name + ' Location Map', n: p.n + ' pitches', series: [{ c: p.c, path: p.locPath, name: p.name }], heat: heatCells(p.rs) }));
+  const placedA = [];
+  list.forEach(p => {
+    const x = parseFloat(p.aaX), y = parseFloat(p.aaY);
+    let dy = 0, guard = 0;
+    while (guard++ < 12 && placedA.some(q => Math.abs(q.x - x) < 22 && Math.abs(q.y + q.dy / 4 - (y + dy / 4)) < 4)) dy += 14;
+    placedA.push({ x, y, dy });
+    p.aaLt = `translate(${x > 75 ? 'calc(-100% - 12px)' : '12px'}, calc(-50% + ${dy}px))`;
+  });
+  const bounds = (iX, iY, pad, minSpan) => {
+    const xs = valid.map(r => num(r[iX])).filter(x => x != null), ys = valid.map(r => num(r[iY])).filter(x => x != null);
+    const fit = (vs) => { if (!vs.length) return [0, 1]; vs = vs.slice().sort((a, b) => a - b); let lo = vs[Math.floor(vs.length * 0.01)] - pad, hi = vs[Math.ceil(vs.length * 0.99) - 1] + pad; if (hi - lo < minSpan) { const m = (hi + lo) / 2; lo = m - minSpan / 2; hi = m + minSpan / 2; } return [lo, hi]; };
+    return { x: fit(xs), y: fit(ys) };
+  };
+  const ticks = ([lo, hi], vert, dp) => [0, 0.25, 0.5, 0.75, 1].map(f => { const v = lo + (hi - lo) * f; return vert ? { t: ((1 - f) * 100) + '%', v: v.toFixed(dp) } : { l: (f * 100) + '%', v: v.toFixed(dp) }; });
+  const rb = bounds(19, 18, 0.25, 1.5), tb = bounds(16, 15, 0.5, 4);
+  const sx = (b, v) => v == null ? null : clamp((v - b[0]) / (b[1] - b[0]) * 100), sy = (b, v) => v == null ? null : clamp((b[1] - v) / (b[1] - b[0]) * 100);
+  list.forEach(p => {
+    const av = i => { const xs = p.rs.map(r => num(r[i])).filter(x => x != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; };
+    p.relX = sx(rb.x, av(19)) + '%'; p.relY = sy(rb.y, av(18)) + '%';
+    p.relPath = dotPath(p.rs, r => sx(rb.x, num(r[19])), r => sy(rb.y, num(r[18])));
+    p.tunX = sx(tb.x, av(16)) + '%'; p.tunY = sy(tb.y, av(15)) + '%';
+    p.tunPath = dotPath(p.rs, r => sx(tb.x, num(r[16])), r => sy(tb.y, num(r[15])));
+  });
+  const relTX = ticks(rb.x, false, 1), relTY = ticks(rb.y, true, 1), tunTX = ticks(tb.x, false, 1), tunTY = ticks(tb.y, true, 1);
+  const allIZ = pct(valid, 12), allComp = pct(valid, 13);
+  const dates = valid.map(r => pD(r[1])).filter(Boolean).sort((a, b) => a - b);
+  const sessions = new Set(dates.map(d => d.toDateString())).size;
+  return { relTX, relTY, tunTX, tunTY, list, total, sessions, locGroups, zone: f(allIZ, 1, '%'), zoneW: (allIZ || 0) + '%', comp: f(allComp, 1, '%'), compW: (allComp || 0) + '%', first: dates[0], last: dates[dates.length - 1] };
+}
+const SCREEN = [[14, 'Right Ankle Dorsiflexion'], [15, 'Left Ankle Dorsiflexion'], [16, 'Right Hip External Rotation'], [17, 'Right Hip Internal Rotation'], [18, 'Left Hip External Rotation'], [19, 'Left Hip Internal Rotation'], [20, 'General Hip Bias'], [21, 'Shoulder Flexion'], [22, 'Shoulder External Rotation'], [23, 'Shoulder Internal Rotation'], [24, 'Cervical Rotation'], [25, 'Bodyweight Squat'], [26, 'Lunge & Reach'], [27, 'Lunge & Rotate'], [28, 'Back Bridge']];
+const TABS = [['main', 'Athlete Mainframe'], ['cmp', 'Athlete Score Comparison'], ['prog', 'Program Board'], ['evalr', 'VeloU On-Site Athlete Evaluation'], ['cmj', 'CMJ'], ['imtp', 'IMTP'], ['sj', 'Squat Jump'], ['cmjr', 'CMJR'], ['ppu', 'Plyo Pushup'], ['ei', 'Energy Interference'], ['et', 'Energy Transference']];
+
+class Component extends DCLogic {
+  state = { tab: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.tab')) || 'eval', range: 'All', athlete: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.athlete')) || 'Aidan Curry', athletes: [], d: null, status: 'loading', updated: null };
+
+  componentDidMount() {
+    this.onBeforePrint = () => this.sizePage();
+    window.addEventListener('beforeprint', this.onBeforePrint);
+    this.loadAthletes();
+    this.load();
+    const mins = this.props.refreshMinutes ?? 5;
+    if (mins > 0) this.timer = setInterval(() => this.load(true), mins * 60000);
+  }
+  componentDidUpdate() {
+    const url = this.state.d && this.state.d.main && this.state.d.main[0] ? this.state.d.main[0][7] : null;
+    if (!url || !/^https?:\/\//.test(url) || url === this._photoReq) return;
+    this._photoReq = url;
+    const im = new Image();
+    im.onload = () => { if (this._photoReq === url) this.setState({ photoOk: url }); };
+    im.onerror = () => {};
+    im.src = url;
+  }
+  componentWillUnmount() { clearInterval(this.timer); window.removeEventListener('beforeprint', this.onBeforePrint); }
+  sizePage() {
+    const W = 1180, b = document.body;
+    const prevW = b.style.width;
+    const hidden = [...document.querySelectorAll('[data-noprint]')];
+    const prevD = hidden.map(el => el.style.display);
+    hidden.forEach(el => { el.style.display = 'none'; });
+    document.querySelectorAll('[style*="overflow-x:auto"]').forEach(el => { el.dataset.ox = '1'; el.style.overflowX = 'visible'; });
+    b.style.width = W + 'px';
+    const H = Math.ceil(Math.max(b.scrollHeight, document.documentElement.scrollHeight)) + 4;
+    b.style.width = prevW;
+    hidden.forEach((el, i) => { el.style.display = prevD[i]; });
+    document.querySelectorAll('[data-ox]').forEach(el => { el.style.overflowX = 'auto'; delete el.dataset.ox; });
+    let st = document.getElementById('velou-page-size');
+    if (!st) { st = document.createElement('style'); st.id = 'velou-page-size'; document.head.appendChild(st); }
+    st.textContent = '@page{size:' + W + 'px ' + H + 'px;margin:0}';
+  }
+
+  q(sheet, tq, id = SHEET_ID, ms = 25000) {
+    // Data comes through the VeloU data proxy (Cloudflare Worker), which sits behind the site login.
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), ms);
+    const u = '/api/sheets?src=' + encodeURIComponent(id) + (sheet ? '&sheet=' + encodeURIComponent(sheet) : '') + (tq ? '&tq=' + encodeURIComponent(tq) : '');
+    return fetch(u, { credentials: 'same-origin', signal: ctl.signal, headers: { Accept: 'application/json' } })
+      .then(res => { if (!res.ok) throw 'network'; return res.json(); })
+      .then(r => {
+        clearTimeout(t);
+        if (r.status === 'error') throw r.errors;
+        const rows = r.table.rows.map(row => row.c.map(c => c ? (c.f ?? c.v) : null));
+        rows.cols = (r.table.cols || []).map(c => (c.label || '').trim());
+        return rows;
+      })
+      .catch(e => { clearTimeout(t); throw (e && e.name === 'AbortError') ? 'timeout' : (e || 'network'); });
+  }
+  async loadAthletes() {
+    try {
+      const rows = await this.q('Athlete Mainframe', 'select A');
+      this.setState({ athletes: [...new Set(rows.map(r => r[0] ? String(r[0]).replace(/[’‘`´]/g, "'").replace(/\s+/g, ' ').trim() : null).filter(Boolean))].sort() });
+    } catch (e) {}
+  }
+  async load(silent) {
+    const name = this.state.athlete;
+    if (!silent) this.setState({ status: 'loading' });
+    const nmPat = name.replace(/"/g, '').trim().toLowerCase().split('').map(ch => /['’‘`´]/.test(ch) ? "['’‘`´]?" : /\s/.test(ch) ? ' *' : /[.*+?^${}()|[\]\\]/.test(ch) ? '[' + ch + ']' : ch).join('').replace(/( \*)+/g, ' *');
+    const nmWhere = `lower(A) matches " *${nmPat} *"`;
+    const where = `select * where ${nmWhere}`;
+    const tmQ = `select A,C,J,M,P,W,X,Y,Z,AB,BN,BP,BR,BS,AC,N,O,Q,S,T,U where A = "${name.replace(/"/g, '')}"`;
+    const nm = name.replace(/"/g, '');
+    const tmP = Promise.all([
+      this.q(null, `select A,C,J,M,P,W,X,Y,Z,AB,BN,BP,BR,BS,AC,N,O where ${nmWhere}`, TRACKMAN_ID, 90000),
+      this.q(null, `select Q,S,T,U where ${nmWhere}`, TRACKMAN_ID, 90000).catch(() => null)
+    ]).then(([a, b]) => a ? a.map((r, i) => r.concat(b && b[i] ? b[i] : [null, null, null, null])) : null).catch(() => null);
+    this.setState({ xLoading: true });
+    this.q(null, `select * where ${nmWhere}`, EXTRA_ID, 90000).then(x => { if (name === this.state.athlete) this.setState({ x, xLoading: false, xErr: false }); }).catch(() => { if (name === this.state.athlete) this.setState({ xLoading: false, xErr: true }); });
+    const res = await Promise.all(TABS.map(([, t]) => this.q(t, where).catch(() => null)));
+    if (name !== this.state.athlete) return;
+    if (res.every(r => r == null)) { this.setState({ status: 'error' }); return; }
+    const d = {}; TABS.forEach(([k], i) => d[k] = res[i] || []);
+    d.tm = (this.state.d && this.state.d.tm) || [];
+    this.setState({ d, status: 'live', updated: new Date(), tmLoading: true });
+    const tm = await tmP;
+    if (name !== this.state.athlete) return;
+    this.setState(s => ({ d: { ...s.d, tm: tm || [] }, tmLoading: false }));
+  }
+
+  extraVals() {
+    const label = this.props.dataTabLabel ?? 'In-Season';
+    const xr = this.state.xRange || 'All';
+    const xc0 = this.state.x && this.state.x.cols ? this.state.x.cols.findIndex(l => /^gamedate$/i.test(String(l || '').trim())) : -1;
+    const years = xc0 < 0 ? [] : [...new Set(this.state.x.map(r => { const d = pD(r[xc0]); return d ? String(d.getFullYear()) : null; }).filter(Boolean))].sort((a, b) => b - a);
+    const xRangeOpts = ['All', ...years, '30 days', 'Last session'].map(r => ({ label: r === 'Last session' ? 'Last game' : r === 'All' ? 'All seasons' : r, onClick: () => this.setState({ xRange: r }), bg: xr === r ? '#E10600' : 'transparent', c: xr === r ? '#FFFFFF' : 'rgba(255,255,255,.82)' }));
+    const base = { xTitle: label, xRangeOpts, xHas: false, xEmpty: true, xSplits: [], xSideOpts: [], xCounts: [], xCountTitle: '', xVelo: [], xTypes: [], xScatters: [], xZones: [], xZoneBox: { l: '33%', w: '33%', t: '33%', h: '33%' }, xMeta: '' };
+    const x = this.state.x;
+    if (!x) return { ...base, xMeta: this.state.xLoading ? 'Loading game data…' : '', xEmptyMsg: this.state.xErr ? 'Could not load the in-season sheet. Make sure it is shared as "Anyone with the link can view".' : 'Loading game data…' };
+    const k = (x.cols || []).map(l => String(l || '').trim().toLowerCase());
+    const I = n => k.indexOf(n.toLowerCase());
+    const c = { d: I('gameDate'), t: I('pitchTypeFull'), bh: I('batterHand'), v: I('releaseVelocity'), v2: I('Vel'), sp: I('Spin'), sd: I('SpinDir'), ivb: I('IndVertBrk'), hb: I('HorzBrk'), vaa: I('VertApprAngle'), haa: I('HorzApprAngle'), vra: I('VertRelAngle'), hra: I('HorzRelAngle'), ext: I('Extension'), rh: I('RelHt'), x: I('x'), y: I('y'), st: I('Strike Count'), sl: I('Strike Looking Count'), sw: I('Swing Count'), wh: I('Whiff Count'), iz: I('IZ'), xw: I('xWOBA'), xi: I('xISO'), cs: I('Count Situation'), gid: I('gameId'), ev: I('exitVelocity'), ev2: I('ExitVel'), res: I('pitchResult'), cnt: I('count') };
+    const g = (r, i) => i < 0 ? null : num(r[i]);
+    let all = x.map(r => ({ d: pD(r[c.d]), t: String(r[c.t] ?? '').trim(), bh: String(r[c.bh] ?? '').trim().toUpperCase(), v: g(r, c.v) ?? g(r, c.v2), sp: g(r, c.sp), sd: g(r, c.sd), ivb: g(r, c.ivb), hb: g(r, c.hb), vaa: g(r, c.vaa), haa: g(r, c.haa), vra: g(r, c.vra), hra: g(r, c.hra), ext: g(r, c.ext), rh: g(r, c.rh), x: g(r, c.x), y: g(r, c.y), st: g(r, c.st) || 0, sl: g(r, c.sl) || 0, sw: g(r, c.sw) || 0, wh: g(r, c.wh) || 0, iz: g(r, c.iz), xw: g(r, c.xw), xi: g(r, c.xi), cs: String(r[c.cs] ?? '').trim().toLowerCase(), gid: r[c.gid], ev: g(r, c.ev) ?? g(r, c.ev2), res: String(r[c.res] ?? ''), cnt: String(r[c.cnt] ?? '').trim() }));
+    if (!all.length) return { ...base, xEmptyMsg: 'No in-season game data found for this athlete.' };
+    const ds = all.map(r => r.d).filter(Boolean);
+    if (/^\d{4}$/.test(xr)) all = all.filter(r => r.d && r.d.getFullYear() === +xr);
+    else if (ds.length && xr !== 'All') { const mx = new Date(Math.max(...ds)); const mn = xr === 'Season' ? new Date(mx.getFullYear(), 0, 1) : xr === '90 days' ? new Date(+mx - 90 * 864e5) : xr === '30 days' ? new Date(+mx - 30 * 864e5) : new Date(mx.getFullYear(), mx.getMonth(), mx.getDate()); all = all.filter(r => r.d && r.d >= mn); }
+    const rows = all.filter(r => r.t && !/^(null|undefined|other|unknown)$/i.test(r.t));
+    if (!rows.length) return { ...base, xEmptyMsg: 'No pitches in this date range.' };
+    const COL = { 'Four Seamer': '#E10600', 'Two Seamer': '#FF8A85', Sinker: '#FF8A85', Cutter: '#FFFFFF', Slider: '#56B7E6', Sweeper: '#A9DBF3', Curveball: '#88E0C6', 'Knuckle Curve': '#88E0C6', Slurve: '#3E8FB8', Changeup: '#C3F0E3', Splitter: '#B8C0C6', Knuckleball: '#5B6770' };
+    const cnt = {}; rows.forEach(r => cnt[r.t] = (cnt[r.t] || 0) + 1);
+    let ei = 0; const types = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).map(t => ({ name: t, c: COL[t] || EXTRA_COLORS[ei++ % EXTRA_COLORS.length] }));
+    const colOf = Object.fromEntries(types.map(t => [t.name, t.c]));
+    const avg = (rs, f) => { const xs = rs.map(f).filter(v => v != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; };
+    const f = (v, dp, suf = '') => v == null ? '—' : (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString('en-US') : v.toFixed(dp)) + suf;
+    const f3 = v => v == null ? '—' : v.toFixed(3).replace(/^0/, '').replace(/^-0/, '-');
+    const pc = (a, b) => b ? f(a / b * 100, 1, '%') : '—';
+    const stat = (rs, total) => { const n = rs.length, vs = rs.map(r => r.v).filter(v => v != null); const sum = key => rs.reduce((a, r) => a + r[key], 0);
+      return { usage: pc(n, total), max: vs.length ? Math.max(...vs).toFixed(1) : '—', avg: f(avg(rs, r => r.v), 1), str: pc(sum('st'), n), sl: pc(sum('sl'), n), wh: pc(sum('wh'), sum('sw')), csw: pc(sum('sl') + sum('wh'), n), xi: f3(avg(rs, r => r.xi)), xw: f3(avg(rs, r => r.xw)) }; };
+    const split = (title, rs) => ({ title, rows: types.filter(t => rs.some(r => r.t === t.name)).map(t => ({ name: t.name, c: t.c, ...stat(rs.filter(r => r.t === t.name), rs.length) })).sort((a, b) => parseFloat(b.usage) - parseFloat(a.usage)), total: stat(rs, rs.length), n: rs.length });
+    const side = this.state.xSide || 'All';
+    const xSideOpts = [['All', 'All hitters'], ['R', 'vs RHH'], ['L', 'vs LHH']].map(([k2, l]) => ({ label: l, onClick: () => this.setState({ xSide: k2 }), bg: side === k2 ? '#E10600' : 'transparent', c: side === k2 ? '#FFFFFF' : 'rgba(255,255,255,.82)' }));
+    const xSplits = [split('USAGE & OUTCOMES · ' + (side === 'R' ? 'VS RIGHT-HANDED HITTERS' : side === 'L' ? 'VS LEFT-HANDED HITTERS' : 'ALL HITTERS'), side === 'All' ? rows : rows.filter(r => r.bh.startsWith(side)))];
+    const sideRows = side === 'All' ? rows : rows.filter(r => r.bh.startsWith(side));
+    const xCountTitle = 'PITCH MIX & OUTCOMES BY COUNT · ' + (side === 'R' ? 'VS RHH' : side === 'L' ? 'VS LHH' : 'ALL HITTERS');
+    const xCounts = [['All Counts', () => true], ['First Pitch', r => r.cnt === '0-0'], ['Ahead', r => r.cs === 'ahead'], ['Even', r => r.cs === 'even'], ['Behind', r => r.cs === 'behind'], ['Two Strikes', r => /-2$/.test(r.cnt)], ['Full', r => r.cs === 'full' || r.cnt === '3-2']]
+      .map(([label, fn]) => [label, sideRows.filter(fn)]).filter(([, rs]) => rs.length).map(([label, rs]) => { const st = stat(rs, rs.length);
+        return { label, n: rs.length.toLocaleString('en-US') + ' pitches', str: st.str, wh: st.wh, csw: st.csw, xw: st.xw,
+          segs: types.map(t => ({ t, v: rs.filter(r => r.t === t.name).length })).filter(o => o.v).map(o => { const p = o.v / rs.length * 100; return { c: o.t.c, w: 'calc(' + p.toFixed(2) + '% - 2px)', lbl: p >= 7 ? Math.round(p) + '%' : '', tip: o.t.name + ' ' + p.toFixed(1) + '%' }; }) }; });
+    const byDay = (rs, agg) => { const m = new Map(); rs.forEach(r => { if (!r.d || r.v == null) return; const kk = +new Date(r.d.getFullYear(), r.d.getMonth(), r.d.getDate()); (m.get(kk) || m.set(kk, []).get(kk)).push(r.v); }); return [...m.entries()].sort((a, b) => a[0] - b[0]).map(([kk, vs]) => ({ d: new Date(kk), v: agg(vs) })); };
+    const vdefs = agg => types.map(t => ({ name: t.name, color: t.c, data: byDay(rows.filter(r => r.t === t.name), agg) })).filter(s => s.data.length);
+    const xVelo = [chart('AVERAGE PITCH VELOCITY BY GAME', vdefs(vs => vs.reduce((a, b) => a + b, 0) / vs.length), v => v.toFixed(1), ' mph', false, true), chart('MAX PITCH VELOCITY BY GAME', vdefs(vs => Math.max(...vs)), v => v.toFixed(1), ' mph', false, true)];
+    const xTypes = types.map(t => { const rs = rows.filter(r => r.t === t.name); return { ...t, spin: f(avg(rs, r => r.sp), 0), sd: f(avg(rs, r => r.sd), 1), ivb: f(avg(rs, r => r.ivb), 1), hb: f(avg(rs, r => r.hb), 1), vaa: f(avg(rs, r => r.vaa), 2), haa: f(avg(rs, r => r.haa), 2), vra: f(avg(rs, r => r.vra), 2), hra: f(avg(rs, r => r.hra), 2) }; });
+    const pctl = (xs, p) => { const s = xs.slice().sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.max(0, Math.round(p * (s.length - 1))))] : null; };
+    const nice = (lo, hi) => { const st = [0.05, 0.1, 0.25, 0.5, 1, 2, 2.5, 5, 10].find(s => (hi - lo) / s <= 5) || 10; return { lo: Math.floor(lo / st) * st, hi: Math.ceil(hi / st) * st, st }; };
+    const scatter = (title, unit, fx, fy, rng, filt = () => true, avgOnly = false) => {
+      const rs = rows.filter(filt).filter(r => fx(r) != null && fy(r) != null);
+      let [xl, xh, yl, yh] = rng || [];
+      if (avgOnly) { const ms = types.map(t => { const tr = rs.filter(r => r.t === t.name); return tr.length ? [avg(tr, fx), avg(tr, fy)] : null; }).filter(Boolean); const mxs = ms.map(m => m[0]), mys = ms.map(m => m[1]); const px = (Math.max(...mxs) - Math.min(...mxs)) * 0.25 || 0.1, py = (Math.max(...mys) - Math.min(...mys)) * 0.25 || 0.1; const a = nice(Math.min(...mxs) - px, Math.max(...mxs) + px), b = nice(Math.min(...mys) - py, Math.max(...mys) + py); [xl, xh, yl, yh] = [a.lo, a.hi, b.lo, b.hi]; }
+      else if (!rng) { const xs = rs.map(fx), ys = rs.map(fy); const a = nice(pctl(xs, .02) ?? 0, pctl(xs, .98) ?? 1), b = nice(pctl(ys, .02) ?? 0, pctl(ys, .98) ?? 1); [xl, xh, yl, yh] = [a.lo, a.hi === a.lo ? a.lo + a.st : a.hi, b.lo, b.hi === b.lo ? b.lo + b.st : b.hi]; }
+      const X = v => clamp((v - xl) / (xh - xl) * 100), Y = v => clamp(100 - (v - yl) / (yh - yl) * 100);
+      const tk = (lo, hi) => { const st = nice(lo, hi).st; const out = []; for (let v = Math.ceil(lo / st) * st; v <= hi + 1e-9; v += st) out.push(Math.round(v * 1000) / 1000); return out; };
+      const fl = v => String(Math.round(v * 100) / 100);
+      return { title, unit,
+        xt: tk(xl, xh).map(v => ({ l: X(v) + '%', label: fl(v), ls: v === 0 ? 'solid' : 'dashed', lc: v === 0 ? 'rgba(91,103,112,.55)' : 'rgba(91,103,112,.32)' })),
+        yt: tk(yl, yh).map(v => ({ t: Y(v) + '%', label: fl(v), ls: v === 0 ? 'solid' : 'dashed', lc: v === 0 ? 'rgba(91,103,112,.55)' : 'rgba(91,103,112,.32)' })),
+        pts: (() => {
+          const W = 460, base = types.map(t => { const tr = rs.filter(r => r.t === t.name); if (!tr.length) return null; const ax = avg(tr, fx), ay = avg(tr, fy); return { t, tr, ax, ay, px: X(ax), py: Y(ay) }; }).filter(Boolean);
+          const boxes = base.map(p => ({ x: p.px * W / 100 - 11, y: p.py * W / 100 - 11, w: 22, h: 22 }));
+          const hit = (r, list) => list.some(q => r.x < q.x + q.w + 3 && r.x + r.w + 3 > q.x && r.y < q.y + q.h + 3 && r.y + r.h + 3 > q.y);
+          const placed = [];
+          return base.map(p => {
+            const lbl = avgOnly ? p.ax.toFixed(2) + ', ' + p.ay.toFixed(2) : p.ax.toFixed(1) + ', ' + p.ay.toFixed(1);
+            const w = lbl.length * 7 + 16, hh = 22, cx = p.px * W / 100, cy = p.py * W / 100;
+            let best = null;
+            for (const d of [16, 32, 52, 76, 104]) {
+              for (const [ux, uy] of [[1, 0], [-1, 0], [0, -1], [0, 1], [1, -1], [-1, -1], [1, 1], [-1, 1]]) {
+                const lx = cx + ux * (d + w / 2) - w / 2 + (ux === 0 ? 0 : 0), ly = cy + uy * (d + hh / 2) - hh / 2;
+                const r = { x: ux === 0 ? cx - w / 2 : ux > 0 ? cx + d : cx - d - w, y: uy === 0 ? cy - hh / 2 : uy > 0 ? cy + d : cy - d - hh, w, h: hh };
+                if (r.x < 0 || r.y < 0 || r.x + r.w > W || r.y + r.h > W) continue;
+                if (!hit(r, placed) && !hit(r, boxes)) { best = r; break; }
+              }
+              if (best) break;
+            }
+            if (!best) best = { x: Math.min(W - w, Math.max(0, cx + 16)), y: Math.min(W - hh, Math.max(0, cy - hh / 2)), w, h: hh };
+            placed.push(best);
+            const lcx = best.x + w / 2, lcy = best.y + hh / 2;
+            const ex = Math.max(best.x, Math.min(cx, best.x + w)), ey = Math.max(best.y, Math.min(cy, best.y + hh));
+            return { c: p.t.c, path: avgOnly ? '' : dotPath(p.tr, r => X(fx(r)), r => Y(fy(r))), mx: p.px + '%', my: p.py + '%', sz: avgOnly ? '20px' : '14px', mg: avgOnly ? '-10px 0 0 -10px' : '-7px 0 0 -7px', lbl,
+              ll: (lcx / W * 100) + '%', lt2: (lcy / W * 100) + '%', lt: 'translate(-50%,-50%)',
+              lead: Math.hypot(ex - cx, ey - cy) > 20 ? 'M' + p.px.toFixed(2) + ' ' + p.py.toFixed(2) + 'L' + (ex / W * 100).toFixed(2) + ' ' + (ey / W * 100).toFixed(2) : '' };
+          });
+        })() };
+    };
+    const xScatters = [
+      scatter('MOVEMENT PROFILE BY PITCH TYPE', 'HB, IVB (in)', r => r.hb, r => r.ivb, [-25, 25, -25, 25]),
+      scatter('APPROACH ANGLE BY PITCH TYPE (STRIKES)', 'HAA, VAA (°)', r => r.haa, r => r.vaa, [-5, 5, -12, -2], r => r.st > 0),
+      scatter('AVG RELEASE CHARACTERISTICS BY PITCH TYPE', 'Extension, Release Height (ft)', r => r.ext, r => r.rh, null, undefined, true),
+      scatter('AVG RELEASE ANGLES BY PITCH TYPE (STRIKES)', 'HRA, VRA (°)', r => r.hra, r => r.vra, null, r => r.st > 0, true)
+    ];
+    const ZX = v => clamp((v + 2.5) / 5 * 100), ZY = v => clamp((3 - v) / 6 * 120, 0, 120);
+    const izr = rows.filter(r => r.iz === 1 && r.x != null && r.y != null);
+    let zb = [-0.83, 0.83, -1, 1];
+    if (izr.length > 30) zb = [pctl(izr.map(r => r.x), .01), pctl(izr.map(r => r.x), .99), pctl(izr.map(r => r.y), .01), pctl(izr.map(r => r.y), .99)];
+    const G = (() => { const cw = (zb[1] - zb[0]) / 3, ch = (zb[3] - zb[2]) / 3; const x0 = zb[0] - Math.ceil((zb[0] + 2.5) / cw - 1e-9) * cw, y0 = zb[3] + Math.ceil((3 - zb[3]) / ch - 1e-9) * ch; return { cw, ch, x0, y0, nc: Math.ceil((2.5 - x0) / cw - 1e-9), nr: Math.ceil((y0 + 3) / ch - 1e-9) }; })();
+    const cellRect = i => { const ci = i % G.nc, cj = Math.floor(i / G.nc); const lx = Math.max(-2.5, G.x0 + ci * G.cw), rx = Math.min(2.5, G.x0 + (ci + 1) * G.cw), ty = Math.min(3, G.y0 - cj * G.ch), by = Math.max(-3, G.y0 - (cj + 1) * G.ch); return { x: ZX(lx).toFixed(2), y: ZY(ty).toFixed(2), w: Math.max(0, ZX(rx) - ZX(lx)).toFixed(2), h: Math.max(0, ZY(by) - ZY(ty)).toFixed(2) }; };
+    const accum = (rs, val) => { const n = G.nc * G.nr, ws = new Array(n).fill(0), vs = new Array(n).fill(0);
+      rs.forEach(r => { if (r.x == null || r.y == null) return; const cx = Math.floor((r.x - G.x0) / G.cw), cy = Math.floor((G.y0 - r.y) / G.ch);
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) { const gx = cx + dx, gy = cy + dy; if (gx < 0 || gy < 0 || gx >= G.nc || gy >= G.nr) continue; const w = (dx === 0 && dy === 0) ? 1 : (dx && dy ? 0.25 : 0.5); ws[gy * G.nc + gx] += w; vs[gy * G.nc + gx] += w * (val ? val(r) : 1); } });
+      return { ws, vs }; };
+    const heat = rs => { const { ws } = accum(rs); const mx = Math.max(...ws) || 1;
+      return ws.map((v, i) => v ? { ...cellRect(i), o: (0.1 + 0.8 * v / mx).toFixed(2), c: v / mx > 0.66 ? '#E10600' : v / mx > 0.33 ? '#F5342B' : '#FF8A85' } : null).filter(Boolean); };
+    const dmgHeat = rs => { const { ws, vs } = accum(rs, r => r.xw); const wmax = Math.max(...ws) || 1;
+      return ws.map((w, i) => { if (w < 1) return null; const v = vs[i] / w; return { ...cellRect(i), o: (0.25 + 0.6 * Math.min(1, w / wmax * 2)).toFixed(2), c: v >= 0.5 ? '#E10600' : v >= 0.4 ? '#F5342B' : v >= 0.3 ? '#FF8A85' : '#56B7E6' }; }).filter(Boolean); };
+    const xZoneBox = { l: ZX(zb[0]) + '%', w: (ZX(zb[1]) - ZX(zb[0])) + '%', t: (ZY(zb[3]) / 1.2) + '%', h: ((ZY(zb[2]) - ZY(zb[3])) / 1.2) + '%' };
+    const dots = (rs, cfn) => { const grp = {}; rs.forEach(r => { const cc = cfn(r); (grp[cc] = grp[cc] || []).push(r); }); return Object.entries(grp).map(([cc, g2]) => ({ c: cc, path: dotPath(g2, r => r.x == null ? null : ZX(r.x), r => r.y == null ? null : ZY(r.y)) })); };
+    const HEAT_LEG = w => [{ c: '#FF8A85', label: 'Few ' + w }, { c: '#F5342B', label: 'Some' }, { c: '#E10600', label: 'Most ' + w }];
+    const xZones = types.map(t => { const rs = rows.filter(r => r.t === t.name && r.x != null && r.y != null); if (!rs.length) return null;
+      const wh = rs.filter(r => r.wh > 0), bip = rs.filter(r => r.xw != null && (r.ev != null || /in ?play/i.test(r.res)));
+      return { name: t.name, c: t.c, n: rs.length.toLocaleString('en-US') + ' pitches', panels: [
+        { title: 'LOCATION', n: rs.length.toLocaleString('en-US'), heat: heat(rs), dots: [], legend: HEAT_LEG('pitches') },
+        { title: 'WHIFFS', n: wh.length.toLocaleString('en-US'), heat: heat(wh), dots: dots(wh, () => t.c), legend: [{ c: t.c, label: 'Swing and miss' }, ...HEAT_LEG('whiffs')] },
+        { title: 'DAMAGE', n: bip.length.toLocaleString('en-US') + ' in play', heat: dmgHeat(bip), dots: dots(bip, r => r.xw >= 0.5 ? '#E10600' : r.xw >= 0.35 ? '#FF8A85' : 'rgba(255,255,255,.82)'), legend: [{ c: '#E10600', label: 'Dot: hard contact (xwOBA .500+)' }, { c: '#FF8A85', label: 'Dot: average (.350–.499)' }, { c: 'rgba(255,255,255,.82)', label: 'Dot: weak contact (under .350)' }, { c: '#E10600', label: 'Zone avg xwOBA .500+' }, { c: '#F5342B', label: 'Zone avg .400–.499' }, { c: '#FF8A85', label: 'Zone avg .300–.399' }, { c: '#56B7E6', label: 'Zone avg under .300' }] }
+      ] }; }).filter(Boolean);
+    const dd = rows.map(r => r.d).filter(Boolean).sort((a, b) => a - b);
+    const games = new Set(rows.map(r => r.gid ?? (r.d && r.d.toDateString()))).size;
+    return { ...base, xHas: true, xEmpty: false, xSplits, xSideOpts, xCounts, xCountTitle, xVelo, xTypes, xScatters, xZones, xZoneBox,
+      xMeta: rows.length.toLocaleString('en-US') + ' pitches · ' + games + (games === 1 ? ' game' : ' games') + (dd.length ? ' · ' + fD(dd[0]) + ' – ' + fD(dd[dd.length - 1]) : '') };
+  }
+
+  renderVals() {
+    const narrative = this.props.showNarrative ?? true;
+    const flagOn = this.props.highlightFlags ?? true;
+    const FLAG = flagOn ? C.flag : C.ink;
+    const d = this.state.d || {};
+    const main = (d.main || [])[0] || [];
+    const cmp = (d.cmp || [])[0] || [];
+    const prog = (d.prog || [])[0] || [];
+    const evalr = (d.evalr || []).slice().sort((a, b) => (pD(b[49]) || 0) - (pD(a[49]) || 0))[0] || [];
+    const v = (x, f = '—') => (x == null || x === '') ? f : x;
+    const n1 = x => x == null ? '—' : x.toFixed(1);
+    const pctCol = p => p == null ? '#5B6770' : p < 25 ? '#E10600' : p < 50 ? '#FFFFFF' : p < 75 ? '#56B7E6' : '#88E0C6';
+    const pctRow = (label, s) => { const p = num(s); return { label, v: p == null ? '—' : p.toFixed(1) + '%', w: (p || 0) + '%', c: pctCol(p) }; };
+
+    const h = num(main[13]);
+    const whr = num(main[15]);
+    const cmj = d.cmj || [], imtp = d.imtp || [], ei = d.ei || [];
+    const cmjLatest = cmj.slice().sort((a, b) => (pD(b[3]) || 0) - (pD(a[3]) || 0));
+    const tabFact = (rows, res, di = 3) => { rows = rows || []; const cols = rows.cols || []; let i = -1; for (const re of res) { i = cols.findIndex(l => re.test(l)); if (i >= 0) break; } if (i < 0) return null; const r = rows.slice().reverse().sort((a, b) => (pD(b[di]) || 0) - (pD(a[di]) || 0)).find(r => r[i] != null && r[i] !== ''); return r ? r[i] : null; };
+    const cmjFact = re => { const i = (cmj.cols || []).findIndex(l => re.test(l)); if (i < 0) return null; const r = cmjLatest.find(r => r[i] != null && r[i] !== ''); return r ? r[i] : null; };
+    const bw = ser(cmj, 3, 9), pp = ser(cmj, 3, 12), ppbm = ser(cmj, 3, 13), ci = ser(cmj, 3, 14), ecc = ser(cmj, 3, 21), ratio = ser(cmj, 3, 19);
+    const pvf = ser(imtp, 3, 8), pvfbm = ser(imtp, 3, 9), net = ser(imtp, 3, 12);
+    const sj = ser(d.sj, 3, 14);
+    const rjFirst = ser(d.cmjr, 3, 8), rjReb = ser(d.cmjr, 3, 19);
+    const pcon = ser(d.ppu, 3, 14), pecc = ser(d.ppu, 3, 17);
+    const ir = ser(ei, 12, 13), er = ser(ei, 12, 14), sc = ser(ei, 12, 15), gr = ser(ei, 12, 16), tot = ser(ei, 12, 17), armS = ser(ei, 12, 18);
+    const armScore = last(armS);
+    const kfmt = x => Math.abs(x) >= 1000 ? Math.round(x).toLocaleString('en-US') : String(Math.round(x * 10) / 10);
+    const pTile = (label, val, sub, span) => { const r = pctRow('', val); return { chartDisp: 'none', tileDisp: 'flex', lineDisp: 'none', stackDisp: 'none', span, tLabel: label, tV: r.v, tW: r.w, tC: r.c, tSub: sub, title: '', latest: '', chg: '', chgColor: '', series: [], dots: [], ticks: [], bars: [], extras: [], hasExtras: false }; };
+    const kpi = (label, s, fmt, unit = '', lowerBetter = false) => { const c = chgFirst(s); const bad = c != null && (lowerBetter ? c > 0 : c < 0); return { label, v: s.length ? fmt(last(s)) + unit : '—', d: c == null ? '—' : fChg(c), dc: bad ? FLAG : C.green }; };
+    const armK = (label, s) => { const c = chgFirst(s); return { label, v: s.length ? n1(last(s)) : '—', d: c == null ? '—' : fChg(c) + ' since first', dc: c != null && c < 0 ? FLAG : C.green }; };
+
+    const etRows = (d.et || []).slice().sort((a, b) => (pD(a[5]) || 0) - (pD(b[5]) || 0));
+    const etL = etRows[etRows.length - 1] || [], etP = etRows[etRows.length - 2] || etL;
+    const tr = (label, ai, ei2, pi) => { const est = num(etL[ei2]); return { label, est: est == null ? '—' : est.toFixed(1), w: est == null ? '0%' : Math.max(0, Math.min(100, (est - 50) * 2)) + '%', a: v(etP[ai]), b: v(etL[ai]), pct: pctRow('', cmp[pi]).v }; };
+
+    const screen = SCREEN.map(([i, label]) => ({ label, v: v(evalr[i]), raw: evalr[i] }))
+      .filter(s => s.raw && s.raw !== 'No Test')
+      .map(s => ({ label: s.label, v: s.v, c: s.v === 'Sufficient' ? C.muted : s.label === 'General Hip Bias' ? C.ink : FLAG, o: s.v === 'Sufficient' ? 2 : s.label === 'General Hip Bias' ? 1 : 0 }))
+      .sort((a, b) => a.o - b.o);
+    const LIM = flagOn ? '#FFFFFF' : C.ink;
+    const arm = evalr[7] || '';
+    const throwsLeft = /^l/i.test(arm);
+    const BH = [474, 380], FH = [512, 380], BK = [436, 466], FK = [568, 458], BA = [388, 556], FA = [612, 566];
+    const bk = throwsLeft ? { hipE: 18, hipI: 19, ank: 15, side: 'Left' } : { hipE: 16, hipI: 17, ank: 14, side: 'Right' };
+    const fr = throwsLeft ? { hipE: 16, hipI: 17, ank: 14, side: 'Right' } : { hipE: 18, hipI: 19, ank: 15, side: 'Left' };
+    const BODY = [
+      [24, 'Cervical Rotation', 'L', 80, 500, 186], [21, 'Shoulder Flexion', 'L', 150, 464, 208], [22, 'Shoulder External Rotation', 'L', 185, 464, 208], [23, 'Shoulder Internal Rotation', 'L', 220, 464, 208],
+      [bk.hipE, bk.side + ' Hip External Rotation', 'L', 320, ...BH], [bk.hipI, bk.side + ' Hip Internal Rotation', 'L', 355, ...BH], [26, 'Lunge & Reach', 'L', 390, 468, 394], [25, 'Bodyweight Squat', 'L', 450, ...BK], [bk.ank, bk.side + ' Ankle Dorsiflexion', 'L', 560, ...BA],
+      [28, 'Back Bridge', 'R', 210, 497, 270], [27, 'Lunge & Rotate', 'R', 280, 495, 322], [fr.hipE, fr.side + ' Hip External Rotation', 'R', 330, 512, 374], [fr.hipI, fr.side + ' Hip Internal Rotation', 'R', 365, 512, 386],
+      [20, 'General Hip Bias', 'R', 400, 493, 360], [fr.ank, fr.side + ' Ankle Dorsiflexion', 'R', 560, ...FA]
+    ];
+    const rank = { '#5B6770': 0, '#FFFFFF': 1, '#88E0C6': 2 };
+    const joints = {};
+    const bodyTests = BODY.map(([i, name, side, y, jx, jy]) => {
+      const raw = evalr[i];
+      const none = !raw || raw === 'No Test';
+      const c = none ? '#5B6770' : name === 'General Hip Bias' ? '#FFFFFF' : raw === 'Sufficient' ? '#88E0C6' : LIM;
+      const k = jx + ',' + jy;
+      const r = (x) => x === LIM ? 3 : rank[x];
+      if (!joints[k] || r(c) > r(joints[k].c)) joints[k] = { x: jx, y: jy, c };
+      const L = side === 'L';
+      return {
+        name, v: none ? 'No test' : raw, c, y, l: (L ? 3 : 64) + '%', t: (y / 6.2) + '%',
+        ry: y + 12, x0: L ? 30 : 640, x1: L ? 360 : 970,
+        nx: L ? 30 : 640, na: 'start', vx: L ? 360 : 970, va: 'end',
+        line: name === 'Cervical Rotation' ? `360,${y - 4} 440,${y - 4} ${jx},${jy}` : L ? `360,${y - 4} 378,${y - 4} ${jx},${jy}` : `640,${y - 4} 622,${y - 4} ${jx},${jy}`
+      };
+    });
+    const tested = bodyTests.filter(t => t.c !== '#5B6770' && t.name !== 'General Hip Bias');
+    const limited = tested.filter(t => t.c !== '#88E0C6').length;
+    const screenSummary = (arm ? `Throwing arm: ${arm} · ` : '') + (tested.length ? `${limited} of ${tested.length} tests limited` : '');
+
+    const ars = buildArsenal(filterRange(d.tm, this.state.range));
+    const pitches = ars.list.map(({ rs, ...rest }) => rest);
+    const tunnel = (() => {
+      const ps = pitches.filter(p => p.tn && p.tn.vra != null && p.tn.vaa != null && p.tn.hra != null && p.tn.haa != null);
+      const slope = (title, a, b) => { const vs = ps.flatMap(p => [p.tn[a], p.tn[b]]); if (!vs.length) return null; const lo = Math.min(...vs), hi = Math.max(...vs), pad = (hi - lo) * 0.08 || 1; const Y = v => 4 + (1 - (v - lo + pad) / (hi - lo + 2 * pad)) * 92;
+        const items = ps.map(p => ({ c: p.c, y1: Y(p.tn[a]) + '%', y2: Y(p.tn[b]) + '%', y2n: Y(p.tn[b]), d: 'M12 ' + Y(p.tn[a]).toFixed(2) + ' L70 ' + Y(p.tn[b]).toFixed(2), v2: p.tn[b].toFixed(1) + '°' })).sort((m, n) => m.y2n - n.y2n);
+        const G = 9, pos = items.map(it => it.y2n); for (let k = 0; k < 40; k++) { for (let i = 1; i < pos.length; i++) { const ov = G - (pos[i] - pos[i - 1]); if (ov > 0) { pos[i - 1] -= ov / 2; pos[i] += ov / 2; } } for (let i = 0; i < pos.length; i++) pos[i] = Math.max(5, Math.min(95, pos[i])); }
+        items.forEach((it, i) => { it.ly = pos[i] + '%'; it.lead = 'M71.5 ' + it.y2n.toFixed(2) + ' L78 ' + pos[i].toFixed(2); });
+        return { title, items, left: 'RELEASE', right: 'PLATE' }; };
+      const tunSlopes = [slope('VERTICAL (VRA → VAA)', 'vra', 'vaa'), slope('HORIZONTAL (HRA → HAA)', 'hra', 'haa')].filter(Boolean);
+      const ref = ps.find(p => /^(fastball|four ?seam)/i.test(p.name)) || ps.slice().sort((m, n) => n.n - m.n)[0];
+      const tunRows = ref ? ps.filter(p => p !== ref).map(p => { const rel = Math.hypot(p.tn.vra - ref.tn.vra, p.tn.hra - ref.tn.hra), pl = Math.hypot(p.tn.vaa - ref.tn.vaa, p.tn.haa - ref.tn.haa), sep = rel > 0.05 ? pl / rel : null;
+        return { name: p.name, c: p.c, rel: rel.toFixed(2) + '°', plate: pl.toFixed(2) + '°', sep: sep == null ? '—' : sep.toFixed(1) + '×', sc: sep == null ? C.muted : sep >= 3 ? C.green : sep >= 1.5 ? C.yellow : C.flag, sv: sep ?? 0 }; }).sort((m, n) => n.sv - m.sv) : [];
+      return { tunSlopes, tunRows, tunRefLabel: ref ? 'VS ' + ref.name.toUpperCase() : 'PITCH' };
+    })();
+    const veloChart = [chart('MAX VELOCITY BY DATE AND PITCH TYPE', ars.list.map(p => ({ name: p.name, color: p.c, data: ser(p.rs, 1, 3) })), x => x.toFixed(1), ' mph', false, true)];
+    veloChart[0].latest = ''; veloChart[0].chg = '';
+    const tab = this.state.tab;
+    const setTab = t => () => { try { localStorage.setItem('velou.tab', t); } catch (x) {} this.setState({ tab: t }); window.scrollTo(0, 0); };
+    const tabBtn = (t, label) => ({ label, onClick: setTab(t), c: tab === t ? '#FFFFFF' : 'rgba(255,255,255,.62)', bd: tab === t ? '#E10600' : 'transparent' });
+    const rangeOpts = RANGES.map(r => ({ label: r, onClick: () => this.setState({ range: r }), bg: this.state.range === r ? '#E10600' : 'transparent', c: this.state.range === r ? '#FFFFFF' : 'rgba(255,255,255,.82)' }));
+
+    const sel = this.state.sel || 'total';
+    const pick = k => () => this.setState({ sel: k });
+    const diff = (a, b) => { const x = num(a), y = num(b); return x == null || y == null ? null : x - y; };
+    const sd = x => x == null || Math.abs(x) < 0.005 ? '' : (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(2) + ' since first';
+    const PIL = {
+      potential: { name: 'ENERGY POTENTIAL', short: 'Energy Potential', sub: 'Body composition', color: C.indigo, score: main[16], first: main[37], pct: cmp[10], href: '#potential',
+        rows: [['Weight / height ratio', whr == null ? '—' : whr.toFixed(2), cmp[8]], ['Bodyweight', main[14] ? Math.round(num(main[14])) + ' lb' : '—', cmp[6]], ['Height', h ? h + ' in' : '—', cmp[4]]] },
+      production: { name: 'ENERGY PRODUCTION', short: 'Energy Production', sub: 'Force & power', color: C.green, score: main[20], first: main[38], pct: cmp[18], href: '#production',
+        rows: [['CMJ peak power / BM', v(main[17]) + ' W/kg', cmp[12]], ['CMJ concentric impulse', v(main[18]), cmp[14]], ['IMTP peak force / BM', v(main[19]) + ' N/kg', cmp[16]]] },
+      interference: { name: 'ENERGY INTERFERENCE', short: 'Energy Interference', sub: 'Arm strength', color: C.flag, score: main[31], first: main[40], pct: cmp[40], href: '#interference',
+        rows: [['Total shoulder strength', v(main[30]) + ' lb', cmp[38]], ['IR strength', v(main[26]) + ' lb', cmp[30]], ['ER strength', v(main[27]) + ' lb', cmp[32]], ['Scaption strength', v(main[28]) + ' lb', cmp[34]], ['Grip strength', v(main[29]) + ' lb', cmp[36]]] },
+      transfer: { name: 'ENERGY TRANSFER', short: 'Energy Transference', sub: 'Rotational capacity', color: '#56B7E6', score: main[25], first: main[39], pct: cmp[28], href: '#transference',
+        rows: [['2 lb medball', v(main[21]) + ' mph', cmp[20]], ['1 lb medball', v(main[22]) + ' mph', cmp[22]], ['Kneeling throw', v(main[23]) + ' mph', cmp[24]], ['Standing throw', v(main[24]) + ' mph', cmp[26]]] },
+      total: { name: 'TOTAL ENERGY SCORE', short: '', sub: 'What your body should be capable of throwing', color: C.indigo, score: main[32], first: main[41], pct: cmp[44], href: '',
+        rows: [['Energy Potential', v(main[16]), cmp[10]], ['Energy Production', v(main[20]), cmp[18]], ['Energy Interference', v(main[31]), cmp[40]], ['Energy Transference', v(main[25]), cmp[28]], ['Top throwing velocity', v(main[33]) + ' mph', cmp[42]], ['Energy delta', v(main[34]), cmp[46]]] }
+    };
+    const P = PIL[sel];
+    const det = {
+      name: P.name, short: P.short, sub: P.sub, color: P.color, score: v(P.score), href: P.href, hasLink: !!P.href,
+      meta: [sd(diff(P.score, P.first)), pctRow('', P.pct).v !== '—' ? pctRow('', P.pct).v + ' age pct' : ''].filter(Boolean).join(' · '),
+      rows: P.rows.map(([label, val, p]) => { const r = pctRow('', p); return { label, v: val, w: r.w, p: r.v }; })
+    };
+    {
+      const P = k => num(cmp[k]);
+      const ord = n => { const m = n % 100; return n + (m >= 11 && m <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th')); };
+      const fp = x => x == null ? '—' : ord(Math.round(x)) + ' percentile';
+      const good = [], fix = [];
+      const pillars = [['Energy Potential', 10], ['Energy Production', 18], ['Energy Interference', 40], ['Energy Transference', 28]].map(([n, k]) => ({ n, p: P(k) })).filter(x => x.p != null).sort((a, b) => b.p - a.p);
+      const limitedTests = bodyTests.filter(t => t.c === LIM).map(t => t.name);
+      const dl = num(main[34]);
+      if (sel === 'total') {
+        pillars.filter(x => x.p >= 60).slice(0, 2).forEach(x => good.push(`${x.n} ranks in the ${fp(x.p)} for age.`));
+        if (num(cmp[42]) >= 75) good.push(`Top velocity of ${v(main[33])} mph is in the ${fp(P(42))}.`);
+        pillars.filter(x => x.p < 50).slice(-2).reverse().forEach(x => fix.push(`${x.n} is the lowest-ranked area at the ${fp(x.p)}.`));
+        if (dl != null && Math.abs(dl) > 1) fix.push(dl < 0 ? `Throwing ${Math.abs(dl).toFixed(1)} mph above the Total Energy Score; building the physical inputs will help sustain that velocity.` : `Throwing ${dl.toFixed(1)} mph below what the body should produce; there is velocity still to unlock.`);
+        if (armScore != null && armScore < 85) fix.push(`Arm Score of ${armScore.toFixed(1)} is below the 85 threshold.`);
+        if (limitedTests.length) fix.push(`Movement screen flagged: ${limitedTests.join(', ')}.`);
+      } else if (sel === 'potential') {
+        if (whr != null) (whr >= 2.6 && whr <= 3 ? good : fix).push(`Weight-to-height ratio is ${whr.toFixed(2)}${whr < 2.6 ? `, below the 2.6–3.0 target. Adding about ${Math.round((2.6 - whr) * (h || 0))} lb would reach the low end of the range.` : whr > 3 ? ', above the 2.6–3.0 target.' : ', inside the 2.6–3.0 target.'}`);
+        if (P(4) >= 60) good.push(`Height is in the ${fp(P(4))}, a natural advantage for velocity.`);
+        const bwc = chgFirst(bw); if (bwc != null) (bwc > 0 ? good : fix).push(`Bodyweight has ${bwc >= 0 ? 'increased' : 'decreased'} ${Math.abs(bwc).toFixed(1)}% since the first test.`);
+        if (P(6) != null && P(6) < 40) fix.push(`Bodyweight is in the ${fp(P(6))} for age.`);
+      } else if (sel === 'production') {
+        const sub = [['Strength (PFV/BM)', 16], ['Power (PP/BM)', 12], ['Impulse', 14]].map(([n, k]) => ({ n, p: P(k) })).filter(x => x.p != null).sort((a, b) => b.p - a.p);
+        sub.filter(x => x.p >= 55).forEach(x => good.push(`${x.n} is in the ${fp(x.p)}.`));
+        sub.filter(x => x.p < 55).reverse().forEach(x => fix.push(`${x.n} is in the ${fp(x.p)}, the main area to build in the weight room.`));
+        [['CMJ peak power', pp], ['IMTP peak force', pvf], ['Squat jump height', sj]].forEach(([n, s0]) => { const c = chgFirst(s0); if (c != null && Math.abs(c) >= 2) (c > 0 ? good : fix).push(`${n} is ${c > 0 ? 'up' : 'down'} ${Math.abs(c).toFixed(1)}% since the first test.`); });
+      } else if (sel === 'interference') {
+        if (armScore != null) (armScore >= 85 ? good : fix).push(`Arm Score is ${armScore.toFixed(1)}, ${armScore >= 100 ? 'in the ideal range' : armScore >= 85 ? 'in the acceptable range' : 'below the 85 threshold'}.`);
+        const parts = [['IR', ir], ['ER', er], ['Scaption', sc], ['Grip', gr]].map(([n, s0]) => ({ n, c: chgFirst(s0), v: last(s0) })).filter(x => x.c != null).sort((a, b) => b.c - a.c);
+        if (parts.length) { const b0 = parts[0], w0 = parts[parts.length - 1]; if (b0.c > 0) good.push(`${b0.n} strength has improved the most, up ${b0.c.toFixed(1)}%.`); if (w0.c < 0) fix.push(`${w0.n} strength is down ${Math.abs(w0.c).toFixed(1)}% since the first test.`); }
+        const er0 = last(er), ir0 = last(ir); if (er0 && ir0) { const r = er0 / ir0; (r >= 0.85 ? good : fix).push(`ER:IR strength ratio is ${r.toFixed(2)}${r < 0.85 ? '; external rotators need to catch up to internal rotators.' : '.'}`); }
+      } else if (sel === 'transfer') {
+        const t = [['2 lb medball', 20], ['1 lb medball', 22], ['Kneeling throw', 24], ['Standing throw', 26]].map(([n, k]) => ({ n, p: P(k) })).filter(x => x.p != null).sort((a, b) => b.p - a.p);
+        t.filter(x => x.p >= 60).forEach(x => good.push(`${x.n} is in the ${fp(x.p)}.`));
+        t.filter(x => x.p < 50).reverse().forEach(x => fix.push(`${x.n} is in the ${fp(x.p)}${/medball/.test(x.n) ? ', pointing to sequencing.' : ', pointing to arm speed or torso-to-shoulder connection.'}`));
+      }
+      this._summary = { good: good.slice(0, 3), fix: fix.slice(0, 3) };
+    }
+    const node = (key, name, score, chg, l, t, clickable, big) => {
+      const on = key === sel, col = clickable ? PIL[key].color : C.ink;
+      return { name, score: v(score), chg, l, t, w: big ? '36%' : '31%', fs: big ? '34px' : '26px',
+        fillH: clickable ? Math.max(0, Math.min(100, num(score) || 0)) + '%' : '0%', fillC: col, fillO: on ? 0.75 : 0.38, lineO: clickable ? 1 : 0,
+        lc: on ? '#FFFFFF' : (clickable ? ({ total: '#FFFFFF', potential: '#FFFFFF', production: '#88E0C6', transfer: '#56B7E6', interference: '#FFFFFF' }[key] || '#FFFFFF') : C.muted), cc: on ? '#FFFFFF' : 'rgba(255,255,255,.82)',
+        bd: on ? '#FFFFFF' : (clickable ? col : 'rgba(91,103,112,.55)'), cursor: clickable ? 'pointer' : 'default',
+        shadow: on ? '0 6px 18px rgba(91,103,112,.18)' : 'none', onClick: clickable ? pick(key) : undefined };
+    };
+    const hexNodes = [
+      node('velo', 'TOP THROWING VELO', main[33], 'mph', '50%', '11%', false),
+      node('potential', 'ENERGY POTENTIAL', main[16], sd(diff(main[16], main[37])).replace(' since first', ''), '17%', '30%', true),
+      node('production', 'ENERGY PRODUCTION', main[20], sd(diff(main[20], main[38])).replace(' since first', ''), '83%', '30%', true),
+      node('total', 'TOTAL ENERGY', main[32], sd(diff(main[32], main[41])).replace(' since first', ''), '50%', '50%', true, true),
+      node('transfer', 'ENERGY TRANSFER', main[25], sd(diff(main[25], main[39])).replace(' since first', ''), '17%', '70%', true),
+      node('interference', 'ENERGY INTERFERENCE', main[31], sd(diff(main[31], main[40])).replace(' since first', ''), '83%', '70%', true),
+      node('delta', 'ENERGY DELTA', main[34], 'total − top velo', '50%', '89%', false)
+    ];
+    {
+      const vNode = hexNodes[0], dNode = hexNodes[6];
+      const velo = num(main[33]);
+      if (velo != null) Object.assign(vNode, { fillH: Math.max(0, Math.min(100, velo)) + '%', fillC: C.blue, fillO: 0.38, lineO: 1, bd: C.blue, lc: '#56B7E6' });
+      const dl = num(main[34]);
+      if (dl != null) {
+        const ad = Math.abs(dl);
+        const [col, tint, lab] = ad <= 1 ? ['#88E0C6', '#88E0C6', 'on track'] : ad <= 3 ? ['#56B7E6', '#56B7E6', 'monitor'] : ad <= 5 ? ['#FFFFFF', '#FFFFFF', 'gap'] : ['#E10600', '#E10600', 'large gap'];
+        Object.assign(dNode, { fillH: '100%', fillC: col, fillO: 0.38, lineO: 0, bd: col, lc: tint, chg: lab, cc: tint });
+      }
+    }
+    const st = this.state.status;
+    const injury = v(evalr[11], 'None');
+    const athletes = this.state.athletes.length ? this.state.athletes : [this.state.athlete];
+
+    return {
+      athlete: this.state.athlete,
+      athleteSel: this.state.athlete,
+      selKey: this.state.athlete + ':' + this.state.athletes.length,
+      ...(() => {
+        const pickA = a => { try { localStorage.setItem('velou.athlete', a); } catch (x) {} this.setState({ athlete: a, d: null, sOpen: false, sq: '', sIdx: 0 }, () => this.load()); };
+        const q = (this.state.sq || '').trim().toLowerCase();
+        const all = athletes.includes(this.state.athlete) ? athletes : [this.state.athlete, ...athletes];
+        const res = (q ? all.filter(a => a.toLowerCase().includes(q)).sort((x, y) => (y.toLowerCase().startsWith(q) - x.toLowerCase().startsWith(q))) : all).slice(0, 60);
+        const idx = Math.min(this.state.sIdx || 0, Math.max(0, res.length - 1));
+        return {
+          searchVal: this.state.sOpen ? (this.state.sq || '') : this.state.athlete,
+          searchOpen: !!this.state.sOpen,
+          noResults: !!this.state.sOpen && res.length === 0,
+          searchResults: res.map((a, i) => ({ v: a, pick: e => { e.preventDefault(); pickA(a); }, bg: i === idx ? 'rgba(225,6,0,.14)' : 'transparent', c: a === this.state.athlete ? '#FFFFFF' : '#FFFFFF' })),
+          onSearchFocus: e => { this.setState({ sOpen: true, sq: '', sIdx: 0 }); },
+          onSearch: e => this.setState({ sq: e.target.value, sOpen: true, sIdx: 0 }),
+          onSearchBlur: () => setTimeout(() => this.setState({ sOpen: false }), 120),
+          onSearchKey: e => {
+            if (e.key === 'ArrowDown') { e.preventDefault(); this.setState({ sIdx: Math.min(idx + 1, res.length - 1) }); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); this.setState({ sIdx: Math.max(idx - 1, 0) }); }
+            else if (e.key === 'Enter' && res[idx]) { pickA(res[idx]); e.target.blur(); }
+            else if (e.key === 'Escape') { this.setState({ sOpen: false }); e.target.blur(); }
+          }
+        };
+      })(),
+      refresh: () => this.load(),
+      printPdf: () => {
+        const prev = document.title;
+        document.title = 'VeloU Player Report - ' + this.state.athlete + (this.state.tab === 'pitch' ? ' - Pitching' : ' - Evaluation');
+        this.sizePage();
+        window.print();
+        setTimeout(() => { document.title = prev; }, 500);
+      },
+      statusColor: st === 'live' ? C.green : st === 'error' ? '#E10600' : 'rgba(255,255,255,.62)',
+      statusText: st === 'live' ? 'Live · updated ' + this.state.updated.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : st === 'error' ? 'Could not reach the sheet' : 'Loading live data…',
+      showNarrative: narrative, hexNodes: hexNodes.map(n => { const p = Math.max(0, Math.min(100, parseFloat(n.fillH) || 0)), c = /^#[0-9a-f]{6}$/i.test(n.fillC) ? n.fillC : '#FFFFFF', on = n.bd === '#FFFFFF'; return { ...n, fillC: c, dash: p + ' 100', pO: p > 0 ? 1 : 0, track: c + '2e', inner: on ? '#' + [1, 3, 5].map(i => Math.round(parseInt(c.slice(i, i + 2), 16) * 0.19 + 18 * 0.81).toString(16).padStart(2, '0')).join('') : '#000000' }; }), det, sumGood: (this._summary || {}).good || [], sumFix: (this._summary || {}).fix || [], hasGood: !!((this._summary || {}).good || []).length, hasFix: !!((this._summary || {}).fix || []).length,
+      name: v(main[0], this.state.athlete),
+      photoBg: this.state.photoOk && this.state.photoOk === main[7] ? 'url("' + main[7] + '")' : 'none',
+      hasPhoto: !!main[7] && this.state.photoOk === main[7],
+      position: v(main[12]), team: v(main[10]), level: v(main[9]), age: v(main[8]), residence: v(main[11]),
+      heightTxt: h ? `${Math.floor(h / 12)}′${Math.round(h % 12)}″` : '—',
+      bwTxt: main[14] ? Math.round(num(main[14])) + ' lb' : '—',
+      evalDate: fD(pD(evalr[49])),
+      headerFacts: [
+        { k: 'THROWING LEVEL', v: v(tabFact(d.et, [/throwing\s*level/i, /level\s*assignment/i, /^level$/i], 5), v(prog[27])), c: C.ink },
+        { k: 'PERFORMANCE LEVEL', v: v(cmjFact(/level\s*assignment|performance\s*level/i), v(prog[28])), c: C.ink },
+        { k: 'INJURY STATUS', v: injury, c: injury === 'None' ? C.ink : FLAG },
+        { k: 'PROGRAM', v: v(cmjFact(/program\s*recommendation|^program$/i), v(prog[29])), c: C.ink },
+        { k: 'PATTERNING FOCUS', v: v(main[44]), c: C.ink },
+        { k: 'THROWING FOCUS', v: v(main[45]), c: C.ink }
+      ],
+      tes: v(main[32]), topVelo: v(main[33]), delta: v(main[34]),
+      ep: v(main[16]), eprod: v(main[20]), ei: v(main[31]), et: v(main[25]),
+      pillars: [
+        { name: 'ENERGY POTENTIAL', sub: 'Body composition', score: v(main[16]), first: v(main[37]), pct: pctRow('', cmp[10]).v, pctW: pctRow('', cmp[10]).w, href: '#potential', color: C.indigo },
+        { name: 'ENERGY PRODUCTION', sub: 'Force & power', score: v(main[20]), first: v(main[38]), pct: pctRow('', cmp[18]).v, pctW: pctRow('', cmp[18]).w, href: '#production', color: C.green },
+        { name: 'ENERGY INTERFERENCE', sub: 'Arm strength', score: v(main[31]), first: v(main[40]), pct: pctRow('', cmp[40]).v, pctW: pctRow('', cmp[40]).w, href: '#interference', color: C.orange },
+        { name: 'ENERGY TRANSFER', sub: 'Rotational capacity', score: v(main[25]), first: v(main[39]), pct: pctRow('', cmp[28]).v, pctW: pctRow('', cmp[28]).w, href: '#transference', color: C.teal }
+      ],
+      whr: whr == null ? '—' : whr.toFixed(2),
+      whrColor: whr == null ? C.muted : (whr < 2.6 || whr > 3) ? FLAG : C.green,
+      whrDeg: whr == null ? -90 : (Math.max(0, Math.min(1, (whr - 2) / 1.6)) - 0.5) * 180,
+      whrNote: whr == null ? '' : (whr < 2.6 ? 'Below target range' : whr > 3 ? 'Above target range' : 'In target range') + ' · ' + (whr - 2.8 >= 0 ? '+' : '−') + Math.abs(whr - 2.8).toFixed(2) + ' from ideal',
+      potentialPct: [pctRow('Bodyweight', cmp[6]), pctRow('Height', cmp[4]), pctRow('W/H ratio', cmp[8])],
+      potentialCharts: [{ ...chart('BODYWEIGHT (LB)', [{ name: 'Bodyweight', color: C.indigo, data: bw }], x => x.toFixed(1)), hasExtras: true, extras: [{ label: 'MEASURED HEIGHT', v: h == null ? '—' : (Math.round(h * 10) / 10) + ' in', d: h == null ? '' : Math.floor(h / 12) + '′' + Math.round(h % 12) + '″', dc: C.muted }] }],
+      productionKpis: [
+        kpi('CMJ PEAK POWER', pp, x => Math.round(x).toLocaleString(), ' W'),
+        kpi('PEAK POWER / BM', ppbm, x => x.toFixed(1), ' W/kg'),
+        kpi('IMTP PEAK FORCE', pvf, x => Math.round(x).toLocaleString(), ' N'),
+        kpi('PVF / BM', pvfbm, x => x.toFixed(1), ' N/kg'),
+        kpi('NET FORCE', net, x => Math.round(x).toLocaleString(), ' N'),
+        kpi('CONC. IMPULSE', ci, x => x.toFixed(1)),
+        kpi('ECC. IMPULSE', ecc, x => x.toFixed(1)),
+        kpi('IMPULSE RATIO', ratio, x => x.toFixed(2))
+      ],
+      productionCharts: [
+        { ...chart('IMTP PEAK VERTICAL FORCE (N)', [{ name: 'Peak Vertical Force', color: C.green, data: pvf }], kfmt), span: 'span 2', hasExtras: true, extras: [
+          kpi('PVF / BM', pvfbm, x => x.toFixed(1), ' N/kg'),
+          kpi('NET FORCE', net, x => Math.round(x).toLocaleString(), ' N')] },
+        { ...chart('PLYO PUSHUP PEAK FORCE (N)', [{ name: 'Concentric', color: C.indigo, data: pcon }, { name: 'Eccentric', color: C.lightblue, data: pecc }], x => Math.round(x).toLocaleString()), hasExtras: true, extras: [
+          kpi('CONC. FORCE / BM', ser(d.ppu, 3, 15), x => x.toFixed(1), ' N/kg'),
+          kpi('PUSH UP HEIGHT', ser(d.ppu, 3, 8), x => x.toFixed(1), ' cm')] },
+        pTile('STRENGTH', cmp[16], '', 'auto'),
+        { ...chart('CMJ PEAK POWER (W)', [{ name: 'Peak Power', color: C.indigo, data: pp }], kfmt), hasExtras: true, extras: [
+          kpi('PEAK POWER / BM', ppbm, x => x.toFixed(1), ' W/kg')] },
+{ ...chart('SQUAT JUMP PEAK POWER (W)', [{ name: 'Peak Power', color: C.blue, data: ser(d.sj, 3, 15) }], kfmt), hasExtras: true, extras: [
+          kpi('PEAK POWER / BM', ser(d.sj, 3, 16), x => x.toFixed(1), ' W/kg'),
+          kpi('RSI-MODIFIED', ser(d.sj, 3, 12), x => x.toFixed(2))] },
+        { ...stackChart('CMJ REBOUND PEAK POWER (W)', [{ name: 'Takeoff Peak Power', color: C.indigo, tc: '#FFFFFF', data: ser(d.cmjr, 3, 9) }, { name: 'Rebound Peak Power', color: C.orange, tc: '#000000', data: ser(d.cmjr, 3, 20) }], kfmt), span: 'auto', hasExtras: true, extras: [
+          kpi('REBOUND CONTACT TIME', ser(d.cmjr, 3, 14), x => Math.round(x), ' ms', true),
+          kpi('REBOUND POWER / BM', ser(d.cmjr, 3, 21), x => x.toFixed(1), ' W/kg')] },
+        pTile('POWER', cmp[12], '', 'auto'),
+        { ...chart('CMJ CONCENTRIC & ECCENTRIC IMPULSE (N·S)', [{ name: 'Concentric Impulse', color: C.indigo, data: ci }, { name: 'Eccentric Braking Impulse', color: C.orange, data: ecc }], x => x.toFixed(1)), hasExtras: true, extras: [
+          kpi('IMPULSE RATIO', ratio, x => x.toFixed(2))] },
+        stackChart('CMJ CONCENTRIC & ECCENTRIC PEAK VELOCITY (M/S)', [{ name: 'Concentric Peak Velocity', color: C.indigo, tc: '#FFFFFF', data: ser(cmj, 3, 18) }, { name: 'Eccentric Peak Velocity (abs)', color: C.lightblue, tc: '#000000', data: ser(cmj, 3, 20).map(p => ({ d: p.d, v: Math.abs(p.v) })) }], x => x.toFixed(2)),
+        pTile('IMPULSE', cmp[14], '', 'auto')
+      ],
+      productionPct: [pctRow('PRODUCTION OVERALL', cmp[18])],
+      armScore: armScore == null ? '—' : armScore.toFixed(1),
+      ...(() => {
+        const z = armScore == null ? null : armScore >= 100 ? 'ideal' : armScore >= 85 ? 'ok' : armScore >= 70 ? 'risk' : 'severe';
+        const col = { ideal: '#88E0C6', ok: '#56B7E6', risk: '#FFFFFF', severe: '#E10600' };
+        const lab = { ideal: 'IDEAL', ok: 'ACCEPTABLE', risk: 'AT RISK', severe: 'SEVERE RISK' };
+        const op = k => z == null || k === z ? 1 : 0.3;
+        return {
+          armColor: z ? col[z] : C.muted, armZone: z ? lab[z] : '',
+          armOp: { severe: op('severe'), risk: op('risk'), ok: op('ok'), ideal: op('ideal') },
+          armPos: armScore == null ? '0%' : Math.max(0, Math.min(100, (armScore - 50) / 70 * 100)) + '%'
+        };
+      })(),
+      arm: [armK('TOTAL SHOULDER', tot), armK('IR STRENGTH', ir), armK('ER STRENGTH', er), armK('SCAPTION', sc), armK('GRIP', gr)].map((a, i) => ({ ...a, span: i === 0 ? 'span 2' : 'auto' })),
+      armCharts: [
+        chart('TOTAL SHOULDER STRENGTH (LB)', [{ name: 'Total Shoulder Strength', color: C.orange, data: tot }], x => x.toFixed(1)),
+        chart('SHOULDER STRENGTH BREAKOUT (LB)', [{ name: 'IR', color: C.indigo, data: ir }, { name: 'ER', color: C.green, data: er }, { name: 'Scap', color: C.orange, data: sc }, { name: 'Grip', color: C.lightblue, data: gr }], x => x.toFixed(1))
+      ],
+      etPrevDate: fMD(pD(etP[5])).toUpperCase() || 'PREV',
+      etLastDate: fMD(pD(etL[5])).toUpperCase() || 'LATEST',
+      transferCharts: [['1 LB MEDBALL (MPH)', 2], ['2 LB MEDBALL (MPH)', 1], ['HALF KNEELING THROW (MPH)', 3], ['SPLIT STANCE THROW (MPH)', 4]]
+        .map(([t, i]) => chart(t, [{ name: t, color: C.teal, data: ser(d.et, 5, i) }], x => x.toFixed(0), '', true)),
+      transfer: [tr('1 lb Medball', 2, 9, 22), tr('2 lb Medball', 1, 8, 20), tr('Half Kneeling', 3, 10, 24), tr('Split Stance', 4, 11, 26)],
+      screen,
+      bodyTests, bodyJoints: Object.values(joints), screenSummary,
+      isEval: tab !== 'pitch' && tab !== 'data', isPitch: tab === 'pitch', isData: tab === 'data',
+      tabs: [tabBtn('eval', 'Performance Development'), tabBtn('pitch', 'Pitching Development'), tabBtn('data', this.props.dataTabLabel ?? 'In-Season')],
+      ...this.extraVals(),
+      rangeOpts,
+      hasArsenal: pitches.length > 0, noArsenal: this.state.d != null && !this.state.tmLoading && pitches.length === 0,
+      tmLoading: !!this.state.tmLoading, pitches, veloChart, ...tunnel, locGroups: ars.locGroups,
+      arsenalMeta: this.state.tmLoading ? 'Loading Trackman pitches…' : pitches.length ? `${ars.total.toLocaleString()} pitches · ${ars.sessions} sessions · ${fD(ars.first)} – ${fD(ars.last)}` : '',
+      relTX: ars.relTX || [], relTY: ars.relTY || [], tunTX: ars.tunTX || [], tunTY: ars.tunTY || [],
+      totalZone: ars.zone, totalZoneW: ars.zoneW, totalComp: ars.comp, totalCompW: ars.compW
+    };
+  }
+}
+</script>
+</body>
+</html>
