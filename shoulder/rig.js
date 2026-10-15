@@ -130,7 +130,7 @@ function buildHumerus(m, withForearm = true) {
 export class Rig {
   constructor(opts = {}) {
     this.root = new Group();
-    this.pose = { elev: 0, plane: 40, er: 0, elbow: 90, pron: 90, scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, rhythm: true, gain: 1, retro: 30, kyph: 35, fwd: 0, scapAuto: true };
+    this.pose = { elev: 0, plane: 40, er: 0, elbow: 90, pron: 90, scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, rhythm: true, gain: 1, antGlide: 0, supGlide: 0, retro: 30, kyph: 35, fwd: 0, scapAuto: true };
     this.mats = { bone: mat(COL.bone, { side: THREE.DoubleSide }), boneDark: mat(COL.boneDark, { side: THREE.DoubleSide }) };
     this.cats = {};              // category -> Group  (for visibility toggles)
     ['thorax', 'scapula', 'clavicle', 'humerus', 'muscles', 'ligaments', 'cartilage', 'soft', 'left', 'overlay'].forEach(k => {
@@ -413,6 +413,7 @@ export class Rig {
     const qW = q1.multiply(qa);
     const qS = new THREE.Quaternion(); this.scapContent.getWorldQuaternion(qS);
     this.humRoot.quaternion.copy(qS.invert().multiply(qW));
+    this.humRoot.position.copy(this.HS).add(v(0, P.supGlide || 0, -(P.antGlide || 0)));
     // retroversion: head frame rotates about the shaft, shaft is displaced so head centre stays put
     const d = P.retro * RAD;
     const ho = v(-2.0 * Math.cos(d), 4.2, 2.0 * Math.sin(d));

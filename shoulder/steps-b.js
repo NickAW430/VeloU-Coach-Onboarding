@@ -188,19 +188,22 @@ export function step7(host, panel) {
   const colorTog = toggle('Color muscles: tight vs long/weak', true, on => { S.color = on; colorize(); });
   const legend = h('div', { class: 'legend' }, h('span', { style: '--c:#E0C04A' }, h('i'), 'Tight / over-active'), h('span', { style: '--c:#7EB6FF' }, h('i'), 'Long / under-active'));
   const reachBtn = h('button', { class: 'btn', type: 'button' }, '▶ Overhead reach test');
+  const resetBtn = h('button', { class: 'btn', type: 'button' }, '↺ Reset arm');
   const detail = card();
   const checks = card();
   panel.append(card(h('span', { class: 'label' }, 'Pattern'), presets.el), detail,
-    card(h('span', { class: 'label' }, 'Build your own'), sl.k.el, sl.f.el, sl.p.el, sl.t.el, sl.er.el, sl.sh.el, colorTog.el, legend, reachBtn), checks);
+    card(h('span', { class: 'label' }, 'Build your own'), sl.k.el, sl.f.el, sl.p.el, sl.t.el, sl.er.el, sl.sh.el, colorTog.el, legend, h('div', { class: 'btns' }, reachBtn, resetBtn)), checks);
 
   function gain() { return Math.max(0.45, Math.min(1, 1 - Math.max(0, S.k - 35) * 0.011 - S.f * 0.12 - Math.max(0, S.p) * 0.14 - Math.max(0, -S.t) * 0.01)); }
   function push() {
     if (!V) return;
+    S.reachMsg = null;
     V.rig.setPose({ kyph: S.k, fwd: S.f, prot: S.p, scapTilt: S.t, er: S.er, shrug: S.sh, gain: gain(), elev: V.rig.pose.elev });
     readout();
   }
   function readout() {
     if (!V || plumbZ === null) return;
+    if (S.reachMsg) { ro.innerHTML = S.reachMsg; return; }
     const r = V.rig;
     const head = (skull0 - r.tpt('skull').z);
     const gap = r.clearance() * 10;
@@ -233,8 +236,14 @@ export function step7(host, panel) {
     if (!V) return;
     const maxE = Math.round(Math.max(110, 178 - Math.max(0, S.k - 35) * 0.9 - S.f * 12 - Math.max(0, S.p) * 10 + Math.max(0, S.t) * 0.3));
     tweenPose(V, { elev: 0, plane: 40 }, 250, null, () => tweenPose(V, { elev: maxE, plane: 40 }, 1600, null, () => {
-      ro.innerHTML = `Reaches about <b>${maxE}°</b> before the model runs out of scapular help.<br><span class="muted">${maxE < 160 ? 'Expect the back to arch and the ribs to flare to make up the difference.' : 'Within normal reach.'}</span>`;
+      S.reachMsg = `Reaches about <b>${maxE}°</b> before the model runs out of scapular help.<br><span class="muted">${maxE < 160 ? 'Expect the back to arch and the ribs to flare to make up the difference.' : 'Within normal reach.'}</span>`;
+      readout();
     }));
+  });
+  resetBtn.addEventListener('click', () => {
+    if (!V) return;
+    S.reachMsg = null;
+    tweenPose(V, { elev: 0, plane: 40 }, 700, null, () => readout());
   });
   applyPreset('neutral');
 
@@ -258,53 +267,58 @@ export function step7(host, panel) {
   });
 }
 
-/* ======================= STEP 8 · DYSKINESIS ======================= */
-const DYS = {
-  normal: { name: 'Normal / symmetric', pose: {}, text: 'Smooth upward rotation and posterior tilt, medial border stays on the ribs, no early shrug.',
-    drivers: '—', test: 'Use as a reference. Check both sides under load and at slow tempo.', train: 'Maintain. Own the end range under fatigue.' },
-  type1: { name: 'Type I · Inferior angle prominence', pose: { scapTilt: -18, prot: 0.15 }, mark: ['S', -7.1, -9.5, 0.4], markText: 'Inferior angle tips out', text: 'The inferior angle tips off the ribs because the scapula is anteriorly tilted about a horizontal axis.',
-    drivers: 'Tight pec minor, weak lower trapezius, a flexed thoracic spine, tight posterior capsule pulling the scapula into tilt.',
-    test: 'Scapular assistance test. Pec minor length in supine. Prone Y with the inferior angle watched.', train: 'Pec minor release, T-spine extension, lower trap and serratus in the right position, then load.' },
-  type2: { name: 'Type II · Medial border prominence', pose: { scapIR: 24, scapTilt: -6, prot: 0.35 }, mark: ['S', -9.7, -3.5, 0.4], markText: 'Medial border lifts', text: 'The whole medial border lifts off the ribs from internal rotation of the scapula about a vertical axis. Classic winging picture.',
-    drivers: 'Serratus anterior weakness or fatigue, long thoracic nerve involvement, tight pec minor, protraction habit.',
-    test: 'Wall push-up and push-up plus. Resisted forward punch. Scapular retraction test.', train: 'Serratus-driven work: wall slides with lift-off, push-up plus progressions, bear crawl holds.' },
-  type3: { name: 'Type III · Superior border / shrug', pose: { shrug: 2.8, scapTilt: -4, scapUp: -4 }, mark: ['S', -8.4, 6.9, 0.4], markText: 'Rides up early', text: 'The scapula rides up early. Upper trapezius and levator do the lifting; the scapula barely rotates up.',
-    drivers: 'Rotator cuff weakness or pain (the scapula "cheats"), poor lower trap and serratus, AC joint irritation.',
-    test: 'Resisted elevation at 90° with the shrug watched. Strength of ER at the side. Scapular assistance test.', train: 'Cuff capacity first, then lower trap and serratus; learn shrug-off cueing and lighter loads.' },
-  sick: { name: 'SICK scapula', pose: { prot: 0.8, shrug: -1.4, scapTilt: -12, scapIR: 8 }, mark: ['S', 3.6, 1.4, -5.3], markText: 'Coracoid pain / low, forward', text: 'Scapular malposition, inferior border prominence, coracoid pain, and dyskinesis. The dominant shoulder sits low and forward.',
-    drivers: 'Repeated high-load overhead use, pec minor shortening, fatigue of the lower trap and serratus, posterior capsule tightness.',
-    test: 'Side-to-side comparison of scapular height and position, coracoid tenderness, pec minor length, lateral scapular slide.', train: 'Restore pec minor and posterior capsule, then scapular control in tilt and upward rotation, then rebuild throwing volume.' },
-  wing: { name: 'Long thoracic palsy (true winging)', pose: { scapIR: 34, scapTilt: -10, prot: 0.25 }, mark: ['S', -9.7, -3.5, 0.4], markText: 'Marked winging', text: 'Marked medial border winging from serratus denervation. Worsens in forward elevation and pushing.',
-    drivers: 'Long thoracic nerve injury (blunt, traction, or viral). Not a training problem.',
-    test: 'Wall push-up, forward elevation with resistance, inspect from behind.', train: 'Refer. Training waits for medical clearance and a plan.' },
+/* ======================= STEP 8 · SHOULDER SYNDROMES (from the VeloU shoulder exam) ======================= */
+const NORMS = [['3"', 'Medial border to spine, parallel to it'], ['T2–T7', 'Where the scapula sits'], ['30°', 'Scapula rotated to the frontal plane, flat on the thorax'],
+  ['< 1/3', 'Humeral head in front of the acromion'], ['T1', 'Shoulders sit slightly below this horizontal line'], ['Palms in', 'Facing the body, humerus in neutral rotation']];
+const SYN = {
+  normal: { name: 'Normal reference', short: 'Normal', pose: {}, look: ['Medial border about 3" from the spine and parallel to it', 'Scapula sits T2 to T7, flat on the thorax', 'Palms face the body'], confirm: [], inh: [], act: [], use: [], avoid: [] },
+  'downward-rotation': { name: 'Scapular downward rotation', short: 'Downward rotation', pose: { scapUp: -9, shrug: -0.8, gain: 0.45 }, mark: ['S', -7.1, -9.5, 0.4], markText: 'Inferior angle sits close to the spine',
+    look: ['Inferior medial border closer to the spine than the superior border', 'Shoulders lower at the acromion end than at the neck'],
+    confirm: ['After 30° abduction and 60° flexion, the scapula re-enters downward rotation instead of continuing upward', 'Decreased humeral elevation in the final phase of flexion', 'Inferior angle doesn\'t reach midaxillary at the end of upward rotation'],
+    inh: ['Rhomboids', 'Levator scapula', 'Pectoralis minor', 'Latissimus dorsi', 'Deltoid', 'Supraspinatus'], act: ['Upper trapezius', 'Lower trapezius', 'Serratus anterior'],
+    use: ['Vertical shrugs', 'Quadruped moves', 'Wall slide variations', 'Landmine presses', 'Shoulder flexion'], avoid: ['Shrugs', 'Heavy carries', 'Frequent deadlifting', 'Pull / chin-up', 'Excessive scapular adduction'] },
+  depression: { name: 'Scapular depression', short: 'Depression', pose: { shrug: -2.4, gain: 0.75 }, mark: ['S', -8.4, 6.9, 0.4], markText: 'Superior angle below T2',
+    look: ['Like downward rotation, but rhomboids and levator scapulae usually aren\'t short', 'Long neck; superior angle below T2', 'Lat dominance may be interfering with elevation'],
+    confirm: ['Active-assisted scapular elevation separates out associated pain', 'Upper trap doesn\'t elevate the shoulder during elevation', 'Pain in the upper trap region'],
+    inh: ['Pectoralis minor', 'Latissimus dorsi', 'Pectoralis major'], act: ['Upper trapezius', 'Middle trapezius', 'Levator scapula'],
+    use: ['Wall-assisted flexion', 'Quadruped moves', 'Wall slide variations', 'Landmine presses', 'OH carry'], avoid: ['Shrugs', 'Heavy carries', 'Frequent deadlifting', 'Pull / chin-up', 'Prone trap raises'] },
+  abduction: { name: 'Scapular abduction', short: 'Abduction', pose: { prot: 1.0 }, mark: ['S', -9.7, -3.5, 0.4], markText: 'Medial border more than 3" from spine',
+    look: ['Medial border more than 3" from the spine', 'Scapula rotated more than 30° into the frontal plane'],
+    confirm: ['Measure medial border to spine', 'Active-assisted adduction produces pain in shoulder flexion'],
+    inh: ['Pectoralis major', 'Pectoralis minor', 'Deltoid', 'Supraspinatus', 'Serratus anterior'], act: ['Upper trapezius', 'Middle trapezius', 'Rhomboids'],
+    use: ['Horizontal rowing variations', 'Prone abduction', 'Heavy carries', 'Adducted goblet position'], avoid: ['Zercher positioning', 'Serratus-dominant exercises', 'Overhead pressing'] },
+  winging: { name: 'Scapular winging and tilting', short: 'Winging / tilting', pose: { scapIR: 22, scapTilt: -14, gain: 0.6 }, mark: ['S', -9.7, -3.5, 0.4], markText: 'Medial border / inferior angle protrude',
+    look: ['Inferior angle protrudes (tilting)', 'Thoracic kyphosis (tilting)', 'Medial border protrudes from the thorax (winging)', 'Flat thoracic spine (winging)'],
+    confirm: ['Scapula and humerus move 1:1', 'Insufficient posterior tilt even with passive guidance'],
+    inh: ['Pectoralis minor', 'Rotator cuff', 'Deltoid', 'Serratus anterior*'], act: ['Upper trapezius', 'Lower trapezius', 'Middle trapezius', 'Serratus anterior*', 'Rhomboids'],
+    use: ['Prone trap raises', 'Wall slide variations', 'Quadruped movements', 'Wall press / push-up'], avoid: ['Anything that lets winging continue during the rep'],
+    note: '*Serratus anterior appears on both sides of the poster.' },
+  'anterior-glide': { name: 'Humeral anterior glide', short: 'Anterior glide', pose: { antGlide: 1.7, scapTilt: -10 }, mark: ['R', 0, 0, -2.9], markText: 'Head sits forward of the acromion',
+    look: ['More than 1/3 of the humeral head in front of the acromion', 'Distal humerus posterior to the proximal end', 'Usually with an anteriorly tilted scapula'],
+    confirm: ['Passively correcting the glide reduces symptoms', 'A small indentation below the acromion on the back of the shoulder'],
+    inh: ['Pectoralis minor', 'Pectoralis major'], act: ['External rotators'],
+    use: ['Banded ER + IR', 'Supine flexion', 'Horizontal row', 'T-spine mobility', 'Quadruped'], avoid: ['Overhead pressing', 'Rowing with anterior glide', 'Heavy IR focus'] },
+  'superior-glide': { name: 'Humeral superior glide', short: 'Superior glide', pose: { supGlide: 1.1 }, mark: ['R', 0, 2.6, 0], markText: 'Head rides up into the acromion',
+    look: ['Humeral head rides up into the acromion during elevation, flexion, and abduction'],
+    confirm: ['Sharp pain at the front and side of the acromion in abduction and rotation', 'Correcting depressed shoulders doesn\'t change humeral head height', 'Symptoms in flexion drop with the elbows bent'],
+    inh: ['Deltoid', 'Teres minor', 'Supraspinatus'], act: ['Supraspinatus', 'Infraspinatus'],
+    use: ['Wall slides + lift-offs', 'Prone ER lift-offs', 'Prone IR without superior glide', 'Prone trap raises'], avoid: ['ER in adduction', 'Abduction with a straight elbow', 'Resisted flexion with a straight elbow'] },
+  'medial-rotation': { name: 'Shoulder medial rotation', short: 'Medial rotation', pose: { er: -28, elbow: 25, pron: 180 }, mark: ['H', 0, -30, 0], markText: 'Elbow sits away, palm faces back',
+    look: ['Humerus medially rotated in the anatomical position', 'Elbows sit away from the body'],
+    confirm: ['Shoulder flexion bends the elbow and flares it out', 'Less humeral lateral rotation during flexion', 'Palms face backward in the anatomical position'],
+    inh: ['Latissimus dorsi', 'Pectoralis minor', 'Pectoralis major', 'Teres major'], act: ['Lateral rotators'],
+    use: ['Shoulder flexion', 'Wall slides', 'Quadruped movements', 'External rotation', 'Bottoms-up carries'], avoid: ['Pull / chin-ups', 'OH pressing', 'Zercher positioning'] },
 };
-const PHASES = [
-  { n: 1, t: 'Restore', sub: 'Range and position first', ex: [
-    ['T-spine extension and rotation', 'Open-books, quadruped rotation, bench extension. The scapula can\'t tilt back on a rib cage that won\'t extend.'],
-    ['Pec minor length', 'Supine position, scapula posteriorly tilted over a roll, then gentle release. Don\'t crank on the anterior capsule.'],
-    ['Posterior capsule / total arc', 'Cross-body and sleeper work, in pain-free ranges, only when total arc is down. If the IR loss is bony, leave it.'],
-    ['Breathing and rib position', '90/90 hip lift breathing; relearn the lower ribs down and the diaphragm doing its job.'] ] },
-  { n: 2, t: 'Re-activate', sub: 'Low load, perfect position', ex: [
-    ['Serratus anterior', 'Wall slide with lift-off, supine punch, scapular push-up on the wall. Cue "reach long, ribs down", not "shrug".'],
-    ['Lower trapezius', 'Prone Y with a light load or a wall slide with forearms; the inferior angle should move up and out without the neck taking over.'],
-    ['Cuff isometrics', 'ER and IR at the side with a towel, 5 × 30 to 45 s. Quiet, no pain, no shrug.'] ] },
-  { n: 3, t: 'Control under load', sub: 'Own the scapula when it is loaded', ex: [
-    ['Closed-chain', 'Push-up plus progressions, bear crawl hold with shoulder taps, plank reach-through.'],
-    ['Open-chain in the scapular plane', 'Landmine press, half-kneeling cable press, bottoms-up kettlebell hold.'],
-    ['Eccentric ER', 'Side-lying and cable ER at the side, then at 90/90, slow 3 to 5 s lowering. This is deceleration training.'],
-    ['Rhythmic stabilisation', 'Partner or band perturbation at 90° elevation. Teaches the cuff to hold the head when pushed.'] ] },
-  { n: 4, t: 'Integrate', sub: 'Put it back inside the kinetic chain', ex: [
-    ['Rotational med ball', 'Side throws and scoop tosses that use hips and trunk first, arm last.'],
-    ['Plyo ER/IR at 90/90', 'Rebounder or wall ball drills with a quiet scapula and a ribs-down finish.'],
-    ['Return-to-throw', 'Short toss to long toss to mound, with arm care volume tied to total arc and strength, not the calendar.'] ] },
+const LOOKUP = [
+  ['Scapula (thoracoscapular muscles)', [['Shoulder elevated + acromion lifted', 'Upper trap shortened'], ['Shoulder elevated, acromion not lifted', 'Levator scapula shortened'], ['Head rotates toward the shoulder in flexion', 'Levator scapula shortened'], ['Shoulder depressed', 'Upper trap lengthened'], ['Scapula adducts during external rotation', 'Rhomboid dominance'], ['Not enough scapular abduction in shoulder flexion', 'Serratus weakness']]],
+  ['Trunk to arm (thoracohumeral muscles)', [['Loses the last 1/3 of shoulder flexion', 'Pec minor + lat dominance'], ['Excessive anterior glide of the humerus', 'Pec minor shortness'], ['Loss of shoulder elevation', 'Pec minor + lat dominance'], ['Low back extends during shoulder flexion', 'Shortened abdominals']]],
+  ['Shoulder joint (scapulohumeral muscles)', [['Humeral head glides up in abduction', 'Deltoid dominance or weak rotator cuff'], ['Humeral head glides forward in motion', 'Posterior deltoid dominance'], ['Resting in medial rotation + abduction', 'Predisposed to impingement'], ['Depressed shoulders + poor elevation', 'Shortened deltoid + supraspinatus'], ['Shoulders depressed', 'Supraspinatus vulnerable to injury'], ['Poor supine sleeper position (tight posterior capsule)', 'Lateral rotators shortened'], ['Anterior glide from lat or pec major dominance', 'Lengthened or weak subscapularis'], ['Center of rotation drops in flexion or abduction', 'Lengthened or weak teres major'], ['Humerus medially rotated with good scapular position', 'Medial rotator dominance']]],
 ];
-const OTHER = [
-  ['GIRD / posterior capsule', 'IR deficit on throwing side with a smaller total arc. Cross-body adduction short. Sleeper position tight.', 'Total arc is the target. Soft tissue, posterior cuff eccentric work, T-spine rotation. Don\'t chase IR that is bone.'],
-  ['Anterior laxity / instability', 'Apprehension and relocation, excess ER, sulcus. Often young, loose, or a thrower.', 'Dynamic stabilisation: subscapularis, serratus, rhythmic stabilisation at mid-range, trunk and hip contribution. Avoid forced end-range stretching.'],
-  ['Subacromial pain', 'Painful arc 60 to 120°, positive Neer/Hawkins cluster, loses scapular upward rotation.', 'Scapular upward rotation and posterior tilt, cuff isometrics then loaded ER, load management of overhead volume.'],
-  ['Cuff weakness / tendinopathy', 'ER weakness, painful resisted abduction or ER, drop-off in strength with repetition.', 'Isometrics for pain, then heavy slow resistance and eccentric. Blood-flow-restriction ER can work in-season.'],
-  ['Labral / biceps anchor irritation', 'Deep, vague pain in late cocking, O\'Brien and Speed\'s cluster, loss of ER or layback.', 'Posterior chain and scapular control, avoid loaded long-head and end-range ER early, graded return-to-throw.'],
-  ['Internal impingement', 'Posterior pain at 90° abduction + max ER, relief with relocation.', 'Scapular posterior tilt and retraction control, horizontal abduction limits, trunk and hip contribution to share load.'],
+const RULES = [
+  'Expect more than one dysfunction. Choose drills so fixing one doesn\'t work against another.',
+  'Inhibit the overactive muscle before you activate the underactive one.',
+  'Watch how global lifts affect the corrective work, like deadlifts for an athlete with shoulder depression syndrome.',
+  'No symptoms does not mean healthy.',
 ];
 export function step8(host, panel, factsHost) {
   let V = null, ov = null;
@@ -312,33 +326,25 @@ export function step8(host, panel, factsHost) {
   const tip = tooltip(host);
   const tools = stageTools(host);
   stageHint(host, 'Back view · left scapula is the normal reference');
-  const types = btnGroup(Object.entries(DYS).map(([id, d]) => ({ id, label: d.name.split(' · ')[0] })), id => { S.key = id; apply(); }, { initial: 'normal' });
+  const types = btnGroup(Object.entries(SYN).map(([id, d]) => ({ id, label: d.short })), id => { S.key = id; apply(); }, { initial: 'normal' });
   const elev = slider({ label: 'Elevate the arm', min: 0, max: 160, value: 0, onInput: v => { S.elev = v; apply(); } });
   const load = toggle('Add resistance (load)', false, on => { S.load = on; apply(); });
   const detail = card();
-  panel.append(card(h('span', { class: 'label' }, 'Pattern'), types.el, elev.el, load.el), detail);
+  const norms = h('div', { class: 'stats-row', style: 'grid-template-columns:repeat(auto-fit,minmax(120px,1fr))' }, ...NORMS.map(n => h('div', { class: 'fact' }, h('b', { style: 'font-size:26px' }, n[0]), h('span', { style: 'font-size:14px' }, n[1]))));
+  panel.append(card(h('span', { class: 'label' }, 'Syndrome'), types.el, elev.el, load.el), detail);
 
-  const phases = h('div', null, ...PHASES.map(p => h('details', { class: 'phase', open: p.n === 1 },
-    h('summary', null, h('span', { class: 'n' }, String(p.n)), h('div', null, h('b', null, p.t), h('span', null, p.sub))),
-    h('div', { class: 'body' }, ...p.ex.map(e => h('div', { class: 'ex' }, h('b', null, e[0]), h('span', null, e[1])))))));
-  const other = h('table', { class: 'tbl' }, h('thead', null, h('tr', null, h('th', null, 'Dysfunction'), h('th', null, 'What you see'), h('th', null, 'Training emphasis'))),
-    h('tbody', null, ...OTHER.map(o => h('tr', null, h('td', null, o[0]), h('td', null, o[1]), h('td', null, o[2])))));
-  panel.append(card(h('span', { class: 'label' }, 'How we train it · four phases'), phases));
-  // other dysfunction table goes under the facts
-  const tableWrap = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'Other shoulder dysfunctions and how we train them'), h('div', { class: 'scroll-x' }, other));
-  const facts = [
-    ['34%', 'higher injury risk for each 1° more scapular upward rotation under manual load, over 12 months (27 collegiate pitchers, 7 injured; small sample).'],
-    ['6.4° vs 1.4°', 'change in scapular upward rotation with resistance in pitchers who got hurt versus those who didn\'t. Resting ROM and rotation deficits were the same.'],
-    ['+227 g', 'shoulder muscle mass gained with blood-flow-restriction cuff work versus +75 g in controls, in-season, at 20% of max, twice weekly for 8 weeks. Mechanics held.'],
-  ];
-  factsHost.append(...facts.map(f => h('div', { class: 'fact' }, h('span', { class: 'tag' }, 'From the research'), h('b', null, f[0]), h('span', null, f[1]))), tableWrap);
-
+  const col = (c, t, items) => h('div', { style: `border-top:3px solid ${c};padding-top:6px` }, h('span', { class: 'label', style: `color:${c}` }, t), h('ul', { class: 'tight' }, ...items.map(i => h('li', null, i))));
   function apply() {
-    const D = DYS[S.key];
-    detail.replaceChildren(h('span', { class: 'label red' }, 'Pattern'), h('h3', null, D.name), h('p', null, D.text),
-      kv([['Likely drivers', D.drivers], ['How to test', D.test], ['Training lens', D.train]]));
+    const D = SYN[S.key];
+    const img = S.key !== 'normal' ? h('img', { src: `../onboarding/assets/shoulder/${S.key}.jpg`, alt: D.name + ' example', style: 'width:100%;border:1px solid var(--line);background:#fff;max-height:260px;object-fit:contain' }) : null;
+    detail.replaceChildren(h('span', { class: 'label red' }, S.key === 'normal' ? 'Reference' : 'Syndrome'), h('h3', null, D.name),
+      img,
+      h('div', null, h('span', { class: 'label' }, 'Look for'), h('ul', { class: 'tight' }, ...D.look.map(i => h('li', null, i)))),
+      D.confirm.length ? h('div', null, h('span', { class: 'label' }, 'Confirm'), h('ul', { class: 'tight' }, ...D.confirm.map(i => h('li', null, i)))) : null,
+      D.inh.length ? h('div', { class: 'grid2' }, col('#E5534B', 'Inhibit · short', D.inh), col('#A6E84A', 'Activate · weak', D.act), col('#D4F57A', 'Use', D.use), col('#E0C04A', 'Avoid', D.avoid)) : h('p', null, 'Pick a syndrome to see how to confirm it and what to inhibit, activate, use, and avoid.'),
+      D.note ? h('p', { style: 'font-size:13.5px' }, D.note) : null);
     if (!V) return;
-    const p = { scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, ...D.pose, elev: S.elev, plane: 40 };
+    const p = { scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, gain: 1, antGlide: 0, supGlide: 0, er: 0, elbow: 20, pron: 90, ...D.pose, elev: S.elev, plane: 40 };
     if (S.load) { p.scapUp += 5; p.scapTilt -= 4; }
     V.rig.setPose(p);
     ov.clear();
@@ -347,6 +353,22 @@ export function step8(host, panel, factsHost) {
     V.invalidate();
   }
   apply();
+
+  // below the stage: normals, quick lookup, rules, and the research the rest of the lab cites
+  const lookup = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'Quick lookup: if you see'),
+    ...LOOKUP.map((g, i) => h('details', { class: 'phase', open: i === 0 }, h('summary', null, h('span', { class: 'n' }, String(i + 1)), h('div', null, h('b', null, g[0]))),
+      h('div', { class: 'body' }, ...g[1].map(r => h('div', { class: 'ex' }, h('b', null, r[0]), h('span', null, '= ' + r[1])))))));
+  const rules = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'Four rules for using this'),
+    ...RULES.map((t, i) => h('div', { class: 'ex' }, h('b', null, 'Rule ' + (i + 1)), h('span', null, t))));
+  const normCard = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'What normal looks like'), norms);
+  const facts = [
+    ['34%', 'higher injury risk for each 1° more scapular upward rotation under manual load, over 12 months (27 collegiate pitchers, 7 injured; small sample).'],
+    ['6.4° vs 1.4°', 'change in scapular upward rotation with resistance in pitchers who got hurt versus those who didn\'t. Resting ROM and rotation deficits were the same.'],
+    ['+227 g', 'shoulder muscle mass gained with blood-flow-restriction cuff work versus +75 g in controls, in-season, at 20% of max, twice weekly for 8 weeks. Mechanics held.'],
+  ];
+  factsHost.append(normCard, lookup, rules, ...facts.map(f => h('div', { class: 'fact' }, h('span', { class: 'tag' }, 'From the research'), h('b', null, f[0]), h('span', null, f[1]))),
+    h('a', { class: 'btn', href: '../onboarding/assets/shoulder/poster.jpg', target: '_blank', rel: 'noopener', style: 'grid-column:1/-1;justify-self:start;text-decoration:none' }, 'Open the full shoulder poster'));
+
   mountStage(host, {
     view: 'post',
     attach(v) {

@@ -3,7 +3,7 @@ import { step1, step2, step3, step4, step5 } from './steps-a.js';
 let B = {};
 try { B = await import('./steps-b.js'); } catch (e) { console.warn('steps-b not loaded', e); }
 
-const TITLES = ['Bone', 'Motion', 'Rotator cuff', 'Layers', 'Soft tissue', 'Fascia', 'Posture', 'Dyskinesis', 'Throwing', 'Testing'];
+const TITLES = ['Bone', 'Motion', 'Rotator cuff', 'Layers', 'Soft tissue', 'Fascia', 'Posture', 'Syndromes', 'Throwing', 'Testing'];
 const stepper = $('#stepper');
 TITLES.forEach((t, i) => stepper.append(h('a', { href: '#s' + (i + 1), 'data-i': i + 1 }, h('b', null, String(i + 1).padStart(2, '0')), t)));
 

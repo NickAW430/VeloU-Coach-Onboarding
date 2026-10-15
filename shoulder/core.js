@@ -17,7 +17,7 @@ export function h(tag, props, ...kids) {
   return el;
 }
 
-export const POSE0 = { elev: 0, plane: 40, er: 0, elbow: 90, pron: 90, scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, rhythm: true, gain: 1, retro: 30, kyph: 35, fwd: 0 };
+export const POSE0 = { elev: 0, plane: 40, er: 0, elbow: 90, pron: 90, scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, rhythm: true, gain: 1, antGlide: 0, supGlide: 0, retro: 30, kyph: 35, fwd: 0 };
 
 export const PART_NAMES = {
   scapula: 'Scapula', humerus: 'Humerus', clavicle: 'Clavicle', rib: 'Rib', vertebra: 'Thoracic vertebra', sternum: 'Sternum',
