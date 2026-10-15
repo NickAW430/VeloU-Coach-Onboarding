@@ -4,6 +4,7 @@ Internal reference for new VeloU coaches covering strength and throwing program 
 
 - [Strength](strength.html)
 - [Throwing](throwing.html)
+- [The Shoulder Lab](shoulder/index.html) (team education: interactive 3D shoulder anatomy, dysfunction, and testing)
 
 ## Privacy note
 

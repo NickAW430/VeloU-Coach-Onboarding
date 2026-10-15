@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VeloU · The Shoulder Lab</title>
+<meta name="description" content="VeloU team education: the shoulder, from bony structure to special testing, with interactive 3D models.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VeloU">
+<meta property="og:title" content="The Shoulder Lab · VeloU">
+<meta property="og:description" content="Ten steps from bony structure to special tests, with interactive 3D models.">
+<meta property="og:url" content="https://coachesvelou.com/shoulder/">
+<meta property="og:image" content="https://coachesvelou.com/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="shoulder.css?v=1">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar"><a href="../">← VeloU</a><span class="muted">/</span><span>Coach education</span></div>
+
+<header class="hero">
+  <span class="label red">Team education</span>
+  <h1>The Shoulder Lab</h1>
+  <p class="lede">Ten steps, built in the order we think about it: bone first, then motion, then the muscle that moves it, then what sits on top, what holds it together, how it breaks down, how we test it, and how we train it. Every model is live. Grab it, spin it, move it.</p>
+  <div class="stats">
+    <div class="stat"><b>10</b><span>Steps</span></div>
+    <div class="stat"><b>3D</b><span>Live models</span></div>
+    <div class="stat"><b>20+</b><span>Special tests</span></div>
+    <div class="stat"><b>1</b><span>ROM calculator</span></div>
+  </div>
+  <p class="disclaimer">Models are stylised and built to scale for teaching. Attachments and paths are simplified. Education and screening only, not a diagnosis. If something is painful, unstable, or numb, it goes to a clinician.</p>
+</header>
+
+<nav class="stepper" aria-label="Steps">
+  <div class="stepper-in" id="stepper"></div>
+  <div class="progress"><i id="prog"></i></div>
+</nav>
+
+<!-- 1 -->
+<section class="step" id="s1">
+  <div class="sec-head"><span class="num">STEP 01</span><h2>Bony structure first</h2>
+    <p class="lede">Four bones and a rib cage. The humerus is a ball, the scapula is a moving socket, the clavicle is the only bony strut tying the arm to the trunk, and the thorax is the platform everything rides on. Learn the landmarks and the rest of the lesson has somewhere to attach.</p></div>
+  <div class="lab">
+    <div class="stage" id="st1"></div>
+    <aside class="panel" id="pn1"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">The big idea</span><p>The glenoid is a shallow dish, roughly a golf ball on a tee. Almost nothing about the bone keeps the shoulder in. <b>Muscle and soft tissue do that job</b>, which is why they matter so much.</p></div>
+    <div class="note"><span class="label">Four joints, one shoulder</span><p>Glenohumeral, acromioclavicular, sternoclavicular, and the scapulothoracic articulation (a functional joint, no capsule). A problem at any one changes the demand on the others.</p></div>
+    <div class="note"><span class="label">Coach read</span><p>When an athlete can't reach, ask which of the four joints is not contributing before blaming the one that hurts.</p></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="step" id="s2">
+  <div class="sec-head"><span class="num">STEP 02</span><h2>Motion of the shoulder</h2>
+    <p class="lede">The arm does not elevate at the glenohumeral joint alone. The scapula upwardly rotates, tilts back, and rotates externally while the clavicle elevates and rotates. Move the arm and watch the split between ball-and-socket and scapula.</p></div>
+  <div class="lab">
+    <div class="stage" id="st2"></div>
+    <aside class="panel" id="pn2"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Scapulohumeral rhythm</span><p>Roughly <b>2° at the glenohumeral joint for every 1° of scapular upward rotation</b> across full elevation. About 120° GH plus 60° scapula for 180° overhead. Individuals vary, and the first 30° or so is mostly GH.</p></div>
+    <div class="note"><span class="label">Turn the rhythm off</span><p>Freeze the scapula and push the arm up. The greater tubercle runs straight into the acromion. That's the picture behind subacromial pain.</p></div>
+    <div class="note"><span class="label">Throwing</span><p>The arm is asked to go from about 165° of layback to ball release in a few hundredths of a second. Press <b>Play throw</b> and watch where each segment contributes.</p></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="step" id="s3">
+  <div class="sec-head"><span class="num">STEP 03</span><h2>The rotator cuff</h2>
+    <p class="lede">Four muscles whose tendons blend into a cuff around the humeral head. SITS: supraspinatus, infraspinatus, teres minor, subscapularis. They are as much a steering and centering system as a power source.</p></div>
+  <div class="lab">
+    <div class="stage" id="st3"></div>
+    <aside class="panel" id="pn3"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Origins stay, insertions move</span><p>Every cuff origin sits on the scapula, every insertion on the proximal humerus. The cuff therefore ties the moving socket to the moving ball.</p></div>
+    <div class="note"><span class="label">Dynamic centering</span><p>The cuff compresses the head into the glenoid so the big movers (deltoid, pec, lat) can work without shearing the head upward or forward.</p></div>
+    <div class="note"><span class="label">The throwing job</span><p>Infraspinatus and teres minor <b>generate braking force</b> in deceleration while the arm is still moving forward at speed. Subscapularis is the largest cuff muscle and a major internal rotator.</p></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="step" id="s4">
+  <div class="sec-head"><span class="num">STEP 04</span><h2>Placement: superficial to deep</h2>
+    <p class="lede">What you see in the mirror is the top layer. What keeps the joint centered is two layers down. Peel the model back one layer at a time and see where the cuff sits relative to everything that covers it.</p></div>
+  <div class="lab">
+    <div class="stage" id="st4"></div>
+    <aside class="panel" id="pn4"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Layer 1</span><p><b>Superficial.</b> Trapezius, deltoid, latissimus dorsi, pec major. Big, long levers. They set the shape of the shoulder and produce most of the torque.</p></div>
+    <div class="note"><span class="label">Layer 2</span><p><b>Intermediate.</b> Rhomboids, levator, serratus anterior, pec minor, teres major, biceps and triceps long heads. They position the scapula under the arm.</p></div>
+    <div class="note"><span class="label">Layer 3</span><p><b>Deep.</b> The rotator cuff. Short, close to the joint, built to hold position. Force couples are how layers 1 to 3 work as one system.</p></div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="step" id="s5">
+  <div class="sec-head"><span class="num">STEP 05</span><h2>Tendon, ligament, cartilage</h2>
+    <p class="lede">Three different tissues, three different jobs. Define them first, then see how each one shows up at the shoulder.</p></div>
+  <div class="def3" id="defs"></div>
+  <div class="lab">
+    <div class="stage" id="st5"></div>
+    <aside class="panel" id="pn5"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Passive vs active</span><p>Ligaments and capsule are passive restraints that matter at <b>end range</b>. Muscle-tendon units do the work in the middle of the range.</p></div>
+    <div class="note"><span class="label">Rotate the arm</span><p>Use the position buttons and watch the glow move from the superior and middle ligaments toward the inferior band as the arm goes to 90° and rotates.</p></div>
+    <div class="note"><span class="label">Healing speed</span><p>Muscle has a good blood supply. Tendon and ligament have less. Articular cartilage has essentially none. Loading plans respect that order.</p></div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="step" id="s6">
+  <div class="sec-head"><span class="num">STEP 06</span><h2>Striations, fascia, and lines of pull</h2>
+    <p class="lede">Muscle fibers are not all aimed the same way, and muscles are wrapped in connective tissue that links neighbors together. Fiber direction sets the line of pull. Fascial continuity gives us a map of how tension may travel across regions.</p></div>
+  <div class="lab">
+    <div class="stage tall" id="st6"></div>
+    <aside class="panel" id="pn6"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Fiber architecture</span><p>Strap, fusiform, convergent (fan), pennate, multipennate. Architecture decides force versus excursion, and how many different jobs one muscle can do.</p></div>
+    <div class="note"><span class="label">Same muscle, different jobs</span><p>Upper, middle, and lower trapezius share a name and have different lines of pull. The same is true for the heads of pec major and the three parts of the deltoid.</p></div>
+    <div class="note"><span class="label">Honest caveat</span><p>The line maps are a <b>thinking tool</b>. Force transmission through fascia is real and measurable in the lab. How much it matters for a given athlete is still being worked out.</p></div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="step" id="s7">
+  <div class="sec-head"><span class="num">STEP 07</span><h2>Posture and what it points to</h2>
+    <p class="lede">Posture is a snapshot. Movement is the test. Use the posture to decide which movements to look at, then let the movement tell you whether the posture matters for this athlete.</p></div>
+  <div class="lab">
+    <div class="stage tall" id="st7"></div>
+    <aside class="panel" id="pn7"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Don't pathologize</span><p>Plenty of high-level throwers look "bad" on the posture screen and move beautifully. If it doesn't change performance or symptoms, <b>it's a trait, not a problem</b>.</p></div>
+    <div class="note"><span class="label">Posture to movement</span><p>Each pattern predicts a short list of movement checks. Do those, not a generic screen.</p></div>
+    <div class="note"><span class="label">Rib cage is the base</span><p>A scapula on a stiff, flexed thoracic spine has less posterior tilt and upward rotation available. That's why thoracic mobility keeps showing up in shoulder plans.</p></div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="step" id="s8">
+  <div class="sec-head"><span class="num">STEP 08</span><h2>Scapular dyskinesis and other dysfunctions</h2>
+    <p class="lede">Dyskinesis is a movement observation, not a diagnosis. Classify what you see, find the driver, then train the driver. The left scapula in the model is the normal reference.</p></div>
+  <div class="lab">
+    <div class="stage" id="st8"></div>
+    <aside class="panel" id="pn8"></aside>
+  </div>
+  <div class="grid3" id="s8facts"></div>
+  <div class="notes">
+    <div class="note"><span class="label">See it under load</span><p>Static scapular position tells us little. Watch the scapula <b>as the arm moves and while it's loaded</b>.</p></div>
+    <div class="note"><span class="label">Find the driver</span><p>Weakness, tight pec minor, stiff thoracic spine, posterior capsule, fatigue, pain, or a nerve. The dyskinesis is the same picture for different reasons.</p></div>
+    <div class="note"><span class="label">Train it in order</span><p>Restore range, wake up the muscle, own it under load, then put it back inside the throw. Skipping steps is where plans stall.</p></div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="step" id="s9">
+  <div class="sec-head"><span class="num">STEP 09</span><h2>What throwing does to the shoulder</h2>
+    <p class="lede">Years of high-velocity throwing reshape the shoulder. Some of that is bone, some is soft tissue, and some is a smart adaptation. Telling them apart is the whole game.</p></div>
+  <div class="lab">
+    <div class="stage" id="st9"></div>
+    <aside class="panel" id="pn9"></aside>
+  </div>
+  <h3>The numbers from the research we've reviewed</h3>
+  <div class="stats-row" id="s9facts"></div>
+  <div class="callout"><b>Read these as patterns, not rules.</b> Most of these are single studies, many are small, and several are observational. Individual baselines beat population thresholds.</div>
+  <h3>ROM calculator</h3>
+  <div class="lab" style="align-items:start">
+    <div class="card" id="calc"></div>
+    <div class="card" id="calcOut"></div>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Bone adapts first</span><p>Throwers build extra humeral retroversion while the skeleton is still maturing. That shifts the arc toward ER and away from IR <b>without changing the total</b>.</p></div>
+    <div class="note"><span class="label">Total arc is the number</span><p>Compare ER plus IR on the throwing side to the other side. A shifted arc with a matching total is an adaptation. A smaller total is the flag.</p></div>
+    <div class="note"><span class="label">Acute vs chronic</span><p>Range drops after a bullpen and recovers. What matters is whether it <b>stays down</b> day after day.</p></div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="step" id="s10">
+  <div class="sec-head"><span class="num">STEP 10</span><h2>Manual testing</h2>
+    <p class="lede">Choose a test, watch the model get into position, and see where the examiner's force goes and what structure is being asked the question. Tests cluster. No single one makes the diagnosis.</p></div>
+  <div class="lab">
+    <div class="stage tall" id="st10"></div>
+    <aside class="panel" id="pn10"></aside>
+  </div>
+  <div class="notes">
+    <div class="note"><span class="label">Cluster, don't hunt</span><p>Use a short cluster for the question you're asking: cuff, subacromial, internal impingement, labrum, instability. Agreement across tests is what counts.</p></div>
+    <div class="note"><span class="label">Compare sides</span><p>Test the good side first, same position, same pressure. Many athletes are lax or painful in a position that's normal for them.</p></div>
+    <div class="note"><span class="label">Know when to refer</span><p>Night pain, numbness, a true giving way, a pop with weakness, or significant loss of strength gets sent on. We screen and train. We don't diagnose.</p></div>
+  </div>
+</section>
+
+<footer class="foot">VeloU · The Shoulder Lab · Built for team education. Anatomy models are procedural and illustrative.</footer>
+</div>
+<script type="module" src="app.js?v=1"></script>
+</body>
+</html>
