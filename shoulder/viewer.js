@@ -1,7 +1,7 @@
 // VeloU Shoulder Lab · lightweight 3D viewer (three.js) with labels, picking and lazy rendering.
 import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
-import { Rig } from './rig.js';
+import { Rig } from './rig.js?v=3';
 
 export const VIEWS = {
   post: { pos: [0, 6, 100], tgt: [7, 2, 2] },

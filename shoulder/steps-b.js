@@ -1,8 +1,8 @@
 // Steps 6 to 10
 import * as THREE from 'three';
-import { COL } from './rig.js';
-import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js';
-import { baseline, hoverTips, viewBtns, hex } from './steps-a.js';
+import { COL } from './rig.js?v=3';
+import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=3';
+import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=3';
 
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
