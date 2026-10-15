@@ -1,8 +1,8 @@
 // Steps 6 to 10
 import * as THREE from 'three';
-import { COL } from './rig.js?v=8';
-import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=8';
-import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=8';
+import { COL } from './rig.js?v=11';
+import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=11';
+import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=11';
 
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -62,7 +62,8 @@ export function step6(host, panel) {
   const modeTabs = tabs([{ id: 'lines', label: 'Fascial lines' }, { id: 'fibers', label: 'Fiber direction' }], m => { S.mode = m; render(); }, 'lines');
   const body = h('div', { class: 'panel' });
   const detail = card();
-  panel.append(card(modeTabs.el), body, detail);
+  const tAll6 = toggle('Show all surrounding muscles', false, on => { if (V && V.rig.showContext) { V.rig.showContext(on); V.invalidate(); } });
+  panel.append(card(modeTabs.el), body, detail, card(tAll6.el));
 
   function render() {
     body.replaceChildren();
@@ -186,13 +187,14 @@ export function step7(host, panel) {
     sh: slider({ label: 'Shoulder height', min: -2.5, max: 2.5, step: 0.1, value: 0, unit: ' cm', ends: ['Depressed', 'Elevated'], onInput: v => { S.sh = v; push(); } }),
   };
   const colorTog = toggle('Color muscles: tight vs long/weak', true, on => { S.color = on; colorize(); });
+  const tAll7 = toggle('Show all surrounding muscles', false, on => { if (V && V.rig.showContext) { V.rig.showContext(on); V.invalidate(); } });
   const legend = h('div', { class: 'legend' }, h('span', { style: '--c:#E0C04A' }, h('i'), 'Tight / over-active'), h('span', { style: '--c:#7EB6FF' }, h('i'), 'Long / under-active'));
   const reachBtn = h('button', { class: 'btn', type: 'button' }, '▶ Overhead reach test');
   const resetBtn = h('button', { class: 'btn', type: 'button' }, '↺ Reset arm');
   const detail = card();
   const checks = card();
   panel.append(card(h('span', { class: 'label' }, 'Pattern'), presets.el), detail,
-    card(h('span', { class: 'label' }, 'Build your own'), sl.k.el, sl.f.el, sl.p.el, sl.t.el, sl.er.el, sl.sh.el, colorTog.el, legend, h('div', { class: 'btns' }, reachBtn, resetBtn)), checks);
+    card(h('span', { class: 'label' }, 'Build your own'), sl.k.el, sl.f.el, sl.p.el, sl.t.el, sl.er.el, sl.sh.el, colorTog.el, tAll7.el, legend, h('div', { class: 'btns' }, reachBtn, resetBtn)), checks);
 
   function gain() { return Math.max(0.45, Math.min(1, 1 - Math.max(0, S.k - 35) * 0.011 - S.f * 0.12 - Math.max(0, S.p) * 0.14 - Math.max(0, -S.t) * 0.01)); }
   function push() {
@@ -429,16 +431,23 @@ export function step9(host, panel, factsHost, calcHost, outHost) {
       <rect x="${x0}" y="${y}" width="${i * sc}" height="26" fill="#7EB6FF"/><rect x="${x0 + i * sc}" y="${y}" width="${e * sc}" height="26" fill="#E5534B"/>
       <text x="${x0 + 6}" y="${y + 18}" fill="#101418" font-size="15" font-weight="700">IR ${Math.round(i)}°</text><text x="${x0 + i * sc + 6}" y="${y + 18}" fill="#fff" font-size="15" font-weight="700">ER ${Math.round(e)}°</text>
       <text x="${x0 + (i + e) * sc + 8}" y="${y + 18}" fill="#f1e9e4" font-size="15">${Math.round(i + e)}° total</text>`;
-    const cx = 330, cy = 200, R = 46, a = S.retro * Math.PI / 180;
-    const arrow = (ang, len, col) => `<line x1="${cx}" y1="${cy}" x2="${cx + Math.cos(ang) * len}" y2="${cy - Math.sin(ang) * len}" stroke="${col}" stroke-width="3"/>`;
-    svg.innerHTML = `<svg viewBox="0 0 ${W} 250" width="100%" role="img" aria-label="Range of motion arcs and head orientation">
+    // top view of the right humeral head: front is up, medial is left. The head faces medially and rotated BACKWARD
+    // (down the page) relative to the line through the two epicondyles.
+    const cx = 290, cy = 208, R = 30, a = S.retro * Math.PI / 180, a0 = ND.retro * Math.PI / 180, L = R + 14;
+    const ray = (ang, len, col, w, dash = '') => `<line x1="${cx}" y1="${cy}" x2="${cx - Math.cos(ang) * len}" y2="${cy + Math.sin(ang) * len}" stroke="${col}" stroke-width="${w}" ${dash ? `stroke-dasharray="${dash}"` : ''} stroke-linecap="round"/>`;
+    svg.innerHTML = `<svg viewBox="0 0 ${W} 275" width="100%" role="img" aria-label="Range of motion arcs and head orientation">
       ${bar(40, ND.er, ND.ir, 'Non-throwing arm (30° retro)')}${bar(100, er, ir, 'Throwing arm (' + Math.round(S.retro) + '° retro)')}
-      <text x="${x0}" y="170" fill="#766b63" font-size="12" letter-spacing="1.2">TOP VIEW · HEAD VS ELBOW AXIS</text>
+      <text x="${x0}" y="170" fill="#766b63" font-size="12" letter-spacing="1.2">TOP VIEW OF THE RIGHT HUMERAL HEAD</text>
       <circle cx="${cx}" cy="${cy}" r="${R}" fill="#1b1714" stroke="#766b63"/>
-      ${arrow(0, R + 30, '#aa9f97')}${arrow(Math.PI, R + 30, '#aa9f97')}
-      ${arrow(Math.PI / 2 + a - Math.PI / 2, R + 6, '#E5534B')}
-      <text x="${cx - R - 40}" y="${cy + 4}" fill="#aa9f97" font-size="12">elbow axis</text>
-      <text x="${cx + 8}" y="${cy - R - 8}" fill="#E5534B" font-size="12">head faces back ${Math.round(S.retro)}°</text>
+      <line x1="${cx - R - 40}" y1="${cy}" x2="${cx + R + 40}" y2="${cy}" stroke="#aa9f97" stroke-width="2"/>
+      ${ray(a0, L, '#766b63', 2, '4 3')}${ray(a, L + 6, '#E5534B', 4)}
+      <text x="${cx - R - 74}" y="${cy + 4}" fill="#aa9f97" font-size="12">MEDIAL</text>
+      <text x="${cx + R + 46}" y="${cy + 4}" fill="#aa9f97" font-size="12">LATERAL</text>
+      <text x="${cx - 14}" y="${cy - R - 10}" fill="#766b63" font-size="11">FRONT</text>
+      <text x="${cx - 12}" y="${cy + R + 18}" fill="#766b63" font-size="11">BACK</text>
+      <text x="${x0}" y="${cy - 2}" fill="#aa9f97" font-size="12">Line through the elbow</text>
+      <text x="${x0}" y="${cy + 14}" fill="#E5534B" font-size="12">Head faces medial + back ${Math.round(S.retro)}°</text>
+      <text x="${x0}" y="${cy + 30}" fill="#766b63" font-size="12">Dashed = other arm (${ND.retro}°)</text>
       <circle cx="${cx}" cy="${cy}" r="3" fill="#f1e9e4"/></svg>`;
     const flagA = Math.abs(arcDef) >= 5, flagI = irDef >= 18;
     const col = flagA ? 'var(--red)' : flagI ? 'var(--amber)' : 'var(--lime)';
@@ -573,7 +582,7 @@ const TESTS = [
 ];
 export function step10(host, panel) {
   let V = null, ov = null;
-  const S = { cat: 'Cuff', id: 'jobe', shown: false };
+  const S = { cat: 'Cuff', id: 'jobe', shown: false, all: true };
   const tip = tooltip(host);
   const ro = stageReadout(host);
   const tools = stageTools(host);
@@ -582,9 +591,10 @@ export function step10(host, panel) {
   const catTabs = tabs(cats.map(c => ({ id: c, label: c })), c => { S.cat = c; S.id = TESTS.find(t => t.cat === c).id; renderList(); select(S.id); }, 'Cuff');
   const listBox = h('div');
   const detail = card();
+  const tAll10 = toggle('Show all muscles (target highlighted)', true, on => { S.all = on; restyle(TESTS.find(x => x.id === S.id)); });
   const posBtn = h('button', { class: 'btn amber', type: 'button' }, 'Show a positive response');
   const sweepBtn = h('button', { class: 'btn', type: 'button' }, '▶ Sweep 0° to 180°');
-  panel.append(card(h('span', { class: 'label' }, 'Test'), catTabs.el, listBox), detail);
+  panel.append(card(h('span', { class: 'label' }, 'Test'), catTabs.el, listBox, tAll10.el), detail);
   function renderList() {
     const lp = listPicker(TESTS.filter(t => t.cat === S.cat).map(t => ({ id: t.id, label: t.name, color: '' })), id => select(id));
     lp.set(S.id); listBox.replaceChildren(lp.el);
@@ -598,11 +608,19 @@ export function step10(host, panel) {
       h('div', { class: 'btns' }, t.positive ? posBtn : null, t.sweep ? sweepBtn : null, h('button', { class: 'btn', type: 'button', onclick: () => place(t) }, '↺ Reset position')));
     if (V) place(t);
   }
+  function restyle(t) {
+    if (!V) return;
+    const r = V.rig;
+    r.muscleDefs.forEach(d => r.setMuscle(d.id, { visible: true, opacity: t.targets.includes(d.id) ? 1 : (S.all ? 0.6 : 0.12), glow: t.targets.includes(d.id) ? 0.55 : 0 }));
+    r.showContext && r.showContext(S.all);
+    V.invalidate();
+  }
   function place(t) {
     if (!V) return;
     const r = V.rig;
     r.resetMuscles(); r.resetLigs();
-    r.muscleDefs.forEach(d => r.setMuscle(d.id, { visible: true, opacity: t.targets.includes(d.id) ? 1 : 0.12, glow: t.targets.includes(d.id) ? 0.55 : 0 }));
+    r.muscleDefs.forEach(d => r.setMuscle(d.id, { visible: true, opacity: t.targets.includes(d.id) ? 1 : (S.all ? 0.6 : 0.12), glow: t.targets.includes(d.id) ? 0.55 : 0 }));
+    r.showContext && r.showContext(S.all);
     r.show('muscles', true); r.show('ligaments', !!t.ligs); r.show('soft', false);
     if (t.ligs) { Object.keys(r.ligs).forEach(id => r.setLig(id, { color: t.ligs.includes(id) ? COL.lig : 0x4a5530, glow: t.ligs.includes(id) ? 0.8 : 0 })); r.capsule.material.opacity = 0.12; r.show('soft', true); }
     ov.clear();
@@ -612,6 +630,9 @@ export function step10(host, panel) {
         ov.arrow(t.arrow.from, dirFn, { color: 0xe5534b, len: 10, text: t.arrow.text });
       }
       if (t.mark) ov.marker(t.mark, { color: 0xd4f57a, r: 0.7, text: t.markText, cls: 'lime' });
+      // keep the whole arm and hand in frame for this position
+      const hc = r.pt(['R', 0, 0, 0]), hd = r.pt(['F', 0, -26, 0]);
+      V.focusWorld(hc.clone().lerp(hd, 0.5), Math.max(80, hc.distanceTo(hd) * 2.3), 800);
       readout();
     });
   }
@@ -641,6 +662,7 @@ export function step10(host, panel) {
       V = v; ov = new Overlay(v);
       baseline(v, { muscles: true, lig: false, left: false, bone: 0.85 });
       v.onFrame = null;
+      v.setView({ pos: [100, 28, 125], tgt: [36, -2, -2] }, 0);
       tools.replaceChildren(...viewBtns(v));
       hoverTips(v, tip);
       v.afterRig = (prev => () => { prev && prev(); readout(); })(v.afterRig);

@@ -1,8 +1,8 @@
 // Steps 1 to 5
 import * as THREE from 'three';
-import { COL } from './rig.js?v=8';
-import { VIEWS } from './viewer.js?v=8';
-import { $, h, POSE0, PART_NAMES, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=8';
+import { COL } from './rig.js?v=11';
+import { VIEWS } from './viewer.js?v=11';
+import { $, h, POSE0, PART_NAMES, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=11';
 
 export const hex = c => '#' + c.toString(16).padStart(6, '0');
 
@@ -268,7 +268,7 @@ export function step3(host, panel) {
   const detail = card();
   const pick = listPicker(Object.entries(CUFF).map(([id, c]) => ({ id, label: c.name, color: hex(COL.cuff), sub: c.action })), id => { S.id = id; apply(); });
   const tMark = toggle('Origin + insertion markers', true, on => { S.markers = on; apply(); });
-  const tCtx = toggle('Show other muscles (ghosted)', false, on => { S.ctx = on; apply(); });
+  const tCtx = toggle('Show all other muscles (ghosted)', false, on => { S.ctx = on; apply(); });
   const tBare = toggle('Hide ribs and left side', false, on => { S.bare = on; apply(); });
   const actBtn = h('button', { class: 'btn', type: 'button' }, '▶ Show action');
   panel.append(card(h('span', { class: 'label' }, 'S · I · T · S'), pick.el, h('div', { class: 'btns' }, actBtn)), detail, card(tMark.el, tCtx.el, tBare.el));
@@ -281,6 +281,7 @@ export function step3(host, panel) {
     const r = V.rig;
     Object.keys(CUFF).forEach(id => r.setMuscle(id, { visible: true, opacity: id === S.id ? 1 : 0.28, glow: id === S.id ? 0.55 : 0 }));
     r.muscleDefs.filter(d => d.layer !== 3).forEach(d => r.setMuscle(d.id, { visible: S.ctx, opacity: 0.22 }));
+    r.showContext && r.showContext(S.ctx);
     r.show('left', !S.bare); r.showThorax('ribs', !S.bare); r.showThorax('costal', !S.bare); r.showThorax('sternum', !S.bare);
     ov.clear();
     if (S.markers) {
@@ -349,9 +350,10 @@ export function step4(host, panel) {
   const elev = slider({ label: 'Elevate the arm', min: 0, max: 150, value: 0, onInput: v => V && V.rig.setPose({ elev: v, plane: 40 }) });
   const tGhost = toggle('Ghost the removed layers', true, on => { S.ghost = on; apply(); });
   const tCouple = toggle('Show force couples', false, on => { S.couples = on; apply(); });
+  const tAll = toggle('Show all surrounding muscles', false, on => { S.all = on; apply(); });
   const legend = h('div', { class: 'legend' },
     ...[1, 2, 3].map(l => h('span', { style: `--c:${hex(LAYER_COL[l])}` }, h('i'), LAYER_NAMES[l])));
-  panel.append(card(h('span', { class: 'label' }, 'Layers'), stageBtns.el, elev.el, tGhost.el, tCouple.el, legend), detail);
+  panel.append(card(h('span', { class: 'label' }, 'Layers'), stageBtns.el, elev.el, tGhost.el, tCouple.el, tAll.el, legend), detail);
   detail.append(h('p', null, 'Click any muscle in the model to see what it sits on top of.'));
 
   function select(id) {
@@ -367,6 +369,7 @@ export function step4(host, panel) {
       const removed = d.layer <= S.stage;
       r.setMuscle(d.id, { visible: !removed || S.ghost, opacity: removed ? 0.13 : 1, glow: S.sel === d.id ? 0.6 : 0, color: LAYER_COL[d.layer] });
     });
+    r.showContext && r.showContext(!!S.all);
     ov.clear();
     if (S.couples) {
       const up = (spec, dir, color, text, cls) => ov.arrow(spec, () => new THREE.Vector3(...dir), { color, len: 8, text, cls });
@@ -446,9 +449,10 @@ export function step5(host, panel, defsHost) {
   });
   const listBox = h('div');
   const detail = card();
+  const tAll5 = toggle('Show all surrounding muscles', false, on => { if (V && V.rig.showContext) { V.rig.showContext(on); V.invalidate(); } });
   const posBtns = btnGroup(POSITIONS.map(p => ({ id: p.id, label: p.label })), id => { S.pos = id; S.sel = null; applyPos(); });
   panel.append(card(h('span', { class: 'label' }, 'Structures'), listBox), detail,
-    card(h('span', { class: 'label' }, 'Which ligament is working? Move the arm.'), posBtns.el));
+    card(h('span', { class: 'label' }, 'Which ligament is working? Move the arm.'), posBtns.el, tAll5.el));
   function render() {
     Object.entries(defBtns).forEach(([k, b]) => b.classList.toggle('on', k === S.type));
     const items = STRUCT[S.type].map(([id, name, text]) => ({ id, label: name, color: hex(TYPES[S.type].c) }));

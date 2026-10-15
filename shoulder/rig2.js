@@ -1,7 +1,7 @@
 // VeloU Shoulder Lab · anatomy rig built on the real mesh set (Z-Anatomy / BodyParts3D, CC BY-SA).
 // Same public surface as rig.js so the step code does not care which one it gets.
 import * as THREE from 'three';
-import { COL } from './rig.js?v=8';
+import { COL } from './rig.js?v=11';
 
 const { Vector3: V3, Matrix4: M4, Quaternion: Q4, Group, Mesh } = THREE;
 const RAD = Math.PI / 180;
@@ -299,8 +299,8 @@ const RIGID_JOINT = [
 /* ---------- skinning ---------- */
 class Skin {
   // prims: [{geometry, material}], keys: bone key list (candidates)
-  constructor(rig, id, prims, keys, mats) {
-    this.rig = rig; this.keys = keys; this.meshes = []; this.rigid = keys.length === 1;
+  constructor(rig, id, prims, keys, mats, fast = false) {
+    this.rig = rig; this.keys = keys; this.fast = fast; this.meshes = []; this.rigid = keys.length === 1;
     const A = rig.A;
     prims.forEach((pr, pi) => {
       const g = new THREE.BufferGeometry();
@@ -321,6 +321,27 @@ class Skin {
   _compute(m, keys) {
     const A = this.rig.A, n = m.rest.length / 3;
     const i0 = new Uint8Array(n), i1 = new Uint8Array(n), w = new Float32Array(n);
+    if (this.fast && keys.length > 1) {
+      // cheap weights: project onto the polyline through the bones' centroids (used for the large context muscles)
+      const cs = keys.map(k => this.rig.centroidFor(k));
+      for (let i = 0; i < n; i++) {
+        const px = m.rest[i * 3], py = m.rest[i * 3 + 1], pz = m.rest[i * 3 + 2];
+        let bestD = Infinity, bs = 0, bt = 0;
+        for (let s = 0; s < cs.length - 1; s++) {
+          const a = cs[s], b = cs[s + 1];
+          const abx = b.x - a.x, aby = b.y - a.y, abz = b.z - a.z;
+          const l2 = abx * abx + aby * aby + abz * abz || 1;
+          let t = ((px - a.x) * abx + (py - a.y) * aby + (pz - a.z) * abz) / l2; t = Math.max(0, Math.min(1, t));
+          const dx = px - (a.x + abx * t), dy = py - (a.y + aby * t), dz = pz - (a.z + abz * t);
+          const d = dx * dx + dy * dy + dz * dz;
+          if (d < bestD) { bestD = d; bs = s; bt = t; }
+        }
+        // sharpen so most of a muscle belly stays rigid with the nearer bone
+        const tt = Math.max(0, Math.min(1, (bt - 0.25) / 0.5));
+        i0[i] = bs; i1[i] = bs + 1; w[i] = tt * tt * (3 - 2 * tt);
+      }
+      return { i0, i1, w };
+    }
     const hashes = keys.map(k => this.rig.hashFor(k));
     const K = keys.length, sv = new Float32Array(K);
     for (let i = 0; i < n; i++) {
@@ -391,6 +412,7 @@ export class RealRig {
     this.cats.scapula.add(this.bodyGroups.scap);
     this.cats.clavicle.add(this.bodyGroups.clav);
     this.cats.left.add(this.bodyGroups.leftArm);
+    this.cats.humerus.add(this.bodyGroups.ulna, this.bodyGroups.rad);
     this.skins = [];
     this._buildBones();
     this._buildJoints();
@@ -399,6 +421,15 @@ export class RealRig {
     this.update(true);
   }
   _cart(color = COL.cart) { return new THREE.MeshStandardMaterial({ color, roughness: 0.4, emissive: 0x000000, transparent: true, opacity: 0.92 }); }
+  centroidFor(k) {
+    this.A._cent = this.A._cent || {};
+    if (!this.A._cent[k]) {
+      const pts = boneVerts(this.A, BONE_SETS(this.A)[k]); const c = new V3();
+      for (let i = 0; i < pts.length; i += 3) { c.x += pts[i]; c.y += pts[i + 1]; c.z += pts[i + 2]; }
+      this.A._cent[k] = c.multiplyScalar(3 / Math.max(3, pts.length));
+    }
+    return this.A._cent[k];
+  }
   hashFor(k) {
     if (this.A._hash && this.A._hash[k]) return this.A._hash[k];
     const sets = BONE_SETS(this.A);
@@ -537,7 +568,7 @@ export class RealRig {
     this.muscles = {}; this.muscleDefs = [];
     const used = new Set();
     const layerColor = { 1: COL.sup, 2: COL.mid, 3: COL.cuff };
-    const add = (id, name, layer, objs, keys) => {
+    const add = (id, name, layer, objs, keys, fast = false) => {
       const prims = [];
       objs.forEach(o => { const p = A.muscles.get(o); if (p) { prims.push(...p); used.add(o); } });
       if (!prims.length) return;
@@ -546,7 +577,7 @@ export class RealRig {
       const group = new Group(); group.userData.muscle = id;
       // flatten primitives of all member objects, remembering material kind
       const flat = prims.map(p => ({ geometry: p.geometry, material: p.material }));
-      const sk = new Skin(this, 'M:' + id, flat, keys, (mat) => /^Tendon/i.test(mat) ? tendMat : bellyMat);
+      const sk = new Skin(this, 'M:' + id, flat, keys, (mat) => /^Tendon/i.test(mat) ? tendMat : bellyMat, fast);
       sk.meshes.forEach(m => { m.mesh.userData.muscle = id; group.add(m.mesh); });
       this.cats.muscles.add(group);
       this.skins.push(sk);
@@ -577,7 +608,7 @@ export class RealRig {
     if (on && !this._ctxBuilt) {
       this._ctxBuilt = true;
       this._ctxIds = [];
-      for (const [id, name, layer, oname, keys] of this._ctxList) { this._addMuscle(id, name, layer, [oname], keys); this._ctxIds.push(id); }
+      for (const [id, name, layer, oname, keys] of this._ctxList) { this._addMuscle(id, name, layer, [oname], keys, true); this._ctxIds.push(id); }
       this._ctxDefs = this.muscleDefs.filter(d => this._ctxIds.includes(d.id));
       // keep them out of the step code's muscleDefs loops
       this.muscleDefs = this.muscleDefs.filter(d => !this._ctxIds.includes(d.id));

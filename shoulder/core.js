@@ -1,9 +1,9 @@
 // Shared helpers for the Shoulder Lab.
 import * as THREE from 'three';
-import { Viewer } from './viewer.js?v=8';
-import { COL, Rig } from './rig.js?v=8';
-import { RealRig } from './rig2.js?v=8';
-import { loadAnatomy } from './anatomy.js?v=8';
+import { Viewer } from './viewer.js?v=11';
+import { COL, Rig } from './rig.js?v=11';
+import { RealRig } from './rig2.js?v=11';
+import { loadAnatomy } from './anatomy.js?v=11';
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -157,7 +157,7 @@ export function mountStage(host, { view = 'obl', attach, detach }) {
     if ((viewer && !viewer.dead) || pending) return;
     pending = true;
     host.classList.add('loading');
-    loadAnatomy().catch(e => { console.warn('anatomy load failed', e); return null; }).then(A => { pending = false; if (viewer && !viewer.dead) return; create(A); });
+    loadAnatomy().catch(e => { console.warn('anatomy load failed', e); return null; }).then(A => { pending = false; if (viewer && !viewer.dead) return; create(A); }).catch(e => { pending = false; host.classList.remove('loading'); console.error('stage create failed', e && e.stack || e); });
   };
   const io = new IntersectionObserver(es => { if (es[0].isIntersecting) ensure(); }, { rootMargin: '500px 0px' });
   io.observe(host);
