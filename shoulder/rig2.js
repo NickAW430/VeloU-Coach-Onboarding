@@ -1,7 +1,7 @@
 // VeloU Shoulder Lab · anatomy rig built on the real mesh set (Z-Anatomy / BodyParts3D, CC BY-SA).
 // Same public surface as rig.js so the step code does not care which one it gets.
 import * as THREE from 'three';
-import { COL } from './rig.js?v=11';
+import { COL } from './rig.js?v=12';
 
 const { Vector3: V3, Matrix4: M4, Quaternion: Q4, Group, Mesh } = THREE;
 const RAD = Math.PI / 180;
@@ -732,7 +732,8 @@ export class RealRig {
     const Hloc = D.H0.clone().applyMatrix4(Msc).add(v(0, P.supGlide || 0, -(P.antGlide || 0)));
     const Mh = new M4().makeTranslation(Hloc.x, Hloc.y, Hloc.z).multiply(new M4().makeRotationFromQuaternion(qT)).multiply(new M4().makeTranslation(-D.H0.x, -D.H0.y, -D.H0.z));
     M.humP.copy(Mth).multiply(Mh);
-    const twist = rotAbout(D.H0, AY, (P.retro - 30) * RAD);
+    // more retroversion = head faces further back relative to the elbow, so with the head seated the shaft/forearm sits in more ER
+    const twist = rotAbout(D.H0, AY, -(P.retro - 30) * RAD);
     M.hum.copy(Mth).multiply(Mh).multiply(twist);
     // forearm
     const flex = rotAbout(D.E0, D.elbowAxis, P.elbow * RAD);
