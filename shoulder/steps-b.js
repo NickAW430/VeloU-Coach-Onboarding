@@ -1,8 +1,8 @@
 // Steps 6 to 10
 import * as THREE from 'three';
-import { COL } from './rig.js?v=14';
-import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=14';
-import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=14';
+import { COL } from './rig.js?v=15';
+import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=15';
+import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=15';
 
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -360,7 +360,7 @@ export function step8(host, panel, factsHost) {
   apply();
 
   // below the stage: normals, quick lookup, rules, and the research the rest of the lab cites
-  const lookup = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'Quick lookup: if you see'),
+  const lookup = h('div', { class: 'card', style: 'height:100%;align-content:start' }, h('span', { class: 'label' }, 'Quick lookup: if you see'),
     ...LOOKUP.map((g, i) => h('details', { class: 'phase', open: i === 0 }, h('summary', null, h('span', { class: 'n' }, String(i + 1)), h('div', null, h('b', null, g[0]))),
       h('div', { class: 'body' }, ...g[1].map(r => h('div', { class: 'ex' }, h('b', null, r[0]), h('span', null, '= ' + r[1])))))));
   const rules = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'Four rules for using this'),
@@ -370,7 +370,8 @@ export function step8(host, panel, factsHost) {
     ['6.4° vs 1.4°', 'change in scapular upward rotation with resistance in pitchers who got hurt versus those who didn\'t. Resting ROM and rotation deficits were the same.'],
     ['+227 g', 'shoulder muscle mass gained with blood-flow-restriction cuff work versus +75 g in controls, in-season, at 20% of max, twice weekly for 8 weeks. Mechanics held.'],
   ];
-  factsHost.append(lookup, rules, ...facts.map(f => h('div', { class: 'fact' }, h('span', { class: 'tag' }, 'From the research'), h('b', null, f[0]), h('span', null, f[1]))),
+  document.getElementById('lk8').append(lookup);
+  factsHost.append(rules, ...facts.map(f => h('div', { class: 'fact' }, h('span', { class: 'tag' }, 'From the research'), h('b', null, f[0]), h('span', null, f[1]))),
     h('a', { class: 'btn', href: '../onboarding/assets/shoulder/poster.jpg', target: '_blank', rel: 'noopener', style: 'grid-column:1/-1;justify-self:start;text-decoration:none' }, 'Open the full shoulder poster'));
 
   mountStage(host, {

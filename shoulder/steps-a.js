@@ -1,8 +1,8 @@
 // Steps 1 to 5
 import * as THREE from 'three';
-import { COL } from './rig.js?v=14';
-import { VIEWS } from './viewer.js?v=14';
-import { $, h, POSE0, PART_NAMES, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=14';
+import { COL } from './rig.js?v=15';
+import { VIEWS } from './viewer.js?v=15';
+import { $, h, POSE0, PART_NAMES, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=15';
 
 export const hex = c => '#' + c.toString(16).padStart(6, '0');
 

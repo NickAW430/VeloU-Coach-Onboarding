@@ -1,7 +1,7 @@
 // VeloU Shoulder Lab · anatomy rig built on the real mesh set (Z-Anatomy / BodyParts3D, CC BY-SA).
 // Same public surface as rig.js so the step code does not care which one it gets.
 import * as THREE from 'three';
-import { COL } from './rig.js?v=14';
+import { COL } from './rig.js?v=15';
 
 const { Vector3: V3, Matrix4: M4, Quaternion: Q4, Group, Mesh } = THREE;
 const RAD = Math.PI / 180;

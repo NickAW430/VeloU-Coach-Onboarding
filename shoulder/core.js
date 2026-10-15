@@ -1,9 +1,9 @@
 // Shared helpers for the Shoulder Lab.
 import * as THREE from 'three';
-import { Viewer } from './viewer.js?v=14';
-import { COL, Rig } from './rig.js?v=14';
-import { RealRig } from './rig2.js?v=14';
-import { loadAnatomy } from './anatomy.js?v=14';
+import { Viewer } from './viewer.js?v=15';
+import { COL, Rig } from './rig.js?v=15';
+import { RealRig } from './rig2.js?v=15';
+import { loadAnatomy } from './anatomy.js?v=15';
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];

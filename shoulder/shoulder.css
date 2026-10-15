@@ -182,3 +182,10 @@ footer.foot{margin-top:70px;padding-top:20px;border-top:1px solid var(--line);co
 @media (max-width:620px){.syn-top{grid-template-columns:1fr}}
 
 .stage.loading::after{content:"Loading anatomy…";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-size:15px}
+
+/* step 8: stage and controls share a row height; syndrome detail sits beside the quick lookup */
+.lab8{align-items:stretch}
+.lab8 .stage{aspect-ratio:auto;min-height:440px;height:100%}
+.lab8>#dt8,.lab8>#lk8{min-width:0}
+.lab8>#lk8>.card{height:100%}
+@media (max-width:980px){.lab8 .stage{aspect-ratio:4/3.1;height:auto}}
