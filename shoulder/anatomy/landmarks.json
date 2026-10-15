@@ -1,0 +1,3112 @@
+{
+"(Canal for vertebral artery)": [
+-0.0332,
+1.5481,
+-0.0133
+],
+"(External occipital crest)": [
+-0.0,
+1.565,
+-0.0775
+],
+"(Internal occipital crest)": [
+-0.0,
+1.5698,
+-0.0607
+],
+"(Mandibular symphysis)": [
+0.0,
+1.5049,
+0.0951
+],
+"(Middle clinoid process)": [
+0.0,
+1.6001,
+0.0165
+],
+"(Posterior obturator tubercle)": [
+-0.0384,
+0.8451,
+-0.0089
+],
+"(Supra-orbital notch)": [
+0.0282,
+1.6155,
+0.0877
+],
+"(Third trochanter)": [
+-0.1262,
+0.7968,
+-0.041
+],
+"(Vermian fossa)": [
+-0.0,
+1.5639,
+-0.0516
+],
+"[Trochlear spine]": [
+0.0186,
+1.6094,
+0.0764
+],
+"Acetabular fossa": [
+-0.0857,
+0.8661,
+-0.02
+],
+"Acetabular margin": [
+-0.1067,
+0.8756,
+-0.0271
+],
+"Acetabular notch": [
+-0.0791,
+0.8605,
+-0.0071
+],
+"Acetabulum": [
+-0.0853,
+0.871,
+-0.015
+],
+"Acromial angle": [
+-0.1803,
+1.4007,
+-0.0711
+],
+"Acromial end": [
+-0.1429,
+1.4282,
+-0.0422
+],
+"Acromial facet": [
+-0.1633,
+1.416,
+-0.0351
+],
+"Acromion": [
+-0.1617,
+1.4257,
+-0.0473
+],
+"Adductor tubercle": [
+-0.017,
+0.4754,
+-0.0322
+],
+"Ala of ilium": [
+-0.0843,
+0.9608,
+-0.0054
+],
+"Ala of sacrum": [
+0.0405,
+0.9383,
+-0.0112
+],
+"Anatomical neck of humerus": [
+-0.1272,
+1.369,
+-0.0206
+],
+"Angle of rib": [
+-0.0745,
+1.3106,
+-0.1086
+],
+"Annular epiphysis": [
+0.0228,
+1.0669,
+0.0117
+],
+"Anterior arch of atlas": [
+0.0046,
+1.5513,
+-0.0018
+],
+"Anterior articular facet of dens axis": [
+-0.0,
+1.5456,
+0.0135
+],
+"Anterior border of fibula": [
+-0.1084,
+0.3337,
+-0.0234
+],
+"Anterior border of humerus": [
+-0.2085,
+1.2295,
+-0.0094
+],
+"Anterior border of radius": [
+-0.2492,
+1.0354,
+0.0036
+],
+"Anterior border of tibia": [
+-0.0854,
+0.3178,
+0.0167
+],
+"Anterior border of ulna": [
+-0.2293,
+1.0273,
+-0.013
+],
+"Anterior clinoid process": [
+0.0139,
+1.6107,
+0.0159
+],
+"Anterior gluteal line": [
+-0.118,
+0.9687,
+-0.0252
+],
+"Anterior inferior iliac spine": [
+-0.0972,
+0.8886,
+0.0403
+],
+"Anterior intercondylar area": [
+-0.0666,
+0.4491,
+-0.0205
+],
+"Anterior limb of stapes": [
+-0.0432,
+1.5801,
+-0.0038
+],
+"Anterior obturator tubercle": [
+-0.0405,
+0.8375,
+0.0277
+],
+"Anterior process of calcaneus": [
+-0.1162,
+0.0479,
+-0.0317
+],
+"Anterior process of malleus": [
+-0.0486,
+1.5829,
+-0.0015
+],
+"Anterior sacral foramina": [
+-0.0215,
+0.9024,
+-0.0607
+],
+"Anterior superior iliac spine": [
+-0.1206,
+0.945,
+0.0742
+],
+"Anterior surface of petrous part": [
+-0.0335,
+1.5859,
+0.0138
+],
+"Anterior surface of radius": [
+-0.2641,
+0.9187,
+0.0229
+],
+"Anterior tubercle of atlas": [
+0.0,
+1.5394,
+0.0152
+],
+"Anterior tubercle of transverse process": [
+-0.0199,
+1.5033,
+-0.0026
+],
+"Anterolateral surface of arytenoid cartilage": [
+-0.0075,
+1.4769,
+0.0086
+],
+"Anterolateral surface of humerus": [
+-0.226,
+1.1839,
+-0.0323
+],
+"Anteromedial surface of fibula": [
+-0.0734,
+0.1895,
+-0.018
+],
+"Anteromedial surface of humerus": [
+-0.1761,
+1.1866,
+-0.0171
+],
+"Apex of arytenoid cartilage": [
+-0.004,
+1.4814,
+0.0049
+],
+"Apex of coccyx": [
+-0.0002,
+0.8285,
+-0.0656
+],
+"Apex of dens axis": [
+0.0003,
+1.5543,
+-0.0109
+],
+"Apex of head of fibula": [
+-0.1123,
+0.4292,
+-0.0459
+],
+"Apex of petrous part": [
+-0.0068,
+1.5814,
+0.0067
+],
+"Apex of sacrum": [
+-0.0165,
+0.8683,
+-0.0898
+],
+"Appendicular skeleton": [
+0.2595,
+1.2527,
+-0.0282
+],
+"Arch of cricoid cartilage": [
+0.0,
+1.4589,
+0.0273
+],
+"Arcuate crest": [
+-0.0064,
+1.4794,
+0.0076
+],
+"Arcuate eminence": [
+-0.0394,
+1.5939,
+-0.0067
+],
+"Arcuate line of ilium": [
+-0.0436,
+0.8872,
+0.0041
+],
+"Articular circumference of head of radius": [
+-0.2793,
+1.0861,
+-0.0297
+],
+"Articular circumference of head of ulna": [
+-0.2678,
+0.864,
+0.0214
+],
+"Articular facet for malleus": [
+-0.0483,
+1.5837,
+-0.0036
+],
+"Articular facet for stapes": [
+-0.045,
+1.5796,
+-0.005
+],
+"Articular facet of head of fibula": [
+-0.0948,
+0.4132,
+-0.0362
+],
+"Articular facet of head of malleus": [
+-0.0496,
+1.5844,
+-0.0069
+],
+"Articular facet of head of radius": [
+-0.2377,
+1.0982,
+-0.0337
+],
+"Articular facet of head of stapes": [
+-0.0464,
+1.5801,
+-0.0054
+],
+"Articular facet of lateral malleolus": [
+-0.066,
+0.0877,
+-0.0482
+],
+"Articular facet of medial malleolus": [
+-0.0589,
+0.0749,
+-0.0329
+],
+"Articular facet of tubercle of rib": [
+-0.0345,
+1.3318,
+-0.1016
+],
+"Articular facets of head of rib": [
+0.0001,
+1.331,
+-0.0591
+],
+"Articular surface for cuboid": [
+-0.0913,
+0.0458,
+-0.0086
+],
+"Articular surface of arytenoid cartilage": [
+-0.0069,
+1.4731,
+0.0054
+],
+"Articular surface of medial condyle": [
+-0.0536,
+0.4557,
+-0.0384
+],
+"Arytenoid articular surface": [
+-0.0101,
+1.4779,
+0.0006
+],
+"Atlas": [
+0.0003,
+1.5461,
+0.0071
+],
+"Auditory ossicles": [
+0.0926,
+1.5822,
+-0.0048
+],
+"Auricular surface of ilium": [
+-0.0391,
+0.9331,
+-0.0276
+],
+"Auricular surface of sacrum": [
+0.0713,
+0.935,
+-0.0308
+],
+"Axial skeleton": [
+0.2188,
+1.2188,
+0.009
+],
+"Axis (C2)": [
+-0.0261,
+1.5301,
+0.0004
+],
+"Base of arytenoid cartilage": [
+-0.0036,
+1.4731,
+0.0083
+],
+"Base of coccyx": [
+0.0001,
+0.858,
+-0.0675
+],
+"Base of mandible": [
+0.0441,
+1.5079,
+0.0544
+],
+"Base of metatarsal bone": [
+-0.083,
+0.0492,
+0.023
+],
+"Base of phalanx of foot": [
+-0.0966,
+0.0218,
+0.0827
+],
+"Base of phalanx of hand": [
+-0.2517,
+0.766,
+0.0421
+],
+"Base of sacrum": [
+-0.0171,
+0.9402,
+-0.008
+],
+"Base of stapes": [
+-0.0418,
+1.5825,
+-0.0046
+],
+"Basilar part of occipital bone": [
+-0.0,
+1.5796,
+-0.005
+],
+"Body of clavicle": [
+-0.0785,
+1.42,
+0.0142
+],
+"Body of femur": [
+-0.1326,
+0.6698,
+0.0026
+],
+"Body of fibula": [
+-0.1305,
+0.2897,
+-0.0438
+],
+"Body of humerus": [
+-0.1745,
+1.2651,
+-0.0255
+],
+"Body of hyoid bone": [
+-0.0063,
+1.4891,
+0.0344
+],
+"Body of ilium": [
+-0.1121,
+0.8986,
+0.0041
+],
+"Body of incus": [
+-0.05,
+1.5848,
+-0.0053
+],
+"Body of ischium": [
+-0.0817,
+0.8339,
+-0.0282
+],
+"Body of mandible": [
+0.0472,
+1.5155,
+0.053
+],
+"Body of metacarpal bone": [
+-0.2416,
+0.8005,
+0.0277
+],
+"Body of metatarsal bone": [
+-0.0855,
+0.0372,
+0.0502
+],
+"Body of phalanx of foot": [
+-0.0995,
+0.0189,
+0.0945
+],
+"Body of phalanx of hand": [
+-0.2565,
+0.7488,
+0.0497
+],
+"Body of pubis": [
+-0.0506,
+0.8793,
+0.0253
+],
+"Body of radius": [
+-0.2837,
+0.9633,
+-0.0104
+],
+"Body of rib": [
+-0.1467,
+1.2772,
+-0.0268
+],
+"Body of sphenoid bone": [
+0.0023,
+1.5559,
+0.0255
+],
+"Body of talus": [
+-0.0495,
+0.0745,
+-0.0366
+],
+"Body of tibia": [
+-0.0556,
+0.2624,
+-0.0158
+],
+"Body of ulna": [
+-0.2146,
+0.9995,
+-0.0215
+],
+"Bones of cranium": [
+0.1014,
+1.6206,
+-0.0051
+],
+"Bones of foot": [
+-0.171,
+0.0457,
+0.004
+],
+"Bones of free part of lower limb": [
+-0.1851,
+0.6171,
+-0.0187
+],
+"Bones of free part of upper limb": [
+-0.3028,
+1.1017,
+-0.0376
+],
+"Bones of hand": [
+-0.3591,
+0.7818,
+0.0309
+],
+"Bones of lower limb": [
+-0.1827,
+0.6558,
+-0.013
+],
+"Bones of pectoral girdle": [
+-0.1542,
+1.43,
+-0.0345
+],
+"Bones of pelvic girdle": [
+-0.1335,
+0.8944,
+-0.0111
+],
+"Bones of thorax": [
+0.0007,
+1.2863,
+0.1457
+],
+"Bones of upper limb": [
+-0.3038,
+1.1404,
+-0.0487
+],
+"Bones of vertebral column": [
+-0.0001,
+1.2671,
+-0.1543
+],
+"Bony pelvis": [
+-0.1338,
+0.9125,
+-0.0137
+],
+"Calcaneal sulcus": [
+-0.0713,
+0.0595,
+-0.0379
+],
+"Calcaneal tubercle": [
+-0.0807,
+0.0261,
+-0.0284
+],
+"Calcaneal tuberosity": [
+-0.0638,
+0.0241,
+-0.1018
+],
+"Capitulum of humerus": [
+-0.256,
+1.092,
+-0.0265
+],
+"Carotid sulcus": [
+0.0014,
+1.5895,
+0.0089
+],
+"Carpal articular surface": [
+-0.2698,
+0.8518,
+0.0146
+],
+"Carpal bones": [
+-0.2169,
+0.8441,
+0.0211
+],
+"Cartilages of ear": [
+0.1111,
+1.5922,
+-0.0129
+],
+"Cerebellar fossa": [
+0.0174,
+1.5757,
+-0.0608
+],
+"Cerebral fossa": [
+0.0221,
+1.6022,
+-0.0837
+],
+"Cerebral surface of greater wing": [
+-0.034,
+1.5937,
+0.03
+],
+"Cervical vertebra": [
+0.037,
+1.4923,
+-0.0101
+],
+"Cervical vertebrae": [
+-0.0001,
+1.4845,
+-0.0936
+],
+"Chiasmatic sulcus": [
+0.0,
+1.6071,
+0.0258
+],
+"Clavicular facet": [
+-0.1418,
+1.4225,
+-0.0373
+],
+"Clavicular notch": [
+-0.0336,
+1.3864,
+0.0436
+],
+"Coccygeal horn": [
+0.0094,
+0.8612,
+-0.0898
+],
+"Coccyx": [
+-0.0224,
+0.8517,
+-0.0775
+],
+"Colliculus of arytenoid cartilage": [
+-0.0031,
+1.4807,
+0.0082
+],
+"Condylar canal": [
+-0.023,
+1.5584,
+-0.0311
+],
+"Condylar fossa": [
+0.0325,
+1.5567,
+-0.0399
+],
+"Condyle of humerus": [
+-0.2194,
+1.0842,
+-0.0356
+],
+"Conoid tubercle": [
+-0.1058,
+1.4068,
+-0.024
+],
+"Coracoid process": [
+-0.1476,
+1.3905,
+0.0078
+],
+"Coronoid fossa": [
+-0.2161,
+1.1148,
+-0.0199
+],
+"Coronoid process of ulna": [
+-0.2193,
+1.0977,
+-0.0129
+],
+"Costal arch": [
+-0.0291,
+1.1775,
+0.1032
+],
+"Costal cartilages": [
+-0.0451,
+1.1991,
+0.1524
+],
+"Costal groove": [
+-0.0795,
+1.3056,
+-0.089
+],
+"Costal notches": [
+-0.0286,
+1.271,
+0.0999
+],
+"Costal part of transverse process": [
+-0.0423,
+1.0523,
+-0.0189
+],
+"Costal surface of scapula": [
+-0.0808,
+1.3451,
+-0.0765
+],
+"Cranium": [
+0.0935,
+1.667,
+-0.0068
+],
+"Crest of greater tubercle": [
+-0.2045,
+1.3766,
+0.0035
+],
+"Crest of head of rib": [
+-0.0045,
+1.3357,
+-0.0572
+],
+"Crest of lesser tubercle": [
+-0.1842,
+1.3625,
+-0.0034
+],
+"Crest of neck of rib": [
+-0.0543,
+1.3375,
+-0.0812
+],
+"Crown of tooth": [
+-0.0297,
+1.5293,
+0.0608
+],
+"Cruciform eminence": [
+-0.0072,
+1.5846,
+-0.0759
+],
+"Cusp of tooth": [
+-0.018,
+1.5327,
+0.0614
+],
+"Deltoid tubercle": [
+-0.0611,
+1.3802,
+-0.113
+],
+"Deltoid tuberosity": [
+-0.2238,
+1.2866,
+-0.034
+],
+"Dens axis": [
+-0.0003,
+1.5493,
+0.0019
+],
+"Digastric fossa": [
+0.0063,
+1.4999,
+0.0626
+],
+"Distal surface of tooth": [
+-0.0227,
+1.5299,
+0.0493
+],
+"Dorsal radial tubercle": [
+-0.2747,
+0.8605,
+-0.0099
+],
+"Dorsal surface of sacrum": [
+0.0139,
+0.9517,
+-0.073
+],
+"Dorsum sellae": [
+-0.0001,
+1.607,
+0.0065
+],
+"Ethmoidal notch": [
+-0.0,
+1.5936,
+0.0619
+],
+"External occipital protuberance": [
+-0.0,
+1.5677,
+-0.0922
+],
+"External surface of frontal bone": [
+0.0246,
+1.694,
+0.0521
+],
+"External surface of parietal bone": [
+-0.0728,
+1.6814,
+-0.0403
+],
+"Extracranial bones of head": [
+0.0782,
+1.5095,
+0.0412
+],
+"Facet for calcaneonavicular part of bifurcate ligament": [
+-0.1041,
+0.0645,
+-0.015
+],
+"Facet for dens": [
+0.0,
+1.5427,
+-0.0077
+],
+"Facet for plantar calcaneonavicular ligament": [
+-0.0452,
+0.057,
+-0.0323
+],
+"Facial bones": [
+0.0739,
+1.5588,
+0.0617
+],
+"False ribs": [
+-0.1473,
+1.1353,
+0.0042
+],
+"Femur": [
+-0.1266,
+0.6201,
+-0.0096
+],
+"Fibula": [
+-0.124,
+0.2574,
+-0.0452
+],
+"Fibular articular facet": [
+-0.1322,
+0.4057,
+-0.0365
+],
+"Fibular notch": [
+-0.1158,
+0.0985,
+-0.0434
+],
+"Fifth metatarsal bone": [
+-0.1131,
+0.022,
+-0.0137
+],
+"First metatarsal bone": [
+-0.0755,
+0.0318,
+0.0237
+],
+"Floating ribs": [
+-0.0635,
+1.0999,
+-0.0811
+],
+"Foramen caecum of frontal bone": [
+0.0,
+1.6102,
+0.0631
+],
+"Foramen magnum": [
+0.0007,
+1.5533,
+-0.0296
+],
+"Foramen ovale": [
+0.024,
+1.5844,
+0.0122
+],
+"Foramen rotundum": [
+-0.0153,
+1.5914,
+0.0439
+],
+"Foramen spinosum": [
+0.0302,
+1.5816,
+0.0068
+],
+"Foramen transversarium": [
+-0.0216,
+1.4894,
+-0.0111
+],
+"Fossa for lacrimal gland": [
+-0.0437,
+1.6078,
+0.0612
+],
+"Fovea for ligament of head of femur": [
+-0.0452,
+0.8742,
+-0.0097
+],
+"Frontal angle of parietal bone": [
+0.0164,
+1.6993,
+0.0212
+],
+"Frontal border of parietal bone": [
+-0.0471,
+1.6704,
+0.0438
+],
+"Frontal crest": [
+0.0,
+1.6395,
+0.0724
+],
+"Frontal eminence": [
+0.0342,
+1.6466,
+0.0831
+],
+"Frontal margin of greater wing": [
+0.0382,
+1.6256,
+0.0439
+],
+"Genion": [
+-0.0387,
+1.5257,
+0.002
+],
+"Glabella": [
+0.0,
+1.6112,
+0.0929
+],
+"Glenoid fossa": [
+-0.1573,
+1.3779,
+-0.0367
+],
+"Glenoid process of scapula": [
+-0.1661,
+1.3713,
+-0.0409
+],
+"Gluteal surface of ilium": [
+-0.0965,
+0.9359,
+-0.0273
+],
+"Gluteal tuberosity": [
+-0.1088,
+0.775,
+-0.0395
+],
+"Gnathion": [
+0.0,
+1.4978,
+0.0899
+],
+"Greater horn of hyoid bone": [
+0.0285,
+1.5042,
+0.0137
+],
+"Greater sciatic foramen": [
+-0.0395,
+0.8925,
+-0.0546
+],
+"Greater sciatic notch": [
+-0.0531,
+0.907,
+-0.0407
+],
+"Greater trochanter": [
+-0.1664,
+0.8433,
+-0.0145
+],
+"Greater tubercle": [
+-0.2007,
+1.4043,
+-0.0222
+],
+"Greater wing": [
+-0.0385,
+1.6307,
+0.0441
+],
+"Groove for marginal sinus": [
+0.0136,
+1.5491,
+-0.0373
+],
+"Groove for middle meningeal artery": [
+-0.0456,
+1.6232,
+0.0053
+],
+"Groove for occipital sinus": [
+-0.0,
+1.5759,
+-0.0639
+],
+"Groove for spinal nerve": [
+-0.0359,
+1.494,
+-0.0044
+],
+"Groove for subclavius muscle": [
+-0.0882,
+1.4009,
+0.003
+],
+"Groove for tendon of fibularis longus muscle of cuboid bone": [
+-0.1207,
+0.0326,
+-0.0187
+],
+"Groove for tendon of flexor hallucis longus of calcaneus": [
+-0.049,
+0.0492,
+-0.0389
+],
+"Groove for tendon of flexor hallucis longus of talus": [
+-0.064,
+0.0675,
+-0.0717
+],
+"Groove for transverse sinus": [
+-0.0288,
+1.5844,
+-0.0703
+],
+"Groove for ulnar nerve": [
+-0.2025,
+1.0917,
+-0.0464
+],
+"Groove for vertebral artery": [
+-0.0227,
+1.5496,
+-0.031
+],
+"Groove of pterygoid hamulus": [
+-0.0079,
+1.5502,
+0.0316
+],
+"Grooves for extensor tendons": [
+-0.2624,
+0.8651,
+-0.013
+],
+"Handle of malleus": [
+-0.0498,
+1.5798,
+-0.0033
+],
+"Head of femur": [
+-0.0748,
+0.8937,
+0.0001
+],
+"Head of fibula": [
+-0.1426,
+0.399,
+-0.0402
+],
+"Head of humerus": [
+-0.171,
+1.4107,
+-0.0156
+],
+"Head of malleus": [
+-0.0487,
+1.5867,
+-0.0041
+],
+"Head of metacarpal bone": [
+-0.237,
+0.7767,
+0.0349
+],
+"Head of metatarsal bone": [
+-0.0893,
+0.0217,
+0.0763
+],
+"Head of phalanx of foot": [
+-0.1,
+0.0139,
+0.1038
+],
+"Head of phalanx of hand": [
+-0.2589,
+0.734,
+0.0613
+],
+"Head of radius": [
+-0.2169,
+1.0826,
+-0.0312
+],
+"Head of rib": [
+-0.0246,
+1.3485,
+-0.0623
+],
+"Head of talus": [
+-0.0482,
+0.0593,
+-0.0206
+],
+"Head of ulna": [
+-0.2263,
+0.8705,
+0.013
+],
+"Hip bone": [
+-0.1222,
+0.9122,
+-0.0038
+],
+"Hook of hamate bone": [
+-0.253,
+0.8403,
+0.0447
+],
+"Humerus": [
+-0.2224,
+1.3071,
+-0.0297
+],
+"Hypoglossal canal": [
+-0.0219,
+1.5636,
+-0.0094
+],
+"Hypophysial fossa": [
+-0.0,
+1.6002,
+0.015
+],
+"Iliac crest": [
+-0.131,
+1.0087,
+0.0062
+],
+"Iliac fossa": [
+-0.08,
+0.9404,
+0.0004
+],
+"Iliac tubercle": [
+-0.1347,
+1.0021,
+-0.0058
+],
+"Iliac tuberosity": [
+-0.0561,
+0.9982,
+-0.0654
+],
+"Iliopubic eminence": [
+-0.0694,
+0.8874,
+0.033
+],
+"Ilium": [
+-0.1189,
+0.9554,
+-0.0433
+],
+"Impression for costoclavicular ligament": [
+-0.0295,
+1.3936,
+0.0382
+],
+"Inferior angle of scapula": [
+-0.094,
+1.2459,
+-0.1006
+],
+"Inferior articular facet of vertebra": [
+0.0163,
+1.018,
+-0.039
+],
+"Inferior articular surface of atlas": [
+0.0162,
+1.5322,
+-0.0114
+],
+"Inferior articular surface of tibia": [
+-0.0721,
+0.0734,
+-0.0422
+],
+"Inferior costal facet": [
+0.0325,
+1.2553,
+-0.0576
+],
+"Inferior gluteal line": [
+-0.1169,
+0.9044,
+0.0046
+],
+"Inferior horn of thyroid cartilage": [
+-0.0262,
+1.4622,
+0.0046
+],
+"Inferior mental spine": [
+0.0016,
+1.5032,
+0.06
+],
+"Inferior nuchal line": [
+0.0193,
+1.5587,
+-0.0671
+],
+"Inferior pubic ramus": [
+-0.0286,
+0.8213,
+0.0286
+],
+"Inferior temporal line": [
+-0.0803,
+1.63,
+-0.0597
+],
+"Inferior thoracic aperture": [
+0.0007,
+1.0632,
+0.0416
+],
+"Inferior thyroid notch": [
+0.0,
+1.4633,
+0.0316
+],
+"Inferior thyroid tubercle": [
+-0.0208,
+1.4658,
+0.0119
+],
+"Inferior vertebral notch": [
+-0.0312,
+1.0439,
+-0.0212
+],
+"Infraglenoid tubercle": [
+-0.1658,
+1.3648,
+-0.0371
+],
+"Infraspinous fossa": [
+-0.1051,
+1.3323,
+-0.102
+],
+"Infrasternal angle": [
+0.0,
+1.1916,
+0.1032
+],
+"Infratemporal surface of greater wing": [
+-0.0386,
+1.5635,
+0.0227
+],
+"Inner lip of iliac crest": [
+-0.1061,
+1.0244,
+-0.0246
+],
+"Intercondylar area": [
+-0.0699,
+0.4541,
+-0.0337
+],
+"Intercondylar eminence": [
+-0.0703,
+0.441,
+-0.0381
+],
+"Intercondylar fossa": [
+-0.0753,
+0.4503,
+-0.0714
+],
+"Intercondylar line": [
+-0.0764,
+0.4666,
+-0.0554
+],
+"Intercostal space": [
+-0.0252,
+1.1673,
+0.1032
+],
+"Intermediate sacral crest": [
+0.0113,
+0.9328,
+-0.0854
+],
+"Intermediate zone": [
+-0.1127,
+1.0213,
+-0.0196
+],
+"Internal occipital protuberance": [
+-0.0,
+1.5895,
+-0.0686
+],
+"Internal surface of parietal bone": [
+-0.0423,
+1.6608,
+-0.0384
+],
+"Internal surface of squamous part of frontal bone": [
+0.0257,
+1.6634,
+0.0575
+],
+"Interosseous border of radius": [
+-0.2297,
+0.965,
+-0.0111
+],
+"Interosseous border of tibia": [
+-0.1126,
+0.29,
+-0.0542
+],
+"Interosseous border of ulna": [
+-0.2627,
+0.9676,
+-0.0103
+],
+"Interosseous crest of fibula": [
+-0.0712,
+0.2156,
+-0.0483
+],
+"Intertrochanteric crest": [
+-0.1167,
+0.81,
+-0.0621
+],
+"Intertrochanteric line": [
+-0.1038,
+0.8275,
+0.0141
+],
+"Intervertebral foramen": [
+0.0124,
+1.0697,
+-0.0228
+],
+"Intervertebral foramina": [
+-0.0137,
+0.9087,
+-0.0793
+],
+"Intervertebral surface": [
+-0.0005,
+1.0679,
+-0.002
+],
+"Intrajugular process of occipital bone": [
+-0.0295,
+1.5653,
+-0.0144
+],
+"Ischial spine": [
+-0.0345,
+0.867,
+-0.0603
+],
+"Ischial tuberosity": [
+-0.081,
+0.8151,
+-0.0599
+],
+"Ischiopubic ramus": [
+-0.0355,
+0.8005,
+0.0081
+],
+"Ischium": [
+-0.0698,
+0.8041,
+-0.0474
+],
+"Jugular notch of occipital bone": [
+0.0294,
+1.5626,
+-0.0084
+],
+"Jugular process": [
+0.0376,
+1.5702,
+-0.0079
+],
+"Lamina of cricoid cartilage": [
+-0.0121,
+1.467,
+-0.0024
+],
+"Lamina of thyroid cartilage": [
+-0.0182,
+1.4773,
+0.0213
+],
+"Lamina of vertebral arch": [
+0.0067,
+1.0455,
+-0.0493
+],
+"Laryngeal cartilages": [
+0.0665,
+1.4748,
+0.0111
+],
+"Laryngeal prominence": [
+0.0,
+1.4758,
+0.0394
+],
+"Lateral angle of scapula": [
+-0.145,
+1.3768,
+-0.0144
+],
+"Lateral border of humerus": [
+-0.2373,
+1.2191,
+-0.0584
+],
+"Lateral border of scapula": [
+-0.141,
+1.3268,
+-0.0592
+],
+"Lateral condyle of femur": [
+-0.1002,
+0.4325,
+-0.0473
+],
+"Lateral condyle of tibia": [
+-0.1385,
+0.4218,
+-0.0287
+],
+"Lateral epicondyle of femur": [
+-0.1472,
+0.4599,
+-0.0313
+],
+"Lateral epicondyle of humerus": [
+-0.2747,
+1.1123,
+-0.0439
+],
+"Lateral intercondylar tubercle": [
+-0.0788,
+0.4343,
+-0.0396
+],
+"Lateral lip of linea apera": [
+-0.0985,
+0.5655,
+-0.0344
+],
+"Lateral malleolar facet": [
+-0.0983,
+0.0758,
+-0.0528
+],
+"Lateral malleolus": [
+-0.1292,
+0.0689,
+-0.0496
+],
+"Lateral mass": [
+0.0233,
+1.5555,
+-0.0152
+],
+"Lateral process of calcaneal tuberosity": [
+-0.0838,
+0.0113,
+-0.0731
+],
+"Lateral process of malleus": [
+-0.0512,
+1.5811,
+-0.0047
+],
+"Lateral process of talus": [
+-0.1031,
+0.056,
+-0.0498
+],
+"Lateral pterygoid plate": [
+0.0254,
+1.5461,
+0.0324
+],
+"Lateral sacral crest": [
+0.0418,
+0.9247,
+-0.0855
+],
+"Lateral supracondylar line": [
+-0.0432,
+0.495,
+-0.0442
+],
+"Lateral supracondylar ridge": [
+-0.2624,
+1.1382,
+-0.0505
+],
+"Lateral surface of fibula": [
+-0.1395,
+0.2766,
+-0.0429
+],
+"Lateral surface of radius": [
+-0.2817,
+0.9824,
+-0.0149
+],
+"Lateral surface of tibia": [
+-0.1132,
+0.2781,
+-0.0014
+],
+"Lateral tubercle": [
+-0.0744,
+0.0608,
+-0.0732
+],
+"Lenticular process of incus": [
+-0.0471,
+1.5799,
+-0.0038
+],
+"Lesser horn of hyoid bone": [
+0.0152,
+1.5062,
+0.0321
+],
+"Lesser sciatic foramen": [
+-0.0512,
+0.8494,
+-0.0714
+],
+"Lesser sciatic notch": [
+-0.0414,
+0.8534,
+-0.0609
+],
+"Lesser trochanter": [
+-0.0732,
+0.7873,
+-0.0426
+],
+"Lesser tubercle": [
+-0.1671,
+1.3896,
+0.0114
+],
+"Lesser wing": [
+-0.0236,
+1.6269,
+0.0368
+],
+"Limbus of sphenoid": [
+-0.0,
+1.6138,
+0.0292
+],
+"Linea aspera": [
+-0.0968,
+0.658,
+-0.0293
+],
+"Linea terminalis": [
+-0.0476,
+0.9089,
+-0.0051
+],
+"Lingual surface of tooth": [
+-0.0131,
+1.527,
+0.0564
+],
+"Long limb of incus": [
+-0.0446,
+1.5816,
+-0.0052
+],
+"Lumbar vertebrae": [
+0.0003,
+1.0283,
+-0.1067
+],
+"Lunate surface": [
+-0.0943,
+0.8802,
+-0.0119
+],
+"Malleolar fossa": [
+-0.0965,
+0.0594,
+-0.0659
+],
+"Mandibular dental arch": [
+-0.0357,
+1.5176,
+0.0755
+],
+"Manubrium of sternum": [
+0.0007,
+1.3801,
+0.0811
+],
+"Mastoid angle of parietal bone": [
+-0.0601,
+1.5847,
+-0.0519
+],
+"Mastoid notch": [
+-0.0515,
+1.5615,
+-0.0213
+],
+"Mastoid process": [
+-0.0645,
+1.5617,
+-0.0161
+],
+"Maxillary dental arch": [
+-0.0392,
+1.5428,
+0.0761
+],
+"Maxillary surface of greater wing": [
+-0.0174,
+1.5832,
+0.0451
+],
+"Medial border of fibula": [
+-0.0755,
+0.2326,
+-0.0466
+],
+"Medial condyle of femur": [
+-0.0515,
+0.4249,
+-0.0472
+],
+"Medial condyle of tibia": [
+-0.0165,
+0.4102,
+-0.0429
+],
+"Medial epicondyle of femur": [
+-0.0053,
+0.452,
+-0.0349
+],
+"Medial epicondyle of humerus": [
+-0.1716,
+1.1092,
+-0.0361
+],
+"Medial intercondylar tubercle": [
+-0.0665,
+0.4379,
+-0.0412
+],
+"Medial lip of linea apera": [
+-0.0704,
+0.5575,
+-0.0305
+],
+"Medial malleolar facet": [
+-0.0517,
+0.0793,
+-0.0373
+],
+"Medial malleolus": [
+-0.028,
+0.0895,
+-0.0372
+],
+"Medial process of calcaneal tuberosity": [
+-0.064,
+0.0111,
+-0.0584
+],
+"Medial pterygoid plate": [
+0.0129,
+1.5489,
+0.0349
+],
+"Medial supracondylar line": [
+-0.1123,
+0.4894,
+-0.0449
+],
+"Medial supracondylar ridge": [
+-0.1721,
+1.1306,
+-0.0366
+],
+"Medial surface of arytenoid cartilage": [
+-0.001,
+1.4749,
+0.0075
+],
+"Medial surface of fibula": [
+-0.0798,
+0.3226,
+-0.045
+],
+"Medial surface of tibia": [
+-0.0561,
+0.3441,
+0.0101
+],
+"Medial surface of ulna": [
+-0.2089,
+1.0328,
+-0.0508
+],
+"Medial tubercle": [
+-0.0524,
+0.0585,
+-0.0669
+],
+"Median sacral crest": [
+-0.0,
+0.9395,
+-0.0839
+],
+"Mental foramen": [
+-0.0364,
+1.5103,
+0.0732
+],
+"Mental protuberance": [
+-0.0133,
+1.5005,
+0.0929
+],
+"Mental tubercle": [
+0.0055,
+1.4951,
+0.0785
+],
+"Mesial surface of tooth": [
+-0.0207,
+1.5265,
+0.0678
+],
+"Metacarpal bones": [
+-0.2163,
+0.8082,
+0.028
+],
+"Metatarsal bones": [
+-0.0314,
+0.0403,
+0.0534
+],
+"Muscular process": [
+-0.0095,
+1.4745,
+0.004
+],
+"Mylohyoid line": [
+0.0178,
+1.5281,
+0.0316
+],
+"Nasal cartilages": [
+0.0002,
+1.5716,
+0.1309
+],
+"Nasal spine of frontal bone": [
+0.0,
+1.5959,
+0.0891
+],
+"Neck of femur": [
+-0.0669,
+0.834,
+-0.0025
+],
+"Neck of fibula": [
+-0.1334,
+0.3806,
+-0.0407
+],
+"Neck of malleus": [
+-0.0503,
+1.582,
+-0.0042
+],
+"Neck of radius": [
+-0.2584,
+1.0748,
+-0.0257
+],
+"Neck of rib": [
+-0.0394,
+1.3308,
+-0.0642
+],
+"Neck of scapula": [
+-0.156,
+1.3473,
+-0.0398
+],
+"Neck of talus": [
+-0.0493,
+0.0684,
+-0.021
+],
+"Neck of tooth": [
+-0.0151,
+1.5263,
+0.0511
+],
+"Neurocranium": [
+0.0996,
+1.6474,
+-0.0109
+],
+"Oblique line of mandible": [
+0.0537,
+1.5279,
+0.0469
+],
+"Oblique line of thyroid cartilage": [
+-0.0253,
+1.4751,
+0.0098
+],
+"Oblong fovea": [
+-0.0069,
+1.4754,
+0.0067
+],
+"Obturator crest": [
+-0.0548,
+0.8453,
+0.0196
+],
+"Obturator foramen": [
+-0.0404,
+0.8349,
+-0.0012
+],
+"Occipital angle of parietal bone": [
+0.0165,
+1.658,
+-0.0941
+],
+"Occipital condyle": [
+-0.023,
+1.5501,
+-0.0171
+],
+"Occipital plane": [
+-0.0,
+1.5842,
+-0.1019
+],
+"Occlusal surface of tooth": [
+-0.0218,
+1.5332,
+0.058
+],
+"Olecranon fossa": [
+-0.217,
+1.1117,
+-0.0545
+],
+"Olecranon": [
+-0.2145,
+1.1165,
+-0.0589
+],
+"Opening of frontal sinus": [
+0.0063,
+1.5931,
+0.0759
+],
+"Optic canal": [
+-0.012,
+1.6031,
+0.0402
+],
+"Orbital plate of frontal bone": [
+-0.0232,
+1.6208,
+0.0486
+],
+"Orbital surface of frontal bone": [
+-0.0365,
+1.6009,
+0.0533
+],
+"Orbital surface of greater wing": [
+0.0271,
+1.5937,
+0.0452
+],
+"Parietal eminence": [
+-0.0801,
+1.6651,
+-0.0314
+],
+"Parietal foramen": [
+-0.0075,
+1.6873,
+-0.0809
+],
+"Patellar surface of femur": [
+-0.081,
+0.45,
+0.0335
+],
+"Pectineal line of femur": [
+-0.0931,
+0.7664,
+-0.031
+],
+"Pectoral girdle": [
+0.0931,
+1.4288,
+0.0075
+],
+"Pedicle of vertebral arch": [
+0.0312,
+1.0528,
+-0.0167
+],
+"Pelvic girdle": [
+0.1303,
+0.9258,
+-0.019
+],
+"Pelvic inlet": [
+0.0,
+0.8983,
+-0.0
+],
+"Pelvic outlet": [
+0.0002,
+0.8051,
+-0.0043
+],
+"Pharyngeal tubercle": [
+-0.0,
+1.5649,
+0.0038
+],
+"Popliteal surface of femur": [
+-0.0819,
+0.5056,
+-0.0588
+],
+"Posterior arch of atlas": [
+0.0129,
+1.535,
+-0.0441
+],
+"Posterior clinoid process": [
+0.0079,
+1.6069,
+0.0006
+],
+"Posterior gluteal line": [
+-0.0735,
+0.9539,
+-0.0786
+],
+"Posterior inferior iliac spine": [
+-0.0401,
+0.916,
+-0.0746
+],
+"Posterior intercondylar area": [
+-0.0716,
+0.4414,
+-0.048
+],
+"Posterior limb of stapes": [
+-0.0425,
+1.5798,
+-0.0057
+],
+"Posterior malleolus": [
+-0.077,
+0.089,
+-0.071
+],
+"Posterior sacral foramina": [
+-0.0223,
+0.914,
+-0.0949
+],
+"Posterior superior iliac spine": [
+-0.0298,
+0.9491,
+-0.0975
+],
+"Posterior surface of arytenoid cartilage": [
+-0.0049,
+1.4765,
+0.0013
+],
+"Posterior surface of fibula": [
+-0.0968,
+0.1194,
+-0.0731
+],
+"Posterior surface of petrous part": [
+-0.033,
+1.5836,
+-0.0239
+],
+"Posterior surface of scapula": [
+-0.1095,
+1.3512,
+-0.0925
+],
+"Posterior tubercle of atlas": [
+0.0,
+1.5373,
+-0.0575
+],
+"Posterior tubercle of transverse process": [
+-0.0264,
+1.5018,
+-0.0068
+],
+"Pronator tuberosity": [
+-0.2784,
+0.9898,
+-0.0176
+],
+"Pterygoid canal": [
+0.0144,
+1.5783,
+0.0054
+],
+"Pterygoid fossa": [
+-0.016,
+1.5623,
+0.0285
+],
+"Pterygoid hamulus": [
+-0.0215,
+1.5505,
+0.0147
+],
+"Pterygoid notch": [
+0.018,
+1.5568,
+0.0447
+],
+"Pubic crest": [
+-0.0242,
+0.8541,
+0.0492
+],
+"Pubic tubercle": [
+-0.0405,
+0.8472,
+0.0524
+],
+"Quadrate tubercle": [
+-0.117,
+0.82,
+-0.0537
+],
+"Radial fossa": [
+-0.2301,
+1.1247,
+-0.0141
+],
+"Radial notch": [
+-0.2361,
+1.0897,
+-0.0368
+],
+"Outer lip of iliac crest": [
+-0.1208,
+1.0154,
+-0.015
+],
+"Rib": [
+-0.1173,
+1.2692,
+-0.0126
+],
+"Ribs": [
+-0.151,
+1.2475,
+0.0184
+],
+"Root apex": [
+-0.0275,
+1.5133,
+0.0502
+],
+"Sacral canal": [
+-0.0011,
+0.9242,
+-0.0719
+],
+"Sacral hiatus": [
+-0.0,
+0.9665,
+-0.0441
+],
+"Sacral horn": [
+0.0108,
+0.8711,
+-0.0951
+],
+"Scaphoid fossa": [
+0.0195,
+1.5706,
+0.0151
+],
+"Scapular notch": [
+-0.1149,
+1.3978,
+-0.0511
+],
+"Soleal line": [
+-0.0754,
+0.3627,
+-0.05
+],
+"Sphenoidal angle of parietal bone": [
+-0.0557,
+1.6166,
+0.0522
+],
+"Sphenoidal crest": [
+-0.0001,
+1.5981,
+0.053
+],
+"Sphenoidal lingula": [
+-0.0144,
+1.5832,
+-0.0021
+],
+"Sphenoidal yoke": [
+-0.0,
+1.6198,
+0.0324
+],
+"Frontal part of orbital margin": [
+0.0372,
+1.603,
+0.077
+],
+"Groove for popliteus muscle": [
+-0.1424,
+0.4426,
+-0.0452
+],
+"Intertubercular sulcus": [
+-0.2015,
+1.3924,
+0.0071
+],
+"Lateral part of occipital bone": [
+0.0295,
+1.5692,
+-0.0392
+],
+"Lateral part of sacrum": [
+0.0575,
+0.9233,
+-0.0062
+],
+"Lateral part of transverse process": [
+-0.0435,
+1.0574,
+-0.0393
+],
+"Malleolar groove of fibula": [
+-0.0977,
+0.0522,
+-0.0496
+],
+"Malleolar groove of tibia": [
+-0.0647,
+0.0982,
+-0.0803
+],
+"Mastoid border of occipital bone": [
+0.0499,
+1.5603,
+-0.0317
+],
+"Medial border of humerus": [
+-0.1793,
+1.2325,
+-0.0531
+],
+"Medial border of scapula": [
+-0.0509,
+1.3254,
+-0.1075
+],
+"Medial border of tibia": [
+-0.0548,
+0.2157,
+-0.035
+],
+"Metacarpal base": [
+-0.2441,
+0.8255,
+0.0198
+],
+"Middle facet for calcaneus": [
+-0.0675,
+0.0508,
+-0.0297
+],
+"Nasal margin of frontal bone": [
+0.005,
+1.6038,
+0.0923
+],
+"Nasal part of frontal bone": [
+-0.0057,
+1.5868,
+0.0757
+],
+"Navicular articular surface": [
+-0.0702,
+0.063,
+0.0029
+],
+"Obturator groove": [
+-0.0497,
+0.8487,
+0.0131
+],
+"Occipital border of parietal bone": [
+-0.0469,
+1.609,
+-0.0976
+],
+"Occipital margin of temporal bone": [
+-0.0295,
+1.5599,
+-0.0273
+],
+"Orbital part of frontal bone": [
+-0.0269,
+1.5976,
+0.0588
+],
+"Parietal margin of frontal bone": [
+-0.0492,
+1.6851,
+0.0271
+],
+"Parietal margin of greater wing": [
+0.0617,
+1.6218,
+0.0321
+],
+"Pars interarticularis of vertebral arch": [
+0.0349,
+1.0489,
+-0.051
+],
+"Pecten pubis": [
+-0.048,
+0.8748,
+0.0302
+],
+"Pelvic surface of sacrum": [
+0.0037,
+0.9143,
+-0.0449
+],
+"Petrous part of temporal bone": [
+-0.0327,
+1.5956,
+-0.0092
+],
+"Phalanges of foot": [
+-0.0353,
+0.018,
+0.1106
+],
+"Phalanges of hand": [
+-0.2066,
+0.7505,
+0.0598
+],
+"Posterior articular facet of dens axis": [
+-0.0,
+1.542,
+-0.0303
+],
+"Posterior border of fibula": [
+-0.1003,
+0.1519,
+-0.0735
+],
+"Posterior border of radius": [
+-0.2689,
+0.8929,
+-0.0196
+],
+"Posterior border of ulna": [
+-0.2393,
+0.9001,
+-0.0163
+],
+"Posterior calcaneal articular facet": [
+-0.0769,
+0.0548,
+-0.0506
+],
+"Posterior process of talus": [
+-0.0613,
+0.0626,
+-0.0723
+],
+"Posterior surface of humerus": [
+-0.2102,
+1.1911,
+-0.0729
+],
+"Posterior surface of radius": [
+-0.2531,
+0.9942,
+-0.0357
+],
+"Posterior surface of tibia": [
+-0.0775,
+0.1897,
+-0.0593
+],
+"Posterior surface of ulna": [
+-0.2336,
+0.9409,
+-0.0281
+],
+"Posteromedial surface of fibula": [
+-0.0742,
+0.1451,
+-0.0749
+],
+"Promontory": [
+-0.0,
+0.9457,
+0.0021
+],
+"Pterygoid process ": [
+-0.0129,
+1.5699,
+0.0548
+],
+"Pterygospinous process": [
+0.0333,
+1.5617,
+0.0149
+],
+"Pubis": [
+0.0036,
+0.8407,
+0.0503
+],
+"Radial groove": [
+-0.2226,
+1.2563,
+-0.0402
+],
+"Radial styloid process": [
+-0.2857,
+0.8455,
+0.0167
+],
+"Radial tuberosity": [
+-0.2432,
+1.0617,
+-0.0004
+],
+"Radius": [
+-0.2771,
+0.9724,
+-0.0148
+],
+"Ramus of ischium": [
+-0.0561,
+0.8103,
+-0.0225
+],
+"Root of tooth": [
+-0.0238,
+1.5194,
+0.0485
+],
+"Sacral tuberosity": [
+0.0466,
+0.9774,
+-0.0428
+],
+"Sacropelvic surface of ilium": [
+-0.0297,
+0.9567,
+-0.0523
+],
+"Sacrum": [
+0.0,
+0.9179,
+-0.0389
+],
+"Sagittal border of parietal bone": [
+0.0014,
+1.7079,
+-0.0358
+],
+"Scapula": [
+-0.1399,
+1.3176,
+-0.068
+],
+"Sella turcica": [
+0.0,
+1.6009,
+0.0153
+],
+"Septum of frontal sinuses": [
+0.0018,
+1.6336,
+0.0772
+],
+"Septum of sphenoidal sinuses": [
+0.0005,
+1.5819,
+0.0274
+],
+"Skeleton of free lower limb": [
+0.1683,
+0.4897,
+-0.0184
+],
+"Skeleton of free upper limb": [
+0.2795,
+1.1478,
+-0.0491
+],
+"Skeleton of lower limbs": [
+0.1792,
+0.5299,
+-0.0112
+],
+"Skeleton of upper limbs": [
+0.2746,
+1.1698,
+-0.0491
+],
+"Sphenoidal margin of frontal bone": [
+0.0227,
+1.6127,
+0.0386
+],
+"Spine of scapula": [
+-0.1131,
+1.3952,
+-0.1024
+],
+"Spine of sphenoid bone": [
+0.0314,
+1.5636,
+0.0016
+],
+"Spinoglenoid notch": [
+-0.1497,
+1.3863,
+-0.0528
+],
+"Spinous process": [
+-0.0002,
+1.0223,
+-0.0764
+],
+"Squamosal border of parietal bone": [
+-0.0669,
+1.6008,
+-0.0106
+],
+"Squamosal margin of greater wing": [
+0.0584,
+1.5876,
+0.0306
+],
+"Squamous part of frontal bone": [
+-0.0167,
+1.6714,
+0.0886
+],
+"Squamous part of occipital bone": [
+0.0242,
+1.6069,
+-0.1066
+],
+"Squamous part of temporal bone": [
+-0.0812,
+1.5995,
+-0.005
+],
+"Stapes": [
+-0.0447,
+1.5813,
+-0.0053
+],
+"Sternal angle": [
+0.0,
+1.3605,
+0.0895
+],
+"Sternal articular surface": [
+0.0003,
+1.4014,
+0.0396
+],
+"Sternal end": [
+-0.0292,
+1.4195,
+0.0416
+],
+"Sternum": [
+0.0007,
+1.2604,
+0.131
+],
+"Styloid process of temporal bone": [
+-0.039,
+1.5472,
+0.0011
+],
+"Styloid process of third metacarpal bone": [
+-0.2723,
+0.8328,
+-0.0109
+],
+"Sublime tubercle": [
+-0.194,
+1.0802,
+-0.0304
+],
+"Sublingual fossa": [
+0.0043,
+1.5087,
+0.067
+],
+"Subscapular fossa": [
+-0.0878,
+1.3355,
+-0.0782
+],
+"Sulcus of auditory tube": [
+0.0234,
+1.5742,
+-0.0049
+],
+"Supercilliary arch": [
+-0.0373,
+1.618,
+0.0905
+],
+"Superior angle of scapula": [
+-0.0825,
+1.4187,
+-0.0765
+],
+"Superior articular facet of vertebra": [
+-0.0101,
+1.0576,
+-0.0537
+],
+"Superior articular process of sacrum": [
+0.0231,
+0.9829,
+-0.0393
+],
+"Superior articular process of vertebra": [
+0.0183,
+1.0725,
+-0.0348
+],
+"Superior articular surface of atlas": [
+0.0173,
+1.5534,
+-0.0124
+],
+"Superior articular surface of lateral condyle": [
+-0.0907,
+0.4555,
+-0.0259
+],
+"Superior articular surfaces of tibia": [
+-0.077,
+0.4637,
+-0.0201
+],
+"Superior border of scapula": [
+-0.097,
+1.4091,
+-0.0299
+],
+"Superior costal facet": [
+0.0303,
+1.2761,
+-0.0625
+],
+"Superior facet of talus": [
+-0.0701,
+0.0847,
+-0.0469
+],
+"Superior horn of thyroid cartilage": [
+-0.0304,
+1.495,
+0.0023
+],
+"Superior mental spine": [
+0.0012,
+1.5091,
+0.0581
+],
+"Superior nuchal line": [
+0.0217,
+1.5711,
+-0.08
+],
+"Superior pubic ramus": [
+-0.0273,
+0.8618,
+0.0333
+],
+"Superior temporal line": [
+-0.077,
+1.6413,
+-0.0697
+],
+"Superior thoracic aperture": [
+0.0,
+1.4188,
+0.0
+],
+"Superior thyroid notch": [
+0.0,
+1.4794,
+0.0363
+],
+"Superior thyroid tubercle": [
+-0.0268,
+1.4834,
+0.008
+],
+"Superior vertebral notch": [
+-0.0189,
+1.0626,
+-0.022
+],
+"Supinator crest": [
+-0.2449,
+1.0592,
+-0.0388
+],
+"Supra-acetabular groove": [
+-0.1176,
+0.8933,
+0.002
+],
+"Supraglenoid tubercle": [
+-0.1534,
+1.3994,
+-0.0264
+],
+"Supraspinous fossa": [
+-0.1046,
+1.3926,
+-0.0718
+],
+"Suprastyloid crest": [
+-0.3004,
+0.8738,
+0.0178
+],
+"Supreme nuchal line": [
+0.0273,
+1.5811,
+-0.0921
+],
+"Surgical neck of humerus": [
+-0.1393,
+1.3516,
+-0.0216
+],
+"Sustentaculum tali": [
+-0.0492,
+0.0514,
+-0.0333
+],
+"Symphysial surface of pubis": [
+0.0109,
+0.8474,
+0.0646
+],
+"Talar sulcus": [
+-0.0691,
+0.054,
+-0.0384
+],
+"Tarsal bones": [
+-0.03,
+0.0562,
+-0.0396
+],
+"Tarsal sinus": [
+-0.0847,
+0.0555,
+-0.037
+],
+"Teeth": [
+-0.0,
+1.5296,
+0.1142
+],
+"Tegmen tympani": [
+-0.0421,
+1.5909,
+-0.0012
+],
+"Temporal line": [
+-0.0621,
+1.6262,
+0.0544
+],
+"Temporal surface of frontal bone": [
+-0.0614,
+1.6145,
+0.0508
+],
+"Temporal surface of greater wing": [
+-0.0567,
+1.5995,
+0.042
+],
+"Thoracic skeleton": [
+0.0,
+1.3108,
+0.1499
+],
+"Thoracic vertebra": [
+-0.0367,
+1.2655,
+-0.0522
+],
+"Thoracic vertebrae": [
+-0.0004,
+1.2375,
+-0.156
+],
+"Thyroid articular surface": [
+-0.0155,
+1.4618,
+-0.0005
+],
+"Tibia": [
+-0.0576,
+0.2473,
+-0.0242
+],
+"Tibial plateau": [
+-0.0209,
+0.4144,
+-0.033
+],
+"Tibial tuberosity": [
+-0.0882,
+0.3981,
+0.0167
+],
+"Transverse costal facet": [
+0.0427,
+1.2704,
+-0.0784
+],
+"Transverse ligament tubercle": [
+-0.0085,
+1.5361,
+-0.0094
+],
+"Transverse process": [
+0.0465,
+1.0546,
+-0.0399
+],
+"Transverse ridges": [
+-0.0,
+0.9214,
+-0.0279
+],
+"Trapezoid line": [
+-0.122,
+1.4117,
+-0.0222
+],
+"Triangular fovea": [
+-0.0054,
+1.4784,
+0.0072
+],
+"Trochanteric fossa": [
+-0.1244,
+0.8613,
+-0.014
+],
+"Trochlea of humerus": [
+-0.2168,
+1.0984,
+-0.0088
+],
+"Trochlea of phalanx of foot": [
+-0.114,
+0.0127,
+0.1049
+],
+"Trochlea of phalanx of hand": [
+-0.2813,
+0.7362,
+0.0765
+],
+"Trochlea of talus": [
+-0.074,
+0.087,
+-0.0431
+],
+"Trochlear fovea": [
+-0.017,
+1.605,
+0.0762
+],
+"Trochlear notch": [
+-0.2175,
+1.0998,
+-0.0335
+],
+"True ribs": [
+-0.144,
+1.2886,
+0.0188
+],
+"Tubercle of iliotibial tract": [
+-0.1189,
+0.3908,
+0.0086
+],
+"Tubercle of rib": [
+-0.0346,
+1.3235,
+-0.0812
+],
+"Tubercle of scaphoid bone": [
+-0.2744,
+0.8523,
+0.0407
+],
+"Tubercle of trapezium bone": [
+-0.2764,
+0.8508,
+0.0473
+],
+"Tuberculum sellae": [
+0.0,
+1.6155,
+0.0225
+],
+"Tuberosity for coracoclavicular ligament": [
+-0.117,
+1.4063,
+-0.0217
+],
+"Tuberosity of cuboid bone": [
+-0.0947,
+0.0272,
+-0.0162
+],
+"Tuberosity of distal phalanx of foot": [
+-0.1204,
+0.015,
+0.1301
+],
+"Tuberosity of distal phalanx of hand": [
+-0.2875,
+0.6955,
+0.0952
+],
+"Tuberosity of navicular bone": [
+-0.0466,
+0.0497,
+-0.0062
+],
+"Tuberosity of ulna": [
+-0.2232,
+1.0644,
+-0.0177
+],
+"Tympanic part of temporal bone": [
+-0.07,
+1.5682,
+-0.0032
+],
+"Ulna": [
+-0.2131,
+1.0163,
+-0.0286
+],
+"Ulnar notch": [
+-0.2459,
+0.8688,
+0.0121
+],
+"Ulnar styloid process": [
+-0.2435,
+0.8455,
+0.0118
+],
+"Uncinate process of first thoracic vertebra": [
+-0.0158,
+1.3823,
+-0.0337
+],
+"Uncinate process of vertebra": [
+-0.0114,
+1.5079,
+-0.0116
+],
+"Vaginal process of sphenoid bone": [
+0.0078,
+1.564,
+0.0181
+],
+"Vertebra": [
+-0.0237,
+1.0392,
+0.023
+],
+"Vertebral arch": [
+0.0122,
+1.0484,
+-0.0494
+],
+"Vertebral body": [
+0.0255,
+1.0413,
+0.0213
+],
+"Vertebral column": [
+-0.0021,
+1.294,
+-0.1563
+],
+"Vertebral foramen": [
+0.0,
+1.0515,
+-0.0257
+],
+"Vestibular surface of tooth": [
+-0.0317,
+1.5267,
+0.0615
+],
+"Viscerocranium": [
+0.0661,
+1.5458,
+0.071
+],
+"Vocal process": [
+-0.0023,
+1.4739,
+0.0118
+],
+"Xiphoid process": [
+0.0004,
+1.2327,
+0.1242
+],
+"Zygomatic margin of greater wing": [
+0.0558,
+1.5948,
+0.0505
+],
+"Zygomatic process of frontal bone": [
+0.0622,
+1.6136,
+0.068
+]
+}

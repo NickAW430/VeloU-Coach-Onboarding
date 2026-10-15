@@ -1,15 +1,15 @@
 // VeloU Shoulder Lab · lightweight 3D viewer (three.js) with labels, picking and lazy rendering.
 import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
-import { Rig } from './rig.js?v=7';
+import { Rig } from './rig.js?v=8';
 
 export const VIEWS = {
-  post: { pos: [0, 6, 100], tgt: [7, 2, 2] },
-  ant: { pos: [0, 6, -100], tgt: [7, 2, 0] },
-  lat: { pos: [100, 6, 4], tgt: [8, 2, 2] },
-  sup: { pos: [10, 100, 1], tgt: [8, 0, 2] },
-  obl: { pos: [44, 14, 56], tgt: [10, 0, 2] },
-  full: { pos: [80, 10, 110], tgt: [3, 0, 2] },
+  post: { pos: [20, 8, 110], tgt: [20, 4, 2] },
+  ant: { pos: [20, 8, -110], tgt: [20, 4, 0] },
+  lat: { pos: [120, 6, 4], tgt: [20, 4, 2] },
+  sup: { pos: [22, 110, 1], tgt: [20, 0, 2] },
+  obl: { pos: [62, 18, 66], tgt: [22, 2, 2] },
+  full: { pos: [90, 10, 120], tgt: [10, 0, 2] },
 };
 
 export class Viewer {
@@ -43,7 +43,7 @@ export class Viewer {
     const rim = new THREE.DirectionalLight(0xffb0a0, 0.9); rim.position.set(-50, 20, -60); this.scene.add(rim);
     const fill = new THREE.DirectionalLight(0xbfd8ff, 0.5); fill.position.set(-30, -20, 40); this.scene.add(fill);
 
-    this.rig = new Rig(opts.rig || {});
+    this.rig = opts.makeRig ? opts.makeRig() : new Rig(opts.rig || {});
     this.scene.add(this.rig.root);
 
     this.labels = []; // {el, getPos}

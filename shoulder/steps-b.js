@@ -1,8 +1,8 @@
 // Steps 6 to 10
 import * as THREE from 'three';
-import { COL } from './rig.js?v=7';
-import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=7';
-import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=7';
+import { COL } from './rig.js?v=8';
+import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=8';
+import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=8';
 
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -136,7 +136,7 @@ export function step6(host, panel) {
       tools.replaceChildren(...viewBtns(v));
       hoverTips(v, tip);
       v.onPick = info => { if (info && info.type === 'muscle') { S.mode = 'fibers'; S.sel = info.id; modeTabs.set('fibers'); render(); apply(); } };
-      v.setView({ pos: [40, 10, 95], tgt: [6, -4, 2] }, 0);
+      v.setView({ pos: [70, 10, 110], tgt: [16, -6, 2] }, 0);
       render(); apply();
     },
     detach() { V = null; ov = null; },
@@ -260,7 +260,7 @@ export function step7(host, panel) {
       tools.replaceChildren(...viewBtns(v));
       hoverTips(v, tip);
       v.afterRig = (prev => () => { prev && prev(); readout(); })(v.afterRig);
-      v.setView({ pos: [125, 8, 4], tgt: [8, 6, 0] }, 0);
+      v.setView({ pos: [140, 8, 4], tgt: [8, 6, 0] }, 0);
       push(); colorize();
     },
     detach() { V = null; ov = null; },
@@ -380,7 +380,7 @@ export function step8(host, panel, factsHost) {
       hoverTips(v, tip);
       v.rig.setPose({ elbow: 20 });
       apply();
-      v.setView({ pos: [52, 10, 84], tgt: [6, 0, 2] }, 0);
+      v.setView({ pos: [70, 12, 92], tgt: [16, 0, 2] }, 0);
     },
     detach() { V = null; ov = null; },
   });
@@ -483,7 +483,7 @@ export function step9(host, panel, factsHost, calcHost, outHost) {
       v.rig.setPose({ elev: 90, plane: 0, er: 90, elbow: 90, rhythm: true, retro: S.retro });
       tools.replaceChildren(...viewBtns(v));
       hoverTips(v, tip);
-      v.setView({ pos: [24, 70, 22], tgt: [14, 4, 0] }, 0);
+      v.setView({ pos: [32, 90, 26], tgt: [22, 4, 0] }, 0);
       render();
     },
     detach() { V = null; },

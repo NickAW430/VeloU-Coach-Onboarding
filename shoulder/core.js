@@ -1,7 +1,9 @@
 // Shared helpers for the Shoulder Lab.
 import * as THREE from 'three';
-import { Viewer } from './viewer.js?v=7';
-import { COL } from './rig.js?v=7';
+import { Viewer } from './viewer.js?v=8';
+import { COL, Rig } from './rig.js?v=8';
+import { RealRig } from './rig2.js?v=8';
+import { loadAnatomy } from './anatomy.js?v=8';
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -138,17 +140,24 @@ export class Overlay {
 /* ---------- viewer lifecycle (lazy create, keep <= 4 live) ---------- */
 const live = [];
 export function mountStage(host, { view = 'obl', attach, detach }) {
-  let viewer = null;
-  const ensure = () => {
-    if (viewer && !viewer.dead) return;
+  let viewer = null, pending = false;
+  const create = (A) => {
     while (live.length >= 4) { const old = live.shift(); old.destroyStage(); }
-    viewer = new Viewer(host, { view });
+    const makeRig = A ? () => { try { return new RealRig(A); } catch (e) { console.warn('real anatomy failed, using stylised rig', e); return new Rig({}); } } : null;
+    viewer = new Viewer(host, { view, makeRig });
     const entry = { destroyStage() { detach && detach(); viewer.destroy(); viewer = null; } };
     live.push(entry);
     viewer._entry = entry;
+    host.classList.remove('loading');
     host.classList.add('ready');
     attach(viewer);
     viewer.invalidate();
+  };
+  const ensure = () => {
+    if ((viewer && !viewer.dead) || pending) return;
+    pending = true;
+    host.classList.add('loading');
+    loadAnatomy().catch(e => { console.warn('anatomy load failed', e); return null; }).then(A => { pending = false; if (viewer && !viewer.dead) return; create(A); });
   };
   const io = new IntersectionObserver(es => { if (es[0].isIntersecting) ensure(); }, { rootMargin: '500px 0px' });
   io.observe(host);

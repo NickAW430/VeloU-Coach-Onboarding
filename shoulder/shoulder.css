@@ -180,3 +180,5 @@ footer.foot{margin-top:70px;padding-top:20px;border-top:1px solid var(--line);co
 .syn-look{display:grid;gap:12px;min-width:0}
 .syn-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
 @media (max-width:620px){.syn-top{grid-template-columns:1fr}}
+
+.stage.loading::after{content:"Loading anatomy…";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-size:15px}
