@@ -22,6 +22,27 @@ function disposeChildren(g) {
   }
 }
 
+const OUT_KIND = {
+  supraspinatus: 'scapD', infraspinatus: 'scapD', 'teres-minor': 'scapD', 'teres-major': 'scapD', subscapularis: 'scapV',
+  'deltoid-ant': 'head', 'deltoid-mid': 'head', 'deltoid-post': 'head',
+};
+let _stripe = null;
+function stripeTexture() {
+  if (!_stripe) {
+    const c = document.createElement('canvas'); c.width = 128; c.height = 8;
+    const x = c.getContext('2d');
+    for (let i = 0; i < 128; i++) {
+      const b = 175 + Math.round(Math.sin(i * 0.9) * 18 + (Math.random() - 0.5) * 38);
+      x.fillStyle = `rgb(${b},${b},${b})`; x.fillRect(i, 0, 1, 8);
+      if (i % 11 === 0) { x.fillStyle = 'rgb(120,120,120)'; x.fillRect(i, 0, 1, 8); }
+    }
+    _stripe = c;
+  }
+  const t = new THREE.CanvasTexture(_stripe);
+  t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.ClampToEdgeWrapping; t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
 /* ---------- spine / thorax model ---------- */
 const LV = ['L5', 'L4', 'L3', 'L2', 'L1', 'T12', 'T11', 'T10', 'T9', 'T8', 'T7', 'T6', 'T5', 'T4', 'T3', 'T2', 'T1', 'C7', 'C6', 'C5', 'C4', 'C3', 'C2', 'C1'];
 const RIB_A = [4.6, 6.8, 8.8, 10.2, 11.3, 12.0, 12.5, 12.6, 12.4, 11.8];
@@ -514,11 +535,25 @@ export class Rig {
     this.muscleDefs = defs;
     defs.forEach(d => {
       const grp = new Group(); grp.userData.muscle = d.id;
-      const bm = mat(d.color, { roughness: 0.55, transparent: true, opacity: 1, emissive: 0x000000 });
-      const tm = mat(COL.tend, { roughness: 0.5, transparent: true, opacity: 1, emissive: 0x000000 });
+      const tex = stripeTexture();
+      tex.repeat.set(d.fibers.length > 1 ? Math.max(6, d.fibers.length * 3) : 7, 1);
+      const bm = mat(d.color, { roughness: 0.62, transparent: true, opacity: 1, emissive: 0x000000, side: THREE.DoubleSide, map: tex, bumpMap: tex, bumpScale: 0.5 });
+      const tm = mat(COL.tend, { roughness: 0.45, transparent: true, opacity: 1, emissive: 0x000000, side: THREE.DoubleSide });
       this.cats.muscles.add(grp);
       this.muscles[d.id] = { def: d, group: grp, belly: bm, tendon: tm, visible: true, baseColor: d.color, opacity: 1, glow: 0 };
     });
+  }
+
+  _outward(kind, p) {
+    if (kind === 'scapD' || kind === 'scapV') {
+      const o = this.scapContent.localToWorld(v(0, 0, 0)), z = this.scapContent.localToWorld(v(0, 0, 1)).sub(o).normalize();
+      return kind === 'scapD' ? z : z.negate();
+    }
+    if (kind === 'head') return p.clone().sub(this.humRoot.getWorldPosition(v(0, 0, 0))).normalize();
+    // away from the spinal axis in the horizontal plane
+    let best = this.thorax.vs[0];
+    for (const o of this.thorax.vs) if (Math.abs(o.p.y - p.y) < Math.abs(best.p.y - p.y)) best = o;
+    return v(p.x, 0, p.z - best.p.z).normalize();
   }
 
   _updateMuscles() {
@@ -526,31 +561,108 @@ export class Rig {
       if (!m.visible && !m.forceBuild) { m.group.visible = false; continue; }
       m.group.visible = true;
       disposeChildren(m.group);
-      m.def.fibers.forEach(f => {
-        const pts = f.pts.map(s => this.pt(s));
-        if (pts.length < 2) return;
-        const curve = new THREE.CatmullRomCurve3(pts, false, 'centripetal');
-        const N = 32;
-        const samples = Array.from({ length: N + 1 }, (_, i) => curve.getPointAt(i / N));
-        const inTd = (u) => (f.td || []).some(([a, b]) => u >= a && u <= b);
-        let run = [], cur = null;
-        const flush = (td) => {
-          if (run.length > 1) {
-            const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(run), Math.max(4, run.length), td ? m.def.r * 0.5 : m.def.r, 6);
-            const me = new Mesh(geo, td ? m.tendon : m.belly);
-            me.userData.muscle = m.def.id; m.group.add(me);
-          }
-        };
-        samples.forEach((p, i) => {
-          const td = inTd(i / N);
-          if (cur === null) cur = td;
-          if (td !== cur) { run.push(p); flush(cur); run = [p]; cur = td; }
-          else run.push(p);
-        });
-        flush(cur);
-      });
+      this._buildMuscleMeshes(m);
     }
     this._applyStyles();
+  }
+
+  _buildMuscleMeshes(m) {
+    const def = m.def, fibers = def.fibers, nF = fibers.length;
+    const MS = 30;
+    const td = fibers[0].td || [];
+    const isTd = u => td.some(([a, b]) => u >= a && u <= b);
+    const curves = fibers.map(f => new THREE.CatmullRomCurve3(f.pts.map(sp => this.pt(sp)), false, 'centripetal'));
+    // contiguous runs of belly / tendon columns (adjacent runs share a column so there is no gap)
+    const runs = [];
+    let start = 0, cur = isTd(0.5 / MS);
+    for (let j = 1; j <= MS; j++) {
+      const t = isTd((j - 0.5) / MS);
+      if (t !== cur) { runs.push([start, j, cur]); start = j; cur = t; }
+    }
+    runs.push([start, MS, cur]);
+    const kind = OUT_KIND[def.id] || 'axis';
+    const T = def.r * 1.7;
+    const add = (geo, tendon) => { const me = new Mesh(geo, tendon ? m.tendon : m.belly); me.userData.muscle = def.id; m.group.add(me); };
+
+    if (nF === 1) {
+      // spindle belly with tapering tendons
+      const c = curves[0];
+      const frames = c.computeFrenetFrames(MS, false);
+      const belly = runs.filter(r => !r[2]).sort((a, b) => (b[1] - b[0]) - (a[1] - a[0]))[0] || [0, MS];
+      const R = def.r * 2.3, SIDES = 10;
+      const radius = j => {
+        if (isTd((j) / MS) && (j < belly[0] || j > belly[1])) return R * 0.16;
+        const uu = Math.min(1, Math.max(0, (j - belly[0]) / Math.max(1, belly[1] - belly[0])));
+        return R * (0.2 + 0.8 * Math.pow(Math.sin(Math.PI * uu), 0.8));
+      };
+      runs.forEach(([j0, j1, tend]) => {
+        const pos = [], uv = [], idx = [];
+        for (let j = j0; j <= j1; j++) {
+          const p = c.getPoint(j / MS), N = frames.normals[j], B = frames.binormals[j], r = radius(j);
+          for (let k = 0; k <= SIDES; k++) {
+            const a = k / SIDES * Math.PI * 2, cs = Math.cos(a), sn = Math.sin(a);
+            pos.push(p.x + r * (cs * N.x + sn * B.x), p.y + r * (cs * N.y + sn * B.y), p.z + r * (cs * N.z + sn * B.z));
+            uv.push(k / SIDES, j / MS);
+          }
+        }
+        const rows = j1 - j0;
+        for (let j = 0; j < rows; j++) for (let k = 0; k < SIDES; k++) {
+          const a = j * (SIDES + 1) + k, b = a + SIDES + 1;
+          idx.push(a, b, a + 1, b, b + 1, a + 1);
+        }
+        const g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+        g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+        g.setIndex(idx); g.computeVertexNormals();
+        add(g, tend);
+      });
+      return;
+    }
+
+    // multi-fibre muscle: loft a thick sheet through the fibres
+    const W = Math.max(9, nF * 4);
+    const cols = [];
+    for (let j = 0; j <= MS; j++) {
+      const pts = curves.map(c => c.getPointAt(j / MS));
+      let row;
+      if (nF === 2) row = Array.from({ length: W }, (_, k) => pts[0].clone().lerp(pts[1], k / (W - 1)));
+      else { const cc = new THREE.CatmullRomCurve3(pts, false, 'centripetal'); row = Array.from({ length: W }, (_, k) => cc.getPointAt(k / (W - 1))); }
+      cols.push(row);
+    }
+    const prev = v(0, 0, 0);
+    runs.forEach(([j0, j1, tend]) => {
+      const top = [], bot = [], uv = [], idx = [];
+      for (let j = j0; j <= j1; j++) {
+        const u = j / MS;
+        const prof = tend ? 0.2 : 0.3 + 0.7 * Math.pow(Math.sin(Math.PI * Math.min(1, Math.max(0, u))), 0.7);
+        for (let k = 0; k < W; k++) {
+          const q = cols[j][k];
+          const ta = cols[Math.min(MS, j + 1)][k].clone().sub(cols[Math.max(0, j - 1)][k]);
+          const ac = cols[j][Math.min(W - 1, k + 1)].clone().sub(cols[j][Math.max(0, k - 1)]);
+          let n = ta.cross(ac);
+          if (n.lengthSq() < 1e-8) n = prev.clone(); else n.normalize();
+          const hint = this._outward(kind, q);
+          if (n.dot(hint) < 0) n.negate();
+          prev.copy(n);
+          const e = Math.pow(Math.sin(Math.PI * k / (W - 1)), 0.55);
+          const t = T * prof * e;
+          top.push(q.x + n.x * t * 0.7, q.y + n.y * t * 0.7, q.z + n.z * t * 0.7);
+          bot.push(q.x - n.x * t * 0.3, q.y - n.y * t * 0.3, q.z - n.z * t * 0.3);
+          uv.push(k / (W - 1), u);
+        }
+      }
+      const rows = j1 - j0, n = (rows + 1) * W;
+      for (let j = 0; j < rows; j++) for (let k = 0; k < W - 1; k++) {
+        const a = j * W + k, b = a + W;
+        idx.push(a, b, a + 1, b, b + 1, a + 1);
+        idx.push(n + a, n + a + 1, n + b, n + b, n + a + 1, n + b + 1);
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute([...top, ...bot], 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute([...uv, ...uv], 2));
+      g.setIndex(idx); g.computeVertexNormals();
+      add(g, tend);
+    });
   }
 
   _applyStyles() {
