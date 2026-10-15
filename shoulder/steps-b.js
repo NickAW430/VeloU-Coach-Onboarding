@@ -1,8 +1,8 @@
 // Steps 6 to 10
 import * as THREE from 'three';
-import { COL } from './rig.js?v=12';
-import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=12';
-import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=12';
+import { COL } from './rig.js?v=14';
+import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=14';
+import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=14';
 
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -406,7 +406,7 @@ const FACTS9 = [
   ['r = .67', 'Vascular', 'In 66 professional pitchers, lower blood flow in a late-cocking position went with weaker grip (r = .67). At rest there was no link.'],
 ];
 export function step9(host, panel, factsHost, calcHost, outHost) {
-  let V = null;
+  let V = null, ov = null;
   const S = { retro: 42, soft: 0 };
   const ND = { retro: 30, er: 100, ir: 70 };
   const tip = tooltip(host);
@@ -453,7 +453,8 @@ export function step9(host, panel, factsHost, calcHost, outHost) {
     const col = flagA ? 'var(--red)' : flagI ? 'var(--amber)' : 'var(--lime)';
     verdict.style.setProperty('--c', col);
     verdict.innerHTML = `<i></i><div><b>IR deficit ${Math.round(irDef)}° · total arc deficit ${Math.round(arcDef)}°.</b> ${flagA ? 'Total arc is down by 5° or more. That is the soft tissue flag. Treat this one.' : flagI ? 'A large IR deficit with a matching total arc is mostly bone (retroversion). Don\'t chase the IR range.' : 'Looks like a normal adaptation: arc slid toward ER, total matches.'}</div>`;
-    ro.innerHTML = `ER gain <b style="color:var(--red)">+${Math.round(er - ND.er)}°</b> · IR loss <b style="color:var(--cool)">−${Math.round(irDef)}°</b>`;
+    const sg = (x) => (x > 0 ? '+' : x < 0 ? '−' : '±') + Math.abs(Math.round(x)) + '°';
+    ro.innerHTML = `ER <b style="color:var(--red)">${sg(er - ND.er)}</b> · IR <b style="color:var(--cool)">${sg(ir - ND.ir)}</b> vs the other arm`;
     if (V) V.rig.setPose({ retro: S.retro });
   }
   render();
@@ -488,14 +489,27 @@ export function step9(host, panel, factsHost, calcHost, outHost) {
     view: 'sup',
     attach(v) {
       V = v;
-      baseline(v, { muscles: false, lig: false, left: false, bone: 1, pose: { elev: 90, plane: 0, er: 90, elbow: 90, retro: S.retro } });
-      v.rig.setPose({ elev: 90, plane: 0, er: 90, elbow: 90, rhythm: true, retro: S.retro });
+      // classic superior view: arm at the side, elbow bent, looking straight down on the head and the line through the elbow
+      baseline(v, { muscles: false, lig: false, left: false, thorax: false, bone: 0.55, pose: { elev: 0, plane: 40, er: 0, elbow: 90, retro: S.retro, rhythm: true } });
+      v.rig.setPose({ elev: 0, plane: 40, er: 0, elbow: 90, rhythm: true, retro: S.retro });
+      v.rig.update();
+      ov = new Overlay(v);
+      if (v.rig.headAxis) {
+        const hc = () => v.rig.headAxis().c;
+        const ext = (from, to) => () => { const e = v.rig.epicondyleLine(); const a = e[from], b2 = e[to]; return a.clone().sub(b2).normalize().multiplyScalar(13).add(a); };
+        ov.line([ext('m', 'l'), ext('l', 'm')], { color: 0xd9cfc8, r: 0.4 });
+        ov.line([() => hc(), () => { const h = v.rig.headAxis(); return h.c.clone().addScaledVector(h.a, 20); }], { color: 0xe5534b, r: 0.55 });
+        ov.marker(hc, { color: 0xf1e9e4, r: 0.8 });
+        ov._addLabel('Line through the elbow', 'dim', () => ext('l', 'm')());
+        ov._addLabel('Head faces here', '', () => { const h = v.rig.headAxis(); return h.c.clone().addScaledVector(h.a, 20); });
+      }
       tools.replaceChildren(...viewBtns(v));
       hoverTips(v, tip);
-      v.setView({ pos: [32, 90, 26], tgt: [22, 4, 0] }, 0);
+      const h0 = v.rig.pt(['R', 0, 0, 0]);
+      v.setView({ pos: [h0.x + 4, h0.y + 82, h0.z + 14], tgt: [h0.x - 1, h0.y - 20, h0.z + 2] }, 0);
       render();
     },
-    detach() { V = null; },
+    detach() { V = null; ov = null; },
   });
 }
 

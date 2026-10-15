@@ -1,7 +1,7 @@
-import { $, $$, h } from './core.js?v=12';
-import { step1, step2, step3, step4, step5 } from './steps-a.js?v=12';
+import { $, $$, h } from './core.js?v=14';
+import { step1, step2, step3, step4, step5 } from './steps-a.js?v=14';
 let B = {};
-try { B = await import('./steps-b.js?v=12'); } catch (e) { console.warn('steps-b not loaded', e); }
+try { B = await import('./steps-b.js?v=14'); } catch (e) { console.warn('steps-b not loaded', e); }
 
 const TITLES = ['Bone', 'Motion', 'Rotator cuff', 'Layers', 'Soft tissue', 'Fascia', 'Posture', 'Syndromes', 'Throwing', 'Testing'];
 const stepper = $('#stepper');

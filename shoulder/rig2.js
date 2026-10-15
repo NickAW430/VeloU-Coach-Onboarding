@@ -1,7 +1,7 @@
 // VeloU Shoulder Lab · anatomy rig built on the real mesh set (Z-Anatomy / BodyParts3D, CC BY-SA).
 // Same public surface as rig.js so the step code does not care which one it gets.
 import * as THREE from 'three';
-import { COL } from './rig.js?v=12';
+import { COL } from './rig.js?v=14';
 
 const { Vector3: V3, Matrix4: M4, Quaternion: Q4, Group, Mesh } = THREE;
 const RAD = Math.PI / 180;
@@ -129,6 +129,14 @@ function derive(A) {
     void sx; void sy; void sz; void sxx; void syy; void szz; void sxy; void sxz; void syz; void sd; void r2;
   }
   D.H0 = c;
+  {
+    const cp = (A.bones.get('Humerus.r') || []).find(p => /^Cartilage/.test(p.material));
+    if (cp) {
+      const a = cp.geometry.attributes.position, s = new V3();
+      for (let i = 0; i < a.count; i++) { s.x += a.getX(i); s.y += a.getY(i); s.z += a.getZ(i); }
+      D.artC = s.multiplyScalar(1 / a.count);
+    } else D.artC = c.clone().add(v(-2, 1, 1));
+  }
   D.N0 = neck.clone();
   D.E0 = L['Lateral epicondyle of humerus'].clone().add(L['Medial epicondyle of humerus']).multiplyScalar(0.5);
   D.elbowAxis = L['Lateral epicondyle of humerus'].clone().sub(L['Medial epicondyle of humerus']).normalize();
@@ -817,6 +825,25 @@ export class RealRig {
     Object.values(this.muscles).forEach(m => { m.belly.dispose(); m.tendon.dispose(); });
   }
 
+  // head articular axis (from the head centre toward the middle of the articular surface) and the line through the epicondyles, in world space
+  headAxis() {
+    const D = this.D, c = D.H0.clone().applyMatrix4(this.M.humP), t = D.artC.clone().applyMatrix4(this.M.humP);
+    return { c, a: t.sub(c).normalize() };
+  }
+  epicondyleLine() {
+    const L = this.A.landmarks;
+    const m = L['Medial epicondyle of humerus'].clone().applyMatrix4(this.M.hum), l = L['Lateral epicondyle of humerus'].clone().applyMatrix4(this.M.hum);
+    return { m, l };
+  }
+  // retroversion as measured on the current geometry (degrees, head axis behind the medial epicondylar direction)
+  measuredRetro() {
+    const { c, a } = this.headAxis(), { m, l } = this.epicondyleLine();
+    const shaft = c.clone().sub(this.D.E0.clone().applyMatrix4(this.M.hum)).normalize();
+    const med = m.clone().sub(l).normalize();
+    const proj = (x) => x.clone().sub(shaft.clone().multiplyScalar(x.dot(shaft))).normalize();
+    const u = proj(med), w = proj(AZ), pa = proj(a);
+    return Math.atan2(pa.dot(w), pa.dot(u)) / RAD;
+  }
   clearance() {
     const D = this.D, a = D.acrIdx.map(p => p.clone().applyMatrix4(this.M.scap));
     const g = D.gtIdx.map(p => p.clone().applyMatrix4(this.M.humP));
