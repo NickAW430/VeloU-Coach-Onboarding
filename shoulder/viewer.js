@@ -1,7 +1,7 @@
 // VeloU Shoulder Lab · lightweight 3D viewer (three.js) with labels, picking and lazy rendering.
 import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
-import { Rig } from './rig.js?v=3';
+import { Rig } from './rig.js?v=5';
 
 export const VIEWS = {
   post: { pos: [0, 6, 100], tgt: [7, 2, 2] },
@@ -17,7 +17,7 @@ export class Viewer {
     this.host = host;
     this.opts = opts;
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
     this.canvas = this.renderer.domElement;
     host.appendChild(this.canvas);
     this.scene = new THREE.Scene();
@@ -28,6 +28,14 @@ export class Viewer {
     this.controls.target.set(...v.tgt);
     this.controls.enableDamping = true; this.controls.dampingFactor = 0.09;
     this.controls.minDistance = 18; this.controls.maxDistance = 220;
+    // Page scroll must never get trapped by a stage: wheel zoom only after a click (or with Ctrl/Cmd), and
+    // on touch a vertical swipe scrolls the page while a horizontal drag rotates the model.
+    this.controls.enableZoom = false;
+    this._zoomArmed = false;
+    this.canvas.addEventListener('wheel', e => { this.controls.enableZoom = this._zoomArmed || e.ctrlKey || e.metaKey; }, { capture: true, passive: true });
+    this.canvas.addEventListener('pointerdown', () => { this._zoomArmed = true; });
+    this.canvas.addEventListener('pointerleave', () => { this._zoomArmed = false; });
+    this.canvas.style.touchAction = 'pan-y';
     this.controls.update();
 
     this.scene.add(new THREE.HemisphereLight(0xfff4ea, 0x2a1d16, 1.05));
@@ -48,7 +56,8 @@ export class Viewer {
     this.io = new IntersectionObserver(([e]) => setVis(e.isIntersecting), { rootMargin: '120px' });
     this.io.observe(host);
     // fallback for environments where IntersectionObserver is unreliable (emulated viewports, some embeds)
-    this._scroll = () => { const r = host.getBoundingClientRect(); setVis(r.bottom > -120 && r.top < window.innerHeight + 120); };
+    let sp = false;
+    this._scroll = () => { if (sp) return; sp = true; requestAnimationFrame(() => { sp = false; const r = host.getBoundingClientRect(); setVis(r.bottom > -120 && r.top < window.innerHeight + 120); }); };
     window.addEventListener('scroll', this._scroll, { passive: true });
     window.addEventListener('resize', this._scroll);
     setTimeout(this._scroll, 50);
@@ -65,9 +74,14 @@ export class Viewer {
       if (down && Math.hypot(e.clientX - down[0], e.clientY - down[1]) < 5) this._pick(e, 'click');
       down = null;
     });
-    this.canvas.addEventListener('pointermove', e => { if (e.buttons === 0) this._pick(e, 'hover'); });
+    let hoverPending = null;
+    this.canvas.addEventListener('pointermove', e => {
+      if (e.buttons !== 0) return;
+      if (hoverPending) { hoverPending = e; return; }
+      hoverPending = e;
+      setTimeout(() => { const ev = hoverPending; hoverPending = null; if (ev && this.visible) this._pick(ev, 'hover'); }, 90);
+    });
     this.canvas.addEventListener('pointerleave', () => { this.onHover && this.onHover(null); });
-    this.canvas.style.touchAction = 'none';
   }
 
   _pick(e, kind) {

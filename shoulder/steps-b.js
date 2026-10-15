@@ -1,8 +1,8 @@
 // Steps 6 to 10
 import * as THREE from 'three';
-import { COL } from './rig.js?v=3';
-import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=3';
-import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=3';
+import { COL } from './rig.js?v=5';
+import { h, POSE0, slider, toggle, btnGroup, tabs, listPicker, card, kv, Overlay, mountStage, stageTools, stageHint, stageReadout, tooltip, tweenPose } from './core.js?v=5';
+import { baseline, hoverTips, viewBtns, hex } from './steps-a.js?v=5';
 
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -329,20 +329,23 @@ export function step8(host, panel, factsHost) {
   const types = btnGroup(Object.entries(SYN).map(([id, d]) => ({ id, label: d.short })), id => { S.key = id; apply(); }, { initial: 'normal' });
   const elev = slider({ label: 'Elevate the arm', min: 0, max: 160, value: 0, onInput: v => { S.elev = v; apply(); } });
   const load = toggle('Add resistance (load)', false, on => { S.load = on; apply(); });
-  const detail = card();
-  const norms = h('div', { class: 'stats-row', style: 'grid-template-columns:repeat(auto-fit,minmax(120px,1fr))' }, ...NORMS.map(n => h('div', { class: 'fact' }, h('b', { style: 'font-size:26px' }, n[0]), h('span', { style: 'font-size:14px' }, n[1]))));
-  panel.append(card(h('span', { class: 'label' }, 'Syndrome'), types.el, elev.el, load.el), detail);
+  const detail = document.getElementById('dt8');
+  const normsList = kv(NORMS.map(n => [n[0], n[1]]));
+  panel.append(card(h('span', { class: 'label' }, 'Syndrome'), types.el, elev.el, load.el), card(h('span', { class: 'label' }, 'What normal looks like'), normsList));
 
   const col = (c, t, items) => h('div', { style: `border-top:3px solid ${c};padding-top:6px` }, h('span', { class: 'label', style: `color:${c}` }, t), h('ul', { class: 'tight' }, ...items.map(i => h('li', null, i))));
   function apply() {
     const D = SYN[S.key];
     const img = S.key !== 'normal' ? h('img', { src: `../onboarding/assets/shoulder/${S.key}.jpg`, alt: D.name + ' example', style: 'width:100%;border:1px solid var(--line);background:#fff;max-height:260px;object-fit:contain' }) : null;
-    detail.replaceChildren(h('span', { class: 'label red' }, S.key === 'normal' ? 'Reference' : 'Syndrome'), h('h3', null, D.name),
-      img,
-      h('div', null, h('span', { class: 'label' }, 'Look for'), h('ul', { class: 'tight' }, ...D.look.map(i => h('li', null, i)))),
-      D.confirm.length ? h('div', null, h('span', { class: 'label' }, 'Confirm'), h('ul', { class: 'tight' }, ...D.confirm.map(i => h('li', null, i)))) : null,
-      D.inh.length ? h('div', { class: 'grid2' }, col('#E5534B', 'Inhibit · short', D.inh), col('#A6E84A', 'Activate · weak', D.act), col('#D4F57A', 'Use', D.use), col('#E0C04A', 'Avoid', D.avoid)) : h('p', null, 'Pick a syndrome to see how to confirm it and what to inhibit, activate, use, and avoid.'),
-      D.note ? h('p', { style: 'font-size:13.5px' }, D.note) : null);
+    const list = (t, items) => h('div', null, h('span', { class: 'label' }, t), h('ul', { class: 'tight' }, ...items.map(i => h('li', null, i))));
+    const kids = [
+      h('div', null, h('span', { class: 'label red' }, S.key === 'normal' ? 'Reference' : 'Syndrome'), h('h3', null, D.name)),
+      h('div', { class: 'syn-top' + (img ? '' : ' no-img') }, img, h('div', { class: 'syn-look' }, list('Look for', D.look), D.confirm.length ? list('Confirm', D.confirm) : null)),
+      D.inh.length ? h('div', { class: 'syn-4' }, col('#E5534B', 'Inhibit · short', D.inh), col('#A6E84A', 'Activate · weak', D.act), col('#D4F57A', 'Use', D.use), col('#E0C04A', 'Avoid', D.avoid))
+        : h('p', null, 'Pick a syndrome to see how to confirm it and what to inhibit, activate, use, and avoid.'),
+      D.note ? h('p', { style: 'font-size:13.5px;margin:0' }, D.note) : null,
+    ].filter(Boolean);
+    detail.replaceChildren(...kids);
     if (!V) return;
     const p = { scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, gain: 1, antGlide: 0, supGlide: 0, er: 0, elbow: 20, pron: 90, ...D.pose, elev: S.elev, plane: 40 };
     if (S.load) { p.scapUp += 5; p.scapTilt -= 4; }
@@ -360,13 +363,12 @@ export function step8(host, panel, factsHost) {
       h('div', { class: 'body' }, ...g[1].map(r => h('div', { class: 'ex' }, h('b', null, r[0]), h('span', null, '= ' + r[1])))))));
   const rules = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'Four rules for using this'),
     ...RULES.map((t, i) => h('div', { class: 'ex' }, h('b', null, 'Rule ' + (i + 1)), h('span', null, t))));
-  const normCard = h('div', { class: 'card', style: 'grid-column:1/-1' }, h('span', { class: 'label' }, 'What normal looks like'), norms);
   const facts = [
     ['34%', 'higher injury risk for each 1° more scapular upward rotation under manual load, over 12 months (27 collegiate pitchers, 7 injured; small sample).'],
     ['6.4° vs 1.4°', 'change in scapular upward rotation with resistance in pitchers who got hurt versus those who didn\'t. Resting ROM and rotation deficits were the same.'],
     ['+227 g', 'shoulder muscle mass gained with blood-flow-restriction cuff work versus +75 g in controls, in-season, at 20% of max, twice weekly for 8 weeks. Mechanics held.'],
   ];
-  factsHost.append(normCard, lookup, rules, ...facts.map(f => h('div', { class: 'fact' }, h('span', { class: 'tag' }, 'From the research'), h('b', null, f[0]), h('span', null, f[1]))),
+  factsHost.append(lookup, rules, ...facts.map(f => h('div', { class: 'fact' }, h('span', { class: 'tag' }, 'From the research'), h('b', null, f[0]), h('span', null, f[1]))),
     h('a', { class: 'btn', href: '../onboarding/assets/shoulder/poster.jpg', target: '_blank', rel: 'noopener', style: 'grid-column:1/-1;justify-self:start;text-decoration:none' }, 'Open the full shoulder poster'));
 
   mountStage(host, {

@@ -1,7 +1,7 @@
 // Shared helpers for the Shoulder Lab.
 import * as THREE from 'three';
-import { Viewer } from './viewer.js?v=3';
-import { COL } from './rig.js?v=3';
+import { Viewer } from './viewer.js?v=5';
+import { COL } from './rig.js?v=5';
 
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -152,7 +152,8 @@ export function mountStage(host, { view = 'obl', attach, detach }) {
   };
   const io = new IntersectionObserver(es => { if (es[0].isIntersecting) ensure(); }, { rootMargin: '500px 0px' });
   io.observe(host);
-  const near = () => { const r = host.getBoundingClientRect(); if (r.bottom > -500 && r.top < window.innerHeight + 500) ensure(); };
+  let np = false;
+  const near = () => { if (np) return; np = true; requestAnimationFrame(() => { np = false; const r = host.getBoundingClientRect(); if (r.bottom > -500 && r.top < window.innerHeight + 500) ensure(); }); };
   window.addEventListener('scroll', near, { passive: true });
   window.addEventListener('resize', near);
   setTimeout(near, 100);
