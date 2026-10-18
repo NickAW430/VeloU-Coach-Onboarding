@@ -302,6 +302,38 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
 .typehead { border-bottom: 2px solid var(--accent); padding-bottom: 6px; }
 .typehead small { font-family: var(--body); font-size: 0.85rem; font-weight: 400; color: var(--muted); margin-left: 12px; }
 [hidden] { display: none !important; }
+/* PDF export: the plan prints from #printDoc on white paper */
+#printDoc { display: none; }
+@media print {
+  @page { margin: 14mm; }
+  body > *:not(#printDoc) { display: none !important; }
+  html, body { background: #fff !important; }
+  #printDoc { display: block; color: #111; font-family: var(--body); font-size: 10.5pt; line-height: 1.4; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #printDoc * { color: inherit; }
+  #printDoc .pbrand { background: #000; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #E10600; }
+  #printDoc .pbrand img { height: 28px; }
+  #printDoc .pbrand span { color: #fff; font-family: var(--display); font-weight: 700; font-size: 16pt; letter-spacing: 0.02em; text-transform: uppercase; }
+  #printDoc h1 { font-size: 24pt; margin: 14px 0 2px; }
+  #printDoc h2 { font-size: 15pt; margin: 20px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #E10600; break-after: avoid; }
+  #printDoc h3 { font-size: 12pt; margin: 12px 0 4px; break-after: avoid; }
+  #printDoc .pmuted { color: #555; }
+  #printDoc table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin: 4px 0 8px; }
+  #printDoc th, #printDoc td { border: 1px solid #ccc; padding: 4px 7px; text-align: left; vertical-align: top; }
+  #printDoc th { background: #eee; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.05em; }
+  #printDoc .pgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 6px 0; }
+  #printDoc .pgrid div { border: 1px solid #ccc; border-top: 3px solid #E10600; padding: 6px 8px; }
+  #printDoc .pgrid b { display: block; font-family: var(--display); font-size: 17pt; line-height: 1.1; }
+  #printDoc .pgrid small { color: #555; }
+  #printDoc .pslot, #printDoc tr, #printDoc .popt { break-inside: avoid; }
+  #printDoc .popt { border: 1px solid #ccc; padding: 6px 9px; margin: 5px 0; }
+  #printDoc .popt ul { margin: 3px 0 0; padding-left: 16px; }
+  #printDoc ul.pl { margin: 4px 0; padding-left: 18px; }
+  #printDoc .pcols { columns: 2; column-gap: 18px; }
+  #printDoc .pcols > div { break-inside: avoid; }
+  #printDoc .pnotes { white-space: pre-wrap; border: 1px solid #ccc; padding: 8px; }
+  #printDoc .pfoot { margin-top: 18px; font-size: 8.5pt; color: #555; border-top: 1px solid #ccc; padding-top: 6px; }
+}
+
 @media (max-width: 640px) {
   .typetabs { grid-template-columns: 1fr; }
   .mealrow { grid-template-columns: 1fr 1fr; }
@@ -498,6 +530,8 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
     <div class="block"><h3>History</h3><div class="table-wrap" id="history"></div></div>
   </section>
 </main>
+
+<div id="printDoc" aria-hidden="true"></div>
 
 <script>
 (function () {
@@ -1614,7 +1648,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
       (prog ? '<div class="stats">' + prog.tiles.join("") + '</div><p class="muted" style="font-size:0.86rem">' + esc(prog.verdict) + '</p>' : '<p class="muted">No check-ins yet. Log one at the end of week 1.</p>') + '</div>';
     var notes = '<div class="card"><div class="sheet-head"><h3>Coach notes</h3><span class="muted" style="font-size:0.8rem">Saved with your plan</span></div><textarea id="notes" aria-label="Coach notes" placeholder="Medications, bloodwork flags, injuries, anything the plan should respect">' + esc(p.notes || "") + '</textarea></div>';
     el.innerHTML = head + stats + '<div class="two">' + macros + rails + '</div><div class="two">' + prioHtml + progHtml + '</div>' + bmHtml + notes +
-      '<div class="toolbar"><button class="btn" type="button" id="copyPlan">Copy plan as text</button><span class="toast" id="planToast" role="status"></span></div><textarea class="copy-fallback" id="planFallback" hidden readonly aria-label="Plan text"></textarea>';
+      '<div class="toolbar"><button class="btn primary" type="button" id="pdfPlan">Download PDF for the athlete</button><button class="btn" type="button" id="copyPlan">Copy plan as text</button><span class="toast" id="planToast" role="status"></span></div><textarea class="copy-fallback" id="planFallback" hidden readonly aria-label="Plan text"></textarea>';
   }
   function renderMeals() {
     var d = D, wrap = $("mealSlots");
@@ -1785,6 +1819,67 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
     if (p.notes) out.push("", "## Coach notes", p.notes);
     return out.join("\n");
   }
+
+  /* PDF: fill #printDoc with a clean copy of the whole plan, then open the print dialog (choose Save as PDF) */
+  function buildPrintDoc() {
+    var d = D, p = S.profile, o = OBJ[d.objective], h = [];
+    var who = [p.sex ? p.sex.charAt(0).toUpperCase() + p.sex.slice(1) : "", p.age ? p.age + " years" : "", Math.floor(d.heightIn / 12) + " ft " + (d.heightIn % 12) + " in", p.weightLb + " lb", d.bf != null ? "Body fat " + n1(d.bf) + "%" : ""].filter(Boolean).join(" · ");
+    h.push('<div class="pbrand"><img src="../assets/velou-wordmark.png" alt="VeloU"><span>Nutrition plan</span></div>');
+    h.push('<h1>' + esc(o.label) + '</h1><p class="pmuted">' + esc(who) + '<br>Week of ' + esc(fmtDate(S.plan.weekOf, { year: "numeric" })) + '</p>');
+    h.push('<p>' + esc(d.objectiveReason) + '.</p><ul class="pl">' + o.approach.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + '</ul>');
+    h.push('<h2>Daily targets</h2><div class="pgrid"><div><b>' + n0(d.trainKcal) + '</b><small>Calories, training day (' + n0(d.restKcal) + ' off day)</small></div><div><b>' + n0(d.protein) + ' g</b><small>Protein</small></div><div><b>' + n0(d.carbTrain) + ' g</b><small>Carbs (' + n0(d.carbRest) + ' g off day)</small></div><div><b>' + n0(d.fat) + ' g</b><small>Fat</small></div></div>');
+    h.push('<p class="pmuted">Target rate: ' + d.rateLb.map(function (x) { return signed(x, 1); }).join(" to ") + ' lb a week.</p>');
+    h.push('<h2>Your week</h2><table><thead><tr>' + DAYS.map(function (x) { return "<th>" + x + "</th>"; }).join("") + '</tr></thead><tbody><tr>' + p.dayMap.map(function (k) { return "<td>" + esc(TYPE_BY[k].n) + "</td>"; }).join("") + '</tr></tbody></table>');
+    d.types.forEach(function (T) {
+      var e = T.events, ev = [{ t: e.wakeEff, x: "Wake" }];
+      e.blocks.forEach(function (b) { ev.push({ t: b.s, x: b.n + ", " + hrs(b.e - b.s) + ", " + intLabel(b.id, b.int) + " (ends " + fmtT(b.e) + ")" }); });
+      T.slots.forEach(function (s) { ev.push({ t: s.t, x: s.label }); });
+      var bedShow = T.sleepMin < 420 && p.resp[T.key + ":sleep"] === "yes" ? e.wakeEff - 450 : e.bed, bt = ((bedShow % 1440) + 1440) % 1440; if (bt < e.wake) bt += 1440;
+      ev.push({ t: bt, x: "In bed" });
+      ev.sort(function (a, b) { return a.t - b.t; });
+      h.push('<div class="pslot"><h3>' + esc(T.name) + ' <span class="pmuted">(' + esc(fmtDays(T.days)) + ')</span></h3><table><tbody>' + ev.map(function (x) { return '<tr><td style="width:80px">' + fmtT(x.t) + '</td><td>' + esc(x.x) + '</td></tr>'; }).join("") + '</tbody></table></div>');
+    });
+    var notes = (d.suggestions || []).filter(function (s) { return s.level !== "good"; });
+    if (notes.length) h.push('<h3>Schedule notes</h3><ul class="pl">' + notes.map(function (s) { return "<li><b>" + esc(s.typeName + ": " + s.title) + ".</b> " + esc(s.resp === "yes" ? s.yesOut : s.resp === "no" ? s.noOut : s.detail) + "</li>"; }).join("") + '</ul>');
+    h.push('<h2>Meals</h2><p class="pmuted">Servings are per week. Weigh and measure portions as listed.</p>');
+    d.types.forEach(function (T) {
+      h.push('<h3>' + esc(T.name) + ' <span class="pmuted">(' + esc(fmtDays(T.days)) + ')</span></h3>');
+      T.slots.forEach(function (s) {
+        var picked = d.options[s.id].filter(function (x) { return d.picks[x.key]; });
+        h.push('<div class="pslot"><b>' + fmtT(s.t) + ' ' + esc(s.label) + '</b> <span class="pmuted">target ' + n0(s.tgt.k) + ' kcal · P ' + n0(s.tgt.p) + ' · C ' + n0(s.tgt.c) + ' · F ' + n0(s.tgt.f) + '</span>' +
+          picked.map(function (x) {
+            return '<div class="popt"><b>' + esc(x.name) + '</b> <span class="pmuted">x' + d.picks[x.key] + ' this week · ' + n0(x.m.k) + ' kcal · P ' + n0(x.m.p) + ' · C ' + n0(x.m.c) + ' · F ' + n0(x.m.f) + '</span><ul>' +
+              x.parts.map(function (pt) { return "<li>" + esc(FOODS[pt.fid].n + ": " + qtyText(pt.fid, pt.amt)) + "</li>"; }).join("") + '</ul></div>';
+          }).join("") + '</div>');
+      });
+    });
+    var g = shopping(d);
+    h.push('<h2>Shopping list</h2><div class="pcols">' + SHOP_ORDER.filter(function (k) { return g[k].length; }).map(function (k) {
+      return '<div><h3>' + esc(k) + '</h3><ul class="pl">' + g[k].map(function (it) { return "<li>" + esc(it.name + ": " + it.q) + "</li>"; }).join("") + '</ul></div>';
+    }).join("") + '</div>');
+    h.push('<h2>Meal prep</h2>');
+    [[1, "Session 1 (Sunday), covers Mon to Wed"], [2, "Session 2 (Wednesday evening), covers Thu to Sun"]].forEach(function (x) {
+      var pl = sessionPlan(d, x[0]);
+      h.push('<div class="pslot"><h3>' + x[1] + '</h3>' + (pl.list.length ? '<p class="pmuted">' + pl.active + ' min hands-on, ' + pl.total + ' min start to finish</p><ol>' + pl.list.map(function (t) { return "<li><b>" + esc(TASKS[t.id].n) + ".</b> " + esc(Object.keys(t.foods).map(function (fid) { return prepQty(fid, t.foods[fid]); }).join(", ")) + " " + esc(TASKS[t.id].how) + "</li>"; }).join("") + '</ol>' : '<p class="pmuted">Nothing to batch cook.</p>') + '</div>');
+    });
+    h.push('<h2>Foods chosen</h2>' + CATS.map(function (c) {
+      var names = c.ids.filter(function (id) { return p.foods.indexOf(id) >= 0; }).map(function (id) { return FOODS[id].n; });
+      return names.length ? '<p><b>' + esc(c.label) + ':</b> ' + esc(names.join(", ")) + '</p>' : "";
+    }).join(""));
+    if (p.notes) h.push('<h2>Coach notes</h2><div class="pnotes">' + esc(p.notes) + '</div>');
+    h.push('<div class="pfoot">VeloU · Calorie and macro targets are estimates. Adjust with your coach based on check-ins.</div>');
+    return h.join("");
+  }
+  function downloadPdf(msgId) {
+    var msg = $(msgId);
+    if (!D || !D.ready) { msg.textContent = "Finish the intake first: " + (D ? D.missing.join(", ") : "") + "."; return; }
+    msg.textContent = "";
+    $("printDoc").innerHTML = buildPrintDoc();
+    var old = document.title; document.title = "VeloU Nutrition Plan";
+    var img = $("printDoc").querySelector("img"), go = function () { window.print(); };
+    window.addEventListener("afterprint", function r() { document.title = old; window.removeEventListener("afterprint", r); });
+    if (img && !img.complete) { img.onload = go; img.onerror = go; } else go();
+  }
   function copy(text, toastId, fbId) {
     var toast = $(toastId), fb = $(fbId);
     function fallback() { fb.hidden = false; fb.value = text; fb.focus(); fb.select(); toast.textContent = "Select all and copy from the box below."; }
@@ -1920,6 +2015,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
     if (t.id === "resetPicks") { S.plan.picks = {}; savePlan(); renderAll(); return; }
     if (t.id === "copyShop") { copy(shopText(), "shopToast", "shopFallback"); return; }
     if (t.id === "copyPrep") { copy(prepText(), "prepToast", "prepFallback"); return; }
+    if (t.id === "pdfPlan") { downloadPdf("planToast"); return; }
     if (t.id === "copyPlan") { copy(planText(), "planToast", "planFallback"); return; }
     if (t.id === "clearTicks") { lsSet(tickKey(), "{}"); renderShop(); return; }
   });
