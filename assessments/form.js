@@ -557,7 +557,7 @@
             } catch (e) { apiNote = 'Could not load that athlete: ' + e.message; render(); }
           },
         }, el('b', { text: r.last_name + ', ' + r.first_name }), el('span', { text: [r.position, r.team].filter(Boolean).join(' · ') }))));
-        if (searchResults && !searchResults.length && search.value.trim().length >= 2) results.append(el('div', { className: 'hint', text: 'No match. Enter them as a new athlete below.' }));
+        if (searchResults && !searchResults.length && search.value.trim().length >= 2) results.append(el('div', { className: 'hint', text: tier.athleteMode === 'name' ? 'No athlete found with that name.' : 'No match. Enter them as a new athlete below.' }));
       };
       search.addEventListener('input', () => {
         clearTimeout(searchTimer);
@@ -565,15 +565,15 @@
         if (q.length < 2) { searchResults = null; drawResults(); return; }
         searchTimer = setTimeout(async () => {
           try { searchResults = (await api('GET', '/athletes?q=' + encodeURIComponent(q) + '&limit=8')).athletes; status.textContent = ''; }
-          catch (e) { searchResults = null; status.textContent = e.status === 401 || e.status === 403 ? 'Sign in again to search athletes.' : 'The database is not connected yet. Enter the athlete below and they will be created when you submit.'; }
+          catch (e) { searchResults = null; status.textContent = e.status === 401 || e.status === 403 ? 'Sign in again to search athletes.' : (tier.athleteMode === 'name' ? 'The athlete list is not available yet because the database is not connected.' : 'The database is not connected yet. Enter the athlete below and they will be created when you submit.'); }
           drawResults();
         }, 250);
       });
-      box.append(el('div', { className: 'field' }, el('label', { className: 'q', for: 'athlete-search', text: 'Find an existing athlete' }), search, status, results));
+      box.append(el('div', { className: 'field' }, el('label', { className: 'q', for: 'athlete-search', text: tier.athleteMode === 'name' ? 'Select an existing athlete' : 'Find an existing athlete' }), tier.athleteMode === 'name' ? el('div', { className: 'hint', text: 'Start typing a name, then choose the athlete from the list.' }) : null, search, status, results));
 
       if (a.id) {
         box.append(el('div', { className: 'selected' },
-          el('div', {}, el('b', { text: a.first_name + ' ' + a.last_name }), el('span', { className: 'muted', text: ' · existing athlete. Changes here update their record.' })),
+          el('div', {}, el('b', { text: a.first_name + ' ' + a.last_name }), el('span', { className: 'muted', text: tier.athleteMode === 'name' ? ' · existing athlete' : ' · existing athlete. Changes here update their record.' })),
           el('button', { type: 'button', className: 'linkbtn', text: 'Use a different athlete', onclick: () => { Object.assign(a, freshState().athlete); state.hadBodyFat = null; save(); render(); } })));
       }
 
@@ -582,8 +582,7 @@
         i.addEventListener('input', () => { a[key] = i.value; save(); refreshChips(); });
         return el('div', { className: 'field' }, el('label', { className: 'q', for: 'a-' + key, text: label + (o.required ? ' *' : '') }), i);
       };
-      if (tier.athleteMode === 'name') box.append(el('div', { className: 'grid2' }, input('first_name', 'First name', { required: true }), input('last_name', 'Last name', { required: true })));
-      else box.append(el('div', { className: 'grid2' },
+      if (tier.athleteMode !== 'name') box.append(el('div', { className: 'grid2' },
         input('first_name', 'First name', { required: true }), input('last_name', 'Last name', { required: true }),
         input('dob', 'Date of birth', { type: 'date' }), el('div'),
         input('email', 'Athlete email', { type: 'email', inputmode: 'email' }), input('phone', 'Athlete phone', { type: 'tel', inputmode: 'tel' }),
@@ -693,7 +692,11 @@
 
     async function submit() {
       const a = state.athlete;
-      if (!state.assessmentId && (!a.first_name.trim() || !a.last_name.trim())) {
+      if (!state.assessmentId && tier.athleteMode === 'name' && !a.id) {
+        message = { kind: 'error', text: 'Select an existing athlete before submitting.' };
+        state.step = 0; render(); return;
+      }
+      if (!state.assessmentId && !a.id && (!a.first_name.trim() || !a.last_name.trim())) {
         message = { kind: 'error', text: 'Add the athlete’s first and last name before submitting.' };
         state.step = 0; render(); return;
       }
