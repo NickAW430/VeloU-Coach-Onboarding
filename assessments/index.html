@@ -40,6 +40,7 @@ const TREE = {
       ] } },
     { key: "retest", label: "Re-Testing", next: {
       title: "Re-Testing Section",
+      colors: ["#E10600", "#56B7E6", "#88E0C6", "#ffffff", "#B794F6", "#FF8A3D", "#FF7AB6"],
       sub: "Which section of re-testing are you completing today?",
       options: [
         { key: "biometrics", label: "Biometrics" },
@@ -80,7 +81,7 @@ function render() {
     subEl.textContent = node.sub;
     const grid = el("div", "mods" + (node.options.length === 3 ? " three" : ""));
     node.options.forEach((o, i) => {
-      const b = el("button", "md"); b.type = "button"; b.style.setProperty("--c", COLORS[i % COLORS.length]);
+      const b = el("button", "md"); b.type = "button"; b.style.setProperty("--c", (node.colors || COLORS)[i % (node.colors || COLORS).length]);
       const pick = el("span", "pick");
       pick.append(el("span", "bk", "[" + LETTERS[i] + "]"), el("span", "lbl", o.label));
       const go = el("span", "go", "Select "); go.append(el("i", "", "→"));
