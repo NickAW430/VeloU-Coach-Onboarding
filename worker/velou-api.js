@@ -718,7 +718,8 @@ async function libraryTab(env, url) {
   let body;
   if (hit && Date.now() - hit.at < 300000) body = hit.body;
   else {
-    const raw = await fetchTab(env.SHEET_PROGRAMLIB, name);
+    // the day-schematic grid has no header row; every other tab does (and needs it kept intact)
+    const raw = await fetchTab(env.SHEET_PROGRAMLIB, name, undefined, name === 'Patterning Scheme');
     body = JSON.stringify({ rows: raw.map(r => r.map(c => String(c == null ? '' : c).trim())) });
     libJson.set(name, { at: Date.now(), body });
   }
@@ -813,10 +814,11 @@ function isoDate(v) {
 }
 const colLetter = i => { let s = ''; for (i += 1; i > 0; i = Math.floor((i - 1) / 26)) s = String.fromCharCode(65 + ((i - 1) % 26)) + s; return s; };
 
-async function fetchTab(id, tab, tq) {
+async function fetchTab(id, tab, tq, noHeader) {
   const u = new URL(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq`);
   u.searchParams.set('tqx', 'out:csv');
   u.searchParams.set('sheet', tab);
+  if (noHeader) u.searchParams.set('headers', '0');
   if (tq) u.searchParams.set('tq', tq);
   const res = await fetch(u.toString());
   if (!res.ok) throw new Error(`could not read the "${tab}" tab (${res.status})`);
