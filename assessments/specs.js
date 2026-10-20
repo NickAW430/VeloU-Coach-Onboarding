@@ -234,7 +234,7 @@
     },
   };
 
-  // Re-testing. Only these three have a form; the rest are captured automatically by in-training testing.
+  // Re-testing: Movement Screen, Athletic Testing, Body Composition and Mental Skills. Athletic Testing has no form; it is captured automatically.
   const RETESTS = {
     'movement-screen': {
       kind: 'retest', section: 'movement-screen', title: 'Movement Screen Re-Test',
@@ -255,10 +255,7 @@
 
   // Re-testing sections with no form: the numbers arrive on their own.
   const AUTOMATIC = {
-    'force-plates': 'Force plate results',
     'athletic-testing': 'Athletic testing results',
-    'throwing': 'Throwing assessment results',
-    'mound': 'Mound assessment results',
   };
 
   window.VELOU_SPECS = { SECTIONS, TIERS, RETESTS, AUTOMATIC, SCREEN_METRICS };
