@@ -25,9 +25,9 @@
 <section id="step" aria-live="polite"></section>
 </div>
 
-<script src="/assessments/specs.js?v=7"></script>
+<script src="/assessments/specs.js?v=9"></script>
 <script src="/assessments/screen-flow.js?v=3"></script>
-<script src="/assessments/form.js?v=6"></script>
+<script src="/assessments/form.js?v=8"></script>
 <script>
 const TREE = {
   title: "Assessment Type",
@@ -35,18 +35,21 @@ const TREE = {
   options: [
     { key: "intake", label: "Initial Intake", next: {
       title: "Assessment Level",
-      sub: "Which level of assessment are you completing today?",
+      sub: "Which assessment are you completing today?",
       options: [
         { key: "basic", label: "Basic" },
         { key: "advanced", label: "Advanced" },
-        { key: "premier", label: "Premier" }
-      ] } },
+        { key: "premier", label: "Premier" },
+        { key: "mental-skills-exam", label: "Mental Skills Exam" },
+        { key: "nutritional-exam", label: "Nutritional Exam" }
+      ],
+      colors: ["#E10600", "#56B7E6", "#88E0C6", "#ffffff", "#F2C94C"] } },
     { key: "retest", label: "Re-Testing", next: {
       title: "Re-Testing Section",
       colors: ["#E10600", "#56B7E6", "#88E0C6", "#ffffff", "#5B6770", "#F2C94C", "#FF8A3D"],
       sub: "Which section of re-testing are you completing today?",
       options: [
-        { key: "biometrics", label: "Biometrics" },
+        { key: "movement-screen", label: "Movement Screen" },
         { key: "force-plates", label: "Force Plates" },
         { key: "athletic-testing", label: "Athletic Testing" },
         { key: "throwing", label: "Throwing Assessment" },
@@ -93,7 +96,11 @@ function render() {
       grid.append(b);
     });
     stepEl.append(grid);
-  } else if (trail.length === 2 && trail[0].key === "intake") {
+  } else if (trail.length === 2 && trail[0].key === "retest" && VELOU_SPECS.AUTOMATIC[trail[1].key]) {
+    titleEl.textContent = trail[1].label;
+    subEl.textContent = "";
+    stepEl.append(el("div", "rule", VELOU_SPECS.AUTOMATIC[trail[1].key] + " are accounted for automatically, either through in-training testing or when the athlete completes it. There is no re-test form to fill in."));
+  } else if (trail.length === 2 && ((trail[0].key === "intake" && VELOU_SPECS.TIERS[trail[1].key]) || (trail[0].key === "retest" && VELOU_SPECS.RETESTS[trail[1].key]))) {
     VeloUForm.mount(trail[1].key, {
       container: stepEl,
       setHeader: (t, s) => { titleEl.textContent = t; subEl.textContent = s; },
@@ -101,7 +108,7 @@ function render() {
   } else {
     titleEl.textContent = trail.map(t => t.label).join(" · ");
     subEl.textContent = "";
-    stepEl.append(el("div", "rule", "This assessment form hasn't been built yet."));
+    stepEl.append(el("div", "rule", "This form will be built later."));
   }
   window.scrollTo(0, 0);
 }

@@ -30,7 +30,7 @@ const JSON_HEADERS = {
 };
 
 const LEVELS = ['basic', 'advanced', 'premier'];
-const SECTIONS = ['biometrics', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills'];
+const SECTIONS = ['movement-screen', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills'];
 const ATHLETE_STATUSES = ['lead', 'active', 'paused', 'alumni'];
 const MAX_BODY = 256 * 1024;
 const FILE_KINDS = ['headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mound_plate_report', 'mocap_report', 'report'];

@@ -2,7 +2,7 @@
 // through /api/v1. Exposes window.VeloUForm.mount(level, { container, setHeader }).
 
 (function () {
-  const { SECTIONS, TIERS, SCREEN_METRICS } = window.VELOU_SPECS;
+  const { SECTIONS, TIERS, RETESTS, SCREEN_METRICS } = window.VELOU_SPECS;
   const FLOW = window.VELOU_SCREEN;
   const FORM_VERSION = 2;
   const MAX_IMAGE_PX = 1600;
@@ -87,8 +87,10 @@
 
   // ---- mount ---------------------------------------------------------------------------------
 
-  function mount(level, ui) {
-    const tier = TIERS[level];
+  function mount(key, ui) {
+    const tier = TIERS[key] || RETESTS[key];
+    const level = tier.level || tier.section;
+    const isRetest = tier.kind === 'retest';
     const sections = tier.sections.map(id => SECTIONS[id]);
     const steps = [{ id: 'athlete', title: 'Athlete' }, ...sections, { id: 'review', title: 'Review' }];
     const draftKey = 'velou.draft.v' + FORM_VERSION + '.' + level;
@@ -120,7 +122,7 @@
       return {
         athlete: { id: null, first_name: '', last_name: '', dob: '', email: '', phone: '', parent_name: '', parent_email: '', parent_phone: '',
           playing_level: '', team: '', residence: '', position: '', dominant_hand: '', sport: 'Baseball' },
-        assessed_on: todayStr(), answers, skipped: {}, step: 0, assessmentId: null, uploaded: {}, flow: { hist: [FLOW.order[0]], done: false },
+        assessed_on: todayStr(), answers, skipped: {}, step: 0, assessmentId: null, uploaded: {}, hadBodyFat: null, flow: { hist: [FLOW.order[0]], done: false },
       };
     }
 
@@ -150,6 +152,7 @@
     }
 
     function visible(sec, f) {
+      if (f.when === 'hadBodyFat' && state.hadBodyFat === false) return false;
       if (!f.showIf) return true;
       const v = (state.answers[sec.id] || {})[f.showIf.key];
       return f.showIf.in ? f.showIf.in.includes(v) : v === f.showIf.equals;
@@ -362,8 +365,9 @@
         measurements.push({ metric: 'cmj_ci_ei', value: Math.round((prod.cmj_con_impulse / prod.cmj_ecc_impulse) * 1000) / 1000, unit: 'ratio', side: null });
       }
       return {
-        type: 'intake', level, assessed_on: state.assessed_on, status: 'submitted', form_version: level + '-' + FORM_VERSION,
-        data: { tier: level, equipment: tier.equipment, answers, skipped: Object.keys(state.skipped).filter(k => state.skipped[k]) },
+        type: tier.kind, level: isRetest ? undefined : level, section: isRetest ? tier.section : undefined,
+        assessed_on: state.assessed_on, status: 'submitted', form_version: (isRetest ? 'retest-' : '') + level + '-' + FORM_VERSION,
+        data: { tier: level, equipment: tier.equipment || [], answers, skipped: Object.keys(state.skipped).filter(k => state.skipped[k]) },
         measurements,
       };
     }
@@ -547,7 +551,9 @@
             try {
               const full = await api('GET', '/athletes/' + r.id);
               for (const k of Object.keys(a)) if (full[k] !== undefined && full[k] !== null) a[k] = full[k];
-              a.id = full.id; save(); render();
+              a.id = full.id;
+              try { state.hadBodyFat = (await api('GET', '/athletes/' + full.id + '/measurements?metric=body_fat_pct')).measurements.length > 0; } catch (e) { state.hadBodyFat = null; }
+              save(); render();
             } catch (e) { apiNote = 'Could not load that athlete: ' + e.message; render(); }
           },
         }, el('b', { text: r.last_name + ', ' + r.first_name }), el('span', { text: [r.position, r.team].filter(Boolean).join(' · ') }))));
@@ -568,7 +574,7 @@
       if (a.id) {
         box.append(el('div', { className: 'selected' },
           el('div', {}, el('b', { text: a.first_name + ' ' + a.last_name }), el('span', { className: 'muted', text: ' · existing athlete. Changes here update their record.' })),
-          el('button', { type: 'button', className: 'linkbtn', text: 'Use a different athlete', onclick: () => { Object.assign(a, freshState().athlete); save(); render(); } })));
+          el('button', { type: 'button', className: 'linkbtn', text: 'Use a different athlete', onclick: () => { Object.assign(a, freshState().athlete); state.hadBodyFat = null; save(); render(); } })));
       }
 
       const input = (key, label, o = {}) => {
@@ -576,7 +582,8 @@
         i.addEventListener('input', () => { a[key] = i.value; save(); refreshChips(); });
         return el('div', { className: 'field' }, el('label', { className: 'q', for: 'a-' + key, text: label + (o.required ? ' *' : '') }), i);
       };
-      box.append(el('div', { className: 'grid2' },
+      if (tier.athleteMode === 'name') box.append(el('div', { className: 'grid2' }, input('first_name', 'First name', { required: true }), input('last_name', 'Last name', { required: true })));
+      else box.append(el('div', { className: 'grid2' },
         input('first_name', 'First name', { required: true }), input('last_name', 'Last name', { required: true }),
         input('dob', 'Date of birth', { type: 'date' }), el('div'),
         input('email', 'Athlete email', { type: 'email', inputmode: 'email' }), input('phone', 'Athlete phone', { type: 'tel', inputmode: 'tel' }),
@@ -695,8 +702,8 @@
       try {
         await Promise.all([...jobs]);
         if (!state.assessmentId) {
-          if (a.id) await api('PATCH', '/athletes/' + a.id, athleteBody());
-          else { a.id = (await api('POST', '/athletes', athleteBody())).id; save(); }
+          if (!a.id) { a.id = (await api('POST', '/athletes', athleteBody())).id; save(); }
+          else if (!isRetest) await api('PATCH', '/athletes/' + a.id, athleteBody());
           const saved = await api('POST', '/assessments', Object.assign({ athlete_id: a.id }, buildPayload()));
           state.assessmentId = saved.id; save();
         }
@@ -734,7 +741,7 @@
         message.retry && !message.saved ? el('div', { className: 'alert-actions' }, el('button', { type: 'button', className: 'btn ghost', text: 'Download a copy', onclick: download })) : null));
       const s = steps[state.step];
       if (s.id === 'athlete') {
-        root.append(el('div', { className: 'equip' }, el('b', { text: 'You will need: ' }), tier.equipment.join(', ')));
+        if (tier.equipment && tier.equipment.length) root.append(el('div', { className: 'equip' }, el('b', { text: 'You will need: ' }), tier.equipment.join(', ')));
         root.append(renderAthlete());
       } else if (s.id === 'review') root.append(renderReview());
       else root.append(renderSection(s));

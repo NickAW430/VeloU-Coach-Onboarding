@@ -128,6 +128,37 @@
       ],
     },
 
+    // ---- Re-testing sections ----
+    retest_update: {
+      id: 'retest_update', title: 'Updated Measurements',
+      blurb: 'Regather the updated measurements: a new shirtless photo, height and weight. Body fat appears if the athlete has had it measured before.',
+      fields: [
+        num('height_in', 'Height', { unit: 'in', metric: 'height_in', min: 40, max: 90, step: 0.25 }),
+        num('weight_lb', 'Weight', { unit: 'lb', metric: 'weight_lb', min: 50, max: 400, step: 0.1 }),
+        num('body_fat', 'Body fat %, from the ultrasound body composition scan', { unit: '%', metric: 'body_fat_pct', min: 3, max: 50, step: 0.1, method: 'ultrasound', when: 'hadBodyFat' }),
+        file('photo_shirtless', 'Athlete shirtless photo', { kind: 'shirtless', accept: 'image/*', image: true }),
+      ],
+    },
+
+    bodycomp: {
+      id: 'bodycomp', title: 'Body Composition',
+      blurb: 'Height, weight, body fat and an updated shirtless photo.',
+      fields: [
+        num('height_in', 'Height', { unit: 'in', metric: 'height_in', min: 40, max: 90, step: 0.25 }),
+        num('weight_lb', 'Weight', { unit: 'lb', metric: 'weight_lb', min: 50, max: 400, step: 0.1 }),
+        num('body_fat', 'Body fat %, from the ultrasound body composition scan', { unit: '%', metric: 'body_fat_pct', min: 3, max: 50, step: 0.1, method: 'ultrasound' }),
+        file('photo_shirtless', 'Athlete shirtless photo', { kind: 'shirtless', accept: 'image/*', image: true }),
+      ],
+    },
+
+    mental_retest: {
+      id: 'mental_retest', title: 'Mental Skills Questionnaire', draft: true,
+      blurb: 'The mental skills questionnaire has not been added yet. It will appear here once it is provided.',
+      fields: [
+        note('mental_notes', 'Notes'),
+      ],
+    },
+
     mound_basic: {
       id: 'mound_basic', title: 'Throwing Video',
       blurb: 'There is no mound evaluation at this level. The breakdown comes from a video the athlete provides. Ask them to upload it now.',
@@ -183,19 +214,19 @@
   const BASE_GEAR = ['Force plates', 'ArmCare', 'Stopwatch or laser timers', 'Tape measure', 'Radar gun', '1 lb med ball', '2 lb med ball'];
   const TIERS = {
     basic: {
-      level: 'basic', title: 'Basic Assessment',
+      kind: 'intake', level: 'basic', title: 'Basic Assessment',
       blurb: 'The throwing evaluation is a video breakdown from a video the athlete provides.',
       equipment: BASE_GEAR,
       sections: [...COMMON, 'mound_basic'],
     },
     advanced: {
-      level: 'advanced', title: 'Advanced Assessment',
+      kind: 'intake', level: 'advanced', title: 'Advanced Assessment',
       blurb: 'The throwing evaluation adds a Trackman report and a video breakdown collected on the day.',
       equipment: [...BASE_GEAR, 'Trackman', 'Camera for the bullpen video'],
       sections: [...COMMON, 'mound_adv'],
     },
     premier: {
-      level: 'premier', title: 'Premier Assessment',
+      kind: 'intake', level: 'premier', title: 'Premier Assessment',
       blurb: 'The throwing evaluation adds a mound force plate report, a motion capture report and Trackman reporting, with body fat from ultrasound. The nutrition evaluation follows the assessment.',
       equipment: [...BASE_GEAR, 'Trackman', 'Mound force plates', 'Motion capture', 'Ultrasound body composition'],
       sections: [...COMMON, 'mound_adv', 'mound_plate', 'mocap'],
@@ -203,5 +234,32 @@
     },
   };
 
-  window.VELOU_SPECS = { SECTIONS, TIERS, SCREEN_METRICS };
+  // Re-testing. Only these three have a form; the rest are captured automatically by in-training testing.
+  const RETESTS = {
+    'movement-screen': {
+      kind: 'retest', section: 'movement-screen', title: 'Movement Screen Re-Test',
+      blurb: 'The movement screen again, then updated measurements.',
+      athleteMode: 'name', sections: ['screen', 'retest_update'],
+    },
+    'body-comp': {
+      kind: 'retest', section: 'body-comp', title: 'Body Composition Re-Test',
+      blurb: 'Height, weight, body fat and a shirtless photo.',
+      athleteMode: 'name', sections: ['bodycomp'],
+    },
+    'mental-skills': {
+      kind: 'retest', section: 'mental-skills', title: 'Mental Skills Re-Test',
+      blurb: 'The mental skills questionnaire.',
+      athleteMode: 'name', sections: ['mental_retest'],
+    },
+  };
+
+  // Re-testing sections with no form: the numbers arrive on their own.
+  const AUTOMATIC = {
+    'force-plates': 'Force plate results',
+    'athletic-testing': 'Athletic testing results',
+    'throwing': 'Throwing assessment results',
+    'mound': 'Mound assessment results',
+  };
+
+  window.VELOU_SPECS = { SECTIONS, TIERS, RETESTS, AUTOMATIC, SCREEN_METRICS };
 })();
