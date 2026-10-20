@@ -40,7 +40,7 @@ It is separate from `sheets-proxy.js`, which keeps feeding the Player Report fro
 | GET | `/api/v1/athletes/:id` | Athlete plus their assessments |
 | PATCH | `/api/v1/athletes/:id` | Update an athlete |
 | GET | `/api/v1/athletes/:id/measurements?metric=` | A metric over time, for charts |
-| POST | `/api/v1/athletes/:id/files?kind=&assessment_id=&name=` | Upload a photo, video or report (raw file body, 100 MB max). `kind` is `headshot`, `shirtless`, `mechanics_video`, `trackman_report`, `trackman_video`, `mocap_video` or `report` |
+| POST | `/api/v1/athletes/:id/files?kind=&assessment_id=&name=` | Upload a photo, video or report (raw file body, 100 MB max). `kind` is `headshot`, `shirtless`, `mechanics_video`, `trackman_report`, `trackman_video`, `mound_plate_report`, `mocap_report` or `report` |
 | GET | `/api/v1/files/:id` | Download a file (signed-in coaches only) |
 | POST | `/api/v1/assessments` | Save an assessment (draft or submitted) with its measurements |
 | GET | `/api/v1/assessments/:id` | One assessment with its measurements |

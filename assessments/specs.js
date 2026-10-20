@@ -34,10 +34,6 @@
         num('top_velo', 'Current top throwing velocity', { unit: 'mph', metric: 'reported_top_velo', min: 30, max: 110, step: 0.1 }),
         num('height_in', 'Height', { unit: 'in', metric: 'height_in', min: 40, max: 90, step: 0.25 }),
         num('weight_lb', 'Weight', { unit: 'lb', metric: 'weight_lb', min: 50, max: 400, step: 0.1 }),
-        num('body_fat_photo', 'Body fat %, estimated from the shirtless photo', {
-          unit: '%', metric: 'body_fat_pct', min: 3, max: 50, step: 0.1, tiers: ['basic', 'advanced'], method: 'photo',
-          hint: 'Take the shirtless photo first, then enter the estimate from it.',
-        }),
         num('body_fat_ultra', 'Body fat %, from the ultrasound body composition scan', {
           unit: '%', metric: 'body_fat_pct', min: 3, max: 50, step: 0.1, tiers: ['premier'], method: 'ultrasound',
         }),
@@ -169,32 +165,21 @@
       ],
     },
 
+    mound_plate: {
+      id: 'mound_plate', title: 'Mound Force Plate',
+      blurb: 'The mound force plates produce their own report. Upload it here. It is stored in the athlete’s file and is not part of the hexagon mapping.',
+      fields: [
+        file('mound_plate_report', 'Mound force plate report', { kind: 'mound_plate_report', accept: '.pdf,application/pdf,.csv,.xls,.xlsx,image/*' }),
+        note('mound_plate_notes', 'Notes'),
+      ],
+    },
+
     mocap: {
       id: 'mocap', title: 'Motion Capture',
-      blurb: 'Upload the motion capture video for the breakdown.',
+      blurb: 'Motion capture produces its own report. Upload it here. It is stored in the athlete’s file and is not part of the hexagon mapping.',
       fields: [
-        file('mocap_video', 'Motion capture video', { kind: 'mocap_video', accept: 'video/*' }),
+        file('mocap_report', 'Motion capture report', { kind: 'mocap_report', accept: '.pdf,application/pdf,video/*,image/*' }),
         note('mocap_notes', 'Notes and observations'),
-      ],
-    },
-
-    mental: {
-      id: 'mental', title: 'Mental Skills Assessment', draft: true,
-      blurb: 'The mental skills assessment is part of the Premier level. The questions are not defined yet; for now, record notes.',
-      fields: [
-        note('mental_notes', 'Mental skills notes'),
-      ],
-    },
-
-    mound_plate: {
-      id: 'mound_plate', title: 'Mound Force Plate', draft: true,
-      blurb: 'Force plate mound testing. These fields are a first draft: tell us what the mound plates report and we will replace them.',
-      fields: [
-        num('mp_drive_peak', 'Drive leg peak force', { unit: 'N', metric: 'mound_drive_peak_force', min: 100, max: 5000 }),
-        num('mp_lead_brake', 'Lead leg peak braking force', { unit: 'N', metric: 'mound_lead_peak_braking_force', min: 100, max: 8000 }),
-        num('mp_lead_vert', 'Lead leg peak vertical force', { unit: 'N', metric: 'mound_lead_peak_vertical_force', min: 100, max: 8000 }),
-        num('mp_time_to_peak', 'Time to peak lead leg force', { unit: 'ms', metric: 'mound_time_to_peak_lead_force', min: 10, max: 1000 }),
-        note('mp_notes', 'Notes'),
       ],
     },
   };
@@ -209,7 +194,7 @@
     e7: { metric: 'shoulder_arc_total', unit: 'deg', min: 60, max: 260 },
   };
 
-  // The levels differ only in the throwing exam (and, at Premier, ultrasound body fat and a mental skills assessment).
+  // The levels differ only in the throwing exam. Premier also has ultrasound body fat and is followed by the nutrition evaluation.
   const COMMON = ['intake', 'injury', 'screen', 'production', 'interference', 'transference'];
   const BASE_GEAR = ['Force plates', 'ArmCare', 'Stopwatch or laser timers', 'Tape measure', 'Radar gun', '1 lb med ball', '2 lb med ball'];
   const TIERS = {
@@ -229,9 +214,10 @@
     },
     premier: {
       level: 'premier', title: 'Premier Assessment',
-      blurb: 'The throwing evaluation adds a force plate mound assessment, motion capture breakdown, Trackman reporting, ultrasound body fat and a mental skills assessment.',
+      blurb: 'The throwing evaluation adds a mound force plate report, a motion capture report and Trackman reporting, with body fat from ultrasound. The nutrition evaluation follows the assessment.',
       equipment: [...BASE_GEAR, 'Trackman', 'Mound force plates', 'Motion capture', 'Ultrasound body composition'],
-      sections: [...COMMON, 'mound_adv', 'mound_plate', 'mocap', 'mental'],
+      sections: [...COMMON, 'mound_adv', 'mound_plate', 'mocap'],
+      after: { label: 'Start the nutrition evaluation', href: '/body-comp/', note: 'The nutrition evaluation is done after the assessment, in the Body Comp Planner.' },
       defaults: { speed_timing: 'stopwatch' },
     },
   };

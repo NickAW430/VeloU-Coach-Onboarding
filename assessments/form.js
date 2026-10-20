@@ -622,6 +622,7 @@
         el('div', { className: 'review-row' }, el('span', { text: 'Level' }), el('b', { text: tier.title })),
         el('button', { type: 'button', className: 'linkbtn', text: 'Edit', onclick: () => go(0) })));
       const labels = { done: 'Complete', partial: 'Some missing', empty: 'Nothing entered', skipped: 'Skipped' };
+      if (tier.after) box.append(el('div', { className: 'equip', text: tier.after.note }));
       for (const sec of sections) {
         const st = sectionStatus(sec);
         const block = el('div', { className: 'review-block' }, el('h3', {}, sec.title, el('span', { className: 'status ' + st, text: labels[st] })));
@@ -646,7 +647,9 @@
       return el('div', { className: 'panel done' },
         el('h2', { className: 'panel-title', text: 'Assessment saved' }),
         el('p', { className: 'blurb', text: (state.athlete.first_name + ' ' + state.athlete.last_name).trim() + ' · ' + tier.title + ' · ' + state.assessed_on }),
+        tier.after ? el('p', { className: 'blurb', text: tier.after.note }) : null,
         el('div', { className: 'formnav' },
+          tier.after ? el('a', { className: 'btn', href: tier.after.href, text: tier.after.label + ' →' }) : null,
           el('a', { className: 'btn ghost', href: '#/', text: 'Back to assessments' }),
           el('button', { type: 'button', className: 'btn', text: 'Start another', onclick: () => { state = freshState(); pending = {}; message = null; save(); clearDraft(); render(); } })));
     }

@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS files (
   id            TEXT PRIMARY KEY,
   athlete_id    TEXT NOT NULL REFERENCES athletes(id) ON DELETE CASCADE,
   assessment_id TEXT REFERENCES assessments(id) ON DELETE SET NULL,
-  kind          TEXT NOT NULL CHECK (kind IN ('headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mocap_video', 'report')),
+  kind          TEXT NOT NULL CHECK (kind IN ('headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mound_plate_report', 'mocap_report', 'report')),
   r2_key        TEXT NOT NULL,
   content_type  TEXT NOT NULL,
   size          INTEGER NOT NULL,

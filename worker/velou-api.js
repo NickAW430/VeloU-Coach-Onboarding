@@ -33,7 +33,7 @@ const LEVELS = ['basic', 'advanced', 'premier'];
 const SECTIONS = ['biometrics', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills'];
 const ATHLETE_STATUSES = ['lead', 'active', 'paused', 'alumni'];
 const MAX_BODY = 256 * 1024;
-const FILE_KINDS = ['headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mocap_video', 'report'];
+const FILE_KINDS = ['headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mound_plate_report', 'mocap_report', 'report'];
 const FILE_TYPES = /^(image\/(jpeg|png|webp|heic|heif)|video\/(mp4|quicktime|webm|x-m4v)|application\/pdf|text\/csv|application\/vnd\.ms-excel|application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet)$/;
 const MAX_FILE = 100 * 1024 * 1024; // Workers accept request bodies up to 100 MB
 
