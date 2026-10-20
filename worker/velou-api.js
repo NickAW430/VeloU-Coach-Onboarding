@@ -31,6 +31,7 @@ const JSON_HEADERS = {
 
 const LEVELS = ['basic', 'advanced', 'premier'];
 const SECTIONS = ['movement-screen', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills'];
+const EXAM_SECTIONS = ['mental-skills', 'nutrition'];
 const ATHLETE_STATUSES = ['lead', 'active', 'paused', 'alumni'];
 const MAX_BODY = 256 * 1024;
 const FILE_KINDS = ['headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mound_plate_report', 'mocap_report', 'report'];
@@ -291,14 +292,14 @@ async function createAssessment(env, body, coach) {
   if (!isObj(body)) throw new HttpError(400, 'body must be an object');
   const athleteId = str(body.athlete_id, 'athlete_id', { max: 64, required: true });
   await getAthlete(env, athleteId);
-  const type = oneOf(body.type, ['intake', 'retest'], 'type', { required: true });
+  const type = oneOf(body.type, ['intake', 'retest', 'exam'], 'type', { required: true });
   let level = null, section = null;
   if (type === 'intake') {
     level = oneOf(body.level, LEVELS, 'level', { required: true });
     if (body.section) throw new HttpError(400, 'an intake has a level, not a section');
   } else {
-    section = oneOf(body.section, SECTIONS, 'section', { required: true });
-    if (body.level) throw new HttpError(400, 'a re-test has a section, not a level');
+    section = oneOf(body.section, type === 'exam' ? EXAM_SECTIONS : SECTIONS, 'section', { required: true });
+    if (body.level) throw new HttpError(400, 'a ' + (type === 'exam' ? 'exam' : 're-test') + ' has a section, not a level');
   }
   const c = parseAssessmentCommon(body);
   const id = crypto.randomUUID();

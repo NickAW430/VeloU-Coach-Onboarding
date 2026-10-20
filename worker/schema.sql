@@ -43,9 +43,9 @@ CREATE INDEX IF NOT EXISTS idx_athletes_coach ON athletes (coach_id);
 CREATE TABLE IF NOT EXISTS assessments (
   id           TEXT PRIMARY KEY,
   athlete_id   TEXT NOT NULL REFERENCES athletes(id) ON DELETE CASCADE,
-  type         TEXT NOT NULL CHECK (type IN ('intake', 'retest')),
+  type         TEXT NOT NULL CHECK (type IN ('intake', 'retest', 'exam')),
   level        TEXT CHECK (level IN ('basic', 'advanced', 'premier')),
-  section      TEXT CHECK (section IN ('movement-screen', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills')),
+  section      TEXT CHECK (section IN ('movement-screen', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills', 'nutrition')),
   assessed_on  TEXT NOT NULL,
   coach_id     TEXT REFERENCES coaches(id),
   status       TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'submitted')),
@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS assessments (
   data         TEXT NOT NULL DEFAULT '{}',
   created_at   TEXT NOT NULL,
   updated_at   TEXT NOT NULL,
-  -- an intake has a level and no section; a re-test has a section and no level
-  CHECK ((type = 'intake' AND level IS NOT NULL AND section IS NULL) OR (type = 'retest' AND section IS NOT NULL AND level IS NULL))
+  -- an intake has a level and no section; a re-test or a stand-alone exam (mental skills, nutrition) has a section and no level
+  CHECK ((type = 'intake' AND level IS NOT NULL AND section IS NULL) OR (type IN ('retest', 'exam') AND section IS NOT NULL AND level IS NULL))
 );
 CREATE INDEX IF NOT EXISTS idx_assessments_athlete ON assessments (athlete_id, assessed_on);
 

@@ -2,7 +2,7 @@
 // through /api/v1. Exposes window.VeloUForm.mount(level, { container, setHeader }).
 
 (function () {
-  const { SECTIONS, TIERS, RETESTS, SCREEN_METRICS } = window.VELOU_SPECS;
+  const { SECTIONS, TIERS, RETESTS, EXAMS, SCREEN_METRICS } = window.VELOU_SPECS;
   const FLOW = window.VELOU_SCREEN;
   const FORM_VERSION = 2;
   const MAX_IMAGE_PX = 1600;
@@ -88,9 +88,9 @@
   // ---- mount ---------------------------------------------------------------------------------
 
   function mount(key, ui) {
-    const tier = TIERS[key] || RETESTS[key];
+    const tier = TIERS[key] || RETESTS[key] || EXAMS[key];
     const level = tier.level || tier.section;
-    const isRetest = tier.kind === 'retest';
+    const isIntake = tier.kind === 'intake';
     const sections = tier.sections.map(id => SECTIONS[id]);
     const steps = [{ id: 'athlete', title: 'Athlete' }, ...sections, { id: 'review', title: 'Review' }];
     const draftKey = 'velou.draft.v' + FORM_VERSION + '.' + level;
@@ -368,8 +368,8 @@
         measurements.push({ metric: 'cmj_ci_ei', value: Math.round((prod.cmj_con_impulse / prod.cmj_ecc_impulse) * 1000) / 1000, unit: 'ratio', side: null });
       }
       return {
-        type: tier.kind, level: isRetest ? undefined : level, section: isRetest ? tier.section : undefined,
-        assessed_on: state.assessed_on, status: 'submitted', form_version: (isRetest ? 'retest-' : '') + level + '-' + FORM_VERSION,
+        type: tier.kind, level: isIntake ? level : undefined, section: isIntake ? undefined : tier.section,
+        assessed_on: state.assessed_on, status: 'submitted', form_version: (isIntake ? '' : tier.kind + '-') + level + '-' + FORM_VERSION,
         data: { tier: level, equipment: tier.equipment || [], answers, skipped: Object.keys(state.skipped).filter(k => state.skipped[k]) },
         measurements,
       };
@@ -720,7 +720,7 @@
         await Promise.all([...jobs]);
         if (!state.assessmentId) {
           if (!a.id) { a.id = (await api('POST', '/athletes', athleteBody())).id; save(); }
-          else if (!isRetest) await api('PATCH', '/athletes/' + a.id, athleteBody());
+          else if (isIntake) await api('PATCH', '/athletes/' + a.id, athleteBody());
           const saved = await api('POST', '/assessments', Object.assign({ athlete_id: a.id }, buildPayload()));
           state.assessmentId = saved.id; save();
         }

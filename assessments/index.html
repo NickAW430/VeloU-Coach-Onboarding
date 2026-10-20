@@ -26,9 +26,9 @@
 </div>
 
 <script src="/assessments/mental-questions.js?v=1"></script>
-<script src="/assessments/specs.js?v=11"></script>
+<script src="/assessments/specs.js?v=12"></script>
 <script src="/assessments/screen-flow.js?v=3"></script>
-<script src="/assessments/form.js?v=12"></script>
+<script src="/assessments/form.js?v=13"></script>
 <script>
 const TREE = {
   title: "Assessment Type",
@@ -42,7 +42,7 @@ const TREE = {
         { key: "advanced", label: "Advanced" },
         { key: "premier", label: "Premier" },
         { key: "mental-skills-exam", label: "Mental Skills Exam" },
-        { key: "nutritional-exam", label: "Nutritional Exam" }
+        { key: "nutritional-exam", label: "Nutritional Exam", href: "/body-comp/" }
       ],
       colors: ["#E10600", "#56B7E6", "#88E0C6", "#ffffff", "#F2C94C"] } },
     { key: "retest", label: "Re-Testing", next: {
@@ -93,7 +93,7 @@ function render() {
       pick.append(el("span", "bk", "[" + LETTERS[i] + "]"), el("span", "lbl", o.label));
       const go = el("span", "go", "Select "); go.append(el("i", "", "→"));
       b.append(pick, go);
-      b.addEventListener("click", () => { location.hash = "#/" + path.concat(o.key).join("/"); });
+      b.addEventListener("click", () => { if (o.href) { location.href = o.href; return; } location.hash = "#/" + path.concat(o.key).join("/"); });
       grid.append(b);
     });
     stepEl.append(grid);
@@ -101,7 +101,7 @@ function render() {
     titleEl.textContent = trail[1].label;
     subEl.textContent = "";
     stepEl.append(el("div", "rule", VELOU_SPECS.AUTOMATIC[trail[1].key] + " re-testing has no form. The results are pulled in automatically from the testing software through our API."));
-  } else if (trail.length === 2 && ((trail[0].key === "intake" && VELOU_SPECS.TIERS[trail[1].key]) || (trail[0].key === "retest" && VELOU_SPECS.RETESTS[trail[1].key]))) {
+  } else if (trail.length === 2 && ((trail[0].key === "intake" && (VELOU_SPECS.TIERS[trail[1].key] || VELOU_SPECS.EXAMS[trail[1].key])) || (trail[0].key === "retest" && VELOU_SPECS.RETESTS[trail[1].key]))) {
     VeloUForm.mount(trail[1].key, {
       container: stepEl,
       setHeader: (t, s) => { titleEl.textContent = t; subEl.textContent = s; },

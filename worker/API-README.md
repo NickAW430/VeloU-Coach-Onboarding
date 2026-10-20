@@ -46,8 +46,8 @@ It is separate from `sheets-proxy.js`, which keeps feeding the Player Report fro
 | GET | `/api/v1/assessments/:id` | One assessment with its measurements |
 | PUT | `/api/v1/assessments/:id` | Update it (measurements are replaced to match) |
 
-An assessment is either `type: "intake"` with a `level` (`basic`, `advanced`, `premier`) or `type: "retest"` with a
-`section` (`movement-screen`, `force-plates`, `athletic-testing`, `throwing`, `mound`, `body-comp`, `mental-skills`).
+An assessment is `type: "intake"` with a `level` (`basic`, `advanced`, `premier`) or `type: "retest"` with a
+`section` (`movement-screen`, `force-plates`, `athletic-testing`, `throwing`, `mound`, `body-comp`, `mental-skills`), or `type: "exam"` (a stand-alone exam, section `mental-skills` or `nutrition`).
 `data` holds the full answers as the form collected them. `measurements` is the list of numbers worth charting, each
 `{ metric, value, unit, side }` with `metric` in lowercase like `shoulder.er` or `body_fat`.
 

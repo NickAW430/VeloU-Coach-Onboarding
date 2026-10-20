@@ -292,6 +292,15 @@
     },
   };
 
+  // Stand-alone exams offered next to the intake levels. The mental skills exam is the same questionnaire as the re-test.
+  const EXAMS = {
+    'mental-skills-exam': {
+      kind: 'exam', section: 'mental-skills', title: 'Mental Skills Exam',
+      blurb: 'The mental skills questionnaire, answered about the previous week.',
+      athleteMode: 'name', sections: ['mental_personality', 'mental_skills', 'mental_selftalk', 'mental_stress'],
+    },
+  };
+
   // Re-tested, but with no form: the results are pulled in from the testing software through our API.
   const AUTOMATIC = {
     'force-plates': 'Force plate',
@@ -299,5 +308,5 @@
     'mound': 'Mound assessment',
   };
 
-  window.VELOU_SPECS = { SECTIONS, TIERS, RETESTS, AUTOMATIC, SCREEN_METRICS };
+  window.VELOU_SPECS = { SECTIONS, TIERS, RETESTS, EXAMS, AUTOMATIC, SCREEN_METRICS };
 })();
