@@ -34,37 +34,16 @@
   --font-display: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ink: #f1e9e4;
-    --hdr-bg: #241d1a;
-    --note-bg: #1e1815;
-    --border: #3a322e;
-    --muted: #ab9e98;
-    --page-bg: #100d0b;
-    --card-bg: #1a1512;
-    --white: #ffffff;
-  }
-}
-:root[data-theme="dark"] {
-  --ink: #f1e9e4;
-  --hdr-bg: #241d1a;
-  --note-bg: #1e1815;
-  --border: #3a322e;
-  --muted: #ab9e98;
-  --page-bg: #100d0b;
-  --card-bg: #1a1512;
-  --white: #ffffff;
-}
 /* ALWAYS-DARK */
 :root { color-scheme: dark;
-  --ink: #f1e9e4;
-  --hdr-bg: #241d1a;
-  --note-bg: #1e1815;
-  --border: #3a322e;
-  --muted: #ab9e98;
-  --page-bg: #100d0b;
-  --card-bg: #1a1512;
+  --grid: rgba(255,255,255,.09);
+  --ink: #ffffff;
+  --hdr-bg: #141414;
+  --note-bg: #0d0d0d;
+  --border: #333333;
+  --muted: #a8a8a8;
+  --page-bg: #000000;
+  --card-bg: #000000;
   --white: #ffffff;
 }
 
@@ -72,7 +51,9 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--page-bg);
+  background-color: var(--page-bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
   color: var(--ink);
   font-family: var(--font-body);
   display: flex;
@@ -82,10 +63,10 @@ body {
   padding: 40px 20px;
 }
 h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0.01em; }
-.logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; }
+.logo { width: min(400px, 100%); height: auto; margin-bottom: 22px; }
 h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
-.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; max-width: 900px; width: 100%; }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 700px; width: 100%; }
 .tile {
   display: flex;
   flex-direction: column;
@@ -94,7 +75,7 @@ h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
   background: #000;
   border: 2px solid #fff;
   border-radius: 14px;
-  padding: 32px 30px;
+  padding: 24px 24px;
   text-decoration: none;
   color: #fff;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -102,8 +83,8 @@ h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tile:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,255,255,0.12); }
 .tile:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 .tile-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
-.tile h2 { font-size: 34px; margin: 0; }
-.tile p { color: var(--muted); font-size: 15px; margin: 0; line-height: 1.5; }
+.tile h2 { font-size: 28px; margin: 0; }
+.tile p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5; }
 .tile-cta { font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: #fff; margin-top: auto; }
 footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: center; }
 @media (max-width: 860px) {
@@ -121,25 +102,25 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
   <a class="tile" href="assessments/">
     <span class="tile-eyebrow">Portal</span>
     <h2>Assessments</h2>
-    <p>Coming soon.</p>
+    <p>Evaluate athletes at intake and track their progress through structured re-testing.</p>
     <span class="tile-cta">Open Assessments →</span>
   </a>
   <a class="tile" href="athlete-management/">
     <span class="tile-eyebrow">Portal</span>
     <h2>Athlete Management</h2>
-    <p>Coming soon.</p>
+    <p>Keep every athlete's plan, progress and follow-up organized in one place.</p>
     <span class="tile-cta">Open Athlete Management →</span>
   </a>
   <a class="tile" href="education/">
     <span class="tile-eyebrow">Portal</span>
     <h2>Education</h2>
-    <p>Coach Onboarding, VeloU Strength, VeloU Throwing, and The Shoulder Lab: learn the VeloU way.</p>
+    <p>Learn the VeloU way: our coaching philosophy, programming and the science behind it.</p>
     <span class="tile-cta">Open Education →</span>
   </a>
   <a class="tile" href="tools/">
     <span class="tile-eyebrow">Portal</span>
     <h2>Tools</h2>
-    <p>Player Report and Body Comp Planner: evaluate athletes and plan their nutrition.</p>
+    <p>Practical tools that support day-to-day coaching and athlete planning.</p>
     <span class="tile-cta">Open Tools →</span>
   </a>
 </div>
