@@ -12,8 +12,10 @@
 //
 // Routes (all JSON):
 //   GET   /api/v1/me
+//   GET   /api/v1/overview?segment=&coach=&status=&q=   the Athlete Management overview (arm score, programs, injury)
 //   GET   /api/v1/athletes?q=&status=&limit=&offset=
 //   POST  /api/v1/athletes
+//   POST  /api/v1/admin/sync                         read the sheets now (also runs on a schedule)
 //   GET   /api/v1/athletes/:id                       athlete + their assessments
 //   PATCH /api/v1/athletes/:id
 //   GET   /api/v1/athletes/:id/measurements?metric=  time series for charts
@@ -34,6 +36,8 @@ const SECTIONS = ['movement-screen', 'force-plates', 'athletic-testing', 'throwi
 const EXAM_SECTIONS = ['mental-skills', 'nutrition'];
 const ATHLETE_STATUSES = ['lead', 'active', 'paused', 'alumni'];
 const MAX_BODY = 256 * 1024;
+const SEGMENTS = ['on-site', 'remote', 'black-label', 'evaluation'];
+const ARM_DROP_FLAG = 0.10; // flag an athlete whose latest arm score is 10% or more below their previous test
 const FILE_KINDS = ['headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mound_plate_report', 'mocap_report', 'report'];
 const FILE_TYPES = /^(image\/(jpeg|png|webp|heic|heif)|video\/(mp4|quicktime|webm|x-m4v)|application\/pdf|text\/csv|application\/vnd\.ms-excel|application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet)$/;
 const MAX_FILE = 100 * 1024 * 1024; // Workers accept request bodies up to 100 MB
@@ -205,6 +209,12 @@ const ATHLETE_FIELDS = {
   },
   dominant_hand: v => oneOf(v, ['R', 'L', 'S'], 'dominant_hand'),
   status: v => oneOf(v, ATHLETE_STATUSES, 'status'),
+  segment: v => oneOf(v, SEGMENTS, 'segment'),
+  throwing_coach: v => str(v, 'throwing_coach', { max: 60 }),
+  strength_coach: v => str(v, 'strength_coach', { max: 60 }),
+  injury_status: v => str(v, 'injury_status', { max: 40 }),
+  injury_location: v => str(v, 'injury_location', { max: 120 }),
+  injury_notes: v => str(v, 'injury_notes', { max: 2000 }),
   coach_id: v => str(v, 'coach_id', { max: 64 }),
 };
 
@@ -224,11 +234,13 @@ async function createAthlete(env, body, coach) {
   const profile = jsonText(body.profile, 'profile', 50 * 1024);
   await env.DB.prepare(
     `INSERT INTO athletes (id, first_name, last_name, dob, email, phone, parent_name, parent_email, parent_phone, playing_level, residence,
-       sport, position, team, grad_year, dominant_hand, status, coach_id, profile, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       sport, position, team, grad_year, dominant_hand, status, coach_id, profile, created_at, updated_at,
+       segment, throwing_coach, strength_coach, injury_status, injury_location, injury_notes, source)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(id, row.first_name, row.last_name, row.dob, row.email, row.phone, row.parent_name, row.parent_email, row.parent_phone,
     row.playing_level, row.residence, row.sport, row.position, row.team, row.grad_year,
-    row.dominant_hand, row.status, row.coach_id, profile, t, t).run();
+    row.dominant_hand, row.status, row.coach_id, profile, t, t,
+    row.segment, row.throwing_coach, row.strength_coach, row.injury_status, row.injury_location, row.injury_notes, 'app').run();
   return getAthlete(env, id);
 }
 
@@ -361,6 +373,70 @@ async function athleteMeasurements(env, athleteId, url) {
   return { measurements: results };
 }
 
+const PROGRAM_CATEGORIES = ['throwing', 'patterning', 'lifting', 'speed', 'arm_care', 'mobility'];
+
+function daysLeft(endsOn) {
+  if (!endsOn) return null;
+  const end = Date.parse(endsOn + 'T00:00:00Z');
+  if (Number.isNaN(end)) return null;
+  const today = Date.parse(new Date().toISOString().slice(0, 10) + 'T00:00:00Z');
+  return Math.round((end - today) / 86400000);
+}
+
+async function overview(env, url) {
+  const segment = url.searchParams.get('segment');
+  const coach = (url.searchParams.get('coach') || '').trim();
+  const status = url.searchParams.get('status') || 'active';
+  const q = (url.searchParams.get('q') || '').trim().slice(0, 80);
+  const where = [], vals = [];
+  if (segment) { oneOf(segment, SEGMENTS, 'segment'); where.push('a.segment = ?'); vals.push(segment); }
+  if (coach) { where.push('(a.throwing_coach = ? OR a.strength_coach = ?)'); vals.push(coach, coach); }
+  if (status !== 'all') { oneOf(status, ATHLETE_STATUSES, 'status'); where.push('a.status = ?'); vals.push(status); }
+  if (q) {
+    const like = `%${q.replace(/[\\%_]/g, m => '\\' + m)}%`;
+    where.push("(a.first_name || ' ' || a.last_name) LIKE ? ESCAPE '\\'");
+    vals.push(like);
+  }
+  const clause = where.length ? 'WHERE ' + where.join(' AND ') : '';
+  const { results: athletes } = await env.DB.prepare(
+    `SELECT a.id, a.first_name, a.last_name, a.status, a.segment, a.throwing_coach, a.strength_coach, a.injury_status, a.injury_location,
+       (SELECT arm_score FROM arm_scores s WHERE s.athlete_id = a.id AND s.arm_score IS NOT NULL ORDER BY exam_on DESC LIMIT 1) AS arm_score,
+       (SELECT exam_on FROM arm_scores s WHERE s.athlete_id = a.id AND s.arm_score IS NOT NULL ORDER BY exam_on DESC LIMIT 1) AS arm_exam_on,
+       (SELECT arm_score FROM arm_scores s WHERE s.athlete_id = a.id AND s.arm_score IS NOT NULL ORDER BY exam_on DESC LIMIT 1 OFFSET 1) AS arm_previous
+     FROM athletes a ${clause} ORDER BY a.last_name, a.first_name LIMIT 2000`
+  ).bind(...vals).all();
+  const { results: programs } = await env.DB.prepare(
+    `SELECT p.athlete_id, p.category, p.program, p.starts_on, p.ends_on FROM program_assignments p JOIN athletes a ON a.id = p.athlete_id ${clause}
+     ORDER BY p.starts_on`
+  ).bind(...vals).all();
+  const byAthlete = new Map();
+  for (const p of programs) {
+    if (!byAthlete.has(p.athlete_id)) byAthlete.set(p.athlete_id, {});
+    byAthlete.get(p.athlete_id)[p.category] = { program: p.program, starts_on: p.starts_on, ends_on: p.ends_on, days_left: daysLeft(p.ends_on) };
+  }
+  for (const a of athletes) {
+    a.programs = byAthlete.get(a.id) || {};
+    // flagged only when the latest test is 10% or more below the one before it
+    a.arm_drop_pct = a.arm_score !== null && a.arm_previous ? Math.round(((a.arm_previous - a.arm_score) / a.arm_previous) * 1000) / 10 : null;
+    a.arm_flag = a.arm_drop_pct !== null && a.arm_drop_pct >= ARM_DROP_FLAG * 100;
+  }
+  const { results: coachRows } = await env.DB.prepare(
+    `SELECT throwing_coach AS c FROM athletes WHERE throwing_coach IS NOT NULL AND throwing_coach <> ''
+     UNION SELECT strength_coach FROM athletes WHERE strength_coach IS NOT NULL AND strength_coach <> '' ORDER BY 1`
+  ).all();
+  return {
+    counts: {
+      athletes: athletes.length,
+      flagged: athletes.filter(a => a.arm_flag).length,
+      injured: athletes.filter(a => a.injury_status === 'Currently Injured' || a.injury_status === 'Rehabbing Injury').length,
+    },
+    arm_drop_flag_pct: ARM_DROP_FLAG * 100,
+    last_sync: await env.DB.prepare('SELECT finished_at, ok, stats, error FROM sync_runs ORDER BY id DESC LIMIT 1').first().catch(() => null),
+    coaches: coachRows.map(r => r.c),
+    athletes,
+  };
+}
+
 async function athleteFiles(env, athleteId) {
   const { results } = await env.DB.prepare(
     'SELECT id, assessment_id, kind, content_type, size, original_name, created_at FROM files WHERE athlete_id = ? ORDER BY created_at DESC'
@@ -415,6 +491,237 @@ async function athleteAssessments(env, athleteId) {
   return results;
 }
 
+
+// ---- Sync from the Google Sheets (read-only) -----------------------------------------------
+// Reads the Athlete Mainframe and Program Library sheets through their public CSV address and mirrors them into D1.
+// It never writes to a sheet. Secrets: SHEET_MAINFRAME and SHEET_PROGRAMLIB (the two sheet ids).
+// Runs every few minutes (cron trigger) and on demand (POST /api/v1/admin/sync).
+
+function parseCsv(t) {
+  const rows = [];
+  let row = [], f = '', q = false;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (q) {
+      if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c;
+    } else if (c === '"') q = true;
+    else if (c === ',') { row.push(f); f = ''; }
+    else if (c === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (c !== '\r') f += c;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows;
+}
+
+const normName = s => String(s || '').replace(/[‘’`´]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
+const cleanText = s => String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
+const numOrNull = v => { const n = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); return Number.isFinite(n) ? n : null; };
+function isoDate(v) {
+  const s = String(v || '').trim();
+  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (m) return `${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}`;
+  m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+}
+const colLetter = i => { let s = ''; for (i += 1; i > 0; i = Math.floor((i - 1) / 26)) s = String.fromCharCode(65 + ((i - 1) % 26)) + s; return s; };
+
+async function fetchTab(id, tab, tq) {
+  const u = new URL(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq`);
+  u.searchParams.set('tqx', 'out:csv');
+  u.searchParams.set('sheet', tab);
+  if (tq) u.searchParams.set('tq', tq);
+  const res = await fetch(u.toString());
+  if (!res.ok) throw new Error(`could not read the "${tab}" tab (${res.status})`);
+  const text = await res.text();
+  if (text.startsWith('<')) throw new Error(`the "${tab}" tab is not readable (sheet not shared?)`);
+  return parseCsv(text);
+}
+
+const headerIndex = rows => Object.fromEntries(rows[0].map((h, i) => [h, i]));
+const SEGMENT_MAP = { 'Black Label': 'black-label', 'VeloU': 'on-site', 'Remote': 'remote', 'zEvaluation': 'evaluation' };
+const BOARD_CATEGORIES = [['throwing', 'Throwing Program'], ['patterning', 'Patterning Program'], ['lifting', 'Lifting Program'],
+  ['speed', 'Speed Program'], ['arm_care', 'Arm Care Program'], ['mobility', 'Mobility Program']];
+
+async function runBatches(env, stmts, size = 90) {
+  for (let i = 0; i < stmts.length; i += size) await env.DB.batch(stmts.slice(i, i + size));
+}
+
+async function runSync(env) {
+  if (!env.SHEET_MAINFRAME || !env.SHEET_PROGRAMLIB) throw new Error('sheet ids are not configured');
+  const stats = { athletes_created: 0, athletes_updated: 0, programs_updated: 0, arm_scores_added: 0, arm_scores_unmatched: 0 };
+  const now = nowIso();
+
+  const [mainframe, roster, board, evals] = await Promise.all([
+    fetchTab(env.SHEET_MAINFRAME, 'Athlete Mainframe'),
+    fetchTab(env.SHEET_PROGRAMLIB, 'Roster'),
+    fetchTab(env.SHEET_MAINFRAME, 'Program Board'),
+    fetchTab(env.SHEET_MAINFRAME, 'VeloU On-Site Athlete Evaluation'),
+  ]);
+  const hA = headerIndex(mainframe), hB = headerIndex(board), hE = headerIndex(evals), hR = headerIndex(roster);
+
+  // existing athletes, keyed by normalized name (and by ArmCare name)
+  const { results: existing } = await env.DB.prepare('SELECT * FROM athletes').all();
+  const byKey = new Map();
+  for (const a of existing) byKey.set(normName(a.first_name + ' ' + a.last_name), a);
+  const alias = new Map(byKey);
+  for (const a of existing) if (a.armcare_name && !alias.has(normName(a.armcare_name))) alias.set(normName(a.armcare_name), a);
+
+  // gather what the sheets say about each athlete
+  const want = new Map(); // key -> fields
+  const touch = (name, fields) => {
+    const clean = cleanText(name);
+    if (!clean) return;
+    const k = normName(clean);
+    want.set(k, Object.assign(want.get(k) || { name: clean }, fields));
+  };
+  for (const r of mainframe.slice(1)) {
+    const name = cleanText(r[hA['Athlete Name']]);
+    if (!name) continue;
+    const seg = SEGMENT_MAP[cleanText(r[hA['Group']])] || null;
+    touch(name, {
+      dob: isoDate(r[hA['Date of Birth']]), segment: seg,
+      playing_level: cleanText(r[hA['Current Level']]) || null, team: cleanText(r[hA['Current Team']]) || null,
+      residence: cleanText(r[hA['Current Residence']]) || null, position: cleanText(r[hA['Position']]) || null,
+      photo_url: cleanText(r[hA['Profile Picture']]) || null, mainframe_id: cleanText(r[hA['Unique ID']]) || null,
+      vald_name: cleanText(r[hA['Vald Name']]) || null, armcare_name: cleanText(r[hA['Arm Care Name']]) || null,
+      eval_name: cleanText(r[hA['Evaluation Name']]) || null, in_mainframe: true,
+    });
+  }
+  for (const r of roster.slice(1)) {
+    if (!cleanText(r[hR['Athlete']])) continue;
+    const st = cleanText(r[hR['Status']]).toLowerCase();
+    touch(r[hR['Athlete']], {
+      status: ['active', 'paused', 'alumni'].includes(st) ? st : 'active',
+      throwing_coach: cleanText(r[hR['Throwing Coach']]) || null, strength_coach: cleanText(r[hR['Strength Coach']]) || null, in_roster: true,
+    });
+  }
+  const progByKey = new Map();
+  const boardStart = BOARD_CATEGORIES.map(([c, h]) => [c, hB[h]]);
+  for (const r of board.slice(1)) {
+    const name = cleanText(r[hB['Athlete']]);
+    if (!name || normName(name) === 'athlete') continue;
+    const progs = [];
+    for (const [c, i] of boardStart) {
+      const p = cleanText(r[i]);
+      if (p) progs.push({ category: c, program: p, starts_on: isoDate(r[i + 1]), ends_on: isoDate(r[i + 2]) });
+    }
+    progByKey.set(normName(name), progs);
+    touch(name, { board_throwing: cleanText(r[hB['Throwing Coach']]) || null, board_lifting: cleanText(r[hB['Lifting Coach']]) || null,
+      profile: { throwing_level: cleanText(r[hB['Throwing Level']]), performance_level: cleanText(r[hB['Performance Level']]), performance_recommendation: cleanText(r[hB['Performance Recommendation']]) } });
+  }
+  const injuries = new Map();
+  for (const r of evals.slice(1)) {
+    const n = normName(r[hE['Athlete Name']]);
+    if (!n) continue;
+    const t = Date.parse(r[hE['Submitted At']]) || 0;
+    const cur = injuries.get(n);
+    if (!cur || t >= cur.t) injuries.set(n, { t, status: cleanText(r[hE['Current Injury Status']]).replace(/^Injured$/, 'Currently Injured'),
+      location: cleanText(r[hE['Injury Location']]), notes: cleanText(r[hE['Injury Notes and Context']]) });
+  }
+
+  // create missing athletes, update changed ones (never touch athletes created in the app)
+  const stmts = [];
+  const SHEET_FIELDS = ['dob', 'segment', 'playing_level', 'team', 'residence', 'position', 'photo_url', 'mainframe_id', 'vald_name', 'armcare_name', 'status', 'throwing_coach', 'strength_coach'];
+  for (const [k, w] of want) {
+    const coachT = w.throwing_coach || w.board_throwing || null, coachS = w.strength_coach || w.board_lifting || null;
+    const inj = injuries.get(normName(w.eval_name || w.name)) || injuries.get(k);
+    const fields = { dob: w.dob || null, segment: w.segment || null, playing_level: w.playing_level || null, team: w.team || null,
+      residence: w.residence || null, position: w.position || null, photo_url: w.photo_url || null, mainframe_id: w.mainframe_id || null,
+      vald_name: w.vald_name || null, armcare_name: w.armcare_name || null, throwing_coach: coachT, strength_coach: coachS,
+      injury_status: inj ? inj.status || null : null, injury_location: inj ? inj.location || null : null, injury_notes: inj ? inj.notes || null : null };
+    let a = byKey.get(k);
+    if (!a) {
+      const parts = w.name.split(' ');
+      const status = w.status || (w.in_mainframe ? (w.segment === 'evaluation' ? 'lead' : 'alumni') : 'active');
+      const id = crypto.randomUUID();
+      a = Object.assign({ id, first_name: parts[0], last_name: parts.slice(1).join(' '), status, source: w.in_roster && !w.in_mainframe ? 'roster' : 'mainframe' }, fields);
+      stmts.push(env.DB.prepare(
+        `INSERT INTO athletes (id, first_name, last_name, dob, playing_level, team, residence, position, status, profile, created_at, updated_at,
+           segment, throwing_coach, strength_coach, injury_status, injury_location, injury_notes, photo_url, mainframe_id, vald_name, armcare_name, source)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ).bind(id, a.first_name, a.last_name, fields.dob, fields.playing_level, fields.team, fields.residence, fields.position, status,
+        JSON.stringify(w.profile || {}), now, now, fields.segment, fields.throwing_coach, fields.strength_coach,
+        fields.injury_status, fields.injury_location, fields.injury_notes, fields.photo_url, fields.mainframe_id, fields.vald_name, fields.armcare_name, a.source));
+      byKey.set(k, a); alias.set(k, a);
+      if (a.armcare_name && !alias.has(normName(a.armcare_name))) alias.set(normName(a.armcare_name), a);
+      stats.athletes_created++;
+      continue;
+    }
+    if (a.source === 'app') continue; // athletes created in the app are owned by the app
+    const sets = [], vals = [];
+    const next = Object.assign({}, fields);
+    if (w.status) next.status = w.status;
+    for (const f of [...SHEET_FIELDS, 'injury_status', 'injury_location', 'injury_notes']) {
+      if (!(f in next)) continue;
+      // keep what the app already has when the sheet has nothing for a field
+      if (next[f] === null || next[f] === undefined) continue;
+      if ((a[f] ?? null) !== next[f]) { sets.push(`${f} = ?`); vals.push(next[f]); a[f] = next[f]; }
+    }
+    if (sets.length) {
+      sets.push('updated_at = ?'); vals.push(now);
+      stmts.push(env.DB.prepare(`UPDATE athletes SET ${sets.join(', ')} WHERE id = ?`).bind(...vals, a.id));
+      stats.athletes_updated++;
+    }
+  }
+  await runBatches(env, stmts);
+
+  // programs: replace an athlete's assignments when the board changed
+  const { results: curProgs } = await env.DB.prepare('SELECT athlete_id, category, program, starts_on, ends_on FROM program_assignments').all();
+  const curByAthlete = new Map();
+  for (const p of curProgs) { if (!curByAthlete.has(p.athlete_id)) curByAthlete.set(p.athlete_id, []); curByAthlete.get(p.athlete_id).push(p); }
+  const sig = list => JSON.stringify([...list].map(p => [p.category, p.program, p.starts_on || '', p.ends_on || '']).sort());
+  const progStmts = [];
+  for (const [k, progs] of progByKey) {
+    const a = byKey.get(k);
+    if (!a || a.source === 'app') continue;
+    if (sig(progs) === sig(curByAthlete.get(a.id) || [])) continue;
+    progStmts.push(env.DB.prepare('DELETE FROM program_assignments WHERE athlete_id = ?').bind(a.id));
+    for (const p of progs) progStmts.push(env.DB.prepare('INSERT INTO program_assignments (athlete_id, category, program, starts_on, ends_on, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+      .bind(a.id, p.category, p.program, p.starts_on, p.ends_on, now));
+    stats.programs_updated++;
+  }
+  await runBatches(env, progStmts);
+
+  // ArmCare exams: read only the columns we need, add exams we do not have yet
+  const headerRow = await fetchTab(env.SHEET_MAINFRAME, 'Energy Interference', 'select * limit 1');
+  const hI = headerIndex(headerRow);
+  const need = ['Exam Date', 'ArmCare ID', 'Last Name', 'First Name', 'Exam Type', 'Arm Score', 'Total Strength', 'IRTARM Strength', 'ERTARM Strength', 'STARM Strength', 'GTARM Strength', 'Velo'];
+  for (const n of need) if (hI[n] === undefined) throw new Error(`the Energy Interference tab has no "${n}" column`);
+  const letters = need.map(n => colLetter(hI[n]));
+  const arm = (await fetchTab(env.SHEET_MAINFRAME, 'Energy Interference', 'select ' + letters.join(','))).slice(1);
+  const { results: haveRows } = await env.DB.prepare('SELECT athlete_id, exam_on FROM arm_scores').all();
+  const have = new Set(haveRows.map(r => r.athlete_id + '|' + r.exam_on));
+  const armStmts = [];
+  const unmatched = new Set();
+  for (const r of arm) {
+    const d = isoDate(r[0]), first = cleanText(r[3]), last = cleanText(r[2]);
+    const score = numOrNull(r[5]);
+    if (!d || !first || !last || score === null) continue;
+    const a = alias.get(normName(first + ' ' + last));
+    if (!a) { unmatched.add(normName(first + ' ' + last)); continue; }
+    const key = a.id + '|' + d;
+    if (have.has(key)) continue;
+    have.add(key);
+    armStmts.push(env.DB.prepare('INSERT OR IGNORE INTO arm_scores (athlete_id, exam_on, arm_score, total_strength, ir, er, scap, grip, velo, exam_type, armcare_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(a.id, d, score, numOrNull(r[6]), numOrNull(r[7]), numOrNull(r[8]), numOrNull(r[9]), numOrNull(r[10]), numOrNull(r[11]), cleanText(r[4]) || null, cleanText(r[1]) || null));
+  }
+  await runBatches(env, armStmts);
+  stats.arm_scores_added = armStmts.length;
+  stats.arm_scores_unmatched = unmatched.size;
+
+  await env.DB.prepare('INSERT INTO sync_runs (started_at, finished_at, ok, stats, error) VALUES (?, ?, 1, ?, NULL)').bind(now, nowIso(), JSON.stringify(stats)).run();
+  return stats;
+}
+
+async function runSyncLogged(env) {
+  const started = nowIso();
+  try { return await runSync(env); }
+  catch (e) {
+    await env.DB.prepare('INSERT INTO sync_runs (started_at, finished_at, ok, stats, error) VALUES (?, ?, 0, NULL, ?)').bind(started, nowIso(), String(e.message || e).slice(0, 500)).run().catch(() => {});
+    throw e;
+  }
+}
+
 // ---- Router ---------------------------------------------------------------------------------
 
 async function readJson(request) {
@@ -431,6 +738,9 @@ async function route(request, env, coach, url) {
   const [a, b, c] = parts;
 
   if (a === 'me' && !b && method === 'GET') return [200, coach];
+
+  if (a === 'overview' && !b && method === 'GET') return [200, await overview(env, url)];
+  if (a === 'admin' && b === 'sync' && !c && method === 'POST') return [200, await runSyncLogged(env)];
 
   if (a === 'athletes') {
     if (!b) {
@@ -463,6 +773,11 @@ async function route(request, env, coach, url) {
 }
 
 export default {
+  // cron trigger: keep the database in step with the sheets
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runSyncLogged(env).catch(() => {}));
+  },
+
   async fetch(request, env) {
     try {
       const url = new URL(request.url);

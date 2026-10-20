@@ -162,3 +162,44 @@ details.protocol summary{cursor:pointer;font-weight:700;font-size:13px;letter-sp
 .scalebtn:has(input:focus-visible){outline:2px solid #fff;outline-offset:2px}
 .scalewrap{display:grid;gap:6px;width:fit-content;max-width:100%}
 .scale-ends{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px}
+
+/* ---- Athlete overview ---- */
+.ov-top{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:flex-end;justify-content:space-between;padding-block:32px 18px}
+.ov-top h1{font-size:clamp(30px,4vw,44px)}
+.ov-sync{font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:center}
+.ov-sync::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green)}
+.ov-sync.stale::before{background:#FF8A3D}
+.ov-sync.err::before{background:var(--red)}
+.ov-stats{display:flex;gap:28px;flex-wrap:wrap;padding:6px 0 18px;border-bottom:1px solid var(--line)}
+.ov-stat b{display:block;font-family:var(--display);font-weight:400;font-size:34px;line-height:1}
+.ov-stat span{font:600 12px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ov-filters{display:flex;flex-wrap:wrap;gap:10px;padding-block:18px}
+.ov-filters select{width:auto;min-width:170px;max-width:260px}
+.ov-filters input[type=search]{max-width:300px}
+.ov-scroll{overflow-x:auto;border:1px solid var(--line);background:rgba(27,23,20,.55)}
+table.ov{border-collapse:collapse;width:100%;min-width:1180px;font-size:14px}
+table.ov th{font:700 11px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.ov td{padding:10px 12px;border-bottom:1px solid rgba(53,45,40,.6);vertical-align:top}
+table.ov tr.coachrow td{background:rgba(255,255,255,.04);font-family:var(--display);font-size:20px;letter-spacing:.02em;text-transform:uppercase;padding:12px}
+table.ov tr.coachrow small{font:600 12px var(--body);color:var(--muted);letter-spacing:.06em;margin-left:10px;text-transform:none}
+.ov-name{font-weight:700;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+.tag{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.flag{border-color:var(--red);color:#fff;background:rgba(225,6,0,.22)}
+.tag.seg-black-label{border-color:#fff;color:#fff}
+.tag.seg-remote{border-color:var(--blue);color:var(--blue)}
+.tag.status{border-color:#FF8A3D;color:#FF8A3D}
+.ov-coaches{font-size:13px;line-height:1.5;white-space:nowrap}
+.ov-coaches span{color:var(--muted)}
+.prog{min-width:150px}
+.prog .p{font-weight:600;font-size:13px;letter-spacing:.02em}
+.prog .d{font-size:12px;color:var(--muted);margin-top:2px}
+.prog .d.late{color:#FF8A3D}
+.prog .none{color:var(--faint,#766B63)}
+.ov-arm{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px}
+.ov-arm small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.ov-arm.flag{color:var(--red)}
+.inj-Currently{color:var(--red);font-weight:700}
+.inj-Rehabbing{color:#FF8A3D;font-weight:700}
+.inj-Previously{color:var(--muted)}
+.ov-empty{padding:40px;text-align:center;color:var(--muted)}

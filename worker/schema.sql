@@ -33,8 +33,21 @@ CREATE TABLE IF NOT EXISTS athletes (
   coach_id      TEXT REFERENCES coaches(id),
   profile       TEXT NOT NULL DEFAULT '{}',
   created_at    TEXT NOT NULL,
-  updated_at    TEXT NOT NULL
+  updated_at    TEXT NOT NULL,
+  segment         TEXT,          -- 'on-site', 'remote', 'black-label' or 'evaluation'
+  throwing_coach  TEXT,
+  strength_coach  TEXT,
+  injury_status   TEXT,
+  injury_location TEXT,
+  injury_notes    TEXT,
+  photo_url       TEXT,
+  mainframe_id    TEXT,
+  vald_name       TEXT,
+  armcare_name    TEXT,
+  source          TEXT
 );
+CREATE INDEX IF NOT EXISTS idx_athletes_status  ON athletes (status);
+CREATE INDEX IF NOT EXISTS idx_athletes_segment ON athletes (segment);
 CREATE INDEX IF NOT EXISTS idx_athletes_name  ON athletes (last_name, first_name);
 CREATE INDEX IF NOT EXISTS idx_athletes_coach ON athletes (coach_id);
 
@@ -88,3 +101,43 @@ CREATE TABLE IF NOT EXISTS files (
   created_at    TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_files_athlete ON files (athlete_id, kind, created_at);
+
+-- The program each athlete is on, per category.
+CREATE TABLE IF NOT EXISTS program_assignments (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  athlete_id TEXT NOT NULL REFERENCES athletes(id) ON DELETE CASCADE,
+  category   TEXT NOT NULL CHECK (category IN ('throwing', 'patterning', 'lifting', 'speed', 'arm_care', 'mobility')),
+  program    TEXT NOT NULL,
+  starts_on  TEXT,
+  ends_on    TEXT,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_programs_athlete ON program_assignments (athlete_id, category, starts_on);
+
+-- ArmCare exam history, one row per athlete per exam date.
+CREATE TABLE IF NOT EXISTS arm_scores (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  athlete_id     TEXT NOT NULL REFERENCES athletes(id) ON DELETE CASCADE,
+  exam_on        TEXT NOT NULL,
+  arm_score      REAL,
+  total_strength REAL,
+  ir             REAL,
+  er             REAL,
+  scap           REAL,
+  grip           REAL,
+  velo           REAL,
+  exam_type      TEXT,
+  armcare_id     TEXT,
+  UNIQUE (athlete_id, exam_on)
+);
+CREATE INDEX IF NOT EXISTS idx_arm_scores_athlete ON arm_scores (athlete_id, exam_on);
+
+-- One row per run of the sheet sync, so the dashboard can show when it last updated.
+CREATE TABLE IF NOT EXISTS sync_runs (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  started_at  TEXT NOT NULL,
+  finished_at TEXT NOT NULL,
+  ok          INTEGER NOT NULL,
+  stats       TEXT,
+  error       TEXT
+);
