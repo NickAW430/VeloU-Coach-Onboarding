@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VeloU Assessments">
+<meta property="og:title" content="VeloU Assessments">
+<meta property="og:description" content="Coming soon.">
+<meta property="og:url" content="https://coachesvelou.com/assessments/">
+<meta property="og:image" content="https://coachesvelou.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://coachesvelou.com/assets/og-image.png">
+<meta name="description" content="Coming soon.">
+
+<title>Assessments · VeloU</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root {
+  --ink: #18130f;
+  --title-bg: #0d0d0d;
+  --day-bg: #e10600;
+  --day-bg-dark: #b80500;
+  --hdr-bg: #f1ebe8;
+  --note-bg: #f6f1ee;
+  --border: #ddd3ce;
+  --muted: #6b615d;
+  --page-bg: #faf7f5;
+  --card-bg: #ffffff;
+  --white: #ffffff;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #f1e9e4;
+    --hdr-bg: #241d1a;
+    --note-bg: #1e1815;
+    --border: #3a322e;
+    --muted: #ab9e98;
+    --page-bg: #100d0b;
+    --card-bg: #1a1512;
+    --white: #ffffff;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #f1e9e4;
+  --hdr-bg: #241d1a;
+  --note-bg: #1e1815;
+  --border: #3a322e;
+  --muted: #ab9e98;
+  --page-bg: #100d0b;
+  --card-bg: #1a1512;
+  --white: #ffffff;
+}
+/* ALWAYS-DARK */
+:root { color-scheme: dark;
+  --ink: #f1e9e4;
+  --hdr-bg: #241d1a;
+  --note-bg: #1e1815;
+  --border: #3a322e;
+  --muted: #ab9e98;
+  --page-bg: #100d0b;
+  --card-bg: #1a1512;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0.01em; }
+.logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; }
+h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
+.tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
+.collections { display: grid; gap: 48px; max-width: 900px; width: 100%; }
+.collection-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.collection-head h2 { font-size: 30px; margin: 0; }
+.collection-head p { color: var(--muted); font-size: 14px; margin: 0; }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; width: 100%; max-width: 900px; }
+.empty {
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 28px 26px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px 26px;
+  text-decoration: none;
+  color: var(--ink);
+  border-top: 5px solid var(--day-bg);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tile:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+.tile-eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--day-bg); }
+.tile h2 { font-size: 26px; margin: 0; }
+.tile p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5; }
+.tile-cta { font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: var(--day-bg); margin-top: 8px; }
+.tile:hover .tile-cta { color: var(--day-bg-dark); }
+footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: center; }
+@media (max-width: 860px) {
+  .tiles { grid-template-columns: 1fr; }
+  .collection-head { flex-direction: column; gap: 4px; }
+}
+.back { align-self: flex-start; width: min(900px, 100%); margin: 0 auto 18px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: var(--day-bg); text-decoration: none; }
+.back:hover { color: var(--day-bg-dark); }
+</style>
+</head>
+<body>
+
+<a class="back" href="../">← All of VeloU</a>
+<img class="logo" src="../assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">
+<h1>Assessments</h1>
+<p class="tagline">Coming soon.</p>
+
+<div class="empty">Nothing here yet.</div>
+
+<footer>VeloU · Strength &amp; Throwing coaching reference</footer>
+
+</body>
+</html>

@@ -85,7 +85,19 @@ h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0
 .logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; }
 h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
-.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; max-width: 900px; width: 100%; }
+.collections { display: grid; gap: 48px; max-width: 900px; width: 100%; }
+.collection-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.collection-head h2 { font-size: 30px; margin: 0; }
+.collection-head p { color: var(--muted); font-size: 14px; margin: 0; }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; width: 100%; }
+.empty {
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 28px 26px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
 .tile {
   display: flex;
   flex-direction: column;
@@ -108,6 +120,7 @@ h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: center; }
 @media (max-width: 860px) {
   .tiles { grid-template-columns: 1fr; }
+  .collection-head { flex-direction: column; gap: 4px; }
 }
 </style>
 </head>
@@ -118,41 +131,29 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
 <p class="tagline">Pick a program to open its full coaching reference.</p>
 
 <div class="tiles">
-  <a class="tile" href="onboarding/">
-    <span class="tile-eyebrow">New Coaches</span>
-    <h2>Coach Onboarding</h2>
-    <p>Thirteen modules, from purpose and standards to the capstone case. Start here before your first day on the floor.</p>
-    <span class="tile-cta">Open Coach Onboarding →</span>
+  <a class="tile" href="assessments/">
+    <span class="tile-eyebrow">Collection</span>
+    <h2>Assessments</h2>
+    <p>Coming soon.</p>
+    <span class="tile-cta">Open Assessments →</span>
   </a>
-  <a class="tile" href="strength.html">
-    <span class="tile-eyebrow">Weight Room</span>
-    <h2>VeloU Strength</h2>
-    <p>Movement Literacy and Tension Literacy through Force Control, Acceleration, and Applied Power — every phase, split, and duration.</p>
-    <span class="tile-cta">Open VeloU Strength →</span>
+  <a class="tile" href="athlete-management/">
+    <span class="tile-eyebrow">Collection</span>
+    <h2>Athlete Management</h2>
+    <p>Coming soon.</p>
+    <span class="tile-cta">Open Athlete Management →</span>
   </a>
-  <a class="tile" href="throwing.html">
-    <span class="tile-eyebrow">On the Mound</span>
-    <h2>VeloU Throwing</h2>
-    <p>The season-long throwing arc — nine phases, three velocity-based levels, eight movement-fault focuses — straight from the throwing database.</p>
-    <span class="tile-cta">Open VeloU Throwing →</span>
+  <a class="tile" href="education/">
+    <span class="tile-eyebrow">Collection</span>
+    <h2>Education</h2>
+    <p>Coach Onboarding, VeloU Strength, VeloU Throwing, and The Shoulder Lab: learn the VeloU way.</p>
+    <span class="tile-cta">Open Education →</span>
   </a>
-  <a class="tile" href="player-report/">
-    <span class="tile-eyebrow">Evaluations</span>
-    <h2>Player Report</h2>
-    <p>Each athlete's on-site evaluation, energy scores, force plate, arm strength, and Trackman pitching data, live from the mainframe.</p>
-    <span class="tile-cta">Open Player Report →</span>
-  </a>
-  <a class="tile" href="shoulder/">
-    <span class="tile-eyebrow">Team Education</span>
-    <h2>The Shoulder Lab</h2>
-    <p>Ten steps from bony structure to special tests, with live 3D models: motion, rotator cuff, posture, scapular dyskinesis, throwing adaptations, and manual testing.</p>
-    <span class="tile-cta">Open The Shoulder Lab →</span>
-  </a>
-  <a class="tile" href="body-comp/">
-    <span class="tile-eyebrow">Nutrition</span>
-    <h2>Body Comp Planner</h2>
-    <p>Intake, objective, calories and macros, then meals, shopping list, prep plan and progress tracking built around each athlete's week.</p>
-    <span class="tile-cta">Open Body Comp Planner →</span>
+  <a class="tile" href="tools/">
+    <span class="tile-eyebrow">Collection</span>
+    <h2>Tools</h2>
+    <p>Player Report and Body Comp Planner: evaluate athletes and plan their nutrition.</p>
+    <span class="tile-cta">Open Tools →</span>
   </a>
 </div>
 
