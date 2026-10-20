@@ -586,7 +586,7 @@
 
       if (a.id) {
         box.append(el('div', { className: 'selected' },
-          el('div', {}, el('b', { text: a.first_name + ' ' + a.last_name }), el('span', { className: 'muted', text: tier.athleteMode === 'name' ? ' · existing athlete' : ' · existing athlete. Changes here update their record.' })),
+          el('div', {}, el('b', { text: a.first_name + ' ' + a.last_name }), el('span', { className: 'muted', text: isIntake ? ' · existing athlete. Changes here update their record.' : ' · existing athlete' })),
           el('button', { type: 'button', className: 'linkbtn', text: 'Use a different athlete', onclick: () => { Object.assign(a, freshState().athlete); state.hadBodyFat = null; save(); render(); } })));
       }
 
@@ -595,7 +595,8 @@
         i.addEventListener('input', () => { a[key] = i.value; save(); refreshChips(); });
         return el('div', { className: 'field' }, el('label', { className: 'q', for: 'a-' + key, text: label + (o.required ? ' *' : '') }), i);
       };
-      if (tier.athleteMode !== 'name') box.append(el('div', { className: 'grid2' },
+      if (tier.athleteMode === 'search-or-new') { if (!a.id) box.append(el('div', { className: 'grid2' }, input('first_name', 'First name', { required: true }), input('last_name', 'Last name', { required: true }))); }
+      else if (tier.athleteMode !== 'name') box.append(el('div', { className: 'grid2' },
         input('first_name', 'First name', { required: true }), input('last_name', 'Last name', { required: true }),
         input('dob', 'Date of birth', { type: 'date' }), el('div'),
         input('email', 'Athlete email', { type: 'email', inputmode: 'email' }), input('phone', 'Athlete phone', { type: 'tel', inputmode: 'tel' }),

@@ -297,7 +297,7 @@
     'mental-skills-exam': {
       kind: 'exam', section: 'mental-skills', title: 'Mental Skills Exam',
       blurb: 'The mental skills questionnaire, answered about the previous week.',
-      athleteMode: 'name', sections: ['mental_personality', 'mental_skills', 'mental_selftalk', 'mental_stress'],
+      athleteMode: 'search-or-new', sections: ['mental_personality', 'mental_skills', 'mental_selftalk', 'mental_stress'],
     },
   };
 
