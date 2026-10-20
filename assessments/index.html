@@ -124,18 +124,118 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
 }
 .back { align-self: flex-start; width: min(900px, 100%); margin: 0 auto 18px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: var(--day-bg); text-decoration: none; }
 .back:hover { color: var(--day-bg-dark); }
+.back { cursor: pointer; background: none; border: 0; padding: 0; text-align: left; }
+.step { width: 100%; max-width: 900px; }
+.question { font-family: var(--font-display); font-size: 30px; font-weight: 700; text-align: center; margin: 0 0 8px; text-wrap: balance; }
+.crumbs { color: var(--muted); font-size: 14px; text-align: center; margin: 0 0 28px; min-height: 1.4em; }
+.options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.options.three { grid-template-columns: repeat(3, 1fr); }
+.option {
+  display: flex; align-items: center; gap: 16px; text-align: left; width: 100%;
+  background: var(--card-bg); color: var(--ink); border: 1px solid var(--border); border-top: 5px solid var(--day-bg);
+  border-radius: 14px; padding: 22px 22px; font: inherit; cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.option:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+.option:focus-visible { outline: 2px solid var(--day-bg); outline-offset: 3px; }
+.letter { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--day-bg); color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 17px; }
+.option-label { font-family: var(--font-display); font-size: 24px; font-weight: 700; }
+.result { background: var(--card-bg); border: 1px solid var(--border); border-top: 5px solid var(--day-bg); border-radius: 14px; padding: 30px 26px; text-align: center; }
+.result h2 { font-size: 30px; margin: 0 0 8px; }
+.result p { color: var(--muted); margin: 0; }
+@media (max-width: 860px) { .options, .options.three { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<a class="back" href="../">← All of VeloU</a>
+<button class="back" id="back" type="button" hidden>← Back</button>
+<a class="back" id="home" href="../">← All of VeloU</a>
 <img class="logo" src="../assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">
 <h1>Assessments</h1>
-<p class="tagline">Coming soon.</p>
+<p class="tagline" id="tagline"></p>
 
-<div class="empty">Nothing here yet.</div>
+<div class="step" id="step" aria-live="polite"></div>
 
 <footer>VeloU · Strength &amp; Throwing coaching reference</footer>
+
+<script>
+const TREE = {
+  question: "Which type of assessment are you completing?",
+  options: [
+    { key: "intake", label: "Initial Intake", next: {
+      question: "What level assessment are you completing?",
+      options: [
+        { key: "basic", label: "Basic" },
+        { key: "advanced", label: "Advanced" },
+        { key: "premier", label: "Premier" }
+      ] } },
+    { key: "retest", label: "Re-Testing", next: {
+      question: "What section of re-testing are you completing?",
+      options: [
+        { key: "biometrics", label: "Biometrics" },
+        { key: "force-plates", label: "Force Plates" },
+        { key: "athletic-testing", label: "Athletic Testing" },
+        { key: "throwing", label: "Throwing Assessment" },
+        { key: "mound", label: "Mound Assessment" },
+        { key: "body-comp", label: "Body Composition" },
+        { key: "mental-skills", label: "Mental Skills" }
+      ] } }
+  ]
+};
+const LETTERS = "ABCDEFGHIJ";
+const stepEl = document.getElementById("step");
+const backEl = document.getElementById("back");
+const homeEl = document.getElementById("home");
+const taglineEl = document.getElementById("tagline");
+
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+
+function render() {
+  const path = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  let node = TREE, trail = [];
+  for (const key of path) {
+    const opt = node.options && node.options.find(o => o.key === key);
+    if (!opt) { path.length = 0; node = TREE; trail = []; break; }
+    trail.push(opt);
+    if (opt.next) node = opt.next; else { node = null; break; }
+  }
+  stepEl.replaceChildren();
+  backEl.hidden = trail.length === 0;
+  homeEl.hidden = trail.length > 0;
+  const crumbs = trail.map(t => t.label).join(" › ");
+  if (node) {
+    taglineEl.textContent = "";
+    stepEl.append(el("h2", "question", node.question), el("p", "crumbs", crumbs));
+    const grid = el("div", "options" + (node.options.length === 3 ? " three" : ""));
+    node.options.forEach((o, i) => {
+      const b = el("button", "option"); b.type = "button";
+      b.append(el("span", "letter", LETTERS[i]), el("span", "option-label", o.label));
+      b.addEventListener("click", () => { location.hash = "#/" + path.concat(o.key).join("/"); });
+      grid.append(b);
+    });
+    stepEl.append(grid);
+  } else {
+    const r = el("div", "result");
+    r.append(el("h2", "", crumbs), el("p", "", "This assessment form is coming next."));
+    stepEl.append(r);
+  }
+  window.scrollTo(0, 0);
+}
+
+backEl.addEventListener("click", () => {
+  const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  parts.pop();
+  location.hash = parts.length ? "#/" + parts.join("/") : "#/";
+});
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const i = LETTERS.indexOf(e.key.toUpperCase());
+  const btns = stepEl.querySelectorAll(".option");
+  if (e.key.length === 1 && i > -1 && btns[i]) btns[i].click();
+});
+window.addEventListener("hashchange", render);
+render();
+</script>
 
 </body>
 </html>

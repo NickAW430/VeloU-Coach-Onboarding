@@ -17,7 +17,7 @@
 <meta name="description" content="VeloU coaching reference and new coach onboarding.">
 
 <title>VeloU</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <style>
 :root {
   --ink: #18130f;
@@ -31,7 +31,7 @@
   --page-bg: #faf7f5;
   --card-bg: #ffffff;
   --white: #ffffff;
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-display: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
@@ -85,42 +85,29 @@ h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0
 .logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; }
 h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
-.collections { display: grid; gap: 48px; max-width: 900px; width: 100%; }
-.collection-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-.collection-head h2 { font-size: 30px; margin: 0; }
-.collection-head p { color: var(--muted); font-size: 14px; margin: 0; }
-.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; width: 100%; }
-.empty {
-  border: 1px dashed var(--border);
-  border-radius: 14px;
-  padding: 28px 26px;
-  color: var(--muted);
-  font-size: 14px;
-  text-align: center;
-}
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; max-width: 900px; width: 100%; }
 .tile {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+  aspect-ratio: 1 / 1;
+  background: #000;
+  border: 2px solid #fff;
   border-radius: 14px;
-  padding: 30px 26px;
+  padding: 32px 30px;
   text-decoration: none;
-  color: var(--ink);
-  border-top: 5px solid var(--day-bg);
+  color: #fff;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.tile:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
-.tile-eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--day-bg); }
-.tile h2 { font-size: 26px; margin: 0; }
-.tile p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5; }
-.tile-cta { font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: var(--day-bg); margin-top: 8px; }
-.tile:hover .tile-cta { color: var(--day-bg-dark); }
+.tile:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,255,255,0.12); }
+.tile:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+.tile-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+.tile h2 { font-size: 34px; margin: 0; }
+.tile p { color: var(--muted); font-size: 15px; margin: 0; line-height: 1.5; }
+.tile-cta { font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: #fff; margin-top: auto; }
 footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: center; }
 @media (max-width: 860px) {
   .tiles { grid-template-columns: 1fr; }
-  .collection-head { flex-direction: column; gap: 4px; }
 }
 </style>
 </head>
@@ -132,25 +119,25 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
 
 <div class="tiles">
   <a class="tile" href="assessments/">
-    <span class="tile-eyebrow">Collection</span>
+    <span class="tile-eyebrow">Portal</span>
     <h2>Assessments</h2>
     <p>Coming soon.</p>
     <span class="tile-cta">Open Assessments →</span>
   </a>
   <a class="tile" href="athlete-management/">
-    <span class="tile-eyebrow">Collection</span>
+    <span class="tile-eyebrow">Portal</span>
     <h2>Athlete Management</h2>
     <p>Coming soon.</p>
     <span class="tile-cta">Open Athlete Management →</span>
   </a>
   <a class="tile" href="education/">
-    <span class="tile-eyebrow">Collection</span>
+    <span class="tile-eyebrow">Portal</span>
     <h2>Education</h2>
     <p>Coach Onboarding, VeloU Strength, VeloU Throwing, and The Shoulder Lab: learn the VeloU way.</p>
     <span class="tile-cta">Open Education →</span>
   </a>
   <a class="tile" href="tools/">
-    <span class="tile-eyebrow">Collection</span>
+    <span class="tile-eyebrow">Portal</span>
     <h2>Tools</h2>
     <p>Player Report and Body Comp Planner: evaluate athletes and plan their nutrition.</p>
     <span class="tile-cta">Open Tools →</span>
