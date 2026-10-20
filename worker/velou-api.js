@@ -438,11 +438,49 @@ async function overview(env, url) {
 }
 
 // ---- Athlete calendar -----------------------------------------------------------------------
-// Day-by-day sessions come from the published plans in the Program Library sheet (read only). Athletes
-// without a published plan fall back to the program currently assigned on the Program Board.
+// Sessions come from the VeloU Program Library sheet (read only). An athlete with a published plan in
+// "Athlete Plans" uses that plan. Everyone else is built from the program assigned on the Program Board:
+// throwing from "Program Schedules", lifting from "Strength Schedules" (plus its prep program).
+// Weeks run Monday to Sunday: Day 1 is Monday, and a Sunday start begins on the Monday after.
 
 const PLAN_TAB = 'Athlete Plans';
 const addDays = (iso, n) => new Date(Date.parse(iso + 'T00:00:00Z') + n * 86400000).toISOString().slice(0, 10);
+const isoWeekday = iso => new Date(iso + 'T00:00:00Z').getUTCDay() || 7;
+const mondayOf = iso => addDays(iso, 1 - isoWeekday(iso));
+const mondayOnOrAfter = iso => (isoWeekday(iso) === 1 ? iso : addDays(iso, 8 - isoWeekday(iso)));
+const dayDiff = (a, b) => Math.round((Date.parse(a + 'T00:00:00Z') - Date.parse(b + 'T00:00:00Z')) / 86400000);
+const safeLink = v => (/^https?:\/\//.test(v || '') ? v : null);
+
+const libCache = new Map();
+async function libTab(env, tab, tq, ttl = 300000) {
+  const key = tab + '|' + tq;
+  const hit = libCache.get(key);
+  if (hit && Date.now() - hit.at < ttl) return hit.rows;
+  const raw = await fetchTab(env.SHEET_PROGRAMLIB, tab, tq);
+  const head = raw[0] || [];
+  const rows = raw.slice(1).map(r => Object.fromEntries(head.map((h, i) => [h, r[i] == null ? '' : r[i]])));
+  libCache.set(key, { at: Date.now(), rows });
+  if (libCache.size > 200) libCache.delete(libCache.keys().next().value);
+  return rows;
+}
+const gv = v => String(v).replace(/'/g, "\\'");
+
+// Where a date falls in a program: week number (Monday based), weekday 1-7, or why it is outside.
+function locate(program, date) {
+  if (!program || !program.starts_on) return { state: 'none' };
+  const first = mondayOnOrAfter(program.starts_on);
+  if (date < first) return { state: 'before', first };
+  if (program.ends_on && date > program.ends_on) return { state: 'after' };
+  return { state: 'in', week: Math.floor(dayDiff(mondayOf(date), first) / 7) + 1, dow: isoWeekday(date) };
+}
+const fmtDay = iso => new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+function outsideMessage(loc, program) {
+  if (loc.state === 'before') return `Starts ${fmtDay(loc.first)}.`;
+  if (loc.state === 'after') return `Ended ${fmtDay(program.ends_on)}. The next program is not on the Program Board yet.`;
+  return 'No program assigned.';
+}
+
+// ---- published plans (Athlete Plans tab)
 
 async function readPlan(env, name) {
   const lit = name.includes("'") ? '"' + name.replace(/"/g, '') + '"' : "'" + name + "'";
@@ -456,8 +494,6 @@ async function readPlan(env, name) {
     return plan && Array.isArray(plan.weeks) && plan.start ? plan : null;
   } catch (e) { return null; }
 }
-
-const safeLink = v => (/^https?:\/\//.test(v || '') ? v : null);
 
 function throwingDay(plan, w, i) {
   const items = ((w.days && w.days[i]) || []).map(e => {
@@ -478,12 +514,134 @@ function liftingDay(w, i) {
 
 function planDays(plan, dates, kind) {
   return dates.map(date => {
-    const offset = Math.round((Date.parse(date + 'T00:00:00Z') - Date.parse(plan.start + 'T00:00:00Z')) / 86400000);
-    if (offset < 0 || offset >= plan.weeks.length * 7) return { date, outside: true };
+    const offset = dayDiff(date, plan.start);
+    if (offset < 0 || offset >= plan.weeks.length * 7) return { date, message: 'Outside the current plan.' };
     const w = plan.weeks[Math.floor(offset / 7)];
     const d = kind === 'throwing' ? throwingDay(plan, w, offset % 7) : liftingDay(w, offset % 7);
     const phase = plan.phases && plan.phases[w.code] ? plan.phases[w.code].name : w.code;
     return { date, week: w.n, phase, focus: w.focus || null, ...d, rest: d.items.length === 0 };
+  });
+}
+
+// ---- throwing from the library
+
+const PHASES = ['REVO', 'REIN', 'ENVO', 'ENIN', 'WATT', 'INT', 'REF', 'ENG'];
+const PHASE_NAMES = { REVO: 'Restructure Volume', REIN: 'Restructure Intensity', ENVO: 'Energy Volume', ENIN: 'Energy Intensity', WATT: 'Wattage', INT: 'Integrate', REF: 'Refine', ENG: 'Engage' };
+
+function parseThrowing(name) {
+  const n = String(name || '').trim();
+  if (/^shut ?down/i.test(n)) return { shutdown: n };
+  const m = n.match(/^THR•(?:BSU•)?([A-Z]{3,4})•L([123])•(\d+)W•(.+)$/i);
+  if (m && PHASES.includes(m[1].toUpperCase())) return { phase: m[1].toUpperCase(), level: +m[2], focus: m[4].trim() };
+  return { exact: n };
+}
+
+async function libraryThrowing(env, program, dates) {
+  if (!program) return dates.map(date => ({ date, message: 'No throwing program assigned.' }));
+  const t = parseThrowing(program.program);
+  if (t.shutdown) return dates.map(date => ({ date, rest: true, message: `${t.shutdown} - no throwing.` }));
+  const sheetProgram = t.phase || t.exact;
+  const [rows, drills] = await Promise.all([
+    libTab(env, 'Program Schedules', `select * where A = '${gv(sheetProgram)}'`),
+    libTab(env, 'Drills', 'select A, C', 600000),
+  ]);
+  if (!rows.length) return dates.map(date => ({ date, message: 'This program is not in the program library yet.' }));
+  const videos = new Map(drills.map(r => [r.Drill, safeLink(r['Video Link'])]));
+  const maxWeek = Math.max(...rows.map(r => parseFloat(r.Week) || 0));
+  const focus = (t.focus || '').toLowerCase();
+  return dates.map(date => {
+    const loc = locate(program, date);
+    if (loc.state !== 'in') return { date, message: outsideMessage(loc, program) };
+    const label = t.phase ? PHASE_NAMES[t.phase] : program.program;
+    if (loc.week > maxWeek) return { date, week: loc.week, phase: label, message: `Past week ${maxWeek} of the library schedule.` };
+    const day = rows.filter(r => (parseFloat(r.Week) || 0) === loc.week && (parseFloat(r.Day) || 0) === loc.dow
+      && (!t.phase || ['all', focus].includes(String(r.Focus).toLowerCase())))
+      .sort((a, b) => (parseFloat(a.Slot) || 0) - (parseFloat(b.Slot) || 0));
+    const base = { date, week: loc.week, phase: label, focus: t.focus ? t.focus.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : null };
+    if (!day.length) return { ...base, title: null, summary: null, items: [], rest: true };
+    const level = t.level || 1;
+    const section = (day.find(r => r.Section) || {}).Section || null;
+    return { ...base, summary: null, rest: false,
+      title: section ? section.replace(/^\d+\s*-\s*/, '') : null,
+      items: day.map(r => {
+        const [nm, variant] = String(r.Drill).split('*');
+        const ball = r[`Ball L${level}`] || r['Ball L1'] || r['Ball L2'] || r['Ball L3'];
+        const sets = parseFloat(r.Sets), reps = parseFloat(r.Reps), pct = parseFloat(r['Intensity %']);
+        return { name: nm ? (variant ? `${nm} · ${variant}` : nm) : 'Throws', link: videos.get(r.Drill) || (nm && videos.get(nm)) || null,
+          detail: [ball, sets && reps ? `${sets} × ${reps}` : null, pct ? `${pct}%` : null].filter(Boolean).join(' · ') };
+      }) };
+  });
+}
+
+// ---- lifting from the library
+
+const FAMILIES = { 'tension literacy': 'TL', 'force control': 'FC', 'acceleration': 'AC', 'applied power': 'AP', 'movement literacy': 'ML' };
+// the split follows the athlete's current throwing phase (VeloU Strength onboarding: "Loading Splits")
+const PHASE_SPLIT = { REVO: ['Axial', 6], REIN: ['Axial', 6], ENVO: ['Axial', 5], ENIN: ['Axial', 5], WATT: ['Non-Axial', 5], INT: ['Non-Axial', 5], REF: ['Non-Axial', 4], ENG: ['Non-Axial', 4] };
+const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+function parseLifting(name) {
+  const parts = String(name || '').split('•').map(x => x.trim());
+  const family = FAMILIES[(parts[0] || '').toLowerCase()];
+  const ph = (parts[1] || '').match(/^P([123])\b/i);
+  if (!family || !ph) return null;
+  const weeks = parts.map(x => x.match(/^(\d+)W$/i)).find(Boolean);
+  const days = parts.map(x => x.match(/^(\d)D$/i)).find(Boolean);
+  return { family, phase: +ph[1], weeks: weeks ? +weeks[1] : null, days: days ? +days[1] : null,
+    split: /non[ -]?axial/i.test(name) ? 'Non-Axial' : /(^|•)axial(•|$)/i.test(name) ? 'Axial' : null };
+}
+
+function pickStrengthProgram(ids, t, throwingPhase) {
+  const [defSplit, defDays] = PHASE_SPLIT[throwingPhase] || PHASE_SPLIT.REVO;
+  const split = t.family === 'ML' ? 'Axial' : t.split || defSplit;
+  const days = t.family === 'ML' ? 6 : t.days || (t.split && t.split !== defSplit ? (split === 'Axial' ? 5 : 4) : defDays);
+  const id = (sp, d) => `${t.family}•${sp}•P${t.phase}•${d}D`;
+  if (ids.has(id(split, days))) return { id: id(split, days), split, days };
+  const pool = [...ids].filter(x => !x.includes('Prep') && x.startsWith(`${t.family}•`) && x.includes(`•P${t.phase}•`)).map(x => {
+    const m = x.split('•'); return { id: x, split: m[1], days: parseInt(m[3], 10) };
+  });
+  pool.sort((a, b) => (Math.abs(a.days - days) + (a.split === split ? 0 : 0.5)) - (Math.abs(b.days - days) + (b.split === split ? 0 : 0.5)));
+  return pool[0] || null;
+}
+
+const tidy = s => String(s || '').replace(/\s*⊃\s*superset/g, '').replace(/\s*\[[^\]]*\]\s*$/, '').trim();
+
+async function libraryLifting(env, program, throwing, dates) {
+  if (!program) return dates.map(date => ({ date, message: 'No lifting program assigned.' }));
+  const t = parseLifting(program.program);
+  const notInLibrary = { message: 'Older program. Its sessions are not in the program library.' };
+  if (!t) return dates.map(date => ({ date, ...notInLibrary }));
+  const tp = parseThrowing(throwing && throwing.program);
+  const programs = await libTab(env, 'Strength Programs', 'select A', 600000);
+  const ids = new Set(programs.map(r => r.Program));
+  const pick = pickStrengthProgram(ids, t, tp.phase);
+  if (!pick) return dates.map(date => ({ date, ...notInLibrary }));
+  const prepId = pick.days === 6 ? `${t.family}•Prep•P${t.phase}•6D` : `${t.family}•Prep ${pick.split}•P${t.phase}•${pick.days}D`;
+  const durations = [t.weeks, 8, 4, 2, 12].filter((v, i, a) => v && a.indexOf(v) === i);
+  let rows = [], prep = [], duration = null;
+  for (const dur of durations) {
+    [rows, prep] = await Promise.all([
+      libTab(env, 'Strength Schedules', `select * where A = '${gv(pick.id)}' and B = ${dur}`),
+      ids.has(prepId) ? libTab(env, 'Strength Schedules', `select * where A = '${gv(prepId)}' and B = ${dur}`) : [],
+    ]);
+    if (rows.length) { duration = dur; break; }
+  }
+  if (!rows.length) return dates.map(date => ({ date, ...notInLibrary }));
+  const label = `${(program.program.split('•')[0] || '').trim()} P${t.phase}`;
+  return dates.map(date => {
+    const loc = locate(program, date);
+    if (loc.state !== 'in') return { date, message: outsideMessage(loc, program) };
+    const base = { date, week: loc.week, phase: label, focus: `${pick.split} · ${pick.days}-day` };
+    if (loc.week > duration) return { ...base, message: `Past week ${duration} of the library schedule.` };
+    const key = pick.days === 6 ? (loc.dow <= 6 ? `D${loc.dow}` : null) : WEEKDAYS[loc.dow - 1];
+    const dayRows = key ? rows.filter(r => r.Day === key) : [];
+    if (!dayRows.length) return { ...base, title: null, summary: null, items: [], rest: true };
+    const wk = `W${loc.week}`;
+    const prepRows = key ? prep.filter(r => r.Day === key && r[wk]) : [];
+    return { ...base, rest: false, title: dayRows[0]['Day Title'] || null,
+      summary: prepRows.length ? `Prep first ${(prepRows[0]['Prep Minutes'] || '').split('·')[0].trim()}`.trim() : null,
+      prep: prepRows.map(r => ({ name: tidy(r.Exercise), detail: r[wk] })),
+      items: dayRows.filter(r => r[wk]).map(r => ({ name: `${r.Slot}. ${tidy(r.Exercise)}`, link: null, detail: r[wk] })) };
   });
 }
 
@@ -495,15 +653,19 @@ async function athleteCalendar(env, athleteId, url) {
   const { results } = await env.DB.prepare(
     "SELECT category, program, starts_on, ends_on FROM program_assignments WHERE athlete_id = ? AND category IN ('throwing', 'lifting')").bind(athleteId).all();
   const assigned = Object.fromEntries(results.map(r => [r.category, { program: r.program, starts_on: r.starts_on, ends_on: r.ends_on, days_left: daysLeft(r.ends_on) }]));
-  let plan = null, plan_error = false;
-  try { plan = await readPlan(env, `${a.first_name} ${a.last_name}`); } catch (e) { plan_error = true; }
-  const section = kind => ({
-    source: plan ? 'plan' : 'assignment',
-    program: assigned[kind] || null,
-    plan: plan ? plan.program : null,
-    days: plan ? planDays(plan, dates, kind) : dates.map(date => ({ date, unscheduled: true })),
-  });
-  return { athlete_id: a.id, today, dates, plan_error, throwing: section('throwing'), lifting: section('lifting') };
+  let plan = null, error = false;
+  try { plan = await readPlan(env, `${a.first_name} ${a.last_name}`); } catch (e) { error = true; }
+  const section = async (kind, build) => {
+    if (plan) return { source: 'plan', program: assigned[kind] || null, plan: plan.program, days: planDays(plan, dates, kind) };
+    let days;
+    try { days = await build(); } catch (e) { error = true; days = dates.map(date => ({ date, message: 'Could not read the program library.' })); }
+    return { source: 'library', program: assigned[kind] || null, plan: null, days };
+  };
+  const [throwing, lifting] = await Promise.all([
+    section('throwing', () => libraryThrowing(env, assigned.throwing, dates)),
+    section('lifting', () => libraryLifting(env, assigned.lifting, assigned.throwing, dates)),
+  ]);
+  return { athlete_id: a.id, today, dates, plan_error: error, throwing, lifting };
 }
 
 async function athleteFiles(env, athleteId) {
