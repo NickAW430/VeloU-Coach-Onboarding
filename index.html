@@ -48,12 +48,22 @@
 }
 
 * { box-sizing: border-box; }
+html { background: var(--page-bg); }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 38%, #000 62%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 38%, #000 62%, transparent 100%);
+}
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--page-bg);
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 48px 48px;
+  background: transparent;
   color: var(--ink);
   font-family: var(--font-body);
   display: flex;
@@ -63,7 +73,8 @@ body {
   padding: 40px 20px;
 }
 h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0.01em; }
-.logo { width: min(400px, 100%); height: auto; margin-bottom: 22px; }
+.logo { width: min(400px, 100%); height: auto; margin-bottom: 44px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
 .tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
 .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 700px; width: 100%; }
@@ -72,15 +83,15 @@ h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
   flex-direction: column;
   gap: 10px;
   aspect-ratio: 1 / 1;
-  background: #000;
-  border: 2px solid #fff;
+  background: linear-gradient(180deg, #161616 0%, rgba(22,22,22,0) 100%);
+  border: 0;
   border-radius: 14px;
-  padding: 24px 24px;
+  padding: 24px 24px 46px;
   text-decoration: none;
   color: #fff;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.tile:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,255,255,0.12); }
+.tile:hover { transform: translateY(-3px); background: linear-gradient(180deg, #202020 0%, rgba(32,32,32,0) 100%); }
 .tile:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 .tile-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
 .tile h2 { font-size: 28px; margin: 0; }
@@ -95,8 +106,7 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
 <body>
 
 <img class="logo" src="assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">
-<h1>VeloU</h1>
-<p class="tagline">Pick a program to open its full coaching reference.</p>
+<h1 class="sr-only">VeloU</h1>
 
 <div class="tiles">
   <a class="tile" href="assessments/">
@@ -124,8 +134,6 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
     <span class="tile-cta">Open Tools →</span>
   </a>
 </div>
-
-<footer>VeloU · Strength &amp; Throwing coaching reference</footer>
 
 </body>
 </html>
