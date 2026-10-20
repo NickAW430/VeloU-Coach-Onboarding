@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="/assets/portal.css?v=5">
+<link rel="stylesheet" href="/assets/portal.css?v=7">
 </head>
 <body>
 <div class="wrap">
@@ -25,9 +25,10 @@
 <section id="step" aria-live="polite"></section>
 </div>
 
-<script src="/assessments/specs.js?v=10"></script>
+<script src="/assessments/mental-questions.js?v=1"></script>
+<script src="/assessments/specs.js?v=11"></script>
 <script src="/assessments/screen-flow.js?v=3"></script>
-<script src="/assessments/form.js?v=10"></script>
+<script src="/assessments/form.js?v=12"></script>
 <script>
 const TREE = {
   title: "Assessment Type",
@@ -49,10 +50,14 @@ const TREE = {
       sub: "Which section of re-testing are you completing today?",
       options: [
         { key: "movement-screen", label: "Movement Screen" },
+        { key: "force-plates", label: "Force Plates" },
         { key: "athletic-testing", label: "Athletic Testing" },
+        { key: "throwing", label: "Throwing Assessment" },
+        { key: "mound", label: "Mound Assessment" },
         { key: "body-comp", label: "Body Composition" },
         { key: "mental-skills", label: "Mental Skills" }
-      ] } }
+      ],
+      colors: ["#E10600", "#56B7E6", "#88E0C6", "#ffffff", "#5B6770", "#F2C94C", "#FF8A3D"] } }
   ]
 };
 const LETTERS = "ABCDEFGHIJ";
@@ -95,7 +100,7 @@ function render() {
   } else if (trail.length === 2 && trail[0].key === "retest" && VELOU_SPECS.AUTOMATIC[trail[1].key]) {
     titleEl.textContent = trail[1].label;
     subEl.textContent = "";
-    stepEl.append(el("div", "rule", VELOU_SPECS.AUTOMATIC[trail[1].key] + " are accounted for automatically, either through in-training testing or when the athlete completes it. There is no re-test form to fill in."));
+    stepEl.append(el("div", "rule", VELOU_SPECS.AUTOMATIC[trail[1].key] + " re-testing has no form. The results are pulled in automatically from the testing software through our API."));
   } else if (trail.length === 2 && ((trail[0].key === "intake" && VELOU_SPECS.TIERS[trail[1].key]) || (trail[0].key === "retest" && VELOU_SPECS.RETESTS[trail[1].key]))) {
     VeloUForm.mount(trail[1].key, {
       container: stepEl,

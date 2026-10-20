@@ -169,7 +169,7 @@
       if (f.type === 'file') return !!pending[f.key] || !!state.uploaded[f.key];
       const v = getVal(sec, f);
       if (f.type === 'trials') return (v || []).some(isNum);
-      if (f.type === 'number') return isNum(v);
+      if (f.type === 'number' || f.type === 'scale') return isNum(v);
       if (f.type === 'multi') return Array.isArray(v) && v.length > 0;
       if (f.type === 'check') return v === true;
       const dflt = (tier.defaults || {})[f.key] !== undefined ? tier.defaults[f.key] : f.default;
@@ -339,7 +339,10 @@
         for (const f of fieldsOf(sec)) {
           if (f.type === 'heading' || f.type === 'file' || f.athleteKey || !visible(sec, f)) continue;
           const v = getVal(sec, f);
-          if (f.type === 'number') {
+          if (f.type === 'scale') {
+            if (!isNum(v)) continue;
+            out[f.key] = Number(v);
+          } else if (f.type === 'number') {
             if (!isNum(v)) continue;
             out[f.key] = Number(v);
             if (f.metric) addM(f, Number(v));
@@ -419,7 +422,7 @@
       const id = 'f-' + sec.id + '-' + f.key;
       const wrap = el('div', { className: 'field', dataset: { key: f.key } });
       wrap.hidden = !visible(sec, f);
-      wrap.append(el('label', { className: 'q', for: ['select', 'multi', 'file', 'check'].includes(f.type) ? null : id, text: f.label }));
+      wrap.append(el('label', { className: 'q', for: ['select', 'multi', 'file', 'check', 'scale'].includes(f.type) ? null : id, text: f.label }));
       if (f.hint) wrap.append(el('div', { className: 'hint', text: f.hint }));
       const val = getVal(sec, f);
 
@@ -469,6 +472,16 @@
           group.append(el('label', { className: 'opt' }, input, el('span', { text: label })));
         }
         wrap.append(group);
+      } else if (f.type === 'scale') {
+        const group = el('div', { className: 'scale', role: 'radiogroup', 'aria-label': f.label });
+        for (let n = f.start; n < f.start + f.steps; n++) {
+          const input = el('input', { type: 'radio', name: id, value: n });
+          input.checked = isNum(val) && Number(val) === n;
+          input.addEventListener('change', () => { setVal(sec, f, n); refreshChips(); });
+          group.append(el('label', { className: 'scalebtn' }, input, el('span', { text: String(n) })));
+        }
+        wrap.append(el('div', { className: 'scalewrap' }, group,
+          (f.left || f.right) ? el('div', { className: 'scale-ends' }, el('span', { text: f.left || '' }), el('span', { text: f.right || '' })) : null));
       } else if (f.type === 'check') {
         wrap.replaceChildren();
         const cb = el('input', { type: 'checkbox', id });
@@ -621,6 +634,7 @@
     function valueText(sec, f) {
       const v = getVal(sec, f);
       if (f.type === 'file') return pending[f.key] ? pending[f.key].file.name : state.uploaded[f.key] ? 'Uploaded' : '';
+      if (f.type === 'scale') return isNum(v) ? String(v) : '';
       if (f.type === 'number') return isNum(v) ? v + (f.unit ? ' ' + f.unit : '') : '';
       if (f.type === 'trials') { const b = bestOf(f, v); return b === null ? '' : (v || []).filter(isNum).join(' · ') + '  (best ' + fmt(b) + (f.unit ? ' ' + f.unit : '') + ')'; }
       if (f.type === 'select') { const o = f.options.find(x => x[0] === v); return o ? o[1] : ''; }

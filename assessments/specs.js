@@ -16,11 +16,14 @@
   const note = (key, label, o = {}) => Object.assign({ type: 'textarea', key, label }, o);
   const trials = (key, label, o = {}) => Object.assign({ type: 'trials', key, label, count: 3, best: 'max' }, o);
   const check = (key, label, o = {}) => Object.assign({ type: 'check', key, label }, o);
+  const scale = (key, label, o = {}) => Object.assign({ type: 'scale', key, label }, o);
   const file = (key, label, o = {}) => Object.assign({ type: 'file', key, label }, o);
   const heading = (label, o = {}) => Object.assign({ type: 'heading', label }, o);
   const same = list => list.map(x => [x, x]);
 
   const YN = [['yes', 'Yes'], ['no', 'No']];
+
+  const MQ = window.VELOU_MENTAL;
 
   const SECTIONS = {
     intake: {
@@ -151,12 +154,43 @@
       ],
     },
 
-    mental_retest: {
-      id: 'mental_retest', title: 'Mental Skills Questionnaire', draft: true,
-      blurb: 'The mental skills questionnaire has not been added yet. It will appear here once it is provided.',
-      fields: [
-        note('mental_notes', 'Notes'),
+    athletic: {
+      id: 'athletic', title: 'Athletic Testing',
+      blurb: 'The broad jump is the one athletic test done outside an automatic system, so it is recorded here. Everything else comes from the testing software.',
+      protocols: [
+        { name: 'Broad jump', setup: 'Athlete stands behind the takeoff line, feet about shoulder-width apart, stable, arms free to swing.', cue: 'Jump as far forward as possible. Use your arms, land on both feet, and stick the landing.', trials: '3 maximal jumps, 30 sec rest. Measure from the takeoff line to the back of the heels.', invalid: 'A foot crosses the takeoff line, a one-foot takeoff, falling backward or touching behind the landing point, stepping on landing, or losing balance.' },
       ],
+      fields: [
+        trials('bj', 'Broad jump distance', { unit: 'in', metric: 'broad_jump_in', min: 30, max: 160, step: 0.25 }),
+        note('athletic_notes', 'Notes'),
+      ],
+    },
+
+    mental_personality: {
+      id: 'mental_personality', title: 'Personality',
+      blurb: MQ.groups[0].description + ' ' + MQ.intro,
+      fields: MQ.groups[0].items.map(it => scale(it.key, it.text, { steps: it.steps, start: it.start, left: it.left, right: it.right })),
+    },
+
+    mental_skills: {
+      id: 'mental_skills', title: 'Mental Skills',
+      blurb: MQ.skillsIntro,
+      fields: MQ.groups.filter(g => g.kind === 'skill').flatMap(g => [
+        heading(g.title),
+        ...g.items.map(it => scale(it.key, it.text, { steps: it.steps, start: it.start, left: it.left, right: it.right, reversed: it.reversed })),
+      ]),
+    },
+
+    mental_selftalk: {
+      id: 'mental_selftalk', title: 'Self-Talk',
+      blurb: MQ.groups.find(g => g.kind === 'selftalk').description,
+      fields: MQ.groups.find(g => g.kind === 'selftalk').items.map(it => scale(it.key, it.text, { steps: it.steps, start: it.start, hint: it.hint })),
+    },
+
+    mental_stress: {
+      id: 'mental_stress', title: 'Perceived Stress',
+      blurb: MQ.groups.find(g => g.kind === 'stress').description,
+      fields: MQ.groups.find(g => g.kind === 'stress').items.map(it => sel(it.key, it.text, it.choices.map((c, i) => [String(i), c]), { inline: true })),
     },
 
     mound_basic: {
@@ -241,6 +275,11 @@
       blurb: 'The movement screen again, then updated measurements.',
       athleteMode: 'name', sections: ['screen', 'retest_update'],
     },
+    'athletic-testing': {
+      kind: 'retest', section: 'athletic-testing', title: 'Athletic Testing Re-Test',
+      blurb: 'The broad jump.',
+      athleteMode: 'name', sections: ['athletic'],
+    },
     'body-comp': {
       kind: 'retest', section: 'body-comp', title: 'Body Composition Re-Test',
       blurb: 'Height, weight, body fat and a shirtless photo.',
@@ -248,14 +287,16 @@
     },
     'mental-skills': {
       kind: 'retest', section: 'mental-skills', title: 'Mental Skills Re-Test',
-      blurb: 'The mental skills questionnaire.',
-      athleteMode: 'name', sections: ['mental_retest'],
+      blurb: 'The mental skills questionnaire, answered about the previous week.',
+      athleteMode: 'name', sections: ['mental_personality', 'mental_skills', 'mental_selftalk', 'mental_stress'],
     },
   };
 
-  // Re-testing sections with no form: the numbers arrive on their own.
+  // Re-tested, but with no form: the results are pulled in from the testing software through our API.
   const AUTOMATIC = {
-    'athletic-testing': 'Athletic testing results',
+    'force-plates': 'Force plate',
+    'throwing': 'Throwing assessment',
+    'mound': 'Mound assessment',
   };
 
   window.VELOU_SPECS = { SECTIONS, TIERS, RETESTS, AUTOMATIC, SCREEN_METRICS };

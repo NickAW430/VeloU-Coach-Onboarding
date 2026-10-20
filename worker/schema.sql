@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS assessments (
   athlete_id   TEXT NOT NULL REFERENCES athletes(id) ON DELETE CASCADE,
   type         TEXT NOT NULL CHECK (type IN ('intake', 'retest')),
   level        TEXT CHECK (level IN ('basic', 'advanced', 'premier')),
-  section      TEXT CHECK (section IN ('movement-screen', 'athletic-testing', 'body-comp', 'mental-skills')),
+  section      TEXT CHECK (section IN ('movement-screen', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills')),
   assessed_on  TEXT NOT NULL,
   coach_id     TEXT REFERENCES coaches(id),
   status       TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'submitted')),

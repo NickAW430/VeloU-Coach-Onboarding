@@ -153,3 +153,12 @@ details.protocol summary{cursor:pointer;font-weight:700;font-size:13px;letter-sp
 .filebtn{cursor:pointer}
 .thumb{width:140px;height:140px;object-fit:cover;border:1px solid var(--line)}
 .fileinfo{font-size:15px}
+
+/* ---- Rating scales (questionnaires) ---- */
+.scale{display:flex;flex-wrap:wrap;gap:6px}
+.scalebtn{position:relative;display:grid;place-items:center;width:48px;height:48px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font:600 16px var(--body)}
+.scalebtn input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
+.scalebtn:has(input:checked){background:#fff;color:#000;border-color:#fff}
+.scalebtn:has(input:focus-visible){outline:2px solid #fff;outline-offset:2px}
+.scalewrap{display:grid;gap:6px;width:fit-content;max-width:100%}
+.scale-ends{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px}
