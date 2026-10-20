@@ -33,8 +33,10 @@ window.VELOU_SCREEN = {
   "e3_grab",
   "e3_reps",
   "s3_add",
-  "e3_add",
-  "e3_brevis",
+  "e3_add_r",
+  "e3_brevis_r",
+  "e3_add_l",
+  "e3_brevis_l",
   "e3_lead",
   "s3_lead",
   "e4a",
@@ -510,14 +512,42 @@ window.VELOU_SCREEN = {
    ]
   },
   "e3_ir_r": {
-   "type": "number",
-   "title": "3 of 7 · Prone hip IR / ER. Prone on the table. Hip IR, RIGHT leg (degrees).",
-   "desc": "Pass: 45° each leg."
+   "type": "choice",
+   "title": "3 of 7 · Prone hip IR / ER. Prone on the table. Hip IR, RIGHT leg.",
+   "desc": "Sufficient: 45° or more of IR on each leg. Limited: under 45°.",
+   "choices": [
+    [
+     "suff",
+     "Sufficient"
+    ],
+    [
+     "lim",
+     "Limited"
+    ],
+    [
+     "exc",
+     "Excessive"
+    ]
+   ]
   },
   "e3_ir_l": {
-   "type": "number",
-   "title": "Hip IR, LEFT leg (degrees).",
-   "desc": "Pass: 45° each leg.",
+   "type": "choice",
+   "title": "Hip IR, LEFT leg.",
+   "desc": "Sufficient: 45° or more of IR on each leg. Limited: under 45°.",
+   "choices": [
+    [
+     "suff",
+     "Sufficient"
+    ],
+    [
+     "lim",
+     "Limited"
+    ],
+    [
+     "exc",
+     "Excessive"
+    ]
+   ],
    "route": [
     {
      "if": {
@@ -529,14 +559,34 @@ window.VELOU_SCREEN = {
         "choice": "wide"
        },
        {
-        "op": "ge",
-        "field": "e3_ir_r",
-        "value": 45
+        "op": "or",
+        "of": [
+         {
+          "op": "is",
+          "field": "e3_ir_r",
+          "choice": "suff"
+         },
+         {
+          "op": "is",
+          "field": "e3_ir_r",
+          "choice": "exc"
+         }
+        ]
        },
        {
-        "op": "ge",
-        "field": "e3_ir_l",
-        "value": 45
+        "op": "or",
+        "of": [
+         {
+          "op": "is",
+          "field": "e3_ir_l",
+          "choice": "suff"
+         },
+         {
+          "op": "is",
+          "field": "e3_ir_l",
+          "choice": "exc"
+         }
+        ]
        }
       ]
      },
@@ -547,14 +597,14 @@ window.VELOU_SCREEN = {
       "op": "or",
       "of": [
        {
-        "op": "lt",
+        "op": "is",
         "field": "e3_ir_r",
-        "value": 45
+        "choice": "lim"
        },
        {
-        "op": "lt",
+        "op": "is",
         "field": "e3_ir_l",
-        "value": 45
+        "choice": "lim"
        }
       ]
      },
@@ -667,16 +717,63 @@ window.VELOU_SCREEN = {
   "s3_add": {
    "type": "statement",
    "title": "ROM improves with reps.",
-   "desc": "Check adductor mobility and adductor brevis, both supine (next two questions)."
+   "desc": "Check adductor mobility and adductor brevis, both supine (next four questions, one pair for each leg)."
   },
-  "e3_add": {
-   "type": "number",
-   "title": "Adductor, supine. One leg straight. Passively move the other leg into horizontal abduction. How many degrees?",
-   "desc": "Sufficient: 60° or more."
-  },
-  "e3_brevis": {
+  "e3_add_r": {
    "type": "choice",
-   "title": "Adductor brevis, same leg. Bend the knee, ankle just above the opposite knee, resting flat on the other thigh. One hand on the opposite pelvis, one on the bent knee, press apart. Does the bent knee come in line with the straight knee without much effort?",
+   "title": "Adductor, supine. One leg straight. Passively move the RIGHT leg into horizontal abduction.",
+   "desc": "Sufficient: 60° or more.",
+   "choices": [
+    [
+     "suff",
+     "Sufficient"
+    ],
+    [
+     "lim",
+     "Limited"
+    ],
+    [
+     "exc",
+     "Excessive"
+    ]
+   ]
+  },
+  "e3_brevis_r": {
+   "type": "choice",
+   "title": "Adductor brevis, RIGHT leg. Bend the knee, ankle just above the opposite knee, resting flat on the other thigh. One hand on the opposite pelvis, one on the bent knee, press apart. Does the bent knee come in line with the straight knee without much effort?",
+   "choices": [
+    [
+     "yes",
+     "Yes (sufficient)"
+    ],
+    [
+     "no",
+     "No"
+    ]
+   ]
+  },
+  "e3_add_l": {
+   "type": "choice",
+   "title": "Adductor, supine. One leg straight. Passively move the LEFT leg into horizontal abduction.",
+   "desc": "Sufficient: 60° or more.",
+   "choices": [
+    [
+     "suff",
+     "Sufficient"
+    ],
+    [
+     "lim",
+     "Limited"
+    ],
+    [
+     "exc",
+     "Excessive"
+    ]
+   ]
+  },
+  "e3_brevis_l": {
+   "type": "choice",
+   "title": "Adductor brevis, LEFT leg. Bend the knee, ankle just above the opposite knee, resting flat on the other thigh. One hand on the opposite pelvis, one on the bent knee, press apart. Does the bent knee come in line with the straight knee without much effort?",
    "choices": [
     [
      "yes",
@@ -1070,27 +1167,55 @@ window.VELOU_SCREEN = {
    ]
   },
   "e6a": {
-   "type": "number",
-   "title": "6 of 7 · Tall-kneeling rotation. Hands criss-crossed on the shoulders. Squeeze the glutes so the pelvis can't rotate. Rotation to the DOMINANT side (degrees).",
-   "desc": "Pass: at least 45° to the dominant side. Looking for thoracic rotation without the pelvis."
+   "type": "choice",
+   "title": "6 of 7 · Tall-kneeling rotation. Hands criss-crossed on the shoulders. Squeeze the glutes so the pelvis can't rotate. Rotation to the DOMINANT side.",
+   "desc": "Sufficient: at least 45° to the dominant side. Looking for thoracic rotation without the pelvis.",
+   "choices": [
+    [
+     "suff",
+     "Sufficient"
+    ],
+    [
+     "lim",
+     "Limited"
+    ],
+    [
+     "exc",
+     "Excessive"
+    ]
+   ]
   },
   "e6b": {
-   "type": "number",
-   "title": "Rotation to the NON-DOMINANT side (degrees).",
+   "type": "choice",
+   "title": "Rotation to the NON-DOMINANT side.",
+   "choices": [
+    [
+     "suff",
+     "Sufficient"
+    ],
+    [
+     "lim",
+     "Limited"
+    ],
+    [
+     "exc",
+     "Excessive"
+    ]
+   ],
    "route": [
     {
      "if": {
       "op": "and",
       "of": [
        {
-        "op": "gt",
+        "op": "is",
         "field": "e6a",
-        "value": 45
+        "choice": "exc"
        },
        {
-        "op": "lt",
+        "op": "is",
         "field": "e6b",
-        "value": 45
+        "choice": "lim"
        }
       ]
      },
@@ -1101,14 +1226,14 @@ window.VELOU_SCREEN = {
       "op": "or",
       "of": [
        {
-        "op": "lt",
+        "op": "is",
         "field": "e6a",
-        "value": 45
+        "choice": "lim"
        },
        {
-        "op": "lt",
+        "op": "is",
         "field": "e6b",
-        "value": 45
+        "choice": "lim"
        }
       ]
      },
@@ -1141,9 +1266,23 @@ window.VELOU_SCREEN = {
    "desc": "Record it and confirm with the next exam or a manual test."
   },
   "e7": {
-   "type": "number",
-   "title": "7 of 7 · Supine shoulder ER / IR. Total rotational arc, ER + IR (degrees).",
-   "desc": "Pass: around 180°. Slightly less is fine; he isn't fully warmed up yet."
+   "type": "choice",
+   "title": "7 of 7 · Supine shoulder ER / IR. Total rotational arc, ER + IR.",
+   "desc": "Sufficient: around 180°. Slightly less is fine; he isn't fully warmed up yet.",
+   "choices": [
+    [
+     "suff",
+     "Sufficient"
+    ],
+    [
+     "lim",
+     "Limited"
+    ],
+    [
+     "exc",
+     "Excessive"
+    ]
+   ]
   },
   "s_rule": {
    "type": "statement",

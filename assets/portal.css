@@ -77,11 +77,14 @@ section{padding-block:32px 8px}
 .hint{color:var(--muted);font-size:14px;line-height:1.4}
 .warn{color:#FF8A3D;font-size:13px;min-height:0}
 .warn:empty{display:none}
-input[type=number],input[type=text],input[type=date],input[type=search],textarea{
-  background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:0;padding:11px 12px;font:500 18px var(--body);width:100%;max-width:420px;
+/* One size for every field: 48px tall, up to 420px wide. Textareas are full width. */
+input[type=number],input[type=text],input[type=date],input[type=search],input[type=email],input[type=tel],select,textarea{
+  background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:0;padding:0 12px;height:48px;
+  font:500 18px var(--body);width:100%;max-width:420px;box-sizing:border-box;
 }
-input[type=number]{max-width:170px;font-variant-numeric:tabular-nums}
-textarea{max-width:none;resize:vertical}
+input[type=number]{font-variant-numeric:tabular-nums}
+textarea{max-width:none;height:auto;min-height:110px;padding:11px 12px;resize:vertical}
+.trial input[type=number]{width:130px}
 input:focus,textarea:focus{outline:none;border-color:#fff}
 input:disabled{opacity:.55}
 .numrow{display:flex;align-items:center;gap:10px}

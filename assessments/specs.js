@@ -15,6 +15,7 @@
   const text = (key, label, o = {}) => Object.assign({ type: 'text', key, label }, o);
   const note = (key, label, o = {}) => Object.assign({ type: 'textarea', key, label }, o);
   const trials = (key, label, o = {}) => Object.assign({ type: 'trials', key, label, count: 3, best: 'max' }, o);
+  const check = (key, label, o = {}) => Object.assign({ type: 'check', key, label }, o);
   const file = (key, label, o = {}) => Object.assign({ type: 'file', key, label }, o);
   const heading = (label, o = {}) => Object.assign({ type: 'heading', label }, o);
   const same = list => list.map(x => [x, x]);
@@ -73,7 +74,7 @@
 
     production: {
       id: 'production', title: 'Energy Production',
-      blurb: 'Force plate numbers come from the best valid trial, as reported by the software. Speed and jump numbers are the best valid trial of each.',
+      blurb: 'Force plate, sprint and laser timer results come from the VALD dashboard automatically. Record whether each test was conducted, plus the broad jump and any notes.',
       protocols: [
         { name: 'CMJ (countermovement jump)', setup: 'Athlete waits for the plates to zero, then stands centered, feet shoulder-width apart, hands on hips, still while body weight is recorded.', cue: 'Keeping your hands on your hips and feet on the plate, jump as high as possible.', trials: '2-3 maximal jumps, 15-30 sec rest.', invalid: 'Feet move before takeoff, hands leave hips, multiple jumps, incomplete landing, excessive movement at start or end.' },
         { name: 'Squat jump', setup: 'Stands centered, feet shoulder-width apart, hands on hips; descends to the prescribed squat depth and holds briefly before jumping.', cue: 'Get into a comfortable squat position, hold still, then jump straight up as high and as fast as possible. Land naturally and stay balanced.', trials: '2-3 maximal jumps, 15-30 sec rest.', invalid: 'A countermovement before takeoff, feet reposition, hands leave hips, multiple jumps, position not held, uncontrolled landing.' },
@@ -85,47 +86,29 @@
         { name: 'Straight-line sprints', setup: 'A marked lane with start and finish. Athlete starts in a consistent 2-point stance behind the start line.', cue: 'Accelerate as hard as possible through the finish. Keep sprinting; do not slow down early.', trials: '2 maximal sprints at each distance, 2 min rest.', invalid: 'A false start, starting ahead of the line, a slip or fall, slowing before the finish, leaving the lane, or timing equipment failure.' },
       ],
       fields: [
-        heading('Countermovement jump (CMJ)'),
-        num('cmj_peak_power', 'Peak power', { unit: 'W', metric: 'cmj_peak_power', min: 500, max: 8000 }),
-        num('cmj_power_bm', 'Power / body mass', { unit: 'W/kg', metric: 'cmj_power_bm', min: 10, max: 80, step: 0.1 }),
-        num('cmj_ecc_impulse', 'Eccentric impulse', { unit: 'N·s', metric: 'cmj_ecc_impulse', min: 20, max: 600 }),
-        num('cmj_con_impulse', 'Concentric impulse', { unit: 'N·s', metric: 'cmj_con_impulse', min: 20, max: 600 }),
-        heading('Squat jump'),
-        num('sj_peak_power', 'Peak power', { unit: 'W', metric: 'sj_peak_power', min: 500, max: 8000 }),
-        num('sj_jump_height', 'Jump height', { unit: 'in', metric: 'sj_jump_height', min: 3, max: 40, step: 0.1 }),
-        heading('Rebound countermovement jump'),
-        num('rj_rsi', 'Reactive strength', { unit: 'RSI', metric: 'rj_rsi', min: 0.1, max: 4, step: 0.01 }),
-        num('rj_contact_ms', 'Ground contact time', { unit: 'ms', metric: 'rj_contact_ms', min: 80, max: 800 }),
-        heading('Plyo push-up'),
-        num('ppu_peak_power', 'Peak power', { unit: 'W', metric: 'ppu_peak_power', min: 100, max: 4000 }),
-        num('ppu_flight_ms', 'Flight time', { unit: 'ms', metric: 'ppu_flight_ms', min: 100, max: 900 }),
-        heading('Isometric mid-thigh pull (IMTP)'),
-        num('imtp_peak_force', 'Peak force', { unit: 'N', metric: 'imtp_peak_force', min: 500, max: 8000 }),
-        num('imtp_force_bm', 'Force / body mass', { unit: 'N/kg', metric: 'imtp_force_bm', min: 10, max: 100, step: 0.1 }),
+        sel('cmj_done', 'Countermovement jump (CMJ) conducted?', YN, { inline: true }),
+        sel('sj_done', 'Squat jump conducted?', YN, { inline: true }),
+        sel('rj_done', 'Rebound countermovement jump conducted?', YN, { inline: true }),
+        sel('ppu_done', 'Plyo push-up conducted?', YN, { inline: true }),
+        sel('imtp_done', 'Isometric mid-thigh pull (IMTP) conducted?', YN, { inline: true }),
+        sel('agility_done', '5-10-5 sprint conducted?', YN, { inline: true }),
+        sel('sprint10_done', '10-yard sprint conducted?', YN, { inline: true }),
+        sel('sprint30_done', '30-yard sprint conducted?', YN, { inline: true }),
+        sel('sprint60_done', '60-yard sprint conducted?', YN, { inline: true }),
         heading('Broad jump'),
         trials('bj', 'Distance', { unit: 'in', metric: 'broad_jump_in', min: 30, max: 160, step: 0.25 }),
-        heading('Sprints'),
-        sel('speed_timing', 'How were the sprints timed?', [['stopwatch', 'Stopwatch (hand timed)'], ['laser', 'Laser timers']], { default: 'stopwatch', hint: 'Hand-timed and laser-timed numbers are not directly comparable, so we record which one this is.' }),
-        trials('agility_l', '5-10-5, start left', { count: 2, best: 'min', unit: 's', metric: 'sprint_5_10_5', side: 'L', min: 3, max: 9, step: 0.01 }),
-        trials('agility_r', '5-10-5, start right', { count: 2, best: 'min', unit: 's', metric: 'sprint_5_10_5', side: 'R', min: 3, max: 9, step: 0.01 }),
-        trials('sprint_10', '10-yard sprint', { count: 2, best: 'min', unit: 's', metric: 'sprint_10yd', min: 1, max: 4, step: 0.01 }),
-        trials('sprint_30', '30-yard sprint', { count: 2, best: 'min', unit: 's', metric: 'sprint_30yd', min: 3, max: 8, step: 0.01 }),
-        trials('sprint_60', '60-yard sprint', { count: 2, best: 'min', unit: 's', metric: 'sprint_60yd', min: 6, max: 14, step: 0.01 }),
-        note('production_notes', 'Notes (invalid trials, anything that affected the numbers)'),
+        note('production_notes', 'Notes'),
       ],
     },
 
     interference: {
-      id: 'interference', title: 'Energy Interference', optional: true,
-      blurb: 'Shoulder strength with the ArmCare device, before any throwing. Pros are read against an 80+ baseline. Skip this station if ArmCare is not being used.',
+      id: 'interference', title: 'Energy Interference',
+      blurb: 'Shoulder strength with the ArmCare device, before any throwing. The numbers are pulled from the ArmCare sheet automatically. Check the box once the tests have been conducted.',
       protocols: [
         { name: 'ArmCare strength tests', setup: 'Supine, head down, feet straight. IR and ER: elbow slightly elevated on a pad at 90°. Scaption: arm straight at roughly 45°, still supine. Grip: half-kneeling, gripping the device with two fingers and the thumb.', cue: 'Keep your head down and feet straight. After the countdown, push as hard as you can into the device and maintain maximal force for 2-3 seconds.', trials: 'Two trials per exercise. If the two are far apart, run a third.', invalid: "The athlete's head leaves the ground, the feet are not straight, or the athlete is not aligned in the testing position." },
       ],
       fields: [
-        num('ac_ir', 'Internal rotation strength', { unit: 'lb', metric: 'armcare_ir', min: 0, max: 150, step: 0.1 }),
-        num('ac_er', 'External rotation strength', { unit: 'lb', metric: 'armcare_er', min: 0, max: 150, step: 0.1 }),
-        num('ac_sc', 'Scaption strength', { unit: 'lb', metric: 'armcare_scaption', min: 0, max: 150, step: 0.1 }),
-        num('ac_gr', 'Grip strength', { unit: 'lb', metric: 'armcare_grip', min: 0, max: 200, step: 0.1 }),
+        check('armcare_done', 'ArmCare tests were conducted'),
       ],
     },
 
@@ -146,39 +129,39 @@
     },
 
     mound_basic: {
-      id: 'mound_basic', title: 'Mechanical Breakdown',
+      id: 'mound_basic', title: 'Throwing Video',
       blurb: 'There is no mound evaluation at this level. The breakdown comes from a video the athlete provides. Ask them to upload it now.',
       fields: [
-        file('mech_video', 'Throwing mechanics video', { kind: 'mechanics_video', accept: 'video/*' }),
+        file('mech_video', 'Throwing video', { kind: 'mechanics_video', accept: 'video/*' }),
         note('mech_notes', 'Additional throwing notes and observations'),
       ],
     },
 
     mound_adv: {
       id: 'mound_adv', title: 'Mound Assessment',
-      blurb: 'Bullpen on the mound with Trackman. Upload the Trackman report and the video breakdown collected today; they are stored in the athlete’s file.',
+      blurb: 'Bullpen on the mound with Trackman. The Trackman report is uploaded to the athlete’s reports section, not here. Check the box once it has been collected, and add the bullpen video from today.',
       fields: [
+        check('trackman_done', 'Trackman data was collected'),
         num('tm_top_velo', 'Top Trackman throwing velocity', { unit: 'mph', metric: 'trackman_top_velo', min: 30, max: 110, step: 0.1 }),
-        note('mound_notes', 'Additional throwing notes and observations'),
-        file('tm_report', 'Trackman report', { kind: 'trackman_report', accept: '.pdf,.csv,.xls,.xlsx,application/pdf,text/csv,image/*' }),
         file('tm_video', 'Bullpen video (collected today)', { kind: 'trackman_video', accept: 'video/*' }),
+        note('mound_notes', 'Additional throwing notes and observations'),
       ],
     },
 
     mound_plate: {
       id: 'mound_plate', title: 'Mound Force Plate',
-      blurb: 'The mound force plates produce their own report. Upload it here. It is stored in the athlete’s file and is not part of the hexagon mapping.',
+      blurb: 'The mound force plates produce their own report, which is uploaded to the athlete’s reports section, not here. Check the box once it has been collected.',
       fields: [
-        file('mound_plate_report', 'Mound force plate report', { kind: 'mound_plate_report', accept: '.pdf,application/pdf,.csv,.xls,.xlsx,image/*' }),
+        check('mound_plate_done', 'Mound force plate data was collected'),
         note('mound_plate_notes', 'Notes'),
       ],
     },
 
     mocap: {
       id: 'mocap', title: 'Motion Capture',
-      blurb: 'Motion capture produces its own report. Upload it here. It is stored in the athlete’s file and is not part of the hexagon mapping.',
+      blurb: 'Motion capture produces its own report, which is uploaded to the athlete’s reports section, not here. Check the box once it has been collected.',
       fields: [
-        file('mocap_report', 'Motion capture report', { kind: 'mocap_report', accept: '.pdf,application/pdf,video/*,image/*' }),
+        check('mocap_done', 'Motion capture data was collected'),
         note('mocap_notes', 'Notes and observations'),
       ],
     },
@@ -186,12 +169,13 @@
 
   // Which numbers in the movement screen flow become chartable measurements.
   const SCREEN_METRICS = {
-    e3_ir_r: { metric: 'hip_ir', side: 'R', unit: 'deg', min: 0, max: 100 },
-    e3_ir_l: { metric: 'hip_ir', side: 'L', unit: 'deg', min: 0, max: 100 },
-    e3_add: { metric: 'adductor_abduction', unit: 'deg', min: 0, max: 120 },
-    e6a: { metric: 'tk_rotation_dom', unit: 'deg', min: 0, max: 120 },
-    e6b: { metric: 'tk_rotation_nondom', unit: 'deg', min: 0, max: 120 },
-    e7: { metric: 'shoulder_arc_total', unit: 'deg', min: 60, max: 260 },
+    e3_ir_r: { metric: 'hip_ir', side: 'R' },
+    e3_ir_l: { metric: 'hip_ir', side: 'L' },
+    e3_add_r: { metric: 'adductor_abduction', side: 'R' },
+    e3_add_l: { metric: 'adductor_abduction', side: 'L' },
+    e6a: { metric: 'tk_rotation_dom' },
+    e6b: { metric: 'tk_rotation_nondom' },
+    e7: { metric: 'shoulder_arc_total' },
   };
 
   // The levels differ only in the throwing exam. Premier also has ultrasound body fat and is followed by the nutrition evaluation.
@@ -203,14 +187,12 @@
       blurb: 'The throwing evaluation is a video breakdown from a video the athlete provides.',
       equipment: BASE_GEAR,
       sections: [...COMMON, 'mound_basic'],
-      defaults: { speed_timing: 'stopwatch' },
     },
     advanced: {
       level: 'advanced', title: 'Advanced Assessment',
       blurb: 'The throwing evaluation adds a Trackman report and a video breakdown collected on the day.',
       equipment: [...BASE_GEAR, 'Trackman', 'Camera for the bullpen video'],
       sections: [...COMMON, 'mound_adv'],
-      defaults: { speed_timing: 'stopwatch' },
     },
     premier: {
       level: 'premier', title: 'Premier Assessment',
@@ -218,7 +200,6 @@
       equipment: [...BASE_GEAR, 'Trackman', 'Mound force plates', 'Motion capture', 'Ultrasound body composition'],
       sections: [...COMMON, 'mound_adv', 'mound_plate', 'mocap'],
       after: { label: 'Start the nutrition evaluation', href: '/body-comp/', note: 'The nutrition evaluation is done after the assessment, in the Body Comp Planner.' },
-      defaults: { speed_timing: 'stopwatch' },
     },
   };
 

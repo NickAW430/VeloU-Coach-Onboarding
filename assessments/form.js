@@ -6,6 +6,7 @@
   const FLOW = window.VELOU_SCREEN;
   const FORM_VERSION = 2;
   const MAX_IMAGE_PX = 1600;
+  const RATING = { suff: 'sufficient', lim: 'limited', exc: 'excessive' };
 
   // ---- helpers -------------------------------------------------------------------------------
 
@@ -167,6 +168,7 @@
       if (f.type === 'trials') return (v || []).some(isNum);
       if (f.type === 'number') return isNum(v);
       if (f.type === 'multi') return Array.isArray(v) && v.length > 0;
+      if (f.type === 'check') return v === true;
       const dflt = (tier.defaults || {})[f.key] !== undefined ? tier.defaults[f.key] : f.default;
       if (dflt !== undefined && v === dflt) return false;
       return v !== undefined && v !== null && String(v).trim() !== '';
@@ -182,7 +184,7 @@
       const filled = shown.filter(f => fieldHasValue(sec, f)).length;
       if (!filled) return 'empty';
       // free-text notes are optional; everything else counts toward "complete"
-      const required = shown.filter(f => f.type !== 'textarea' && f.type !== 'text');
+      const required = shown.filter(f => f.type !== 'textarea' && f.type !== 'text' && f.type !== 'check');
       return required.every(f => fieldHasValue(sec, f)) ? 'done' : 'partial';
     }
 
@@ -326,7 +328,7 @@
             if (v === undefined || v === '') continue;
             out[ref] = s.type === 'number' ? Number(v) : v;
             const m = SCREEN_METRICS[ref];
-            if (m && isNum(v)) addM(m, Number(v));
+            if (m && s.type === 'choice') measurements.push({ metric: m.metric, text_value: RATING[v] || v, unit: null, side: m.side || null });
           }
           if (Object.keys(out).length) { out._path = state.flow.hist.slice(); answers[sec.id] = out; }
           continue;
@@ -345,6 +347,8 @@
             if (f.metric) addM(f, bestOf(f, arr));
           } else if (f.type === 'multi') {
             if (Array.isArray(v) && v.length) out[f.key] = v;
+          } else if (f.type === 'check') {
+            out[f.key] = v === true;
           } else {
             if (v === undefined || v === null || String(v).trim() === '') continue;
             out[f.key] = v;
@@ -411,7 +415,7 @@
       const id = 'f-' + sec.id + '-' + f.key;
       const wrap = el('div', { className: 'field', dataset: { key: f.key } });
       wrap.hidden = !visible(sec, f);
-      wrap.append(el('label', { className: 'q', for: ['select', 'multi', 'file'].includes(f.type) ? null : id, text: f.label }));
+      wrap.append(el('label', { className: 'q', for: ['select', 'multi', 'file', 'check'].includes(f.type) ? null : id, text: f.label }));
       if (f.hint) wrap.append(el('div', { className: 'hint', text: f.hint }));
       const val = getVal(sec, f);
 
@@ -437,7 +441,7 @@
         showBest();
         wrap.append(row, best, warn);
       } else if (f.type === 'select') {
-        const group = el('div', { className: 'opts', role: 'radiogroup' });
+        const group = el('div', { className: 'opts' + (f.inline ? ' inline' : ''), role: 'radiogroup' });
         for (const [value, label] of f.options) {
           const input = el('input', { type: 'radio', name: id, value });
           input.checked = val === value;
@@ -461,6 +465,13 @@
           group.append(el('label', { className: 'opt' }, input, el('span', { text: label })));
         }
         wrap.append(group);
+      } else if (f.type === 'check') {
+        wrap.replaceChildren();
+        const cb = el('input', { type: 'checkbox', id });
+        cb.checked = val === true;
+        cb.addEventListener('change', () => { setVal(sec, f, cb.checked); refreshChips(); });
+        wrap.append(el('label', { className: 'opt', for: id }, cb, el('span', { className: 'q', text: f.label })));
+        if (f.hint) wrap.append(el('div', { className: 'hint', text: f.hint }));
       } else if (f.type === 'text') {
         const input = el('input', { type: 'text', id, value: val || '', autocomplete: 'off' });
         input.addEventListener('input', () => { setVal(sec, f, input.value); refreshChips(); });
@@ -608,6 +619,7 @@
       if (f.type === 'trials') { const b = bestOf(f, v); return b === null ? '' : (v || []).filter(isNum).join(' · ') + '  (best ' + fmt(b) + (f.unit ? ' ' + f.unit : '') + ')'; }
       if (f.type === 'select') { const o = f.options.find(x => x[0] === v); return o ? o[1] : ''; }
       if (f.type === 'multi') return Array.isArray(v) ? v.join(', ') : '';
+      if (f.type === 'check') return v === true ? 'Yes' : 'No';
       return v ? String(v) : '';
     }
 
