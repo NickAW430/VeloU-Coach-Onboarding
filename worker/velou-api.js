@@ -441,13 +441,10 @@ async function overview(env, url) {
 // Sessions come from the VeloU Program Library sheet (read only). An athlete with a published plan in
 // "Athlete Plans" uses that plan. Everyone else is built from the program assigned on the Program Board:
 // throwing from "Program Schedules", lifting from "Strength Schedules" (plus its prep program).
-// Weeks run Monday to Sunday: Day 1 is Monday, and a Sunday start begins on the Monday after.
+// Day 1 is the program's start date, the same as the programming tool.
 
 const PLAN_TAB = 'Athlete Plans';
 const addDays = (iso, n) => new Date(Date.parse(iso + 'T00:00:00Z') + n * 86400000).toISOString().slice(0, 10);
-const isoWeekday = iso => new Date(iso + 'T00:00:00Z').getUTCDay() || 7;
-const mondayOf = iso => addDays(iso, 1 - isoWeekday(iso));
-const mondayOnOrAfter = iso => (isoWeekday(iso) === 1 ? iso : addDays(iso, 8 - isoWeekday(iso)));
 const dayDiff = (a, b) => Math.round((Date.parse(a + 'T00:00:00Z') - Date.parse(b + 'T00:00:00Z')) / 86400000);
 const safeLink = v => (/^https?:\/\//.test(v || '') ? v : null);
 
@@ -465,13 +462,14 @@ async function libTab(env, tab, tq, ttl = 300000) {
 }
 const gv = v => String(v).replace(/'/g, "\\'");
 
-// Where a date falls in a program: week number (Monday based), weekday 1-7, or why it is outside.
+// Where a date falls in a program: week number, day 1-7 and why it is outside. Day 1 is the program's start date,
+// the same as the programming tool.
 function locate(program, date) {
   if (!program || !program.starts_on) return { state: 'none' };
-  const first = mondayOnOrAfter(program.starts_on);
-  if (date < first) return { state: 'before', first };
+  const off = dayDiff(date, program.starts_on);
+  if (off < 0) return { state: 'before', first: program.starts_on };
   if (program.ends_on && date > program.ends_on) return { state: 'after' };
-  return { state: 'in', week: Math.floor(dayDiff(mondayOf(date), first) / 7) + 1, dow: isoWeekday(date) };
+  return { state: 'in', week: Math.floor(off / 7) + 1, dow: (off % 7) + 1 };
 }
 const fmtDay = iso => new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 function outsideMessage(loc, program) {
