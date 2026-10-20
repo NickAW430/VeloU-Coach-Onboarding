@@ -4,26 +4,173 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Keep every athlete's plan, progress and follow-up organized in one place.">
+<meta name="description" content="VeloU Athlete Management: every athlete, their coaches, programs, arm score and injury status.">
 <title>Athlete Management · VeloU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="/assets/portal.css?v=2">
+<link rel="stylesheet" href="/assets/portal.css?v=8">
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" style="max-width:1500px">
 <div class="homebar">
   <a class="homelink" href="/">← VeloU Home</a>
 </div>
-<header>
-  <div class="crumbs"><span class="chip on">Athlete Management</span></div>
-  <h1>Athlete Management</h1>
-  <p class="lede">Keep every athlete's plan, progress and follow-up organized in one place.</p>
-</header>
-<section>
-<div class="rule">Nothing here yet.</div>
-</section>
+
+<div class="ov-top">
+  <div>
+    <div class="chip on" style="display:inline-block;margin-bottom:12px">Coach overview</div>
+    <h1 id="title">All athletes</h1>
+  </div>
+  <div class="ov-sync" id="sync">Loading…</div>
 </div>
+
+<div class="ov-stats" id="stats" aria-live="polite">
+  <div class="ov-stat"><b id="n-athletes">0</b><span>Athletes</span></div>
+  <div class="ov-stat"><b id="n-flagged">0</b><span>Arm score down 10%+</span></div>
+  <div class="ov-stat"><b id="n-injured">0</b><span>Injured or rehabbing</span></div>
+</div>
+
+<div class="ov-filters">
+  <select id="f-segment" aria-label="Athlete group">
+    <option value="">All Athletes</option>
+    <option value="remote">Remote</option>
+    <option value="on-site">On-Site</option>
+    <option value="black-label">Black Label</option>
+  </select>
+  <select id="f-coach" aria-label="Coach"><option value="">All coaches</option></select>
+  <select id="f-status" aria-label="Status">
+    <option value="active">Active</option>
+    <option value="paused">Paused</option>
+    <option value="alumni">Alumni</option>
+    <option value="all">All statuses</option>
+  </select>
+  <input type="search" id="f-q" placeholder="Search athletes…" aria-label="Search athletes" autocomplete="off">
+</div>
+
+<div class="ov-scroll" id="box"><div class="ov-empty">Loading athletes…</div></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const CATS = [['throwing', 'Throwing'], ['patterning', 'Patterning'], ['lifting', 'Lifting'], ['speed', 'Speed'], ['arm_care', 'Arm Care'], ['mobility', 'Mobility']];
+const SEG_LABEL = { 'black-label': 'Black Label', remote: 'Remote', 'on-site': 'On-Site', evaluation: 'Evaluation' };
+let timer = null, loading = false, coachesLoaded = false;
+
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const shortDate = d => { if (!d) return ''; const [y, m, day] = d.split('-').map(Number); return MONTHS[m - 1] + ' ' + day; };
+
+function query() {
+  const p = new URLSearchParams();
+  if ($('f-segment').value) p.set('segment', $('f-segment').value);
+  if ($('f-coach').value) p.set('coach', $('f-coach').value);
+  p.set('status', $('f-status').value);
+  if ($('f-q').value.trim()) p.set('q', $('f-q').value.trim());
+  return p.toString();
+}
+
+function title() {
+  const seg = $('f-segment').selectedOptions[0].text, coach = $('f-coach').value;
+  $('title').textContent = coach ? coach + (seg !== 'All Athletes' ? ' · ' + seg : '') : seg;
+}
+
+function progCell(p) {
+  const td = el('td', 'prog');
+  if (!p) { td.append(el('span', 'none', '—')); return td; }
+  td.append(el('div', 'p', p.program.replace(/•/g, ' · ')));
+  const d = el('div', 'd' + (p.days_left !== null && p.days_left < 0 ? ' late' : ''));
+  const range = p.starts_on || p.ends_on ? shortDate(p.starts_on) + ' → ' + shortDate(p.ends_on) : '';
+  const left = p.days_left === null ? '' : p.days_left < 0 ? ' · ended ' + (-p.days_left) + 'd ago' : ' · ' + p.days_left + 'd left';
+  d.textContent = range + left;
+  td.append(d);
+  return td;
+}
+
+function render(data) {
+  $('n-athletes').textContent = data.counts.athletes;
+  $('n-flagged').textContent = data.counts.flagged;
+  $('n-injured').textContent = data.counts.injured;
+  if (!coachesLoaded || $('f-coach').options.length - 1 !== data.coaches.length) {
+    const cur = $('f-coach').value;
+    $('f-coach').replaceChildren(new Option('All coaches', ''), ...data.coaches.map(c => new Option(c, c)));
+    $('f-coach').value = cur; coachesLoaded = true;
+  }
+  const sync = $('sync');
+  sync.className = 'ov-sync';
+  if (data.last_sync) {
+    const t = new Date(data.last_sync.finished_at);
+    const mins = Math.round((Date.now() - t.getTime()) / 60000);
+    sync.textContent = (data.last_sync.ok ? 'Updated ' : 'Last sync failed · ') + t.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + (mins > 30 ? ' · ' + mins + ' min ago' : '');
+    if (!data.last_sync.ok) sync.classList.add('err'); else if (mins > 30) sync.classList.add('stale');
+  } else sync.textContent = 'Not synced yet';
+
+  const box = $('box');
+  if (!data.athletes.length) { box.replaceChildren(el('div', 'ov-empty', 'No athletes match these filters.')); return; }
+  const groups = new Map();
+  for (const a of data.athletes) { const k = a.throwing_coach || 'Unassigned'; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(a); }
+  const names = [...groups.keys()].sort((x, y) => x === 'Unassigned' ? 1 : y === 'Unassigned' ? -1 : x.localeCompare(y));
+
+  const table = el('table', 'ov');
+  const head = el('tr');
+  ['Athlete', 'Coaches', ...CATS.map(c => c[1]), 'Arm Score', 'Injury'].forEach(h => head.append(el('th', '', h)));
+  const thead = el('thead'); thead.append(head); table.append(thead);
+  const body = el('tbody');
+  for (const name of names) {
+    const list = groups.get(name);
+    const row = el('tr', 'coachrow'), c = el('td'); c.colSpan = 10;
+    c.append(name, el('small', '', list.length + ' athlete' + (list.length === 1 ? '' : 's') + ' · ' + list.filter(a => a.arm_flag).length + ' flagged'));
+    row.append(c); body.append(row);
+    for (const a of list) {
+      const tr = el('tr');
+      const who = el('td');
+      who.append(el('div', 'ov-name', a.first_name + ' ' + a.last_name));
+      const chips = el('div', 'chips');
+      if (a.arm_score !== null) {
+        const f = el('span', 'tag' + (a.arm_flag ? ' flag' : ''), 'Arm score ' + a.arm_score.toFixed(1) + (a.arm_flag ? ' ▼ ' + a.arm_drop_pct + '%' : ''));
+        if (a.arm_flag) f.title = 'Down ' + a.arm_drop_pct + '% from the previous test (' + a.arm_previous.toFixed(1) + ')';
+        chips.append(f);
+      }
+      if (a.segment && a.segment !== 'on-site') chips.append(el('span', 'tag seg-' + a.segment, SEG_LABEL[a.segment] || a.segment));
+      if (a.status !== 'active') chips.append(el('span', 'tag status', a.status));
+      who.append(chips); tr.append(who);
+      const co = el('td', 'ov-coaches');
+      co.append(el('span', '', 'Throwing: '), a.throwing_coach || '—', document.createElement('br'), el('span', '', 'Strength: '), a.strength_coach || '—');
+      tr.append(co);
+      for (const [k] of CATS) tr.append(progCell(a.programs[k]));
+      const arm = el('td', 'ov-arm' + (a.arm_flag ? ' flag' : ''));
+      if (a.arm_score !== null) { arm.append(a.arm_score.toFixed(1)); if (a.arm_previous !== null) arm.append(el('small', '', 'was ' + a.arm_previous.toFixed(1))); } else arm.textContent = '—';
+      tr.append(arm);
+      const inj = el('td');
+      const s = a.injury_status;
+      inj.append(el('span', s && s !== 'None' ? 'inj-' + s.split(' ')[0] : '', s || '—'));
+      if (a.injury_location && s && s !== 'None') inj.append(el('div', 'd', a.injury_location));
+      tr.append(inj);
+      body.append(tr);
+    }
+  }
+  table.append(body);
+  box.replaceChildren(table);
+}
+
+async function load() {
+  if (loading) return;
+  loading = true;
+  try {
+    const res = await fetch('/api/v1/overview?' + query(), { credentials: 'same-origin' });
+    if (!res.ok) throw new Error(res.status === 401 || res.status === 403 ? 'Sign in again' : 'HTTP ' + res.status);
+    render(await res.json());
+  } catch (e) {
+    const sync = $('sync'); sync.textContent = 'Could not load: ' + e.message; sync.className = 'ov-sync err';
+    if (!coachesLoaded) $('box').replaceChildren(el('div', 'ov-empty', 'Could not load athletes (' + e.message + ').'));
+  } finally { loading = false; }
+}
+
+['f-segment', 'f-coach', 'f-status'].forEach(id => $(id).addEventListener('change', () => { title(); load(); }));
+$('f-q').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(load, 250); });
+title(); load();
+setInterval(() => { if (!document.hidden) load(); }, 60000); // keep the page current while it is open
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+</script>
 </body>
 </html>
