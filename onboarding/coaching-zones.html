@@ -19,7 +19,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
 <style>
 /* All text is Barlow */
 button,input,select,textarea,code,kbd,pre,samp{font-family:inherit}
@@ -42,7 +42,7 @@ body{background:var(--bg);color:var(--ink);font-family:"Barlow",system-ui,sans-s
   box-shadow:0 10px 30px rgba(0,0,0,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .head{padding:16px 16px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}
 .eyebrow{font:700 12px/1 "Barlow",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0}
-h1{font:700 34px/1 "Barlow",sans-serif;text-transform:uppercase;margin:8px 0 6px;letter-spacing:.01em}
+h1{font:400 34px/1 "Anton",sans-serif;text-transform:uppercase;margin:8px 0 6px;letter-spacing:.01em}
 .meta{margin:0;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
 .collapse{display:none;border:1px solid var(--line);background:var(--chip);color:var(--ink);
   font:700 13px "Barlow",sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;cursor:pointer}
@@ -50,7 +50,7 @@ h1{font:700 34px/1 "Barlow",sans-serif;text-transform:uppercase;margin:8px 0 6px
 .label{font:700 12px/1 "Barlow",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
 .coach{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .cbtn{border:1px solid var(--line);background:var(--chip);color:var(--ink);padding:10px 4px;cursor:pointer;display:grid;gap:2px;justify-items:center}
-.cbtn b{font:700 30px/1 "Barlow",sans-serif}
+.cbtn b{font:400 30px/1 "Anton",sans-serif}
 .cbtn span{font:700 12px "Barlow",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .cbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
 .cbtn[aria-pressed="true"] span{color:#fff}
@@ -65,7 +65,7 @@ h1{font:700 34px/1 "Barlow",sans-serif;text-transform:uppercase;margin:8px 0 6px
 .zcard{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-left:4px solid var(--zc);
   background:var(--chip);color:var(--ink);padding:8px 10px;cursor:pointer}
 .zcard:hover{background:var(--chip-hover)}
-.zn{font:700 30px/1 "Barlow",sans-serif;color:var(--zc);text-align:center}
+.zn{font:400 30px/1 "Anton",sans-serif;color:var(--zc);text-align:center}
 .zb b{display:block;font:700 16px "Barlow",sans-serif;letter-spacing:.06em;text-transform:uppercase}
 .zb small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35;margin-top:2px}
 .sel{border:1px solid var(--line);padding:10px 12px;background:var(--chip)}
@@ -749,7 +749,7 @@ const CFG={
      teal:{n:0,r:[4.2,4.2,...BOT],p:[4.2,43.2]},green:{n:3,r:[4.2,65.5,...BOT],p:[31,42.6],col:'orange'}}
 };
 function labelTex(text,sub,color){const c=document.createElement('canvas'),x=c.getContext('2d');c.width=512;c.height=sub?300:200;
-  x.fillStyle=color;x.textAlign='center';x.textBaseline='middle';x.font='400 150px "Barlow",sans-serif';x.fillText(text,256,sub?110:100);
+  x.fillStyle=color;x.textAlign='center';x.textBaseline='middle';x.font='400 150px "Anton",sans-serif';x.fillText(text,256,sub?110:100);
   if(sub){x.font='700 56px "Barlow",sans-serif';x.fillText(sub,256,235)}
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
 function pinTex(text,color){const c=document.createElement('canvas'),x=c.getContext('2d');x.font='700 46px "Barlow",sans-serif';

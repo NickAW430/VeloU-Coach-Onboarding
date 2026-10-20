@@ -2,105 +2,40 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
 <meta name="description" content="VeloU assessments: initial intake and re-testing.">
 <title>Assessments · VeloU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
-<style>
-/* All text is Barlow */
-button,input,select,textarea,code,kbd,pre,samp{font-family:inherit}
-
-/* Design tokens, type and components follow the Coach Onboarding site (onboarding/assets/velou.css). */
-:root{
-  color-scheme: dark;
-  --bg:#100D0B; --panel:#1B1714; --panel-2:#231E1A; --line:#352D28;
-  --text:#F1E9E4; --muted:#AA9F97; --faint:#766B63;
-  --red:#E5534B; --lime:#D4F57A; --cool:#7E93A6; --amber:#E0C04A;
-  --display:"Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --label:"Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --body:"Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-html{background:#000;overflow-x:clip}
-body{
-  margin:0; background:transparent; color:var(--text); font-family:var(--body); font-size:17px; line-height:1.55;
-  padding-inline:20px; padding-block:0 64px; overflow-x:clip;
-}
-body::before{
-  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background:url("../assets/topo-bg.webp") center / cover no-repeat;
-  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%);
-  mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%);
-}
-.wrap{max-width:980px;margin:0 auto}
-h1,h2{font-family:var(--display);font-weight:700;letter-spacing:.01em;line-height:1.05;text-wrap:balance;margin:0;text-transform:uppercase}
-h1{font-size:clamp(34px,6vw,60px)}
-p{margin:0;max-width:66ch}
-:focus-visible{outline:2px solid var(--red);outline-offset:3px}
-
-/* top navigation */
-.homebar{position:sticky;top:0;z-index:50;display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:12px 0;background:rgba(16,13,11,.94);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
-.homelink{font:600 13px var(--label);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:6px 12px;color:var(--muted);text-decoration:none;background:var(--panel);cursor:pointer}
-.homelink:hover{border-color:var(--red);color:var(--text)}
-
-/* header */
-header{padding-block:40px 28px;display:grid;gap:18px;border-bottom:1px solid var(--line)}
-.crumbs{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.chip{font:600 13px var(--label);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:4px 10px;color:var(--muted)}
-.chip.on{border-color:var(--red);color:var(--red)}
-.lede{font-size:19px;color:var(--muted)}
-
-/* step */
-section{padding-block:40px 8px;display:grid;gap:22px}
-.sec-head{display:grid;gap:8px}
-.sec-head .num{font:700 14px var(--label);color:var(--red);letter-spacing:.14em;text-transform:uppercase}
-.mods{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.mods.three{grid-template-columns:repeat(3,1fr)}
-.md{
-  background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--c);padding:16px;display:grid;gap:6px;
-  text-align:left;color:var(--text);font:inherit;align-content:start;cursor:pointer;width:100%;
-  transition:border-color .15s,box-shadow .15s,transform .15s;
-}
-.md:hover{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 6px 18px rgba(229,83,75,.18);transform:translateY(-2px)}
-.md .n{font:700 34px/1 var(--display);color:var(--c)}
-.md b{font:700 18px var(--label);text-transform:uppercase;letter-spacing:.03em}
-.md::after{content:"Select \2192";justify-self:start;margin-top:4px;font:700 12px var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
-.rule{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border-left:3px solid var(--red);padding:14px 18px}
-.rule .label{font:600 13px var(--label);text-transform:uppercase;letter-spacing:.12em;color:var(--red);padding-top:3px}
-@media (max-width:820px){.mods,.mods.three{grid-template-columns:1fr 1fr}}
-@media (max-width:480px){.mods,.mods.three{grid-template-columns:1fr}}
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/portal.css?v=1">
 </head>
 <body>
-<div class="wrap">
-<div class="homebar">
-  <button class="homelink" id="back" type="button" hidden>← Back</button>
-  <a class="homelink" href="../">← VeloU Home</a>
+<div class="topbar">
+  <button id="back" type="button" hidden>← Back</button>
+  <a href="/">← All of VeloU</a>
 </div>
-<header>
-  <div class="crumbs" id="crumbs"></div>
-  <h1 id="question"></h1>
-</header>
-<section id="step" aria-live="polite"></section>
-</div>
-
+<img class="logo" src="/assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">
+<h1 class="page-title" id="title"></h1>
+<p class="page-sub" id="sub"></p>
+<div id="step" aria-live="polite" style="width:100%;max-width:700px"></div>
 <script>
 const TREE = {
-  question: "Which type of assessment are you completing?",
+  title: "Assessment Type",
+  sub: "Choose which type of assessment you are completing today.",
   options: [
     { key: "intake", label: "Initial Intake", next: {
-      question: "What level assessment are you completing?",
+      title: "Assessment Level",
+      sub: "Choose which level of assessment you are completing today.",
       options: [
         { key: "basic", label: "Basic" },
         { key: "advanced", label: "Advanced" },
         { key: "premier", label: "Premier" }
       ] } },
     { key: "retest", label: "Re-Testing", next: {
-      question: "What section of re-testing are you completing?",
+      title: "Re-Testing Section",
+      sub: "Choose which section of re-testing you are completing today.",
       options: [
         { key: "biometrics", label: "Biometrics" },
         { key: "force-plates", label: "Force Plates" },
@@ -113,10 +48,10 @@ const TREE = {
   ]
 };
 const LETTERS = "ABCDEFGHIJ";
-const COLORS = ["var(--amber)", "var(--lime)", "var(--red)", "var(--cool)"];
+const COLORS = ["var(--red)", "var(--blue)", "var(--green)", "#ffffff"];
 const stepEl = document.getElementById("step");
-const crumbsEl = document.getElementById("crumbs");
-const questionEl = document.getElementById("question");
+const titleEl = document.getElementById("title");
+const subEl = document.getElementById("sub");
 const backEl = document.getElementById("back");
 
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
@@ -131,26 +66,24 @@ function render() {
     if (opt.next) node = opt.next; else { node = null; break; }
   }
   backEl.hidden = trail.length === 0;
-  crumbsEl.replaceChildren(el("span", "chip" + (trail.length ? "" : " on"), "Assessments"));
-  trail.forEach((t, i) => crumbsEl.append(el("span", "chip" + (i === trail.length - 1 ? " on" : ""), t.label)));
   stepEl.replaceChildren();
   if (node) {
-    questionEl.textContent = node.question;
-    const head = el("div", "sec-head");
-    head.append(el("span", "num", trail.length ? "Step 2" : "Step 1"));
-    const grid = el("div", "mods" + (node.options.length === 3 ? " three" : ""));
+    titleEl.textContent = node.title;
+    subEl.textContent = node.sub;
+    const grid = el("div", "tiles");
     node.options.forEach((o, i) => {
-      const b = el("button", "md"); b.type = "button"; b.style.setProperty("--c", COLORS[i % COLORS.length]);
-      b.append(el("span", "n", LETTERS[i]), el("b", "", o.label));
+      const b = el("button", "tile"); b.type = "button"; b.style.setProperty("--c", COLORS[i % COLORS.length]);
+      const pick = el("span", "pick");
+      pick.append(el("span", "bk", "[" + LETTERS[i] + "]"), el("span", "pick-label", o.label));
+      b.append(pick);
       b.addEventListener("click", () => { location.hash = "#/" + path.concat(o.key).join("/"); });
       grid.append(b);
     });
-    stepEl.append(head, grid);
+    stepEl.append(grid);
   } else {
-    questionEl.textContent = trail.map(t => t.label).join(" · ");
-    const r = el("div", "rule");
-    r.append(el("span", "label", "Coming next"), el("p", "", "This assessment form hasn't been built yet."));
-    stepEl.append(r);
+    titleEl.textContent = trail.map(t => t.label).join(" · ");
+    subEl.textContent = "";
+    stepEl.append(el("div", "note", "This assessment form hasn't been built yet."));
   }
   window.scrollTo(0, 0);
 }
@@ -163,7 +96,7 @@ backEl.addEventListener("click", () => {
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   const i = LETTERS.indexOf(e.key.toUpperCase());
-  const btns = stepEl.querySelectorAll(".md");
+  const btns = stepEl.querySelectorAll(".tile");
   if (e.key.length === 1 && i > -1 && btns[i]) btns[i].click();
 });
 window.addEventListener("hashchange", render);

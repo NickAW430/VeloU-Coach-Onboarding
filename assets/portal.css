@@ -1,0 +1,54 @@
+/* Shared look for every page you click into from the home page (portal pages and question pages). */
+:root {
+  color-scheme: dark;
+  --bg: #000000; --ink: #ffffff; --muted: #a8a8a8;
+  --red: #e10600; --blue: #56b7e6; --green: #88e0c6;
+  --font-display: "Anton", "Impact", "Arial Narrow Bold", sans-serif;
+  --font-body: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+button, input, select, textarea, code, kbd, pre, samp { font-family: inherit; }
+html { background: var(--bg); }
+body {
+  margin: 0; min-height: 100vh; background: transparent; color: var(--ink); font-family: var(--font-body);
+  display: flex; flex-direction: column; align-items: center; padding: 28px 20px 56px;
+}
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: url("/assets/topo-bg.webp") center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.topbar { width: min(700px, 100%); display: flex; gap: 22px; margin-bottom: 18px; }
+.topbar a, .topbar button {
+  background: none; border: 0; padding: 0; cursor: pointer; font: 700 14px var(--font-body);
+  letter-spacing: 0.03em; color: #fff; text-decoration: none;
+}
+.topbar a:hover, .topbar button:hover { text-decoration: underline; }
+.topbar [hidden] { display: none; }
+:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.logo { width: min(400px, 100%); height: auto; margin-bottom: 36px; }
+h1.page-title { font-family: var(--font-display); font-weight: 400; font-size: 44px; letter-spacing: 0.01em; text-transform: uppercase; margin: 0 0 10px; text-align: center; text-wrap: balance; line-height: 1.05; }
+.page-sub { color: var(--muted); font-size: 18px; margin: 0 0 36px; text-align: center; max-width: 52ch; }
+
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 700px; width: 100%; }
+.tile {
+  display: flex; flex-direction: column; gap: 10px; aspect-ratio: 1 / 1; position: relative;
+  background: linear-gradient(180deg, #161616 0%, rgba(22,22,22,0) 100%);
+  border: 0; border-radius: 14px; padding: 24px 24px 46px;
+  text-decoration: none; color: #fff; text-align: left; font: inherit; width: 100%;
+}
+a.tile, button.tile { cursor: pointer; }
+.tile-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+.tile h2 { font-family: var(--font-display); font-weight: 400; font-size: 28px; margin: 0; text-wrap: balance; }
+.tile p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5; }
+.tile-cta { font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: #fff; margin-top: auto; }
+
+/* lettered choices: colored [A] bracket sits right against a light-weight label */
+.pick { display: flex; align-items: baseline; gap: 8px; }
+.bk { font-weight: 700; font-size: 26px; color: var(--c, #fff); letter-spacing: 0.02em; }
+.pick-label { font-weight: 300; font-size: 26px; line-height: 1.15; }
+.note { width: 100%; max-width: 700px; border-radius: 14px; padding: 28px 26px; text-align: center; color: var(--muted); background: linear-gradient(180deg, #161616 0%, rgba(22,22,22,0) 100%); }
+
+@media (max-width: 700px) { .tiles { grid-template-columns: 1fr; } .page-sub { font-size: 16px; } h1.page-title { font-size: 36px; } }
