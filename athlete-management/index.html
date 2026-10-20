@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="/assets/portal.css?v=8">
+<link rel="stylesheet" href="/assets/portal.css?v=9">
 </head>
 <body>
 <div class="wrap" style="max-width:1500px">
@@ -124,7 +124,9 @@ function render(data) {
     for (const a of list) {
       const tr = el('tr');
       const who = el('td');
-      who.append(el('div', 'ov-name', a.first_name + ' ' + a.last_name));
+      const nameLink = el('a', 'ov-name', a.first_name + ' ' + a.last_name);
+      nameLink.href = '/athlete-management/athlete/?id=' + encodeURIComponent(a.id) + '&athlete=' + encodeURIComponent(a.first_name + ' ' + a.last_name);
+      who.append(nameLink);
       const chips = el('div', 'chips');
       if (a.arm_score !== null) {
         const f = el('span', 'tag' + (a.arm_flag ? ' flag' : ''), 'Arm score ' + a.arm_score.toFixed(1) + (a.arm_flag ? ' ▼ ' + a.arm_drop_pct + '%' : ''));

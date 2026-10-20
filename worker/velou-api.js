@@ -437,6 +437,75 @@ async function overview(env, url) {
   };
 }
 
+// ---- Athlete calendar -----------------------------------------------------------------------
+// Day-by-day sessions come from the published plans in the Program Library sheet (read only). Athletes
+// without a published plan fall back to the program currently assigned on the Program Board.
+
+const PLAN_TAB = 'Athlete Plans';
+const addDays = (iso, n) => new Date(Date.parse(iso + 'T00:00:00Z') + n * 86400000).toISOString().slice(0, 10);
+
+async function readPlan(env, name) {
+  const lit = name.includes("'") ? '"' + name.replace(/"/g, '') + '"' : "'" + name + "'";
+  const rows = await fetchTab(env.SHEET_PROGRAMLIB, PLAN_TAB, `select * where lower(B) = ${lit.toLowerCase()}`);
+  const h = rows[0] || [];
+  const body = rows.slice(1).filter(r => r.length > 5 && normName(r[1]) === normName(name) && String(r[3]).toLowerCase() !== 'no');
+  if (!body.length || h[0] !== 'Code') return null;
+  body.sort((x, y) => (isoDate(y[2]) || '').localeCompare(isoDate(x[2]) || ''));
+  try {
+    const plan = JSON.parse(body[0].slice(4).join('').replace(/^~/, ''));
+    return plan && Array.isArray(plan.weeks) && plan.start ? plan : null;
+  } catch (e) { return null; }
+}
+
+const safeLink = v => (/^https?:\/\//.test(v || '') ? v : null);
+
+function throwingDay(plan, w, i) {
+  const items = ((w.days && w.days[i]) || []).map(e => {
+    const d = plan.drills[e[0]] || [];
+    const [nm, variant] = String(d[0] || '').split('*');
+    return { name: variant ? `${nm} · ${variant}` : nm, link: safeLink(d[1]),
+      detail: [e[1], e[2] && e[3] ? `${e[2]} × ${e[3]}` : null, e[4] ? `${e[4]}%` : null, e[5]].filter(Boolean).join(' · ') };
+  });
+  return { title: (w.sums && w.sums[i]) || null, summary: null, items };
+}
+
+function liftingDay(w, i) {
+  const s = w.str && w.str.days && w.str.days[i];
+  if (!s) return { title: null, summary: null, items: [] };
+  return { title: s.t || null, summary: s.pm || null,
+    items: (s.l || []).map(x => ({ name: `${x[0]}. ${x[1]}`, link: null, detail: x[3] || '' })) };
+}
+
+function planDays(plan, dates, kind) {
+  return dates.map(date => {
+    const offset = Math.round((Date.parse(date + 'T00:00:00Z') - Date.parse(plan.start + 'T00:00:00Z')) / 86400000);
+    if (offset < 0 || offset >= plan.weeks.length * 7) return { date, outside: true };
+    const w = plan.weeks[Math.floor(offset / 7)];
+    const d = kind === 'throwing' ? throwingDay(plan, w, offset % 7) : liftingDay(w, offset % 7);
+    const phase = plan.phases && plan.phases[w.code] ? plan.phases[w.code].name : w.code;
+    return { date, week: w.n, phase, focus: w.focus || null, ...d, rest: d.items.length === 0 };
+  });
+}
+
+async function athleteCalendar(env, athleteId, url) {
+  const a = await getAthlete(env, athleteId);
+  const today = /^\d{4}-\d{2}-\d{2}$/.test(url.searchParams.get('today') || '') ? url.searchParams.get('today') : new Date().toISOString().slice(0, 10);
+  const count = Math.min(14, Math.max(1, parseInt(url.searchParams.get('days'), 10) || 3));
+  const dates = Array.from({ length: count }, (_, i) => addDays(today, i));
+  const { results } = await env.DB.prepare(
+    "SELECT category, program, starts_on, ends_on FROM program_assignments WHERE athlete_id = ? AND category IN ('throwing', 'lifting')").bind(athleteId).all();
+  const assigned = Object.fromEntries(results.map(r => [r.category, { program: r.program, starts_on: r.starts_on, ends_on: r.ends_on, days_left: daysLeft(r.ends_on) }]));
+  let plan = null, plan_error = false;
+  try { plan = await readPlan(env, `${a.first_name} ${a.last_name}`); } catch (e) { plan_error = true; }
+  const section = kind => ({
+    source: plan ? 'plan' : 'assignment',
+    program: assigned[kind] || null,
+    plan: plan ? plan.program : null,
+    days: plan ? planDays(plan, dates, kind) : dates.map(date => ({ date, unscheduled: true })),
+  });
+  return { athlete_id: a.id, today, dates, plan_error, throwing: section('throwing'), lifting: section('lifting') };
+}
+
 async function athleteFiles(env, athleteId) {
   const { results } = await env.DB.prepare(
     'SELECT id, assessment_id, kind, content_type, size, original_name, created_at FROM files WHERE athlete_id = ? ORDER BY created_at DESC'
@@ -754,6 +823,8 @@ async function route(request, env, coach, url) {
         return [200, athlete];
       }
       if (method === 'PATCH') return [200, await updateAthlete(env, b, await readJson(request))];
+    } else if (c === 'calendar' && method === 'GET') {
+      return [200, await athleteCalendar(env, b, url)];
     } else if (c === 'measurements' && method === 'GET') {
       return [200, await athleteMeasurements(env, b, url)];
     } else if (c === 'files' && method === 'POST') {

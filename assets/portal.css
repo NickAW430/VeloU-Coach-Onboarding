@@ -182,7 +182,8 @@ table.ov th{font:700 11px var(--body);letter-spacing:.1em;text-transform:upperca
 table.ov td{padding:10px 12px;border-bottom:1px solid rgba(53,45,40,.6);vertical-align:top}
 table.ov tr.coachrow td{background:rgba(255,255,255,.04);font-family:var(--display);font-size:20px;letter-spacing:.02em;text-transform:uppercase;padding:12px}
 table.ov tr.coachrow small{font:600 12px var(--body);color:var(--muted);letter-spacing:.06em;margin-left:10px;text-transform:none}
-.ov-name{font-weight:700;font-size:15px}
+.ov-name{font-weight:700;font-size:15px;color:#fff;text-decoration:none;display:block}
+a.ov-name:hover{color:var(--red)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
 .tag{font:700 10.5px var(--body);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .tag.flag{border-color:var(--red);color:#fff;background:rgba(225,6,0,.22)}
