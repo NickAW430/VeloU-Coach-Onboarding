@@ -19,6 +19,8 @@ body {
   background-size: 48px 48px;
 }
 body::before { content: none; }
+h1.page-title { font-size: 30px; margin-bottom: 8px; }
+.page-sub { font-size: 16px; margin-bottom: 30px; }
 </style>
 </head>
 <body>
@@ -33,11 +35,11 @@ body::before { content: none; }
 <script>
 const TREE = {
   title: "Assessment Type",
-  sub: "Choose which type of assessment you are completing today.",
+  sub: "Which type of assessment are you completing today?",
   options: [
     { key: "intake", label: "Initial Intake", next: {
       title: "Assessment Level",
-      sub: "Choose which level of assessment you are completing today.",
+      sub: "Which level of assessment are you completing today?",
       options: [
         { key: "basic", label: "Basic" },
         { key: "advanced", label: "Advanced" },
@@ -45,7 +47,7 @@ const TREE = {
       ] } },
     { key: "retest", label: "Re-Testing", next: {
       title: "Re-Testing Section",
-      sub: "Choose which section of re-testing you are completing today.",
+      sub: "Which section of re-testing are you completing today?",
       options: [
         { key: "biometrics", label: "Biometrics" },
         { key: "force-plates", label: "Force Plates" },
