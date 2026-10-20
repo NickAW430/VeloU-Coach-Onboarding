@@ -1,7 +1,8 @@
 // VeloU API (Cloudflare Worker + D1). Stores athletes, assessments and measurements.
 //
 // Route:      coachesvelou.com/api/v1/*   (the Cloudflare Access app already covers the hostname)
-// Binding:    DB            the D1 database (schema in schema.sql)
+// Bindings:   DB            the D1 database (schema in schema.sql)
+//             FILES         the R2 bucket for photos, videos and reports
 // Variables:  TEAM_DOMAIN   e.g. velouniversity.cloudflareaccess.com
 //             POLICY_AUD    the Application Audience (AUD) tag of the Access application
 //             ALLOWED_ORIGIN  optional, defaults to https://coachesvelou.com (writes must come from this origin)
@@ -16,6 +17,8 @@
 //   GET   /api/v1/athletes/:id                       athlete + their assessments
 //   PATCH /api/v1/athletes/:id
 //   GET   /api/v1/athletes/:id/measurements?metric=  time series for charts
+//   POST  /api/v1/athletes/:id/files?kind=&assessment_id=&name=   raw file body (photo, video, report) into R2
+//   GET   /api/v1/files/:id                          the file itself
 //   POST  /api/v1/assessments
 //   GET   /api/v1/assessments/:id                    assessment + its measurements
 //   PUT   /api/v1/assessments/:id
@@ -30,6 +33,9 @@ const LEVELS = ['basic', 'advanced', 'premier'];
 const SECTIONS = ['biometrics', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills'];
 const ATHLETE_STATUSES = ['lead', 'active', 'paused', 'alumni'];
 const MAX_BODY = 256 * 1024;
+const FILE_KINDS = ['headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mocap_video', 'report'];
+const FILE_TYPES = /^(image\/(jpeg|png|webp|heic|heif)|video\/(mp4|quicktime|webm|x-m4v)|application\/pdf|text\/csv|application\/vnd\.ms-excel|application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet)$/;
+const MAX_FILE = 100 * 1024 * 1024; // Workers accept request bodies up to 100 MB
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -182,6 +188,11 @@ const ATHLETE_FIELDS = {
   dob: v => day(v, 'dob'),
   email: v => str(v, 'email', { max: 200 }),
   phone: v => str(v, 'phone', { max: 40 }),
+  parent_name: v => str(v, 'parent_name', { max: 120 }),
+  parent_email: v => str(v, 'parent_email', { max: 200 }),
+  parent_phone: v => str(v, 'parent_phone', { max: 40 }),
+  playing_level: v => str(v, 'playing_level', { max: 60 }),
+  residence: v => str(v, 'residence', { max: 120 }),
   sport: v => str(v, 'sport', { max: 60 }),
   position: v => str(v, 'position', { max: 60 }),
   team: v => str(v, 'team', { max: 120 }),
@@ -211,9 +222,11 @@ async function createAthlete(env, body, coach) {
   row.coach_id = row.coach_id || coach.id;
   const profile = jsonText(body.profile, 'profile', 50 * 1024);
   await env.DB.prepare(
-    `INSERT INTO athletes (id, first_name, last_name, dob, email, phone, sport, position, team, grad_year, dominant_hand, status, coach_id, profile, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).bind(id, row.first_name, row.last_name, row.dob, row.email, row.phone, row.sport, row.position, row.team, row.grad_year,
+    `INSERT INTO athletes (id, first_name, last_name, dob, email, phone, parent_name, parent_email, parent_phone, playing_level, residence,
+       sport, position, team, grad_year, dominant_hand, status, coach_id, profile, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(id, row.first_name, row.last_name, row.dob, row.email, row.phone, row.parent_name, row.parent_email, row.parent_phone,
+    row.playing_level, row.residence, row.sport, row.position, row.team, row.grad_year,
     row.dominant_hand, row.status, row.coach_id, profile, t, t).run();
   return getAthlete(env, id);
 }
@@ -347,6 +360,53 @@ async function athleteMeasurements(env, athleteId, url) {
   return { measurements: results };
 }
 
+async function athleteFiles(env, athleteId) {
+  const { results } = await env.DB.prepare(
+    'SELECT id, assessment_id, kind, content_type, size, original_name, created_at FROM files WHERE athlete_id = ? ORDER BY created_at DESC'
+  ).bind(athleteId).all();
+  return results;
+}
+
+async function uploadFile(env, request, athleteId, url, coach) {
+  await getAthlete(env, athleteId);
+  if (!env.FILES) throw new HttpError(500, 'file storage is not connected');
+  const kind = oneOf(url.searchParams.get('kind'), FILE_KINDS, 'kind', { required: true });
+  const assessmentId = str(url.searchParams.get('assessment_id'), 'assessment_id', { max: 64 });
+  if (assessmentId) {
+    const a = await env.DB.prepare('SELECT athlete_id FROM assessments WHERE id = ?').bind(assessmentId).first();
+    if (!a || a.athlete_id !== athleteId) throw new HttpError(400, 'assessment does not belong to this athlete');
+  }
+  const contentType = (request.headers.get('Content-Type') || '').split(';')[0].trim().toLowerCase();
+  if (!FILE_TYPES.test(contentType)) throw new HttpError(415, 'file type not allowed');
+  const size = parseInt(request.headers.get('Content-Length') || '', 10);
+  if (!Number.isFinite(size) || size <= 0) throw new HttpError(411, 'content length required');
+  if (size > MAX_FILE) throw new HttpError(413, 'file too large (100 MB max)');
+  const name = (str(url.searchParams.get('name'), 'name', { max: 150 }) || kind).replace(/[^A-Za-z0-9._ -]/g, '_');
+  const id = crypto.randomUUID();
+  const key = `athletes/${athleteId}/${kind}/${id}-${name.replace(/ /g, '_')}`;
+  await env.FILES.put(key, request.body, { httpMetadata: { contentType } });
+  await env.DB.prepare(
+    'INSERT INTO files (id, athlete_id, assessment_id, kind, r2_key, content_type, size, original_name, uploaded_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+  ).bind(id, athleteId, assessmentId, kind, key, contentType, size, name, coach.id, nowIso()).run();
+  return { id, kind, content_type: contentType, size, original_name: name, assessment_id: assessmentId };
+}
+
+async function serveFile(env, id) {
+  const row = await env.DB.prepare('SELECT r2_key, content_type, original_name FROM files WHERE id = ?').bind(id).first();
+  if (!row) throw new HttpError(404, 'file not found');
+  const obj = await env.FILES.get(row.r2_key);
+  if (!obj) throw new HttpError(404, 'file not found');
+  return new Response(obj.body, {
+    status: 200,
+    headers: {
+      'Content-Type': row.content_type,
+      'Content-Disposition': `inline; filename="${(row.original_name || 'file').replace(/"/g, '')}"`,
+      'Cache-Control': 'private, no-store',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  });
+}
+
 async function athleteAssessments(env, athleteId) {
   const { results } = await env.DB.prepare(
     'SELECT id, type, level, section, assessed_on, status, coach_id FROM assessments WHERE athlete_id = ? ORDER BY assessed_on DESC, created_at DESC'
@@ -379,13 +439,18 @@ async function route(request, env, coach, url) {
       if (method === 'GET') {
         const athlete = await getAthlete(env, b);
         athlete.assessments = await athleteAssessments(env, b);
+        athlete.files = await athleteFiles(env, b);
         return [200, athlete];
       }
       if (method === 'PATCH') return [200, await updateAthlete(env, b, await readJson(request))];
     } else if (c === 'measurements' && method === 'GET') {
       return [200, await athleteMeasurements(env, b, url)];
+    } else if (c === 'files' && method === 'POST') {
+      return [201, await uploadFile(env, request, b, url, coach)];
     }
   }
+
+  if (a === 'files' && b && !c && method === 'GET') return [200, await serveFile(env, b), true];
 
   if (a === 'assessments') {
     if (!b && method === 'POST') return [201, await createAssessment(env, await readJson(request), coach)];
@@ -412,8 +477,8 @@ export default {
       }
 
       const coach = await currentCoach(env, token.email);
-      const [status, body] = await route(request, env, coach, url);
-      return reply(status, body);
+      const [status, body, raw] = await route(request, env, coach, url);
+      return raw ? body : reply(status, body);
     } catch (e) {
       if (e instanceof HttpError) return reply(e.status, { error: e.message });
       return reply(500, { error: 'server error' });

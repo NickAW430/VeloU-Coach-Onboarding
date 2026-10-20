@@ -12,15 +12,18 @@ It is separate from `sheets-proxy.js`, which keeps feeding the Player Report fro
 
 1. **Create the database.** Workers & Pages -> D1 SQL Database -> Create database. Name it `velou`.
    Open it, go to the **Console** tab, paste the whole of `schema.sql`, and run it. The Tables list should now show
-   `coaches`, `athletes`, `assessments`, `measurements`.
+   `coaches`, `athletes`, `assessments`, `measurements`, `files`.
 2. **Create the Worker.** Workers & Pages -> Create -> Hello World. Name it `velou-api`, deploy, then Edit code,
    replace the sample with the full contents of `velou-api.js`, and Deploy.
-3. **Connect the database.** Worker -> Settings -> Bindings -> Add -> D1 database. Variable name must be exactly `DB`;
-   choose the `velou` database.
-4. **Add the two variables** (type **Text**, the same values the sheets Worker uses):
+3. **Create the file bucket.** R2 Object Storage -> Create bucket. Name it `velou-files`. Keep it private (no public access).
+   It stores athlete photos, mechanics videos, Trackman reports and videos.
+4. **Connect both to the Worker.** Worker -> Settings -> Bindings -> Add:
+   - D1 database: variable name exactly `DB`, choose `velou`.
+   - R2 bucket: variable name exactly `FILES`, choose `velou-files`.
+5. **Add the two variables** (type **Text**, the same values the sheets Worker uses):
    - `TEAM_DOMAIN` = `velouniversity.cloudflareaccess.com`
    - `POLICY_AUD` = the Application Audience (AUD) tag from Zero Trust -> Access -> Applications -> `coachesvelou.com`.
-5. **Route it.** Worker -> Settings -> Domains & Routes -> Add -> Route: `coachesvelou.com/api/v1/*`, zone `coachesvelou.com`.
+6. **Route it.** Worker -> Settings -> Domains & Routes -> Add -> Route: `coachesvelou.com/api/v1/*`, zone `coachesvelou.com`.
    Turn off the `workers.dev` URL.
 
 ## Check it
@@ -37,6 +40,8 @@ It is separate from `sheets-proxy.js`, which keeps feeding the Player Report fro
 | GET | `/api/v1/athletes/:id` | Athlete plus their assessments |
 | PATCH | `/api/v1/athletes/:id` | Update an athlete |
 | GET | `/api/v1/athletes/:id/measurements?metric=` | A metric over time, for charts |
+| POST | `/api/v1/athletes/:id/files?kind=&assessment_id=&name=` | Upload a photo, video or report (raw file body, 100 MB max). `kind` is `headshot`, `shirtless`, `mechanics_video`, `trackman_report`, `trackman_video`, `mocap_video` or `report` |
+| GET | `/api/v1/files/:id` | Download a file (signed-in coaches only) |
 | POST | `/api/v1/assessments` | Save an assessment (draft or submitted) with its measurements |
 | GET | `/api/v1/assessments/:id` | One assessment with its measurements |
 | PUT | `/api/v1/assessments/:id` | Update it (measurements are replaced to match) |

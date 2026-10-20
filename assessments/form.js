@@ -1,11 +1,13 @@
-// Renders an Initial Intake assessment (Basic, Advanced or Premier) from specs.js and saves it through /api/v1.
-// Exposes window.VeloUForm.mount(level, { container, setHeader }).
+// Renders an Initial Intake assessment (Basic, Advanced or Premier) from specs.js and screen-flow.js, and saves it
+// through /api/v1. Exposes window.VeloUForm.mount(level, { container, setHeader }).
 
 (function () {
-  const { SECTIONS, TIERS } = window.VELOU_SPECS;
-  const FORM_VERSION = 1;
+  const { SECTIONS, TIERS, SCREEN_METRICS } = window.VELOU_SPECS;
+  const FLOW = window.VELOU_SCREEN;
+  const FORM_VERSION = 2;
+  const MAX_IMAGE_PX = 1600;
 
-  // ---- small helpers -------------------------------------------------------------------------
+  // ---- helpers -------------------------------------------------------------------------------
 
   function el(tag, props, ...kids) {
     const e = document.createElement(tag);
@@ -24,22 +26,62 @@
   const todayStr = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
   const isNum = v => v !== '' && v !== null && v !== undefined && Number.isFinite(Number(v));
   const fmt = n => String(Math.round(n * 1000) / 1000);
+  const fileSize = n => (n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB');
 
   async function api(method, path, body) {
     const res = await fetch('/api/v1' + path, {
-      method,
+      method, credentials: 'same-origin',
       headers: body ? { 'Content-Type': 'application/json' } : {},
       body: body ? JSON.stringify(body) : undefined,
-      credentials: 'same-origin',
     });
     let json = null;
     try { json = await res.json(); } catch (e) { /* not JSON */ }
-    if (!res.ok) {
-      const err = new Error((json && json.error) || 'HTTP ' + res.status);
-      err.status = res.status;
-      throw err;
-    }
+    if (!res.ok) { const err = new Error((json && json.error) || 'HTTP ' + res.status); err.status = res.status; throw err; }
     return json;
+  }
+
+  async function uploadFile(athleteId, assessmentId, kind, file) {
+    const q = new URLSearchParams({ kind, name: file.name || kind });
+    if (assessmentId) q.set('assessment_id', assessmentId);
+    const res = await fetch('/api/v1/athletes/' + athleteId + '/files?' + q, {
+      method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file,
+    });
+    if (!res.ok) {
+      let msg = 'HTTP ' + res.status;
+      try { msg = (await res.json()).error || msg; } catch (e) { /* ignore */ }
+      throw new Error(msg);
+    }
+  }
+
+  // Shrinks a phone photo before upload. Falls back to the original if the browser cannot decode it.
+  async function shrinkImage(file) {
+    try {
+      const bmp = await createImageBitmap(file);
+      const scale = Math.min(1, MAX_IMAGE_PX / Math.max(bmp.width, bmp.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bmp.width * scale); canvas.height = Math.round(bmp.height * scale);
+      canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.85));
+      if (!blob) return file;
+      return new File([blob], (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+    } catch (e) { return file; }
+  }
+
+  // Tiny markdown: **bold** headings, "- " bullets, paragraphs. Builds DOM nodes, never HTML strings.
+  function richText(src) {
+    const wrap = el('div', { className: 'rich' });
+    let list = null;
+    const inline = (parent, line) => {
+      line.split(/(\*\*[^*]+\*\*)/).forEach(part => {
+        if (/^\*\*[^*]+\*\*$/.test(part)) parent.append(el('strong', { text: part.slice(2, -2) }));
+        else if (part) parent.append(part);
+      });
+    };
+    for (const line of String(src).split('\n')) {
+      if (/^- /.test(line)) { if (!list) { list = el('ul'); wrap.append(list); } const li = el('li'); inline(li, line.slice(2)); list.append(li); }
+      else { list = null; if (line.trim()) { const p = el('p'); inline(p, line); wrap.append(p); } }
+    }
+    return wrap;
   }
 
   // ---- mount ---------------------------------------------------------------------------------
@@ -51,12 +93,15 @@
     const draftKey = 'velou.draft.v' + FORM_VERSION + '.' + level;
     const root = ui.container;
 
+    const fieldsOf = sec => (sec.fields || []).filter(f => !f.tiers || f.tiers.includes(level));
+    const protocolsOf = sec => (sec.protocols || []).filter(p => !p.tiers || p.tiers.includes(level));
+
     let state = loadDraft();
+    let pending = {};        // field key -> { file, url }. Held in memory only; files are not kept in the saved draft.
     let busy = false;
-    let message = null; // { kind: 'error' | 'ok', text }
-    let searchTimer = null;
-    let searchResults = null;
-    let apiNote = '';
+    const jobs = new Set();  // photos still being shrunk
+    let message = null;      // { kind, text, retry, saved }
+    let searchTimer = null, searchResults = null, apiNote = '';
 
     ui.setHeader(tier.title, tier.blurb);
 
@@ -66,12 +111,15 @@
       const answers = {};
       for (const sec of sections) {
         answers[sec.id] = {};
-        for (const f of sec.fields) if (f.default !== undefined) answers[sec.id][f.key] = f.default;
-        for (const [k, v] of Object.entries(tier.defaults || {})) if (sec.fields.some(f => f.key === k)) answers[sec.id][k] = v;
+        for (const f of fieldsOf(sec)) {
+          if (f.default !== undefined) answers[sec.id][f.key] = f.default;
+          if ((tier.defaults || {})[f.key] !== undefined) answers[sec.id][f.key] = tier.defaults[f.key];
+        }
       }
       return {
-        athlete: { id: null, first_name: '', last_name: '', dob: '', sport: 'Baseball', position: '', dominant_hand: '', team: '', grad_year: '' },
-        assessed_on: todayStr(), answers, skipped: {}, step: 0, assessmentId: null,
+        athlete: { id: null, first_name: '', last_name: '', dob: '', email: '', phone: '', parent_name: '', parent_email: '', parent_phone: '',
+          playing_level: '', team: '', residence: '', position: '', dominant_hand: '', sport: 'Baseball' },
+        assessed_on: todayStr(), answers, skipped: {}, step: 0, assessmentId: null, uploaded: {}, flow: { hist: [FLOW.order[0]], done: false },
       };
     }
 
@@ -81,26 +129,29 @@
         if (raw) {
           const saved = JSON.parse(raw);
           const base = freshState();
-          return Object.assign(base, saved, { answers: Object.assign(base.answers, saved.answers) });
+          return Object.assign(base, saved, { athlete: Object.assign(base.athlete, saved.athlete), answers: Object.assign(base.answers, saved.answers) });
         }
       } catch (e) { /* storage unavailable or corrupt: start fresh */ }
       return freshState();
     }
 
-    function save() {
-      try { localStorage.setItem(draftKey, JSON.stringify(state)); } catch (e) { /* ignore */ }
-    }
+    const save = () => { try { localStorage.setItem(draftKey, JSON.stringify(state)); } catch (e) { /* ignore */ } };
+    const clearDraft = () => { try { localStorage.removeItem(draftKey); } catch (e) { /* ignore */ } };
 
-    function clearDraft() {
-      try { localStorage.removeItem(draftKey); } catch (e) { /* ignore */ }
+    function getVal(sec, f) {
+      if (f.athleteKey) return state.athlete[f.athleteKey];
+      return (state.answers[sec.id] || {})[f.key];
     }
-
-    const getVal = (sec, key) => (state.answers[sec.id] || {})[key];
-    function setVal(sec, key, v) { state.answers[sec.id] = state.answers[sec.id] || {}; state.answers[sec.id][key] = v; save(); }
+    function setVal(sec, f, v) {
+      if (f.athleteKey) state.athlete[f.athleteKey] = v;
+      else { state.answers[sec.id] = state.answers[sec.id] || {}; state.answers[sec.id][f.key] = v; }
+      save();
+    }
 
     function visible(sec, f) {
       if (!f.showIf) return true;
-      return getVal(sec, f.showIf.key) === f.showIf.equals;
+      const v = (state.answers[sec.id] || {})[f.showIf.key];
+      return f.showIf.in ? f.showIf.in.includes(v) : v === f.showIf.equals;
     }
 
     function bestOf(f, arr) {
@@ -110,62 +161,201 @@
     }
 
     function fieldHasValue(sec, f) {
-      const v = getVal(sec, f.key);
+      if (f.type === 'heading') return false;
+      if (f.type === 'file') return !!pending[f.key] || !!state.uploaded[f.key];
+      const v = getVal(sec, f);
       if (f.type === 'trials') return (v || []).some(isNum);
       if (f.type === 'number') return isNum(v);
-      if (f.type === 'heading') return false;
+      if (f.type === 'multi') return Array.isArray(v) && v.length > 0;
       const dflt = (tier.defaults || {})[f.key] !== undefined ? tier.defaults[f.key] : f.default;
-      if (dflt !== undefined && v === dflt) return false; // untouched default
+      if (dflt !== undefined && v === dflt) return false;
       return v !== undefined && v !== null && String(v).trim() !== '';
     }
 
     function sectionStatus(sec) {
       if (state.skipped[sec.id]) return 'skipped';
-      const fields = sec.fields.filter(f => f.type !== 'heading' && visible(sec, f));
-      const filled = fields.filter(f => fieldHasValue(sec, f)).length;
+      if (sec.kind === 'flow') {
+        if (state.flow.done) return 'done';
+        return Object.keys(state.answers[sec.id] || {}).length ? 'partial' : 'empty';
+      }
+      const shown = fieldsOf(sec).filter(f => f.type !== 'heading' && visible(sec, f));
+      const filled = shown.filter(f => fieldHasValue(sec, f)).length;
       if (!filled) return 'empty';
-      const measured = fields.filter(f => f.metric);
-      const measuredFilled = measured.filter(f => fieldHasValue(sec, f)).length;
-      return measured.length && measuredFilled < measured.length ? 'partial' : 'done';
+      // free-text notes are optional; everything else counts toward "complete"
+      const required = shown.filter(f => f.type !== 'textarea' && f.type !== 'text');
+      return required.every(f => fieldHasValue(sec, f)) ? 'done' : 'partial';
+    }
+
+    // ---- movement screen flow ----
+
+    const screenAns = () => (state.answers.screen = state.answers.screen || {});
+
+    function evalCond(c, ans) {
+      switch (c.op) {
+        case 'always': return true;
+        case 'and': return c.of.every(x => evalCond(x, ans));
+        case 'or': return c.of.some(x => evalCond(x, ans));
+        case 'is': return ans[c.field] === c.choice;
+        default: {
+          const v = ans[c.field];
+          if (!isNum(v)) return false;
+          const n = Number(v);
+          return c.op === 'ge' ? n >= c.value : c.op === 'gt' ? n > c.value : c.op === 'lt' ? n < c.value : n <= c.value;
+        }
+      }
+    }
+
+    function nextRef(ref) {
+      const s = FLOW.screens[ref];
+      for (const r of s.route || []) if (evalCond(r.if, screenAns())) return r.to;
+      const i = FLOW.order.indexOf(ref);
+      return FLOW.order[i + 1] || null;
+    }
+
+    function flowAdvance() {
+      const cur = state.flow.hist[state.flow.hist.length - 1];
+      const n = nextRef(cur);
+      if (n) state.flow.hist.push(n); else state.flow.done = true;
+      save(); render();
+    }
+
+    function flowBack() {
+      if (state.flow.done) { state.flow.done = false; save(); render(); return; }
+      if (state.flow.hist.length > 1) { state.flow.hist.pop(); save(); render(); }
+    }
+
+    function flowAnswered(ref) {
+      const s = FLOW.screens[ref];
+      if (s.type === 'statement' || s.type === 'text' || s.type === 'longtext') return true;
+      const v = screenAns()[ref];
+      return s.type === 'number' ? isNum(v) : v !== undefined && v !== '';
+    }
+
+    function renderFlow(sec) {
+      const box = el('div', { className: 'panel' });
+      box.append(el('h2', { className: 'panel-title', text: sec.title }), el('p', { className: 'blurb', text: sec.blurb }));
+      if (state.flow.done) {
+        box.append(el('div', { className: 'alert ok', text: 'Movement screen complete. Every finding should be confirmed by a second exam or a manual test.' }));
+        box.append(flowSummary());
+        box.append(el('div', { className: 'formnav' },
+          el('button', { type: 'button', className: 'btn ghost', text: '← Back to the last question', onclick: flowBack }),
+          el('button', { type: 'button', className: 'btn', text: 'Next →', onclick: () => go(state.step + 1) })));
+        return box;
+      }
+      const ref = state.flow.hist[state.flow.hist.length - 1];
+      const s = FLOW.screens[ref];
+      const card = el('div', { className: 'flowcard' + (s.type === 'statement' ? ' statement' : '') });
+      card.append(el('div', { className: 'flowstep', text: s.type === 'statement' ? 'Finding' : 'Question ' + state.flow.hist.filter(r => FLOW.screens[r].type !== 'statement').length }));
+      card.append(el('h3', { className: 'flowtitle', text: s.title }));
+      if (s.desc) card.append(s.type === 'statement' ? richText(s.desc) : el('div', { className: 'hint', text: s.desc }));
+      const isLast = !nextRef(ref);
+      const nextBtn = el('button', { type: 'button', className: 'btn', text: isLast ? 'Finish screen' : s.type === 'statement' ? 'Continue →' : 'Next →', onclick: flowAdvance });
+      const setReady = () => { nextBtn.disabled = !flowAnswered(ref); };
+
+      if (s.type === 'choice') {
+        const group = el('div', { className: 'opts', role: 'radiogroup' });
+        for (const [key, label] of s.choices) {
+          const input = el('input', { type: 'radio', name: 'flow-' + ref, value: key });
+          input.checked = screenAns()[ref] === key;
+          input.addEventListener('change', () => { screenAns()[ref] = key; save(); setReady(); refreshChips(); });
+          group.append(el('label', { className: 'opt' }, input, el('span', { text: label })));
+        }
+        card.append(group);
+      } else if (s.type === 'number') {
+        const m = SCREEN_METRICS[ref] || {};
+        const warn = el('div', { className: 'warn' });
+        const input = el('input', { type: 'number', inputmode: 'decimal', step: 'any', value: screenAns()[ref] ?? '', 'aria-label': s.title });
+        input.addEventListener('input', () => {
+          screenAns()[ref] = input.value; save(); setReady(); refreshChips();
+          warn.textContent = isNum(input.value) && m.min !== undefined && (Number(input.value) < m.min || Number(input.value) > m.max) ? 'That looks off. Check the number.' : '';
+        });
+        card.append(el('div', { className: 'numrow' }, input, m.unit ? el('span', { className: 'unit', text: m.unit }) : null), warn);
+      } else if (s.type === 'text' || s.type === 'longtext') {
+        const ta = el('textarea', { rows: 3, 'aria-label': s.title });
+        ta.value = screenAns()[ref] || '';
+        ta.addEventListener('input', () => { screenAns()[ref] = ta.value; save(); });
+        card.append(ta);
+      }
+      setReady();
+      card.append(el('div', { className: 'formnav' },
+        state.flow.hist.length > 1 ? el('button', { type: 'button', className: 'btn ghost', text: '← Back', onclick: flowBack }) : el('span'), nextBtn));
+      box.append(card);
+      return box;
+    }
+
+    function flowRows() {
+      const rows = [];
+      for (const ref of state.flow.hist) {
+        const s = FLOW.screens[ref];
+        if (s.type === 'statement') { rows.push({ finding: true, text: s.title }); continue; }
+        const v = screenAns()[ref];
+        if (v === undefined || v === '') continue;
+        let shown = v;
+        if (s.type === 'choice') shown = (s.choices.find(c => c[0] === v) || [null, v])[1];
+        if (s.type === 'number') shown = v + ' ' + ((SCREEN_METRICS[ref] || {}).unit || '');
+        const label = s.title.replace(/^\d of 7 · /, '');
+        rows.push({ label: label.length > 90 ? label.slice(0, 87) + '…' : label, value: shown });
+      }
+      return rows;
+    }
+
+    function flowSummary() {
+      const wrap = el('div', { className: 'review-block' });
+      for (const r of flowRows()) {
+        if (r.finding) wrap.append(el('div', { className: 'finding', text: '→ ' + r.text }));
+        else wrap.append(el('div', { className: 'review-row' }, el('span', { text: r.label }), el('b', { text: r.value })));
+      }
+      return wrap;
     }
 
     // ---- payload ----
 
-    function throwingSide() { return state.athlete.dominant_hand === 'L' ? 'L' : 'R'; }
-
     function buildPayload() {
       const answers = {};
       const measurements = [];
+      const addM = (f, value, side) => measurements.push({ metric: f.metric, value, unit: f.unit || null, side: side || f.side || null });
       for (const sec of sections) {
         if (state.skipped[sec.id]) continue;
         const out = {};
-        for (const f of sec.fields) {
-          if (f.type === 'heading' || !visible(sec, f)) continue;
-          const v = getVal(sec, f.key);
+        if (sec.kind === 'flow') {
+          const a = screenAns();
+          for (const ref of state.flow.hist) {
+            const s = FLOW.screens[ref];
+            if (s.type === 'statement') continue;
+            const v = a[ref];
+            if (v === undefined || v === '') continue;
+            out[ref] = s.type === 'number' ? Number(v) : v;
+            const m = SCREEN_METRICS[ref];
+            if (m && isNum(v)) addM(m, Number(v));
+          }
+          if (Object.keys(out).length) { out._path = state.flow.hist.slice(); answers[sec.id] = out; }
+          continue;
+        }
+        for (const f of fieldsOf(sec)) {
+          if (f.type === 'heading' || f.type === 'file' || f.athleteKey || !visible(sec, f)) continue;
+          const v = getVal(sec, f);
           if (f.type === 'number') {
             if (!isNum(v)) continue;
             out[f.key] = Number(v);
+            if (f.metric) addM(f, Number(v));
           } else if (f.type === 'trials') {
             const arr = (v || []).map(x => (isNum(x) ? Number(x) : null));
             if (!arr.some(x => x !== null)) continue;
             out[f.key] = arr;
+            if (f.metric) addM(f, bestOf(f, arr));
+          } else if (f.type === 'multi') {
+            if (Array.isArray(v) && v.length) out[f.key] = v;
           } else {
             if (v === undefined || v === null || String(v).trim() === '') continue;
             out[f.key] = v;
           }
-          if (f.metric && out[f.key] !== undefined) {
-            const value = f.type === 'trials' ? bestOf(f, out[f.key]) : out[f.key];
-            if (value === null) continue;
-            let side = f.side || null;
-            if (f.armSide) side = f.armSide === 'throwing' ? throwingSide() : (throwingSide() === 'R' ? 'L' : 'R');
-            measurements.push({ metric: f.metric, value, unit: f.unit || null, side });
-          }
+          if (f.method && out[f.key] !== undefined) out[f.key + '_method'] = f.method;
         }
         if (Object.keys(out).length) answers[sec.id] = out;
       }
-      const fp = answers.forceplate;
-      if (fp && isNum(fp.cmj_con_impulse) && isNum(fp.cmj_ecc_impulse) && fp.cmj_ecc_impulse > 0) {
-        measurements.push({ metric: 'cmj_ci_ei', value: Math.round((fp.cmj_con_impulse / fp.cmj_ecc_impulse) * 1000) / 1000, unit: 'ratio', side: null });
+      const prod = answers.production;
+      if (prod && isNum(prod.cmj_con_impulse) && isNum(prod.cmj_ecc_impulse) && prod.cmj_ecc_impulse > 0) {
+        measurements.push({ metric: 'cmj_ci_ei', value: Math.round((prod.cmj_con_impulse / prod.cmj_ecc_impulse) * 1000) / 1000, unit: 'ratio', side: null });
       }
       return {
         type: 'intake', level, assessed_on: state.assessed_on, status: 'submitted', form_version: level + '-' + FORM_VERSION,
@@ -176,17 +366,44 @@
 
     // ---- field rendering ----
 
-    function warnFor(f, v) {
-      if (!isNum(v)) return '';
-      const n = Number(v);
-      if ((f.min !== undefined && n < f.min) || (f.max !== undefined && n > f.max)) return 'That looks off. Check the number.';
-      return '';
+    const warnFor = (f, v) => (isNum(v) && ((f.min !== undefined && Number(v) < f.min) || (f.max !== undefined && Number(v) > f.max)) ? 'That looks off. Check the number.' : '');
+
+    function numberInput(f, id, value, onInput, label) {
+      const input = el('input', { type: 'number', id, inputmode: 'decimal', step: f.step || 'any', min: f.min, max: f.max, value: value ?? '', 'aria-label': label });
+      input.addEventListener('input', () => onInput(input.value));
+      return input;
     }
 
-    function renderNumberInput(sec, f, idBase, value, onInput, label) {
-      const input = el('input', { type: 'number', id: idBase, inputmode: 'decimal', step: f.step || 'any', min: f.min, max: f.max, value: value === undefined || value === null ? '' : value, 'aria-label': label });
-      input.addEventListener('input', () => onInput(input.value, input));
-      return input;
+    function renderFileField(sec, f, wrap) {
+      const holder = el('div', { className: 'filebox' });
+      const draw = () => {
+        holder.replaceChildren();
+        const p = pending[f.key];
+        if (p) {
+          if (f.image && p.url) holder.append(el('img', { className: 'thumb', src: p.url, alt: f.label }));
+          holder.append(el('div', { className: 'fileinfo' }, el('b', { text: p.file.name }), el('span', { className: 'muted', text: ' · ' + fileSize(p.file.size) }),
+            el('button', { type: 'button', className: 'linkbtn', text: 'Remove', onclick: () => { if (p.url) URL.revokeObjectURL(p.url); delete pending[f.key]; draw(); refreshChips(); } })));
+        } else if (state.uploaded[f.key]) {
+          holder.append(el('div', { className: 'fileinfo' }, el('b', { text: 'Uploaded' }), el('span', { className: 'muted', text: ' · saved to the athlete’s file' })));
+        }
+        const input = el('input', { type: 'file', id: 'f-' + sec.id + '-' + f.key, accept: f.accept, className: 'fileinput' });
+        input.addEventListener('change', () => {
+          const chosen = input.files && input.files[0];
+          if (!chosen) return;
+          const job = (async () => {
+            const file = f.image ? await shrinkImage(chosen) : chosen;
+            if (pending[f.key] && pending[f.key].url) URL.revokeObjectURL(pending[f.key].url);
+            pending[f.key] = { file, url: f.image ? URL.createObjectURL(file) : null };
+            delete state.uploaded[f.key]; save();
+            draw(); refreshChips();
+          })();
+          jobs.add(job);
+          job.finally(() => jobs.delete(job));
+        });
+        holder.append(el('label', { className: 'btn ghost filebtn', for: input.id, text: pending[f.key] || state.uploaded[f.key] ? 'Replace' : (f.image ? 'Take or choose photo' : 'Choose file') }), input);
+      };
+      draw();
+      wrap.append(holder);
     }
 
     function renderField(sec, f) {
@@ -194,71 +411,84 @@
       const id = 'f-' + sec.id + '-' + f.key;
       const wrap = el('div', { className: 'field', dataset: { key: f.key } });
       wrap.hidden = !visible(sec, f);
-      wrap.append(el('label', { className: 'q', for: f.type === 'select' ? null : id, text: f.label }));
+      wrap.append(el('label', { className: 'q', for: ['select', 'multi', 'file'].includes(f.type) ? null : id, text: f.label }));
       if (f.hint) wrap.append(el('div', { className: 'hint', text: f.hint }));
+      const val = getVal(sec, f);
 
       if (f.type === 'number') {
-        const warn = el('div', { className: 'warn' });
-        const input = renderNumberInput(sec, f, id, getVal(sec, f.key), (v, inp) => { setVal(sec, f.key, v); warn.textContent = warnFor(f, v); refreshChips(); }, f.label);
-        warn.textContent = warnFor(f, getVal(sec, f.key));
+        const warn = el('div', { className: 'warn', text: warnFor(f, val) });
+        const input = numberInput(f, id, val, v => { setVal(sec, f, v); warn.textContent = warnFor(f, v); refreshChips(); }, f.label);
         wrap.append(el('div', { className: 'numrow' }, input, f.unit ? el('span', { className: 'unit', text: f.unit }) : null), warn);
       } else if (f.type === 'trials') {
-        const vals = (getVal(sec, f.key) || []).slice();
         const best = el('div', { className: 'best' });
-        const refreshBest = () => {
-          const b = bestOf(f, getVal(sec, f.key));
-          best.textContent = b === null ? '' : 'Best: ' + fmt(b) + (f.unit ? ' ' + f.unit : '');
-        };
         const warn = el('div', { className: 'warn' });
+        const showBest = () => { const b = bestOf(f, getVal(sec, f)); best.textContent = b === null ? '' : 'Best: ' + fmt(b) + (f.unit ? ' ' + f.unit : ''); };
         const row = el('div', { className: 'trials' });
         for (let i = 0; i < f.count; i++) {
-          const input = renderNumberInput(sec, f, id + '-' + i, vals[i], v => {
-            const arr = (getVal(sec, f.key) || []).slice();
+          const input = numberInput(f, id + '-' + i, (val || [])[i], v => {
+            const arr = (getVal(sec, f) || []).slice();
             while (arr.length < f.count) arr.push('');
-            arr[i] = v;
-            setVal(sec, f.key, arr);
-            refreshBest();
-            warn.textContent = arr.map(x => warnFor(f, x)).find(Boolean) || '';
-            refreshChips();
+            arr[i] = v; setVal(sec, f, arr); showBest();
+            warn.textContent = arr.map(x => warnFor(f, x)).find(Boolean) || ''; refreshChips();
           }, f.label + ' trial ' + (i + 1));
           row.append(el('label', { className: 'trial' }, el('span', { className: 'trial-n', text: 'Trial ' + (i + 1) }), input));
         }
         row.append(f.unit ? el('span', { className: 'unit', text: f.unit }) : null);
-        refreshBest();
+        showBest();
         wrap.append(row, best, warn);
       } else if (f.type === 'select') {
         const group = el('div', { className: 'opts', role: 'radiogroup' });
-        for (const [value, text] of f.options) {
+        for (const [value, label] of f.options) {
           const input = el('input', { type: 'radio', name: id, value });
-          if (getVal(sec, f.key) === value) input.checked = true;
-          input.addEventListener('change', () => { setVal(sec, f.key, value); refreshVisibility(sec); refreshChips(); });
-          group.append(el('label', { className: 'opt' }, input, el('span', { text })));
+          input.checked = val === value;
+          input.addEventListener('change', () => { setVal(sec, f, value); refreshVisibility(sec); refreshChips(); });
+          group.append(el('label', { className: 'opt' }, input, el('span', { text: label })));
         }
         wrap.append(group);
-        if (f.default === undefined) {
-          wrap.append(el('button', { type: 'button', className: 'linkbtn', text: 'Clear', onclick: () => { setVal(sec, f.key, undefined); group.querySelectorAll('input').forEach(i => { i.checked = false; }); refreshVisibility(sec); refreshChips(); } }));
+        if (f.default === undefined && (tier.defaults || {})[f.key] === undefined) {
+          wrap.append(el('button', { type: 'button', className: 'linkbtn', text: 'Clear', onclick: () => { setVal(sec, f, ''); group.querySelectorAll('input').forEach(i => { i.checked = false; }); refreshVisibility(sec); refreshChips(); } }));
         }
+      } else if (f.type === 'multi') {
+        const group = el('div', { className: 'opts inline', role: 'group' });
+        for (const [value, label] of f.options) {
+          const input = el('input', { type: 'checkbox', value });
+          input.checked = Array.isArray(val) && val.includes(value);
+          input.addEventListener('change', () => {
+            const cur = new Set(getVal(sec, f) || []);
+            if (input.checked) cur.add(value); else cur.delete(value);
+            setVal(sec, f, f.options.map(o => o[0]).filter(v => cur.has(v))); refreshChips();
+          });
+          group.append(el('label', { className: 'opt' }, input, el('span', { text: label })));
+        }
+        wrap.append(group);
+      } else if (f.type === 'text') {
+        const input = el('input', { type: 'text', id, value: val || '', autocomplete: 'off' });
+        input.addEventListener('input', () => { setVal(sec, f, input.value); refreshChips(); });
+        wrap.append(input);
       } else if (f.type === 'textarea') {
         const ta = el('textarea', { id, rows: 3 });
-        ta.value = getVal(sec, f.key) || '';
-        ta.addEventListener('input', () => { setVal(sec, f.key, ta.value); refreshChips(); });
+        ta.value = val || '';
+        ta.addEventListener('input', () => { setVal(sec, f, ta.value); refreshChips(); });
         wrap.append(ta);
+      } else if (f.type === 'file') {
+        renderFileField(sec, f, wrap);
       }
       return wrap;
     }
 
     function refreshVisibility(sec) {
-      for (const f of sec.fields) {
+      for (const f of fieldsOf(sec)) {
         const w = root.querySelector('.field[data-key="' + f.key + '"]');
         if (w) w.hidden = !visible(sec, f);
       }
     }
 
     function protocolBlock(sec) {
-      if (!sec.protocols) return null;
+      const list = protocolsOf(sec);
+      if (!list.length) return null;
       return el('details', { className: 'protocol' },
-        el('summary', { text: 'Protocol for this station' }),
-        sec.protocols.map(p => el('div', { className: 'proto' },
+        el('summary', { text: 'Protocols for this section' }),
+        list.map(p => el('div', { className: 'proto' },
           el('h4', { text: p.name }),
           el('dl', {},
             el('dt', { text: 'Setup' }), el('dd', { text: p.setup }),
@@ -273,27 +503,16 @@
       const row = el('nav', { className: 'steps', 'aria-label': 'Assessment sections' });
       steps.forEach((s, i) => {
         let mark = '';
-        if (s.id !== 'athlete' && s.id !== 'review') {
-          const st = sectionStatus(s);
-          mark = st === 'done' ? '✓ ' : st === 'skipped' ? '– ' : st === 'partial' ? '• ' : '';
-        } else if (s.id === 'athlete' && (state.athlete.id || (state.athlete.first_name && state.athlete.last_name))) mark = '✓ ';
-        row.append(el('button', { type: 'button', className: 'chip step-chip' + (i === state.step ? ' on' : ''), dataset: { i }, text: mark + s.title, onclick: () => go(i) }));
+        if (s.id === 'athlete') mark = (state.athlete.id || (state.athlete.first_name && state.athlete.last_name)) ? '✓ ' : '';
+        else if (s.id !== 'review') { const st = sectionStatus(s); mark = st === 'done' ? '✓ ' : st === 'skipped' ? '– ' : st === 'partial' ? '• ' : ''; }
+        row.append(el('button', { type: 'button', className: 'chip step-chip' + (i === state.step ? ' on' : ''), text: mark + s.title, onclick: () => go(i) }));
       });
       return row;
     }
 
-    function refreshChips() {
-      const old = root.querySelector('.steps');
-      if (old) old.replaceWith(renderChips());
-    }
+    function refreshChips() { const old = root.querySelector('.steps'); if (old) old.replaceWith(renderChips()); }
 
-    function go(i) {
-      state.step = Math.max(0, Math.min(steps.length - 1, i));
-      save();
-      message = null;
-      render();
-      window.scrollTo(0, 0);
-    }
+    function go(i) { state.step = Math.max(0, Math.min(steps.length - 1, i)); save(); message = null; render(); window.scrollTo(0, 0); }
 
     function navButtons() {
       const last = state.step === steps.length - 1;
@@ -307,7 +526,6 @@
       const box = el('div', { className: 'panel' });
       box.append(el('h2', { className: 'panel-title', text: 'Who is being assessed?' }));
 
-      // search existing athletes
       const results = el('div', { className: 'results' });
       const status = el('div', { className: 'hint', text: apiNote });
       const search = el('input', { type: 'search', id: 'athlete-search', placeholder: 'Search existing athletes by name', autocomplete: 'off', 'aria-label': 'Search existing athletes' });
@@ -317,14 +535,11 @@
           type: 'button', className: 'result-row', onclick: async () => {
             try {
               const full = await api('GET', '/athletes/' + r.id);
-              Object.assign(a, {
-                id: full.id, first_name: full.first_name, last_name: full.last_name, dob: full.dob || '', sport: full.sport || '', position: full.position || '',
-                dominant_hand: full.dominant_hand || '', team: full.team || '', grad_year: full.grad_year || '',
-              });
-              save(); render();
+              for (const k of Object.keys(a)) if (full[k] !== undefined && full[k] !== null) a[k] = full[k];
+              a.id = full.id; save(); render();
             } catch (e) { apiNote = 'Could not load that athlete: ' + e.message; render(); }
           },
-        }, el('b', { text: r.last_name + ', ' + r.first_name }), el('span', { text: [r.sport, r.position, r.team].filter(Boolean).join(' · ') }))));
+        }, el('b', { text: r.last_name + ', ' + r.first_name }), el('span', { text: [r.position, r.team].filter(Boolean).join(' · ') }))));
         if (searchResults && !searchResults.length && search.value.trim().length >= 2) results.append(el('div', { className: 'hint', text: 'No match. Enter them as a new athlete below.' }));
       };
       search.addEventListener('input', () => {
@@ -332,7 +547,7 @@
         const q = search.value.trim();
         if (q.length < 2) { searchResults = null; drawResults(); return; }
         searchTimer = setTimeout(async () => {
-          try { const r = await api('GET', '/athletes?q=' + encodeURIComponent(q) + '&limit=8'); searchResults = r.athletes; status.textContent = ''; }
+          try { searchResults = (await api('GET', '/athletes?q=' + encodeURIComponent(q) + '&limit=8')).athletes; status.textContent = ''; }
           catch (e) { searchResults = null; status.textContent = e.status === 401 || e.status === 403 ? 'Sign in again to search athletes.' : 'The database is not connected yet. Enter the athlete below and they will be created when you submit.'; }
           drawResults();
         }, 250);
@@ -341,27 +556,21 @@
 
       if (a.id) {
         box.append(el('div', { className: 'selected' },
-          el('div', {}, el('b', { text: a.first_name + ' ' + a.last_name }), el('span', { className: 'muted', text: ' · existing athlete' })),
+          el('div', {}, el('b', { text: a.first_name + ' ' + a.last_name }), el('span', { className: 'muted', text: ' · existing athlete. Changes here update their record.' })),
           el('button', { type: 'button', className: 'linkbtn', text: 'Use a different athlete', onclick: () => { Object.assign(a, freshState().athlete); save(); render(); } })));
       }
 
-      const text = (key, label, o = {}) => {
-        const input = el('input', { type: o.type || 'text', id: 'a-' + key, value: a[key] || '', autocomplete: 'off', 'aria-label': label, inputmode: o.inputmode, disabled: !!a.id && !o.always });
-        input.addEventListener('input', () => { a[key] = input.value; save(); refreshChips(); });
-        return el('div', { className: 'field' }, el('label', { className: 'q', for: 'a-' + key, text: label + (o.required ? ' *' : '') }), input);
+      const input = (key, label, o = {}) => {
+        const i = el('input', { type: o.type || 'text', id: 'a-' + key, value: a[key] || '', autocomplete: 'off', 'aria-label': label, inputmode: o.inputmode });
+        i.addEventListener('input', () => { a[key] = i.value; save(); refreshChips(); });
+        return el('div', { className: 'field' }, el('label', { className: 'q', for: 'a-' + key, text: label + (o.required ? ' *' : '') }), i);
       };
-      const hand = el('div', { className: 'field' }, el('label', { className: 'q', text: 'Throws / dominant hand' }),
-        el('div', { className: 'opts inline', role: 'radiogroup' },
-          [['R', 'Right'], ['L', 'Left'], ['S', 'Switch']].map(([v, t]) => {
-            const i = el('input', { type: 'radio', name: 'a-hand', value: v, disabled: !!a.id });
-            i.checked = a.dominant_hand === v;
-            i.addEventListener('change', () => { a.dominant_hand = v; save(); });
-            return el('label', { className: 'opt' }, i, el('span', { text: t }));
-          })));
       box.append(el('div', { className: 'grid2' },
-        text('first_name', 'First name', { required: true }), text('last_name', 'Last name', { required: true }),
-        text('dob', 'Date of birth', { type: 'date' }), text('grad_year', 'Graduation year', { inputmode: 'numeric' }),
-        text('sport', 'Sport'), text('position', 'Position'), text('team', 'Team'), hand));
+        input('first_name', 'First name', { required: true }), input('last_name', 'Last name', { required: true }),
+        input('dob', 'Date of birth', { type: 'date' }), el('div'),
+        input('email', 'Athlete email', { type: 'email', inputmode: 'email' }), input('phone', 'Athlete phone', { type: 'tel', inputmode: 'tel' }),
+        input('parent_name', 'Parent name'), el('div'),
+        input('parent_email', 'Parent email', { type: 'email', inputmode: 'email' }), input('parent_phone', 'Parent phone', { type: 'tel', inputmode: 'tel' })));
       const dateIn = el('input', { type: 'date', id: 'assessed-on', value: state.assessed_on });
       dateIn.addEventListener('input', () => { state.assessed_on = dateIn.value; save(); });
       box.append(el('div', { className: 'field' }, el('label', { className: 'q', for: 'assessed-on', text: 'Assessment date' }), dateIn));
@@ -369,22 +578,23 @@
     }
 
     function renderSection(sec) {
+      if (sec.kind === 'flow') return renderFlow(sec);
       const box = el('div', { className: 'panel' });
-      box.append(el('h2', { className: 'panel-title', text: 'Station ' + Math.floor(sec.station) + (sec.station % 1 ? 'b' : '') + ' · ' + sec.title }), el('p', { className: 'blurb', text: sec.blurb }));
+      box.append(el('h2', { className: 'panel-title', text: sec.title }), el('p', { className: 'blurb', text: sec.blurb }));
       if (sec.draft) box.append(el('div', { className: 'alert draft', text: 'Draft fields. These will change once we confirm what the equipment reports.' }));
       const proto = protocolBlock(sec);
       if (proto) box.append(proto);
       const body = el('div', { className: 'fields' });
       const fill = () => {
         body.replaceChildren();
-        if (state.skipped[sec.id]) body.append(el('div', { className: 'hint', text: 'Skipped. Nothing from this station will be saved.' }));
-        else sec.fields.forEach(f => body.append(renderField(sec, f)));
+        if (state.skipped[sec.id]) body.append(el('div', { className: 'hint', text: 'Skipped. Nothing from this section will be saved.' }));
+        else fieldsOf(sec).forEach(f => body.append(renderField(sec, f)));
       };
       if (sec.optional) {
         const cb = el('input', { type: 'checkbox', id: 'skip-' + sec.id });
         cb.checked = !!state.skipped[sec.id];
         cb.addEventListener('change', () => { state.skipped[sec.id] = cb.checked; save(); fill(); refreshChips(); });
-        box.append(el('label', { className: 'opt skip' }, cb, el('span', { text: 'Skip this station' })));
+        box.append(el('label', { className: 'opt skip' }, cb, el('span', { text: 'Skip this section' })));
       }
       fill();
       box.append(body);
@@ -392,13 +602,12 @@
     }
 
     function valueText(sec, f) {
-      const v = getVal(sec, f.key);
+      const v = getVal(sec, f);
+      if (f.type === 'file') return pending[f.key] ? pending[f.key].file.name : state.uploaded[f.key] ? 'Uploaded' : '';
       if (f.type === 'number') return isNum(v) ? v + (f.unit ? ' ' + f.unit : '') : '';
-      if (f.type === 'trials') {
-        const b = bestOf(f, v);
-        return b === null ? '' : (v || []).filter(isNum).join(' · ') + '  (best ' + fmt(b) + (f.unit ? ' ' + f.unit : '') + ')';
-      }
+      if (f.type === 'trials') { const b = bestOf(f, v); return b === null ? '' : (v || []).filter(isNum).join(' · ') + '  (best ' + fmt(b) + (f.unit ? ' ' + f.unit : '') + ')'; }
       if (f.type === 'select') { const o = f.options.find(x => x[0] === v); return o ? o[1] : ''; }
+      if (f.type === 'multi') return Array.isArray(v) ? v.join(', ') : '';
       return v ? String(v) : '';
     }
 
@@ -410,15 +619,21 @@
         el('h3', { text: 'Athlete' }),
         el('div', { className: 'review-row' }, el('span', { text: 'Name' }), el('b', { text: (a.first_name + ' ' + a.last_name).trim() || 'Not entered' })),
         el('div', { className: 'review-row' }, el('span', { text: 'Assessment date' }), el('b', { text: state.assessed_on })),
-        el('div', { className: 'review-row' }, el('span', { text: 'Level' }), el('b', { text: tier.title }))));
+        el('div', { className: 'review-row' }, el('span', { text: 'Level' }), el('b', { text: tier.title })),
+        el('button', { type: 'button', className: 'linkbtn', text: 'Edit', onclick: () => go(0) })));
+      const labels = { done: 'Complete', partial: 'Some missing', empty: 'Nothing entered', skipped: 'Skipped' };
       for (const sec of sections) {
         const st = sectionStatus(sec);
-        const block = el('div', { className: 'review-block' }, el('h3', {}, sec.title, el('span', { className: 'status ' + st, text: { done: 'Complete', partial: 'Some numbers missing', empty: 'Nothing entered', skipped: 'Skipped' }[st] })));
+        const block = el('div', { className: 'review-block' }, el('h3', {}, sec.title, el('span', { className: 'status ' + st, text: labels[st] })));
         if (st !== 'skipped') {
-          for (const f of sec.fields) {
-            if (f.type === 'heading' || !visible(sec, f)) continue;
-            const t = valueText(sec, f);
-            if (t) block.append(el('div', { className: 'review-row' }, el('span', { text: f.label.replace(/^\d of 7 · /, '').split('. ')[0] }), el('b', { text: t })));
+          if (sec.kind === 'flow') {
+            for (const r of flowRows()) block.append(r.finding ? el('div', { className: 'finding', text: '→ ' + r.text }) : el('div', { className: 'review-row' }, el('span', { text: r.label }), el('b', { text: r.value })));
+          } else {
+            for (const f of fieldsOf(sec)) {
+              if (f.type === 'heading' || !visible(sec, f)) continue;
+              const t = valueText(sec, f);
+              if (t) block.append(el('div', { className: 'review-row' }, el('span', { text: f.label }), el('b', { text: t })));
+            }
           }
         }
         block.append(el('button', { type: 'button', className: 'linkbtn', text: 'Edit', onclick: () => go(steps.indexOf(sec)) }));
@@ -433,7 +648,7 @@
         el('p', { className: 'blurb', text: (state.athlete.first_name + ' ' + state.athlete.last_name).trim() + ' · ' + tier.title + ' · ' + state.assessed_on }),
         el('div', { className: 'formnav' },
           el('a', { className: 'btn ghost', href: '#/', text: 'Back to assessments' }),
-          el('button', { type: 'button', className: 'btn', text: 'Start another', onclick: () => { state = freshState(); message = null; save(); clearDraft(); render(); } })));
+          el('button', { type: 'button', className: 'btn', text: 'Start another', onclick: () => { state = freshState(); pending = {}; message = null; save(); clearDraft(); render(); } })));
     }
 
     // ---- submit ----
@@ -444,38 +659,52 @@
       document.body.append(a); a.click(); a.remove();
     }
 
+    function athleteBody() {
+      const a = state.athlete, body = {};
+      for (const k of ['first_name', 'last_name', 'dob', 'email', 'phone', 'parent_name', 'parent_email', 'parent_phone', 'playing_level', 'team', 'residence', 'position', 'sport']) {
+        const v = typeof a[k] === 'string' ? a[k].trim() : a[k];
+        if (v) body[k] = v;
+      }
+      if (a.dominant_hand) body.dominant_hand = a.dominant_hand;
+      return body;
+    }
+
     async function submit() {
       const a = state.athlete;
-      if (!state.assessmentId && !a.id && (!a.first_name.trim() || !a.last_name.trim())) {
+      if (!state.assessmentId && (!a.first_name.trim() || !a.last_name.trim())) {
         message = { kind: 'error', text: 'Add the athlete’s first and last name before submitting.' };
         state.step = 0; render(); return;
       }
       busy = true; message = null; render();
+      const failed = [];
       try {
-        if (!a.id) {
-          const body = { first_name: a.first_name.trim(), last_name: a.last_name.trim() };
-          if (a.dob) body.dob = a.dob;
-          if (a.sport) body.sport = a.sport;
-          if (a.position) body.position = a.position;
-          if (a.team) body.team = a.team;
-          if (a.dominant_hand) body.dominant_hand = a.dominant_hand;
-          if (isNum(a.grad_year)) body.grad_year = Number(a.grad_year);
-          const created = await api('POST', '/athletes', body);
-          a.id = created.id; save();
-        }
+        await Promise.all([...jobs]);
         if (!state.assessmentId) {
+          if (a.id) await api('PATCH', '/athletes/' + a.id, athleteBody());
+          else { a.id = (await api('POST', '/athletes', athleteBody())).id; save(); }
           const saved = await api('POST', '/assessments', Object.assign({ athlete_id: a.id }, buildPayload()));
           state.assessmentId = saved.id; save();
         }
-        clearDraft();
-        busy = false; state.step = steps.length; message = null; render();
+        for (const sec of sections) for (const f of fieldsOf(sec)) {
+          if (f.type !== 'file' || state.skipped[sec.id] || state.uploaded[f.key]) continue;
+          const p = pending[f.key];
+          if (!p) continue;
+          try { await uploadFile(a.id, state.assessmentId, f.kind, p.file); state.uploaded[f.key] = true; delete pending[f.key]; save(); }
+          catch (e) { failed.push(f.label + ' (' + e.message + ')'); }
+        }
+        busy = false;
+        if (failed.length) {
+          message = { kind: 'error', text: 'The assessment was saved, but these files did not upload: ' + failed.join('; ') + '.', retry: true, saved: true };
+          render(); return;
+        }
+        clearDraft(); state.step = steps.length; render();
       } catch (e) {
         busy = false;
         const offline = !e.status || e.status === 404;
-        message = { kind: 'error', text: offline
+        message = { kind: 'error', retry: true, text: offline
           ? 'Could not reach the database. Your answers are saved on this device. You can try again, or download a copy.'
           : e.status === 401 || e.status === 403 ? 'You are signed out. Reload the page and sign in again; your answers are saved on this device.'
-          : 'Could not save: ' + e.message, retry: true };
+          : 'Could not save: ' + e.message };
         render();
       }
     }
@@ -487,10 +716,10 @@
       if (state.step >= steps.length) { root.append(renderDone()); return; }
       root.append(renderChips());
       if (message) root.append(el('div', { className: 'alert ' + message.kind, role: 'alert' }, message.text,
-        message.retry ? el('div', { className: 'alert-actions' }, el('button', { type: 'button', className: 'btn ghost', text: 'Download a copy', onclick: download })) : null));
+        message.retry && !message.saved ? el('div', { className: 'alert-actions' }, el('button', { type: 'button', className: 'btn ghost', text: 'Download a copy', onclick: download })) : null));
       const s = steps[state.step];
       if (s.id === 'athlete') {
-        if (tier.equipment) root.append(el('div', { className: 'equip' }, el('b', { text: 'You will need: ' }), tier.equipment.join(', ')));
+        root.append(el('div', { className: 'equip' }, el('b', { text: 'You will need: ' }), tier.equipment.join(', ')));
         root.append(renderAthlete());
       } else if (s.id === 'review') root.append(renderReview());
       else root.append(renderSection(s));
@@ -498,8 +727,9 @@
         root.append(el('div', { className: 'formnav' },
           el('button', { type: 'button', className: 'btn ghost', text: '← Back', onclick: () => go(state.step - 1) }),
           el('button', { type: 'button', className: 'btn', text: busy ? 'Saving…' : (message && message.retry ? 'Try again' : 'Submit assessment'), disabled: busy, onclick: submit })));
-      } else root.append(navButtons());
-      root.append(el('div', { className: 'draftnote' }, 'Draft saved on this device. ', el('button', { type: 'button', className: 'linkbtn', text: 'Start over', onclick: () => { if (confirm('Clear this draft and start over?')) { state = freshState(); clearDraft(); render(); } } })));
+      } else if (s.kind !== 'flow') root.append(navButtons());
+      root.append(el('div', { className: 'draftnote' }, 'Draft saved on this device (photos and videos are not kept in the draft). ',
+        el('button', { type: 'button', className: 'linkbtn', text: 'Start over', onclick: () => { if (confirm('Clear this draft and start over?')) { state = freshState(); pending = {}; clearDraft(); render(); } } })));
     }
 
     render();

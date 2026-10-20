@@ -133,3 +133,20 @@ details.protocol summary{cursor:pointer;font-weight:700;font-size:13px;letter-sp
 .status.partial{border-color:#F2C94C;color:#F2C94C}
 .status.empty{border-color:var(--red);color:var(--red)}
 @media (max-width:640px){.grid2{grid-template-columns:1fr}.proto dl{grid-template-columns:1fr}}
+
+/* ---- Movement screen flow, files, rich text ---- */
+.flowcard{border:1px solid var(--line);background:var(--bg);padding:20px 18px;display:grid;gap:14px}
+.flowcard.statement{border-left:3px solid var(--blue)}
+.flowstep{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.flowtitle{margin:0;font:600 20px/1.35 var(--body)}
+.flowcard.statement .flowtitle{font-family:var(--display);font-weight:400;font-size:24px;text-transform:uppercase;line-height:1.15}
+.rich{display:grid;gap:8px;font-size:15.5px;color:var(--muted)}
+.rich p{margin:0}
+.rich strong{color:var(--text);display:block;margin-top:6px;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
+.rich ul{margin:0;padding-left:20px;display:grid;gap:2px}
+.finding{color:var(--blue);font-weight:600;font-size:15px}
+.filebox{display:grid;gap:10px;justify-items:start}
+.fileinput{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.filebtn{cursor:pointer}
+.thumb{width:140px;height:140px;object-fit:cover;border:1px solid var(--line)}
+.fileinfo{font-size:15px}

@@ -19,6 +19,11 @@ CREATE TABLE IF NOT EXISTS athletes (
   dob           TEXT,
   email         TEXT,
   phone         TEXT,
+  parent_name   TEXT,
+  parent_email  TEXT,
+  parent_phone  TEXT,
+  playing_level TEXT,
+  residence     TEXT,
   sport         TEXT,
   position      TEXT,
   team          TEXT,
@@ -67,3 +72,19 @@ CREATE TABLE IF NOT EXISTS measurements (
 );
 CREATE INDEX IF NOT EXISTS idx_measurements_series     ON measurements (athlete_id, metric, measured_on);
 CREATE INDEX IF NOT EXISTS idx_measurements_assessment ON measurements (assessment_id);
+
+-- Photos, videos and reports (headshot, shirtless photo, mechanics video, Trackman report and video).
+-- The file itself lives in the R2 bucket under r2_key; this row says whose it is and what it is.
+CREATE TABLE IF NOT EXISTS files (
+  id            TEXT PRIMARY KEY,
+  athlete_id    TEXT NOT NULL REFERENCES athletes(id) ON DELETE CASCADE,
+  assessment_id TEXT REFERENCES assessments(id) ON DELETE SET NULL,
+  kind          TEXT NOT NULL CHECK (kind IN ('headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mocap_video', 'report')),
+  r2_key        TEXT NOT NULL,
+  content_type  TEXT NOT NULL,
+  size          INTEGER NOT NULL,
+  original_name TEXT,
+  uploaded_by   TEXT REFERENCES coaches(id),
+  created_at    TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_files_athlete ON files (athlete_id, kind, created_at);
