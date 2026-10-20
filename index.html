@@ -36,7 +36,6 @@
 }
 /* ALWAYS-DARK */
 :root { color-scheme: dark;
-  --grid: rgba(255,255,255,.09);
   --ink: #ffffff;
   --hdr-bg: #141414;
   --note-bg: #0d0d0d;
@@ -55,10 +54,9 @@ body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 48px 48px;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 38%, #000 62%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 38%, #000 62%, transparent 100%);
+  background: url("assets/topo-bg.webp") center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
 }
 body {
   margin: 0;

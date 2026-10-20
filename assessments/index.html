@@ -4,146 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="VeloU Assessments">
-<meta property="og:title" content="VeloU Assessments">
-<meta property="og:description" content="Coming soon.">
-<meta property="og:url" content="https://coachesvelou.com/assessments/">
-<meta property="og:image" content="https://coachesvelou.com/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://coachesvelou.com/assets/og-image.png">
-<meta name="description" content="Coming soon.">
-
+<meta name="description" content="VeloU assessments: initial intake and re-testing.">
 <title>Assessments · VeloU</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <style>
+/* VeloU brand palette: black, white, red E10600, blue 56B7E6, green 88E0C6, grey 5B6770. Always dark. */
 :root {
-  --ink: #18130f;
-  --title-bg: #0d0d0d;
-  --day-bg: #e10600;
-  --day-bg-dark: #b80500;
-  --hdr-bg: #f1ebe8;
-  --note-bg: #f6f1ee;
-  --border: #ddd3ce;
-  --muted: #6b615d;
-  --page-bg: #faf7f5;
-  --card-bg: #ffffff;
-  --white: #ffffff;
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --font-body: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: dark;
+  --bg: #000000; --ink: #ffffff; --muted: #a8a8a8;
+  --red: #e10600; --blue: #56b7e6; --green: #88e0c6; --grey: #5b6770;
+  --font: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ink: #f1e9e4;
-    --hdr-bg: #241d1a;
-    --note-bg: #1e1815;
-    --border: #3a322e;
-    --muted: #ab9e98;
-    --page-bg: #100d0b;
-    --card-bg: #1a1512;
-    --white: #ffffff;
-  }
-}
-:root[data-theme="dark"] {
-  --ink: #f1e9e4;
-  --hdr-bg: #241d1a;
-  --note-bg: #1e1815;
-  --border: #3a322e;
-  --muted: #ab9e98;
-  --page-bg: #100d0b;
-  --card-bg: #1a1512;
-  --white: #ffffff;
-}
-/* ALWAYS-DARK */
-:root { color-scheme: dark;
-  --ink: #f1e9e4;
-  --hdr-bg: #241d1a;
-  --note-bg: #1e1815;
-  --border: #3a322e;
-  --muted: #ab9e98;
-  --page-bg: #100d0b;
-  --card-bg: #1a1512;
-  --white: #ffffff;
-}
-
 * { box-sizing: border-box; }
+html { background: var(--bg); }
 body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--page-bg);
-  color: var(--ink);
-  font-family: var(--font-body);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
+  margin: 0; min-height: 100vh; background: transparent; color: var(--ink); font-family: var(--font);
+  display: flex; flex-direction: column; align-items: center; padding: 28px 20px 56px;
 }
-h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: 0.01em; }
-.logo { width: min(560px, 100%); height: auto; margin-bottom: 22px; }
-h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
-.tagline { color: var(--muted); font-size: 17px; margin: 0 0 40px; text-align: center; }
-.collections { display: grid; gap: 48px; max-width: 900px; width: 100%; }
-.collection-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-.collection-head h2 { font-size: 30px; margin: 0; }
-.collection-head p { color: var(--muted); font-size: 14px; margin: 0; }
-.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; width: 100%; max-width: 900px; }
-.empty {
-  border: 1px dashed var(--border);
-  border-radius: 14px;
-  padding: 28px 26px;
-  color: var(--muted);
-  font-size: 14px;
-  text-align: center;
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: url("../assets/topo-bg.webp") center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
 }
-.tile {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 30px 26px;
-  text-decoration: none;
-  color: var(--ink);
-  border-top: 5px solid var(--day-bg);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.back {
+  align-self: flex-start; width: min(700px, 100%); margin: 0 auto 18px; padding: 0; text-align: left;
+  background: none; border: 0; cursor: pointer; font: 700 14px var(--font); letter-spacing: 0.03em; color: #fff; text-decoration: none;
 }
-.tile:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
-.tile-eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--day-bg); }
-.tile h2 { font-size: 26px; margin: 0; }
-.tile p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5; }
-.tile-cta { font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: var(--day-bg); margin-top: 8px; }
-.tile:hover .tile-cta { color: var(--day-bg-dark); }
-footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: center; }
-@media (max-width: 860px) {
-  .tiles { grid-template-columns: 1fr; }
-  .collection-head { flex-direction: column; gap: 4px; }
-}
-.back { align-self: flex-start; width: min(900px, 100%); margin: 0 auto 18px; font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: var(--day-bg); text-decoration: none; }
-.back:hover { color: var(--day-bg-dark); }
-.back { cursor: pointer; background: none; border: 0; padding: 0; text-align: left; }
-.step { width: 100%; max-width: 900px; }
-.question { font-family: var(--font-display); font-size: 30px; font-weight: 700; text-align: center; margin: 0 0 8px; text-wrap: balance; }
+.back:hover { text-decoration: underline; }
+.back[hidden] { display: none; }
+.logo { width: min(400px, 100%); height: auto; margin-bottom: 44px; }
+.step { width: 100%; max-width: 700px; }
+.question { font-size: 32px; font-weight: 700; text-align: center; margin: 0 0 8px; text-wrap: balance; letter-spacing: 0.01em; }
 .crumbs { color: var(--muted); font-size: 14px; text-align: center; margin: 0 0 28px; min-height: 1.4em; }
-.options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 .options.three { grid-template-columns: repeat(3, 1fr); }
 .option {
-  display: flex; align-items: center; gap: 16px; text-align: left; width: 100%;
-  background: var(--card-bg); color: var(--ink); border: 1px solid var(--border); border-top: 5px solid var(--day-bg);
-  border-radius: 14px; padding: 22px 22px; font: inherit; cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 40px; text-align: left; width: 100%;
+  min-height: 150px; padding: 22px 24px; border: 0; border-radius: 14px; color: #fff; font: inherit; cursor: pointer;
+  background: linear-gradient(180deg, rgba(22,22,22,0.92) 0%, rgba(22,22,22,0) 100%);
+  transition: transform 0.15s ease, background 0.15s ease;
 }
-.option:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
-.option:focus-visible { outline: 2px solid var(--day-bg); outline-offset: 3px; }
-.letter { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--day-bg); color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 17px; }
-.option-label { font-family: var(--font-display); font-size: 24px; font-weight: 700; }
-.result { background: var(--card-bg); border: 1px solid var(--border); border-top: 5px solid var(--day-bg); border-radius: 14px; padding: 30px 26px; text-align: center; }
+.option:hover { transform: translateY(-3px); background: linear-gradient(180deg, rgba(34,34,34,0.95) 0%, rgba(34,34,34,0) 100%); }
+.option:focus-visible, .back:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.letter {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  font-weight: 700; font-size: 16px; background: var(--red); color: #fff;
+}
+.option[data-c="1"] .letter { background: var(--blue); color: #000; }
+.option[data-c="2"] .letter { background: var(--green); color: #000; }
+.option[data-c="3"] .letter { background: var(--grey); color: #fff; }
+.option-label { font-size: 24px; font-weight: 700; letter-spacing: 0.01em; }
+.result { border-radius: 14px; padding: 36px 28px; text-align: center; background: linear-gradient(180deg, rgba(22,22,22,0.92) 0%, rgba(22,22,22,0) 100%); }
 .result h2 { font-size: 30px; margin: 0 0 8px; }
 .result p { color: var(--muted); margin: 0; }
-@media (max-width: 860px) { .options, .options.three { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .options, .options.three { grid-template-columns: 1fr; } .option { min-height: 0; } }
 </style>
 </head>
 <body>
@@ -151,12 +67,10 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
 <button class="back" id="back" type="button" hidden>← Back</button>
 <a class="back" id="home" href="../">← All of VeloU</a>
 <img class="logo" src="../assets/velou-logo.webp" alt="VeloU New York and VeloU Texas" width="2000" height="881">
-<h1>Assessments</h1>
-<p class="tagline" id="tagline"></p>
+<h1 class="sr-only">Assessments</h1>
+<p id="tagline" hidden></p>
 
 <div class="step" id="step" aria-live="polite"></div>
-
-<footer>VeloU · Strength &amp; Throwing coaching reference</footer>
 
 <script>
 const TREE = {
@@ -208,7 +122,7 @@ function render() {
     stepEl.append(el("h2", "question", node.question), el("p", "crumbs", crumbs));
     const grid = el("div", "options" + (node.options.length === 3 ? " three" : ""));
     node.options.forEach((o, i) => {
-      const b = el("button", "option"); b.type = "button";
+      const b = el("button", "option"); b.type = "button"; b.dataset.c = i % 4;
       b.append(el("span", "letter", LETTERS[i]), el("span", "option-label", o.label));
       b.addEventListener("click", () => { location.hash = "#/" + path.concat(o.key).join("/"); });
       grid.append(b);
