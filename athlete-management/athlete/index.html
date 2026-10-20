@@ -597,6 +597,45 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
   </div>
   </sc-if>
 
+<sc-if value="{{ isProg }}" hint-placeholder-val="{{ false }}">
+  <section id="programming" data-screen-label="Programming" style="display:flex;flex-direction:column;gap:20px;margin-top:-12px">
+    <nav data-noprint="true" style="display:flex;gap:24px;flex-wrap:wrap;border-bottom:1px solid rgba(91,103,112,.32)">
+      <sc-for list="{{ subTabs }}" as="st">
+        <button onClick="{{ st.onClick }}" style="background:none;border:0;border-bottom:3px solid {{ st.bd }};margin-bottom:-1px;padding:8px 0;font:600 14px 'Barlow',sans-serif;letter-spacing:.04em;color:{{ st.c }};cursor:pointer" style-hover="color:#FFFFFF">{{ st.label }}</button>
+      </sc-for>
+    </nav>
+    <sc-if value="{{ hasLib }}" hint-placeholder-val="{{ false }}"><div data-noprint="1" style="font:400 11px 'Barlow',sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.62)">{{ libStatus }}</div></sc-if>
+    <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ subPrep }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261020a" data-view="strength" data-lane="prep" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
+      </sc-if>
+      <sc-if value="{{ subThrowing }}" hint-placeholder-val="{{ true }}">
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261020a" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
+      </sc-if>
+      <sc-if value="{{ subLifting }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261020a" data-view="strength" data-lane="lift" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
+      </sc-if>
+    </sc-if>
+    <sc-if value="{{ subCare }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:16px">
+          <sc-for list="{{ careCards }}" as="cc">
+            <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);border-top:3px solid #88E0C6;padding:18px 20px;display:flex;flex-direction:column;gap:8px">
+              <span style="font:600 12px 'Barlow',sans-serif;letter-spacing:.1em;color:#88E0C6">{{ cc.title }}</span>
+              <sc-if value="{{ cc.has }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:20px;font-weight:600;line-height:1.25">{{ cc.name }}</span>
+                <span style="font-size:13px;color:rgba(255,255,255,.62)">{{ cc.dates }}</span>
+              </sc-if>
+              <sc-if value="{{ cc.none }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;color:rgba(255,255,255,.62)">{{ cc.empty }}</span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:0;max-width:760px;font-size:13px;line-height:1.55;color:rgba(255,255,255,.62)">Arm care and mobility programs are assigned on the Program Board. Their day-by-day exercises are not in the program library yet, so this tab shows the assignment only.</p>
+      </div>
+    </sc-if>
+  </section>
+  </sc-if>
+
 <sc-if value="{{ isPitch }}" hint-placeholder-val="{{ false }}">
   <section id="pitching" data-screen-label="Pitching" style="display:flex;flex-direction:column;gap:22px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
@@ -1177,8 +1216,33 @@ function buildArsenal(rows) {
 const SCREEN = [[14, 'Right Ankle Dorsiflexion'], [15, 'Left Ankle Dorsiflexion'], [16, 'Right Hip External Rotation'], [17, 'Right Hip Internal Rotation'], [18, 'Left Hip External Rotation'], [19, 'Left Hip Internal Rotation'], [20, 'General Hip Bias'], [21, 'Shoulder Flexion'], [22, 'Shoulder External Rotation'], [23, 'Shoulder Internal Rotation'], [24, 'Cervical Rotation'], [25, 'Bodyweight Squat'], [26, 'Lunge & Reach'], [27, 'Lunge & Rotate'], [28, 'Back Bridge']];
 const TABS = [['main', 'Athlete Mainframe'], ['cmp', 'Athlete Score Comparison'], ['prog', 'Program Board'], ['evalr', 'VeloU On-Site Athlete Evaluation'], ['cmj', 'CMJ'], ['imtp', 'IMTP'], ['sj', 'Squat Jump'], ['cmjr', 'CMJR'], ['ppu', 'Plyo Pushup'], ['ei', 'Energy Interference'], ['et', 'Energy Transference']];
 
+// Plan storage: the programming tool keeps its plan in localStorage; mirror those keys to the database.
+const PLAN_SYNC = { id: null, name: null, timers: {}, installed: false, raw: { set: Storage.prototype.setItem, remove: Storage.prototype.removeItem } };
+function planScope(k) {
+  if (k === 'velou.drills.custom') return '*';
+  if (PLAN_SYNC.id && PLAN_SYNC.name && (k === 'velou.plan.' + PLAN_SYNC.name || k === 'velou.history.' + PLAN_SYNC.name)) return PLAN_SYNC.id;
+  return null;
+}
+function planChanged(k, v) {
+  const scope = planScope(k);
+  if (!scope) return;
+  clearTimeout(PLAN_SYNC.timers[k]);
+  PLAN_SYNC.timers[k] = setTimeout(() => {
+    const body = JSON.stringify({ athlete: scope, key: k, data: v });
+    fetch('/api/v1/plans', { method: v == null ? 'DELETE' : 'PUT', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: v == null ? JSON.stringify({ athlete: scope, key: k }) : body })
+      .then(r => { if (!r.ok) throw new Error('save failed'); window.dispatchEvent(new CustomEvent('velou-plan-saved')); })
+      .catch(() => window.dispatchEvent(new CustomEvent('velou-plan-save-failed')));
+  }, 700);
+}
+function installPlanSync() {
+  if (PLAN_SYNC.installed) return;
+  PLAN_SYNC.installed = true;
+  Storage.prototype.setItem = function (k, v) { PLAN_SYNC.raw.set.call(this, k, v); if (this === window.localStorage) planChanged(String(k), String(v)); };
+  Storage.prototype.removeItem = function (k) { PLAN_SYNC.raw.remove.call(this, k); if (this === window.localStorage) planChanged(String(k), null); };
+}
+
 class Component extends DCLogic {
-  state = { tab: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], cal: null, modal: null, d: null, status: 'loading', updated: null };
+  state = { tab: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], cal: null, modal: null, plansReady: false, sub: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.sub')) || 'throwing', care: null, d: null, status: 'loading', updated: null };
 
   componentDidMount() {
     this.onBeforePrint = () => this.sizePage();
@@ -1186,6 +1250,8 @@ class Component extends DCLogic {
     this.loadAthletes();
     this.load();
     this.loadCalendar();
+    this.loadPlans();
+    this.loadLibrary();
     this.onKey = e => { if (e.key === 'Escape' && this.state.modal) this.setState({ modal: null }); };
     window.addEventListener('keydown', this.onKey);
     const mins = this.props.refreshMinutes ?? 5;
@@ -1285,6 +1351,107 @@ class Component extends DCLogic {
       const rows = await this.q('Athlete Mainframe', 'select A');
       this.setState({ athletes: [...new Set(rows.map(r => r[0] ? String(r[0]).replace(/[’‘`´]/g, "'").replace(/\s+/g, ' ').trim() : null).filter(Boolean))].sort() });
     } catch (e) {}
+  }
+  async athleteIdFor(name) {
+    if (this.state.athleteId) return this.state.athleteId;
+    const r = await fetch('/api/v1/overview?status=all&q=' + encodeURIComponent(name), { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(x => { if (!x.ok) throw new Error('network'); return x.json(); });
+    const m = r.athletes.find(a => nKey(a.first_name + a.last_name) === nKey(name));
+    if (!m) throw new Error('not found');
+    if (name === this.state.athlete) this.setState({ athleteId: m.id });
+    return m.id;
+  }
+  // Saved plans live in the database. The programming tool stores its plan under localStorage keys, so
+  // those keys are loaded from the server before it mounts and saved back whenever it writes them.
+  async loadPlans() {
+    const name = this.state.athlete;
+    PLAN_SYNC.name = null; PLAN_SYNC.id = null;
+    try {
+      const id = await this.athleteIdFor(name);
+      const j = await fetch('/api/v1/plans?athlete=' + encodeURIComponent(id), { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('network'); return r.json(); });
+      if (name !== this.state.athlete) return;
+      const mine = new Set(['velou.plan.' + name, 'velou.history.' + name, 'velou.drills.custom']);
+      const have = new Set(j.items.map(i => i.key));
+      for (const k of mine) PLAN_SYNC.raw.remove.call(localStorage, k);
+      for (const it of j.items) if (mine.has(it.key)) PLAN_SYNC.raw.set.call(localStorage, it.key, it.data);
+      PLAN_SYNC.id = id; PLAN_SYNC.name = name;
+      installPlanSync();
+      this.setState({ plansReady: true });
+    } catch (e) { if (name === this.state.athlete) this.setState({ plansReady: true, plansErr: true }); }
+  }
+  async loadLibrary() {
+    const get = t => fetch('/api/v1/library/tab?name=' + encodeURIComponent(t), { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('library'); return r.json(); }).then(j => j.rows.slice(1));
+    try {
+      const [ph, fo, dr, sc, rf] = await Promise.all(['Phases', 'Focuses', 'Drills', 'Program Schedules', 'Intensity Reference'].map(get));
+      const s = x => String(x ?? '').trim(), n = x => { const v = parseFloat(x); return isNaN(v) ? '' : v; }, yes = x => /^y(es)?$|^true$/i.test(s(x));
+      const programs = [], pdesc = {}, map = {};
+      ph.filter(r => s(r[0])).sort((a, b) => (n(a[6]) || 999) - (n(b[6]) || 999)).forEach(r => { const code = s(r[0]), name = s(r[1]) || code, uses = yes(r[4]); programs.push({ name: name === code ? code : name + ' (' + code + ')', code, uses, weeks: n(r[3]) || 4 }); if (s(r[7])) pdesc[code] = s(r[7]); if (uses) for (const l of [1, 2, 3]) map[code + l] = code; });
+      const fRows = fo.filter(r => s(r[0])).sort((a, b) => (n(a[1]) || 999) - (n(b[1]) || 999)), focus = fRows.map(r => s(r[0])), fdesc = {};
+      fRows.forEach(r => { if (s(r[2])) fdesc[s(r[0])] = s(r[2]); });
+      const drills = [], videos = {};
+      dr.filter(r => s(r[0])).forEach(r => { if (s(r[3]) && !yes(r[3])) return; drills.push([s(r[0]), s(r[1])]); if (/^https?:\/\//i.test(s(r[2]))) videos[s(r[0]).toLowerCase()] = s(r[2]); });
+      const S = {}, idx = {};
+      for (const r of sc) {
+        const p = s(r[0]); if (!p) continue; const wk = n(r[1]), dd = n(r[2]), sl = n(r[3]); if (!wk || !dd) continue;
+        const k = p + '|' + wk + '|' + dd + '|' + sl; let row = idx[k];
+        if (!row) { row = [wk, dd, sl, s(r[4]), s(r[7]), s(r[8]), s(r[9]), n(r[10]) || 1, n(r[11]), n(r[12]), '', ...focus.map(() => '')]; idx[k] = row; (S[p] = S[p] || []).push(row); }
+        const f = s(r[5]), d = s(r[6]), fi = focus.indexOf(f);
+        if (!f || /^all$/i.test(f)) row[10] = d; else if (fi >= 0) row[11 + fi] = d;
+      }
+      const ref = rf.filter(r => n(r[0]) !== '').map(r => { const a = new Array(20).fill(0); a[0] = n(r[0]); a[1] = n(r[1]) || 0; a[2] = n(r[2]) || 0; a[19] = n(r[3]) || 0; return a; }).sort((a, b) => a[0] - b[0]);
+      const lib = { programs, pdesc, map, focus, fdesc, drills, videos, S, ref };
+      window.__veloULib = lib;
+      if (window.VeloUPlan && window.VeloUPlan.setLibrary) window.VeloUPlan.setLibrary(lib);
+      this.setState({ libStatus: 'Program Library loaded: ' + programs.length + ' programs, ' + drills.length + ' drills.' });
+    } catch (e) {
+      this.setState({ libStatus: 'Program Library could not be loaded. Showing the last saved copy.' });
+    }
+  }
+  async loadCare() {
+    const name = this.state.athlete;
+    try {
+      const id = await this.athleteIdFor(name);
+      const a = await fetch('/api/v1/athletes/' + encodeURIComponent(id), { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('network'); return r.json(); });
+      if (name === this.state.athlete) this.setState({ care: a.programs || [] });
+    } catch (e) { if (name === this.state.athlete) this.setState({ care: [], careErr: true }); }
+  }
+  planVals(d, prog, main, armScore, injury, tabFact, cmjFact, v, num) {
+    const pc = (d.prog && d.prog.cols) || [];
+    const pb = re => { for (const r of (d.prog || [])) { const i = pc.findIndex(l => re.test(String(l || ''))); if (i >= 0) { const n = parseFloat(r[i]); if (!isNaN(n)) return String(n); } } return ''; };
+    const tmRows = d.tm || [];
+    const fb = tmRows.filter(r => /fast|four|4s|seam|sink/i.test(String(r[2] || ''))).map(r => num(r[3])).filter(x => x != null && x > 40);
+    const all = tmRows.map(r => num(r[3])).filter(x => x != null && x > 40);
+    const top = fb.length ? Math.max(...fb) : all.length ? Math.max(...all) : null;
+    const lvl = tabFact(d.et, [/throwing\s*level/i, /level\s*assignment/i, /^level$/i], 5) ?? prog[27];
+    const g = i => prog[i] == null ? '' : String(prog[i]).trim();
+    return {
+      planAthlete: this.state.athlete || '', planLevel: lvl == null ? '' : String(lvl),
+      planVelo: top == null ? '' : top.toFixed(1),
+      planKneel: pb(/kneel/i) || (num(main[23]) != null ? String(num(main[23])) : ''),
+      planLt: pb(/long\s*toss|^lt\b/i),
+      planArm: armScore == null ? '' : armScore.toFixed(1), planInjury: injury === 'None' ? '' : String(injury), planFocus: String(main[45] ?? ''),
+      planBoard: JSON.stringify({ c1: g(1), c2: g(2), thr: g(3), ts: g(4), te: g(5), pat: g(7), ps: g(8), pe: g(9), lift: g(11), ls: g(12), le: g(13) }),
+      planPerf: (() => { try { return String(v(cmjFact(/level\s*assignment|performance\s*level/i), v(prog[28], '')) ?? ''); } catch (x) { return ''; } })(),
+      planRec: (() => { try { return String(v(cmjFact(/program\s*recommendation|^program$/i), v(prog[29], '')) ?? ''); } catch (x) { return ''; } })(),
+      planVideos: '{}'
+    };
+  }
+  careVals() {
+    const progs = this.state.care;
+    if (this.state.tab === 'prog' && this.state.sub === 'care' && progs == null && !this._careAsked) { this._careAsked = true; setTimeout(() => this.loadCare(), 0); }
+    if (progs != null) this._careAsked = false;
+    const NAMES = { arm_care: 'Arm care', mobility: 'Mobility' };
+    const card = cat => {
+      const p = (progs || []).find(x => x.category === cat);
+      const lines = [];
+      if (p) {
+        const parts = String(p.program).split('•').map(x => x.trim());
+        lines.push(p.program);
+        const dl = p.ends_on ? Math.round((Date.parse(p.ends_on + 'T00:00:00') - new Date(new Date().toDateString())) / 86400000) : null;
+        lines.push((p.starts_on ? fMD(pD(p.starts_on)) : '') + (p.ends_on ? ' to ' + fMD(pD(p.ends_on)) : '') + (dl == null ? '' : dl >= 0 ? ' · ' + dl + ' days left' : ' · ended ' + (-dl) + ' days ago'));
+      }
+      return { title: NAMES[cat].toUpperCase(), has: !!p, none: !p, name: p ? lines[0] : '', dates: p ? lines[1] : '', empty: progs == null ? (this.state.careErr ? 'Could not load the assignment.' : 'Loading…') : 'No ' + NAMES[cat].toLowerCase() + ' program assigned.' };
+    };
+    return { careCards: [card('arm_care'), card('mobility')] };
   }
   async loadCalendar(silent) {
     const name = this.state.athlete;
@@ -1641,7 +1808,7 @@ class Component extends DCLogic {
       athleteSel: this.state.athlete,
       selKey: this.state.athlete + ':' + this.state.athletes.length,
       ...(() => {
-        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, cal: null, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadCalendar(); }); };
+        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, cal: null, care: null, plansReady: false, plansErr: false, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadCalendar(); this.loadPlans(); }); };
         const q = (this.state.sq || '').trim().toLowerCase();
         const all = athletes.includes(this.state.athlete) ? athletes : [this.state.athlete, ...athletes];
         const res = (q ? all.filter(a => a.toLowerCase().includes(q)).sort((x, y) => (y.toLowerCase().startsWith(q) - x.toLowerCase().startsWith(q))) : all).slice(0, 60);
@@ -1760,8 +1927,13 @@ class Component extends DCLogic {
       screen,
       bodyTests, bodyJoints: Object.values(joints), screenSummary,
       ...this.calVals(),
-      isEval: tab !== 'pitch' && tab !== 'data', isPitch: tab === 'pitch', isData: tab === 'data',
-      tabs: [tabBtn('eval', 'Dashboard'), tabBtn('pitch', 'Pitching Development'), tabBtn('data', this.props.dataTabLabel ?? 'In-Season')],
+      isEval: tab !== 'pitch' && tab !== 'data' && tab !== 'prog', isPitch: tab === 'pitch', isData: tab === 'data', isProg: tab === 'prog',
+      libStatus: (this.state.libStatus || '') + (this.state.plansErr ? ' Saved plans are not syncing yet, so changes stay in this browser only.' : ''), hasLib: !!(this.state.libStatus || this.state.plansErr), plansReady: !!this.state.plansReady,
+      subTabs: [['prep', 'Prep'], ['throwing', 'Throwing'], ['lifting', 'Lifting'], ['care', 'Corrective / Mobility']].map(([k, label]) => ({ label, onClick: () => { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k }); }, c: this.state.sub === k ? '#FFFFFF' : 'rgba(255,255,255,.62)', bd: this.state.sub === k ? '#56B7E6' : 'transparent' })),
+      subPrep: this.state.sub === 'prep', subThrowing: this.state.sub === 'throwing', subLifting: this.state.sub === 'lifting', subCare: this.state.sub === 'care',
+      ...this.planVals(d, prog, main, armScore, injury, tabFact, cmjFact, v, num),
+      ...this.careVals(),
+      tabs: [tabBtn('eval', 'Dashboard'), tabBtn('prog', 'Programming'), tabBtn('pitch', 'Pitching Development'), tabBtn('data', this.props.dataTabLabel ?? 'In-Season')],
       ...this.extraVals(),
       rangeOpts,
       hasArsenal: pitches.length > 0, noArsenal: this.state.d != null && !this.state.tmLoading && pitches.length === 0,

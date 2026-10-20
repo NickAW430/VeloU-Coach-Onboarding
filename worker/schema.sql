@@ -141,3 +141,13 @@ CREATE TABLE IF NOT EXISTS sync_runs (
   stats       TEXT,
   error       TEXT
 );
+
+-- Saved programming plans and history from the athlete Programming tab (scope = athlete id, or '*' for shared settings).
+CREATE TABLE IF NOT EXISTS plan_store (
+  scope      TEXT NOT NULL,
+  key        TEXT NOT NULL,
+  data       TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  updated_by TEXT,
+  PRIMARY KEY (scope, key)
+);

@@ -35,7 +35,7 @@ const LEVELS = ['basic', 'advanced', 'premier'];
 const SECTIONS = ['movement-screen', 'force-plates', 'athletic-testing', 'throwing', 'mound', 'body-comp', 'mental-skills'];
 const EXAM_SECTIONS = ['mental-skills', 'nutrition'];
 const ATHLETE_STATUSES = ['lead', 'active', 'paused', 'alumni'];
-const MAX_BODY = 256 * 1024;
+const MAX_BODY = 1024 * 1024;
 const SEGMENTS = ['on-site', 'remote', 'black-label', 'evaluation'];
 const ARM_DROP_FLAG = 0.10; // flag an athlete whose latest arm score is 10% or more below their previous test
 const FILE_KINDS = ['headshot', 'shirtless', 'mechanics_video', 'trackman_report', 'trackman_video', 'mound_plate_report', 'mocap_report', 'report'];
@@ -668,6 +668,63 @@ async function athleteCalendar(env, athleteId, url) {
   return { athlete_id: a.id, today, dates, plan_error: error, throwing, lifting };
 }
 
+// ---- Saved plans (Programming tab) ----------------------------------------------------------
+// The programming tool keeps each plan as JSON under keys like "velou.plan.<athlete name>". The page saves
+// those keys here so every coach and device sees the same plan. Last save wins.
+
+const PLAN_KEY = /^(velou\.plan\.|velou\.history\.)[^\n]{1,120}$|^velou\.drills\.custom$/;
+const MAX_PLAN = 900 * 1024;
+
+async function listPlans(env, url) {
+  const id = url.searchParams.get('athlete') || '';
+  if (id) await getAthlete(env, id);
+  const { results } = await env.DB.prepare(
+    "SELECT scope, key, data, updated_at, updated_by FROM plan_store WHERE scope = '*' OR scope = ?").bind(id).all();
+  return { items: results };
+}
+
+async function savePlan(env, body, coach) {
+  const scope = String(body.athlete || '');
+  const key = String(body.key || '');
+  if (!PLAN_KEY.test(key)) throw new HttpError(400, 'unsupported key');
+  if (typeof body.data !== 'string' || body.data.length > MAX_PLAN) throw new HttpError(400, 'plan data too large or missing');
+  try { JSON.parse(body.data); } catch (e) { throw new HttpError(400, 'plan data is not JSON'); }
+  if (key === 'velou.drills.custom') { if (scope !== '*') throw new HttpError(400, 'drill library is shared'); }
+  else { if (scope === '*') throw new HttpError(400, 'plans belong to an athlete'); await getAthlete(env, scope); }
+  const at = nowIso();
+  await env.DB.prepare(
+    `INSERT INTO plan_store (scope, key, data, updated_at, updated_by) VALUES (?, ?, ?, ?, ?)
+     ON CONFLICT(scope, key) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at, updated_by = excluded.updated_by`
+  ).bind(scope, key, body.data, at, coach.email).run();
+  return { ok: true, updated_at: at };
+}
+
+async function deletePlan(env, body) {
+  const scope = String(body.athlete || ''), key = String(body.key || '');
+  if (!PLAN_KEY.test(key)) throw new HttpError(400, 'unsupported key');
+  await env.DB.prepare('DELETE FROM plan_store WHERE scope = ? AND key = ?').bind(scope, key).run();
+  return { ok: true };
+}
+
+// ---- Program library tabs for the Programming tab -------------------------------------------
+const LIB_TABS = new Set(['Phases', 'Focuses', 'Drills', 'Program Schedules', 'Intensity Reference', 'Patterning Blocks',
+  'Patterning Scheme', 'Patterning Library', 'Strength Programs', 'Strength Schedules']);
+const libJson = new Map();
+
+async function libraryTab(env, url) {
+  const name = url.searchParams.get('name') || '';
+  if (!LIB_TABS.has(name)) throw new HttpError(400, 'unknown tab');
+  const hit = libJson.get(name);
+  let body;
+  if (hit && Date.now() - hit.at < 300000) body = hit.body;
+  else {
+    const raw = await fetchTab(env.SHEET_PROGRAMLIB, name);
+    body = JSON.stringify({ rows: raw.map(r => r.map(c => String(c == null ? '' : c).trim())) });
+    libJson.set(name, { at: Date.now(), body });
+  }
+  return new Response(body, { status: 200, headers: { ...JSON_HEADERS, 'Cache-Control': 'private, max-age=300' } });
+}
+
 async function athleteFiles(env, athleteId) {
   const { results } = await env.DB.prepare(
     'SELECT id, assessment_id, kind, content_type, size, original_name, created_at FROM files WHERE athlete_id = ? ORDER BY created_at DESC'
@@ -972,6 +1029,12 @@ async function route(request, env, coach, url) {
 
   if (a === 'overview' && !b && method === 'GET') return [200, await overview(env, url)];
   if (a === 'admin' && b === 'sync' && !c && method === 'POST') return [200, await runSyncLogged(env)];
+  if (a === 'library' && b === 'tab' && method === 'GET') return [200, await libraryTab(env, url), true];
+  if (a === 'plans' && !b) {
+    if (method === 'GET') return [200, await listPlans(env, url)];
+    if (method === 'PUT') return [200, await savePlan(env, await readJson(request), coach)];
+    if (method === 'DELETE') return [200, await deletePlan(env, await readJson(request))];
+  }
 
   if (a === 'athletes') {
     if (!b) {
@@ -982,6 +1045,8 @@ async function route(request, env, coach, url) {
         const athlete = await getAthlete(env, b);
         athlete.assessments = await athleteAssessments(env, b);
         athlete.files = await athleteFiles(env, b);
+        athlete.programs = (await env.DB.prepare(
+          'SELECT category, program, starts_on, ends_on FROM program_assignments WHERE athlete_id = ? ORDER BY starts_on').bind(b).all()).results;
         return [200, athlete];
       }
       if (method === 'PATCH') return [200, await updateAthlete(env, b, await readJson(request))];
