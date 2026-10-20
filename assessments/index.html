@@ -8,17 +8,20 @@
 <title>Assessments · VeloU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <style>
+/* All text is Barlow */
+button,input,select,textarea,code,kbd,pre,samp{font-family:inherit}
+
 /* Design tokens, type and components follow the Coach Onboarding site (onboarding/assets/velou.css). */
 :root{
   color-scheme: dark;
   --bg:#100D0B; --panel:#1B1714; --panel-2:#231E1A; --line:#352D28;
   --text:#F1E9E4; --muted:#AA9F97; --faint:#766B63;
   --red:#E5534B; --lime:#D4F57A; --cool:#7E93A6; --amber:#E0C04A;
-  --display:"Anton","Impact","Arial Narrow Bold",sans-serif;
-  --label:"Barlow Condensed","Arial Narrow",sans-serif;
-  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --display:"Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --label:"Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --body:"Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -34,7 +37,7 @@ body::before{
   mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%);
 }
 .wrap{max-width:980px;margin:0 auto}
-h1,h2{font-family:var(--display);font-weight:400;letter-spacing:.01em;line-height:1.05;text-wrap:balance;margin:0;text-transform:uppercase}
+h1,h2{font-family:var(--display);font-weight:700;letter-spacing:.01em;line-height:1.05;text-wrap:balance;margin:0;text-transform:uppercase}
 h1{font-size:clamp(34px,6vw,60px)}
 p{margin:0;max-width:66ch}
 :focus-visible{outline:2px solid var(--red);outline-offset:3px}
@@ -63,7 +66,7 @@ section{padding-block:40px 8px;display:grid;gap:22px}
   transition:border-color .15s,box-shadow .15s,transform .15s;
 }
 .md:hover{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 6px 18px rgba(229,83,75,.18);transform:translateY(-2px)}
-.md .n{font:400 34px/1 var(--display);color:var(--c)}
+.md .n{font:700 34px/1 var(--display);color:var(--c)}
 .md b{font:700 18px var(--label);text-transform:uppercase;letter-spacing:.03em}
 .md::after{content:"Select \2192";justify-self:start;margin-top:4px;font:700 12px var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
 .rule{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--panel);border-left:3px solid var(--red);padding:14px 18px}

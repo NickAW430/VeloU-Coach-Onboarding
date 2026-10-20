@@ -17,8 +17,11 @@
 <meta name="description" content="VeloU Strength: every program, phase, split, and duration.">
 
 <title>VeloU Strength</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <style>
+/* All text is Barlow */
+button,input,select,textarea,code,kbd,pre,samp{font-family:inherit}
+
 :root {
   /* VeloU brand palette: the ONLY six colors used anywhere on this page --
      000000 (black) / FFFFFF (white) / E10600 (red) / 56B7E6 (blue) /
@@ -47,8 +50,8 @@
   --page-bg: rgba(91, 103, 112, 0.04);
   --card-bg: var(--white);
   --max: 960px;
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --font-body: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-body: "Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -290,7 +293,7 @@ table, .badge { font-variant-numeric: tabular-nums; }
 .phase-summary-weeks { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .phase-summary-name { font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.02em; color: var(--accent, var(--ink)); margin-bottom: 6px; }
 .phase-summary-body { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
-.phase-summary-band { display: inline-block; margin-top: 8px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; background: var(--hdr-bg); color: var(--ink); padding: 2px 7px; border-radius: 4px; }
+.phase-summary-band { display: inline-block; margin-top: 8px; font-family: var(--font-body); font-size: 11px; background: var(--hdr-bg); color: var(--ink); padding: 2px 7px; border-radius: 4px; }
 
 .jump-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
 .jump-row a { background: var(--hdr-bg); color: var(--ink); text-decoration: none; padding: 5px 12px; border-radius: 999px; font-family: var(--font-display); font-size: 13px; font-weight: 600; letter-spacing: 0.03em; }

@@ -19,6 +19,9 @@
 <title>VeloU</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <style>
+/* All text is Barlow */
+button,input,select,textarea,code,kbd,pre,samp{font-family:inherit}
+
 :root {
   --ink: #18130f;
   --title-bg: #0d0d0d;
@@ -31,8 +34,8 @@
   --page-bg: #faf7f5;
   --card-bg: #ffffff;
   --white: #ffffff;
-  --font-display: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-body: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-body: "Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 /* ALWAYS-DARK */
 :root { color-scheme: dark;
@@ -89,6 +92,12 @@ h1 { font-size: 38px; font-weight: 700; margin: 0 0 8px; text-align: center; }
   color: #fff;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+.tile { position: relative; overflow: hidden; }
+.tile::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent, #fff);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+}
+.tile:hover::before, .tile:focus-visible::before { transform: scaleX(1); }
 .tile:hover { transform: translateY(-3px); background: linear-gradient(180deg, #202020 0%, rgba(32,32,32,0) 100%); }
 .tile:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 .tile-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
@@ -107,25 +116,25 @@ footer { margin-top: 44px; color: var(--muted); font-size: 12px; text-align: cen
 <h1 class="sr-only">VeloU</h1>
 
 <div class="tiles">
-  <a class="tile" href="assessments/">
+  <a class="tile" href="assessments/" style="--accent:#e10600">
     <span class="tile-eyebrow">Portal</span>
     <h2>Assessments</h2>
     <p>Evaluate athletes at intake and track their progress through structured re-testing.</p>
     <span class="tile-cta">Open Assessments →</span>
   </a>
-  <a class="tile" href="athlete-management/">
+  <a class="tile" href="athlete-management/" style="--accent:#56b7e6">
     <span class="tile-eyebrow">Portal</span>
     <h2>Athlete Management</h2>
     <p>Keep every athlete's plan, progress and follow-up organized in one place.</p>
     <span class="tile-cta">Open Athlete Management →</span>
   </a>
-  <a class="tile" href="education/">
+  <a class="tile" href="education/" style="--accent:#88e0c6">
     <span class="tile-eyebrow">Portal</span>
     <h2>Education</h2>
     <p>Learn the VeloU way: our coaching philosophy, programming and the science behind it.</p>
     <span class="tile-cta">Open Education →</span>
   </a>
-  <a class="tile" href="tools/">
+  <a class="tile" href="tools/" style="--accent:#ffffff">
     <span class="tile-eyebrow">Portal</span>
     <h2>Tools</h2>
     <p>Practical tools that support day-to-day coaching and athlete planning.</p>

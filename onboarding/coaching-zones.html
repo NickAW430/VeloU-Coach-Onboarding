@@ -19,8 +19,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <style>
+/* All text is Barlow */
+button,input,select,textarea,code,kbd,pre,samp{font-family:inherit}
+
 :root{
   --bg:#100D0B; --panel:rgba(27,23,20,.95); --ink:#F1E9E4; --muted:#AA9F97; --line:#352D28;
   --accent:#E5534B; --accent-ink:#ffffff; --chip:#231E1A; --chip-hover:#2E2723;
@@ -38,22 +41,22 @@ body{background:var(--bg);color:var(--ink);font-family:"Barlow",system-ui,sans-s
   display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);
   box-shadow:0 10px 30px rgba(0,0,0,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .head{padding:16px 16px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}
-.eyebrow{font:700 12px/1 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0}
-h1{font:400 34px/1 "Anton","Barlow Condensed",sans-serif;text-transform:uppercase;margin:8px 0 6px;letter-spacing:.01em}
+.eyebrow{font:700 12px/1 "Barlow",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0}
+h1{font:700 34px/1 "Barlow",sans-serif;text-transform:uppercase;margin:8px 0 6px;letter-spacing:.01em}
 .meta{margin:0;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
 .collapse{display:none;border:1px solid var(--line);background:var(--chip);color:var(--ink);
-  font:700 13px "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;cursor:pointer}
+  font:700 13px "Barlow",sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;cursor:pointer}
 .scroll{overflow:auto;padding:14px 16px 16px;display:flex;flex-direction:column;gap:16px}
-.label{font:700 12px/1 "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.label{font:700 12px/1 "Barlow",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
 .coach{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .cbtn{border:1px solid var(--line);background:var(--chip);color:var(--ink);padding:10px 4px;cursor:pointer;display:grid;gap:2px;justify-items:center}
-.cbtn b{font:400 30px/1 "Anton",sans-serif}
-.cbtn span{font:700 12px "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cbtn b{font:700 30px/1 "Barlow",sans-serif}
+.cbtn span{font:700 12px "Barlow",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .cbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
 .cbtn[aria-pressed="true"] span{color:#fff}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 .btn{border:1px solid var(--line);background:var(--chip);color:var(--ink);padding:8px 6px;
-  font:700 14px/1.1 "Barlow Condensed",sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;text-align:center}
+  font:700 14px/1.1 "Barlow",sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;text-align:center}
 .btn:hover,.cbtn:hover{background:var(--chip-hover)}
 .btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .btn:focus-visible,.cbtn:focus-visible,.zcard:focus-visible,.collapse:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -62,11 +65,11 @@ h1{font:400 34px/1 "Anton","Barlow Condensed",sans-serif;text-transform:uppercas
 .zcard{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);border-left:4px solid var(--zc);
   background:var(--chip);color:var(--ink);padding:8px 10px;cursor:pointer}
 .zcard:hover{background:var(--chip-hover)}
-.zn{font:400 30px/1 "Anton",sans-serif;color:var(--zc);text-align:center}
-.zb b{display:block;font:700 16px "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.zn{font:700 30px/1 "Barlow",sans-serif;color:var(--zc);text-align:center}
+.zb b{display:block;font:700 16px "Barlow",sans-serif;letter-spacing:.06em;text-transform:uppercase}
 .zb small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35;margin-top:2px}
 .sel{border:1px solid var(--line);padding:10px 12px;background:var(--chip)}
-.sel h2{font:700 19px/1.05 "Barlow Condensed",sans-serif;margin:0 0 3px;text-transform:uppercase}
+.sel h2{font:700 19px/1.05 "Barlow",sans-serif;margin:0 0 3px;text-transform:uppercase}
 .sel .brand{margin:0;font-size:13px;color:var(--muted)}
 .sel .dims{margin:6px 0 0;font-size:13px}
 #list{display:none}
@@ -74,7 +77,7 @@ h1{font:400 34px/1 "Anton","Barlow Condensed",sans-serif;text-transform:uppercas
 .hint{position:fixed;z-index:4;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);background:var(--panel);border:1px solid var(--line);
   padding:8px 12px;font-size:13px;color:var(--muted);max-width:calc(100% - 32px)}
 .tip{position:fixed;z-index:6;pointer-events:none;background:var(--panel);border:1px solid var(--line);padding:8px 10px;box-shadow:0 6px 20px rgba(0,0,0,.4);max-width:260px}
-.tip b{display:block;font:700 17px/1.1 "Barlow Condensed",sans-serif}
+.tip b{display:block;font:700 17px/1.1 "Barlow",sans-serif}
 .tip span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .walkpad{position:fixed;z-index:6;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 64px);display:grid;
   grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,48px);gap:6px}
@@ -746,12 +749,12 @@ const CFG={
      teal:{n:0,r:[4.2,4.2,...BOT],p:[4.2,43.2]},green:{n:3,r:[4.2,65.5,...BOT],p:[31,42.6],col:'orange'}}
 };
 function labelTex(text,sub,color){const c=document.createElement('canvas'),x=c.getContext('2d');c.width=512;c.height=sub?300:200;
-  x.fillStyle=color;x.textAlign='center';x.textBaseline='middle';x.font='400 150px "Anton","Barlow Condensed",sans-serif';x.fillText(text,256,sub?110:100);
-  if(sub){x.font='700 56px "Barlow Condensed",sans-serif';x.fillText(sub,256,235)}
+  x.fillStyle=color;x.textAlign='center';x.textBaseline='middle';x.font='400 150px "Barlow",sans-serif';x.fillText(text,256,sub?110:100);
+  if(sub){x.font='700 56px "Barlow",sans-serif';x.fillText(sub,256,235)}
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
-function pinTex(text,color){const c=document.createElement('canvas'),x=c.getContext('2d');x.font='700 46px "Barlow Condensed",sans-serif';
+function pinTex(text,color){const c=document.createElement('canvas'),x=c.getContext('2d');x.font='700 46px "Barlow",sans-serif';
   const w=Math.ceil(x.measureText(text).width)+44;c.width=w;c.height=72;x.fillStyle=color;rr(x,0,0,w,72,36);x.fill();
-  x.font='700 46px "Barlow Condensed",sans-serif';x.fillStyle='#100D0B';x.textBaseline='middle';x.textAlign='center';x.fillText(text,w/2,38);
+  x.font='700 46px "Barlow",sans-serif';x.fillStyle='#100D0B';x.textBaseline='middle';x.textAlign='center';x.fillText(text,w/2,38);
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return {t,a:w/72}}
 const ZONES={};
 Object.keys(SLOTS).forEach(k=>{const col=new THREE.Color(SLOTS[k].c);
@@ -816,14 +819,14 @@ function focusZone(k){if(walk)exitWalk();const cfg=CFG[coachCount],mine=Object.k
 const decals=[],tags=[];
 function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function decal(text,x,z,size,color,rot){
-  const c=document.createElement('canvas'),ctx=c.getContext('2d'),fs=110,font=`700 ${fs}px "Barlow Condensed","Arial Narrow",sans-serif`;
+  const c=document.createElement('canvas'),ctx=c.getContext('2d'),fs=110,font=`700 ${fs}px "Barlow",sans-serif`;
   ctx.font=font;const w=Math.ceil(ctx.measureText(text).width)+40;c.width=w;c.height=Math.round(fs*1.25);
   ctx.font=font;ctx.fillStyle=color;ctx.textBaseline='middle';ctx.fillText(text,20,c.height/2+4);
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;
   const m=new THREE.Mesh(new THREE.PlaneGeometry(size*w/c.height,size),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false}));
   m.rotation.x=-Math.PI/2;m.rotation.z=rot||0;m.position.set(x,.03,z);scene.add(m);decals.push(m);return m}
 function tag(text){
-  const c=document.createElement('canvas'),ctx=c.getContext('2d'),fs=42,font=`600 ${fs}px "Barlow Condensed","Arial Narrow",sans-serif`;
+  const c=document.createElement('canvas'),ctx=c.getContext('2d'),fs=42,font=`600 ${fs}px "Barlow",sans-serif`;
   ctx.font=font;const w=Math.ceil(ctx.measureText(text).width)+36;c.width=w;c.height=68;
   ctx.fillStyle='rgba(14,17,21,.86)';rr(ctx,0,0,w,68,12);ctx.fill();ctx.font=font;ctx.fillStyle='#ffffff';ctx.textBaseline='middle';ctx.fillText(text,18,36);
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;

@@ -19,10 +19,13 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/velou.css?v=9">
 <script src="assets/interactive.js?v=11" defer></script>
 <script src="assets/forms.js"></script><style>
+/* All text is Barlow */
+button,input,select,textarea,code,kbd,pre,samp{font-family:inherit}
+
 /* Module 7 additions */
 .reads{display:grid;gap:10px}
 .read{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);padding:14px 18px;text-decoration:none}
@@ -33,7 +36,7 @@
 .read span{color:var(--muted);font-size:14.5px}
 .norms{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .nm{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--green);padding:12px;display:grid;gap:4px;align-content:start}
-.nm b{font-family:var(--display);font-weight:400;font-size:26px;line-height:1;color:var(--green)}
+.nm b{font-family:var(--display);font-weight:700;font-size:26px;line-height:1;color:var(--green)}
 .nm span{font-size:13.5px;color:var(--muted);line-height:1.35}
 @media (max-width:900px){.norms{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:480px){.norms{grid-template-columns:1fr 1fr}}
@@ -79,12 +82,12 @@
 .stds7{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .g7{background:var(--panel);border:1px solid var(--line);padding:14px;display:grid;gap:4px;justify-items:center;text-align:center}
 .g7 svg{width:110px;height:auto}
-.g7 b{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;color:var(--green)}
+.g7 b{font-family:var(--display);font-weight:700;font-size:30px;line-height:1;color:var(--green)}
 .g7 span{font-family:var(--label);font-size:13.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 @media (max-width:700px){.stds7{grid-template-columns:1fr 1fr}}
 .xtabs{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .xtab{appearance:none;background:var(--panel);border:1px solid var(--line);color:var(--muted);font:700 13.5px var(--label);letter-spacing:.04em;text-transform:uppercase;padding:10px 6px;cursor:pointer;display:grid;gap:4px;justify-items:center;text-align:center;line-height:1.15}
-.xtab span{font-family:var(--display);font-size:22px;color:var(--faint);font-weight:400}
+.xtab span{font-family:var(--display);font-size:22px;color:var(--faint);font-weight:700}
 .xtab:hover{color:var(--text)}
 .xtab[aria-selected="true"]{border-color:var(--red);color:var(--text);background:var(--panel-2)}
 .xtab[aria-selected="true"] span{color:var(--red)}
@@ -136,7 +139,7 @@
 .tests{display:grid;gap:10px}
 .test{background:var(--panel);border:1px solid var(--line);display:grid;grid-template-columns:230px 1fr}
 .test .side{padding:18px;border-right:1px solid var(--line);display:grid;gap:8px;align-content:start;background:var(--panel-2)}
-.test .side b{overflow-wrap:anywhere;font-family:var(--display);font-weight:400;font-size:22px;text-transform:uppercase;line-height:1.05}
+.test .side b{overflow-wrap:anywhere;font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;line-height:1.05}
 .test .side .comp{font-family:var(--label);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
 .test .side p{font-size:14.5px;color:var(--muted)}
 .test .side .out{display:flex;flex-wrap:wrap;gap:6px}
@@ -160,7 +163,7 @@
 
 .stops{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .sp7{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--red);padding:16px;display:grid;gap:8px;align-content:start}
-.sp7 b{font-family:var(--display);font-weight:400;font-size:24px;text-transform:uppercase}
+.sp7 b{font-family:var(--display);font-weight:700;font-size:24px;text-transform:uppercase}
 .sp7 p{font-size:15px;color:var(--muted)}
 @media (max-width:700px){.stops{grid-template-columns:1fr}}
 
