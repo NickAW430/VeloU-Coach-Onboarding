@@ -1815,12 +1815,20 @@ function rttList(){
   return D.programs.filter(p=>/^THR•RT[TM]•/.test(p.code)).map(p=>{
     const m=p.code.match(/^THR•(RT[TM])•(\d+)W•(.+)$/), inj=m?tcase(m[3]):p.code;
     return {code:p.code,weeks:Number(p.weeks)||Number(m&&m[2])||8,kind:m?m[1]:'RTT',injury:inj,label:(m&&m[1]==='RTM'?'Return to mound':'Return to throw')+' · '+inj+' · '+(Number(p.weeks)||Number(m&&m[2])||8)+' wks'};
-  }).sort((a,b)=>a.label.localeCompare(b.label));
+  }).sort((a,b)=>(a.kind===b.kind?0:a.kind==='RTT'?-1:1)||a.label.localeCompare(b.label));
 }
-function rttSuggest(note){
+function rttSuggest(note,loc){
   const t=String(note||'').toLowerCase(); if(!t) return '';
-  const want=/revision/.test(t)?'REVISION':/hybrid/.test(t)?'HYBRID':/repair|brace/.test(t)?'REPAIR':/sprain.*(g2|grade 2|ii\b|2)/.test(t)?'SPRAIN G2':/sprain|strain/.test(t)?'SPRAIN G1':/pain|sore/.test(t)?'ELBOW PAIN':/tj|tommy|reconstruct/.test(t)?'HYBRID':'';
-  const hit=rttList().find(p=>p.code.endsWith('•'+want)&&/RTT/.test(p.kind)); return hit&&want?hit.label:'';
+  const pick=w=>{const h=rttList().find(p=>p.kind==='RTT'&&p.code.toUpperCase().includes(w)); return h?'Suggested from the injury notes: '+h.label:''};
+  const elbow=/elbow/i.test(loc||'')||/ucl|elbow|\btj\b|tommy/.test(t);
+  if(/revision/.test(t)) return pick('UCL REVISION');
+  if(/hybrid/.test(t)) return pick('UCL HYBRID');
+  if(/repair|brace/.test(t)) return pick('UCL REPAIR');
+  if(/sprain.*(g2|grade 2|ii\b|2)/.test(t)) return pick('SPRAIN G2');
+  if(/sprain|strain/.test(t)) return pick('SPRAIN G1');
+  if(elbow&&/\btj\b|tommy|reconstruct|surgery/.test(t)) return 'The notes mention surgery. Choose the repair, hybrid or revision program that matches the procedure.';
+  if(elbow&&/pain|sore/.test(t)) return pick('ELBOW PAIN');
+  return '';
 }
 function detectCont(c,start){
   const st=day0(start); if(!st) return null;
@@ -1910,7 +1918,7 @@ function renderBuild(){
       const k2=card('Can the athlete begin throwing yet?'); k2.append(bOpts([['yes','Yes'],['no','No, not yet']],Q.canThrow,v=>bset({canThrow:v})));
       if(Q.canThrow==='no'){
         const k3=card('Return to throw','The exact injury on file is shown above. Pick the program you plan to start them on.');
-        const sug=rttSuggest(c.injNote); if(sug) k3.append(el('div','qmsg','Suggested from the injury notes: '+sug));
+        const sug=rttSuggest(c.injNote,c.injLoc); if(sug) k3.append(el('div','qmsg',sug));
         k3.append(bField('When is the athlete expected to begin their RTT?',bDate(Q.rttStart||'',v=>bset({rttStart:v}))));
         const list=rttList(); k3.append(bField('Which program do you plan to start them on?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
         const pg=list.find(p=>p.code===Q.rttCode); if(pg) k3.append(bField('Starting week',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)}))));
@@ -1972,6 +1980,8 @@ function renderBuild(){
   const out=PBL.build(I), sel=Q.liftPat!=null&&out.lift.options[Q.liftPat]?Q.liftPat:out.lift.rec, opt=out.lift.options[sel];
   sug.append(el('div','qh','Suggested '+out.W+' week plan'),el('div','qs',day0(Q.start).toLocaleDateString(undefined,{month:'short',day:'numeric'})+' to '+day0(out.end).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' · '+out.season+(out.N!=null?' · '+out.N+' weeks to competition':'')));
   for(const w of out.warn) sug.append(el('div','qmsg qwarn',w));
+  if(!c.thrLevel&&!Q.thrLevel) sug.append(el('div','qmsg qwarn','No transference score on file, so Level 1 is assumed for throwing. Set the throwing level under Assumptions if that is wrong.'));
+  if(!c.autoTheory&&!Q.theory) sug.append(el('div','qmsg qwarn','No production score on file, so Tension Literacy is assumed for lifting. Set the training theory under Assumptions if that is wrong.'));
   if(contUse){const r=el('div','qrow'); r.append(el('span','qs','Continuing '+FAMN[contUse.fam]+' from P'+contUse.ph+' ('+contUse.src+').')); r.append(bSel([['adv','Advance to P'+Math.min(3,contUse.ph+1)],['hold','Hold at P'+contUse.ph]],advance?'adv':'hold',v=>bset({contAdvance:v}))); sug.append(r)}
   else if(cont&&cont.fam!==theory) sug.append(el('div','qs','The previous lifting theory was '+FAMN[cont.fam]+'. A new training theory starts at P1.'));
   const tbl=el('div','qtbl'), row=(a,b,cc)=>{const r=el('div','qtr'); r.append(el('span','qt1',a),el('span','qt2',b),el('span','qt3',cc||'')); tbl.append(r)};
