@@ -171,15 +171,15 @@ button.rr:hover{background:var(--sunk)}
 .wrap.dv:not(.editing) .dsum{padding:0 10px 3px;font-size:11px}
 .dvrest{color:var(--muted);font-style:italic}
 .ldays{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px;align-items:stretch}
-.lbox{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);min-height:132px;min-width:0}
+.lbox{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);min-height:0;min-width:0}
 .lbox.today{border-color:var(--seam);box-shadow:inset 0 3px 0 var(--seam)}
 .lbox.lover{border-color:var(--heat);box-shadow:inset 0 0 0 2px var(--heat)}
 .lbox.ldrag,.lrow.ldrag{opacity:.35}
-.ldh{padding:11px 12px 0;user-select:none}
+.ldh{padding:8px 10px 0;user-select:none}
 .lbox.lediting .ldh{cursor:grab;touch-action:none}
 .lh1{font:600 11px/1.2 var(--mono);letter-spacing:.08em;color:var(--muted)}
-.lh2{font:700 18px/1.2 var(--body);color:#fff;margin:7px 0 12px;white-space:nowrap;overflow:hidden}
-.lrow.linfo{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:4px 0}
+.lh2{font:700 14.5px/1.2 var(--body);color:#fff;margin:3px 0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow.linfo{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:2px 0}
 .lrow.linfo b{font:600 11.5px var(--mono);text-align:right;overflow-wrap:anywhere}
 .lgiant{display:flex;flex-direction:column;gap:14px;border:1px solid var(--line);background:#0a0c0e;padding:14px}
 .lsec{border:1px solid #2f383e;background:rgba(255,255,255,.015)}
@@ -190,23 +190,23 @@ button.rr:hover{background:var(--sunk)}
 .lst span{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
 .lch{color:var(--muted);font-size:13px}
 .lsec .ldays{padding:2px 14px 14px}
-.lgrid{display:grid;grid-template-columns:repeat(3,minmax(250px,1fr));gap:10px;overflow-x:auto;align-items:stretch}
-.ldcell{background:#101417;border:1px solid var(--line);border-top:3px solid #3a444a;padding:10px 12px;font:700 16px/1.2 var(--body);letter-spacing:.04em;color:#fff;text-align:center;user-select:none}
+.lgrid{display:grid;grid-template-columns:repeat(3,minmax(250px,1fr));gap:8px;overflow-x:auto;align-items:stretch}
+.ldcell{background:#101417;border:1px solid var(--line);border-top:3px solid #3a444a;padding:8px 10px;font:700 16px/1.2 var(--body);letter-spacing:.04em;color:#fff;text-align:center;user-select:none}
 .ldcell.today{border-top-color:var(--seam)}
 .ldcell.lediting{cursor:grab;touch-action:none}
 .lbox .lh1{font:600 10.5px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--heat)}
 .lgrid .lbox.today{border-color:var(--line);box-shadow:none}
 .lh2.off{color:var(--muted);font-weight:600}
-.lline{border-top:1px solid rgba(255,255,255,.09);margin:0 12px}
-.lexp{display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:9px 12px;color:var(--muted);font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:left;width:100%}
+.lline{border-top:1px solid rgba(255,255,255,.09);margin:0 10px}
+.lexp{display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:4px 10px;color:var(--muted);font:600 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:left;width:100%}
 .lexp:hover{color:#fff}
-.lrws{display:flex;flex-direction:column;padding:2px 12px 10px}
-.lrow{display:grid;gap:6px;align-items:center;padding:4px 0;border-top:1px solid #1d2428;font-size:12.5px;line-height:1.25}
-.lrow.newblk{margin-top:6px;border-top-color:#3a444a}
+.lrws{display:flex;flex-direction:column;padding:0 10px 6px}
+.lrow{display:grid;gap:5px;align-items:center;padding:2px 0;border-top:1px solid #1d2428;font-size:11.5px;line-height:1.2}
+.lrow.newblk{margin-top:3px;border-top-color:#3a444a}
 .lrow.lhead{font:600 9.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-top:0}
 .lrow .sl{font:600 10.5px var(--mono);color:var(--heat)}
 .lrow .nm2{overflow-wrap:anywhere}
-.lrow .n{font:600 12px var(--mono);text-align:right;overflow-wrap:anywhere}
+.lrow .n{font:600 11px var(--mono);text-align:right;overflow-wrap:anywhere}
 .lrow.lbefore{box-shadow:0 -2px 0 var(--heat)}
 .lrow.lafter{box-shadow:0 2px 0 var(--heat)}
 .lin{width:100%;min-width:0;background:#000;border:1px solid var(--line);padding:3px 4px;font:600 12px var(--mono);color:#fff;text-align:right}
@@ -223,7 +223,7 @@ button.rr:hover{background:var(--sunk)}
 .lcr b{font:600 11.5px var(--mono);text-align:right;overflow-wrap:anywhere}
 .lbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .lgrp{font:600 9.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--heat);padding:8px 0 2px}
-.lsub{font:400 11px var(--mono);color:var(--muted);margin-top:1px}
+.lsub{font:400 10px var(--mono);color:var(--muted)}
 .lrow.ledit{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:6px 0}
 .lr1{display:grid;grid-template-columns:18px 26px minmax(0,1fr) auto;gap:6px;align-items:center}
 .lr2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding-left:50px}
@@ -1404,7 +1404,7 @@ function dvBar(){
   t.append(el('b',null,'Training plan'), el('span',null,fmt(ds[0])+' to '+fmt(ds[ds.length-1])));
   const a=el('div','acts2'), mk=(txt,fn,cls,dis,lab)=>{const b=el('button','btn sm'+(cls?' '+cls:''),txt); b.type='button'; if(lab) b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',fn); return b};
   a.append(mk('\u2190',()=>{dvOff-=1; VS.off=dvOff; render()},'',false,'Earlier days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; VS.off=0; render()},'',!dvOff,'Back to today'), mk('\u2192',()=>{dvOff+=1; VS.off=dvOff; render()},'',false,'Later days'));
-  a.append(mk(dvEdit?'Done editing':'Edit program',()=>{dvEdit=!dvEdit; VS.edit=dvEdit; coachOpen=dvEdit; render()},dvEdit?'primary':'',false));
+  a.append(mk(dvEdit?'Done editing':'Edit program',()=>{dvEdit=!dvEdit; VS.edit=dvEdit; coachOpen=dvEdit; if(!dvEdit){liftOpen.clear(); VS.open=[]} render()},dvEdit?'primary':'',false));
   const st=el('span','note'); st.id='dvst'; st.textContent=$('status')?$('status').textContent:''; a.append(st); bar.append(t,a);
 }
 // per-date edits: A[kind][YYYY-MM-DD] = {r:{rowKey:{name,dose}}, x:[removed rowKeys], a:[{id,name,dose,grp}]}
@@ -1540,16 +1540,12 @@ function liftDragStart(e,kind,info,srcEl){
     const t=liftDrag&&liftDrag.t; gh.remove(); srcEl.classList.remove('ldrag'); clear(); liftDrag=null; if(ev.type==='pointercancel'||!t) return; liftDrop(kind,info,t)};
   h.addEventListener('pointermove',move); h.addEventListener('pointerup',end); h.addEventListener('pointercancel',end); mark(e.clientX,e.clientY);
 }
-// one line titles: shrink to fit, then abbreviate
-function fitTitles(){
-  const ABBR=[[/Deceleration/g,'Decel'],[/Acceleration/g,'Accel'],[/Rotation/g,'Rot'],[/Horizontal/g,'Horiz'],[/Posterior/g,'Post'],[/Positional Control/g,'Pos Ctrl']];
-  for(const t of root.querySelectorAll('.lh2')){
-    const full=t.dataset.full||t.textContent; t.dataset.full=full; t.title=full; t.textContent=full;
-    let fs=18; t.style.fontSize=fs+'px';
-    while(t.scrollWidth>t.clientWidth&&fs>12){fs-=0.5; t.style.fontSize=fs+'px'}
-    if(t.scrollWidth>t.clientWidth){let s2=full; for(const [re,to] of ABBR) s2=s2.replace(re,to); t.textContent=s2; while(t.scrollWidth>t.clientWidth&&fs>9){fs-=0.5; t.style.fontSize=fs+'px'}}
-  }
-}
+// titles are held to a character count: abbreviate step by step, then cut
+const TMAX=32;
+const ABBR=[[/\s*\/\s*/g,'/'],[/\[Vertical\]/g,'[V]'],[/\[Horizontal\]/g,'[H]'],[/Deceleration/gi,'Decel'],[/Acceleration/gi,'Accel'],[/Rotation/gi,'Rot'],[/\(second exposure\)/i,'(2nd)'],
+  [/resisted speed\/heavy push/i,'Resisted/Heavy'],[/overhead\/throw/i,'OH/Throw'],[/Horizontal/gi,'Horiz'],[/Vertical/gi,'Vert'],[/Posterior/gi,'Post'],[/Lower prep/i,'Low Prep'],[/Upper prep/i,'Up Prep'],
+  [/Upper/g,'Up'],[/Lower/g,'Low'],[/Resisted/gi,'Resist'],[/Dynamic/gi,'Dyn'],[/Sequencing/gi,'Seq'],[/Stability/gi,'Stab'],[/Overhead/gi,'OH']];
+function abbrTitle(t){let x=String(t||''); for(const [re,to] of ABBR){ if(x.length<=TMAX) break; x=x.replace(re,to)} return x.length>TMAX?x.slice(0,TMAX-1)+'…':x}
 function renderBox(l,dt,ix,ctx){
   const cfg=LCFG[l], {days,hasInt,hasTmp,cols,needSt,st,today}=ctx, rowsOf=ctx.rowsOf;
     const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk; box.dataset.lane=l;
@@ -1561,6 +1557,7 @@ function renderBox(l,dt,ix,ctx){
     else if(d&&d.loading) {t2='Loading…'; off=true}
     else if(!d||d.out) {t2='Past the end of this plan.'; off=true}
     else {t2=lnHead(l,d); off=d.rest&&l!=='corr'}
+    t2=abbrTitle(t2);
     const h2=el('div','lh2'+(off?' off':''),t2); hd.append(h2);
     const real=d&&!d.out&&!d.loading;
     if(coachOpen&&real){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt,lane:l},box)})}
@@ -1603,7 +1600,7 @@ function renderAll(){
     const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ');
     const ctx={days,hasInt,hasTmp,cols,needSt,st,today,rowsOf};
     dts.forEach((dt,ix)=>grid.append(renderBox(l,dt,ix,ctx)))}
-  const giant=el('div','lgiant'); giant.append(grid); cal.append(giant); requestAnimationFrame(fitTitles)}
+  const giant=el('div','lgiant'); giant.append(grid); cal.append(giant)}
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
