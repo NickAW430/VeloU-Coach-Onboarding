@@ -235,10 +235,11 @@ button.rr:hover{background:var(--sunk)}
 .qc{border:1px solid var(--line);background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .qh{font:600 15px/1.3 var(--body);color:#fff}
 .qhr{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.bgrid{display:grid;grid-template-columns:minmax(270px,350px) minmax(0,1fr);gap:12px;align-items:stretch}
-.bknown{aspect-ratio:1/1;width:100%;box-sizing:border-box;align-self:start;gap:11px;padding:14px 16px}
-.bqbox{gap:14px;padding:16px 20px;position:relative}
-.kg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px 12px}
+.bgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.bknown,.bqbox{aspect-ratio:1/1;min-height:0;width:100%;box-sizing:border-box}
+.bknown{gap:9px;padding:14px 16px;overflow:auto}
+.bqbox{gap:14px;padding:18px 22px;position:relative}
+.kg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 12px}
 .kg .k{display:flex;flex-direction:column;gap:2px;min-width:0}
 .kg .k.w{grid-column:1/-1}
 .kg .k span{font:500 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
@@ -248,14 +249,23 @@ button.rr:hover{background:var(--sunk)}
 .qprog{font:500 10.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .qtt{font:600 20px/1.3 var(--body);color:#fff}
 .qbody{display:flex;flex-direction:column;gap:12px}
+.qbody.scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:4px}
+.qtri{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr);gap:12px;align-items:end}
+.qduo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.qduo .qf{min-width:0}
+.qduo .qsel{width:100%;min-width:0}
+.qtri .qf{min-width:0}
+.qtri .qsel{width:100%;min-width:0;padding:8px 8px;font-size:13px}
+.kans{display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px solid #1d2428}
+.kansh{font:500 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto}
-.qchips{display:flex;flex-wrap:wrap;gap:6px;padding-top:12px;border-top:1px solid #1d2428}
-.qchip{background:transparent;border:1px solid var(--line);color:#9aa3a8;font:500 11px var(--body);padding:4px 9px;cursor:pointer}
+.qchips{display:flex;flex-wrap:wrap;gap:5px}
+.qchip{background:transparent;border:1px solid var(--line);color:#9aa3a8;font:500 10.5px var(--body);padding:3px 7px;cursor:pointer}
 .qchip b{color:#fff;font-weight:600}
 .qchip:hover{border-color:#56b7e6}
 .qchip.on{border-color:#56b7e6;background:rgba(86,183,230,.1)}
 .qback:disabled{opacity:.35;cursor:default}
-@media (max-width:760px){.bgrid{grid-template-columns:1fr}.bknown{aspect-ratio:auto}}
+@media (max-width:760px){.bgrid{grid-template-columns:1fr}.bknown,.bqbox{aspect-ratio:auto}.bknown{overflow:visible}.bqbox{order:-1}.qtri,.qduo{grid-template-columns:1fr}.qbody.scroll{overflow:visible}}
 .qh2{font:600 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--heat);margin-top:6px}
 .qs{font-size:12px;line-height:1.4;color:var(--muted)}
 .qopts{display:flex;flex-wrap:wrap;gap:8px}
@@ -1992,8 +2002,9 @@ function bDefs(c,Q,eff,level,theory){
   const rttBody=(k,startLabel)=>{
     const list=rttList(), sg=rttSuggest(c.injNote,c.injLoc); if(sg) k.append(el('div','qmsg',sg));
     k.append(bField('Which program do you plan to start them on?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
-    const pg=list.find(p=>p.code===Q.rttCode); if(pg) k.append(bField('Starting week',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)}))));
-    k.append(bField(startLabel,bDate(Q.rttStart||Q.start,v=>bset({rttStart:v}),{min:Q.start})))};
+    const pg=list.find(p=>p.code===Q.rttCode), r=el('div','qduo');
+    if(pg) r.append(bField('Starting week',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)}))));
+    r.append(bField(startLabel,bDate(Q.rttStart||Q.start,v=>bset({rttStart:v}),{min:Q.start}))); k.append(r)};
   D.start={label:'Start',title:'What is the athlete’s start date?',
     body:k=>k.append(bDate(Q.start,v=>x.go('start',{start:v||ymd(new Date())}))), txt:()=>SHORT(Q.start), can:()=>!!Q.start};
   D.comp={label:'Competition',title:'When is their next expected competition?',
@@ -2006,8 +2017,8 @@ function bDefs(c,Q,eff,level,theory){
     body:k=>k.append(bOpts([['yes','Yes'],['no','No']],Q.recovered,v=>x.go('rec',{recovered:v}))), txt:()=>Q.recovered==='no'?'No':'Yes', can:()=>!!Q.recovered};
   D.can={label:'Cleared to throw',title:'Can the athlete begin throwing yet?',
     body:k=>k.append(bOpts([['yes','Yes'],['no','No, not yet']],Q.canThrow,v=>x.go('can',{canThrow:v}))), txt:()=>Q.canThrow==='no'?'Not yet':'Yes', can:()=>!!Q.canThrow};
-  D.rtt={label:'Return to throw',title:'Return to throw',sub:'The exact injury is shown on the left. Pick the program you plan to start them on.',
-    body:k=>rttBody(k,'When is the athlete expected to begin their RTT?'), txt:()=>{const p=rttList().find(p=>p.code===Q.rttCode); return p?p.label:''}, can:()=>!!Q.rttCode};
+  D.rtt={label:'Return to throw',title:'Return to throw',
+    body:k=>rttBody(k,'Expected RTT start'), txt:()=>{const p=rttList().find(p=>p.code===Q.rttCode); return p?p.label:''}, can:()=>!!Q.rttCode};
   D.restrict={label:'Lifting limits',title:'Does the athlete have any restrictions regarding lifting?',
     body:k=>k.append(bOpts([['yes','Yes'],['no','No']],Q.restrict,v=>x.go('restrict',{restrict:v}))), txt:()=>Q.restrict==='yes'?'Yes':'No', can:()=>!!Q.restrict};
   D.areas={label:'Area',title:'Which area is affected?',
@@ -2026,7 +2037,7 @@ function bDefs(c,Q,eff,level,theory){
   D.status={label:'Throwing',title:'Where is the athlete in their throwing?',
     body:k=>{ k.append(bOpts(STATUS_OPTS,Q.status,v=>{ if(v==='onramp'||v==='offmound') x.go('status',{status:v}); else bset({status:v}) }));
       if(Q.status==='deload') k.append(bField('How many weeks? (patterning only during this time)',bSel([1,2,3,4].map(n=>[n,n+' week'+(n>1?'s':'')]),Q.deloadWeeks||1,v=>bset({deloadWeeks:Number(v)}))));
-      if(Q.status==='rtt') rttBody(k,'Date they begin this program')},
+      if(Q.status==='rtt') rttBody(k,'Program start')},
     txt:()=>Q.status==='deload'?'Deload · '+(Q.deloadWeeks||1)+' wk':(STATUS_TXT[Q.status]||''), can:()=>!!Q.status&&(Q.status!=='rtt'||!!Q.rttCode)};
   D.focus={label:'Focus',title:'What is the athlete’s proposed focus for throwing development?',
     body:k=>k.append(bOpts(FOCI.map(f=>[f,f]),Q.focus,v=>x.go('focus',{focus:v}))), txt:()=>Q.focus||'', can:()=>!!Q.focus};
@@ -2037,11 +2048,12 @@ function bDefs(c,Q,eff,level,theory){
   D.equip={label:'Equipment',title:'What equipment does the athlete have access to?',
     body:k=>k.append(bOpts(EQUIP,Q.equip,v=>x.go('equip',{equip:v}))), txt:()=>{const e=EQUIP.find(t=>t[0]===Q.equip); return e?e[1]:''}, can:()=>!!Q.equip};
   D.assume={label:'Assumptions',title:'Check the assumptions',sub:'These come from the athlete’s profile. Change anything that looks wrong; the plan below updates as you do.',
-    body:k=>{ const r=el('div','qrow');
-      r.append(bField('Training days per week',bSel([[4,'4 days'],[5,'5 days'],[6,'6 days']],Q.days,v=>bset({days:Number(v)})),'6 for high school, 5 for college and pro'));
+    body:k=>{ const r=el('div','qtri');
+      r.append(bField('Training days per week',bSel([[4,'4 days'],[5,'5 days'],[6,'6 days']],Q.days,v=>bset({days:Number(v)}))));
       r.append(bField('Throwing level',bSel([[1,'Level 1'],[2,'Level 2'],[3,'Level 3']],Q.thrLevel||'',v=>bset({thrLevel:v}),c.thrLevel?'Auto: Level '+c.thrLevel:'Choose a level')));
       r.append(bField('Training theory',bSel(Object.keys(FAMN).map(f=>[f,FAMN[f]]),Q.theory||'',v=>bset({theory:v}),c.autoTheory?'Auto: '+FAMN[c.autoTheory]:'Auto')));
-      const lm=el('label','qchk'), lx=el('input'); lx.type='checkbox'; lx.checked=!!Q.mound; lx.addEventListener('change',()=>bset({mound:lx.checked})); lm.append(lx,el('span',null,'Has mound access (pitchers are assumed to find mound time)')); r.append(lm); k.append(r)},
+      k.append(r); k.append(el('div','qs','Training days: 6 for high school, 5 for college and pro. Level and theory read Auto when they come from the athlete’s scores.'));
+      const lm=el('label','qchk'), lx=el('input'); lx.type='checkbox'; lx.checked=!!Q.mound; lx.addEventListener('change',()=>bset({mound:lx.checked})); lm.append(lx,el('span',null,'Has mound access (pitchers are assumed to find mound time)')); k.append(lm)},
     txt:()=>Q.days+' days · L'+level+' · '+theory, can:()=>true};
   return D}
 // answers saved before the question box existed count as answered
@@ -2072,13 +2084,16 @@ function renderBuild(){
    if(Object.keys(Q).some(t=>!['start','days','mound','done'].includes(t))||Object.keys(Q.done||{}).length){const so=el('button','btn sm','Start over'); so.type='button'; so.addEventListener('click',()=>{if(confirm('Clear these answers and start a new plan build? The plan already applied stays as it is until you apply a new one.')){bStep=null; A.build={}; changed()}}); hr.append(so)}
    k.append(hr);
    const g=el('div','kg'), kv=(a,v,wide,clamp)=>{const t=el('div','k'+(wide?' w':'')), b=el('b',clamp?'clamp':null,v||'—'); if(clamp&&v) b.title=v; t.append(el('span',null,a),b); g.append(t)};
-   kv('Athlete',c.name,1); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · '),1);
+   kv('Athlete',c.name); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · '));
    kv('Throwing arm',c.hand); kv('Arm score',c.arm!=null?c.arm.toFixed(1):'');
    kv('Throwing level',c.thrLevel?'L'+c.thrLevel+' · '+c.xfer.toFixed(1):'No score'); kv('Lifting level',c.liftLevel?'L'+c.liftLevel+' · '+c.prod.toFixed(1):'No score');
    kv('Training theory',c.autoTheory?FAMN[c.autoTheory]+(c.liftLevel===3&&c.ratio!=null?' · ratio '+c.ratio.toFixed(2):''):'',1);
    kv('Injury',hasInjury(c)?[c.injStatus,c.injLoc!=='None'?c.injLoc:'',c.injNote].filter(Boolean).join(' · '):'None on file',1,1);
    kv('Program Board',[c.board.thr,c.board.lift].filter(Boolean).join('  |  '),1,1);
-   k.append(g); const rn=PBL.ratioNote(c.ratio); if(c.liftLevel===3&&rn) k.append(el('div','qmsg qwarn',rn)); grid.append(k)}
+   k.append(g); const rn=PBL.ratioNote(c.ratio); if(c.liftLevel===3&&rn) k.append(el('div','qmsg qwarn',rn));
+   {const answered=order.filter(id=>done(id)&&defs[id]&&defs[id].txt());
+    if(answered.length){const w=el('div','kans'); w.append(el('div','kansh','Your answers')); const ch=el('div','qchips'); for(const id of answered){const t=el('button','qchip'+(id===curId?' on':'')); t.type='button'; t.append(document.createTextNode(defs[id].label+': '),el('b',null,defs[id].txt())); t.addEventListener('click',()=>{bStep=id; render()}); ch.append(t)} w.append(ch); k.append(w)}}
+   grid.append(k)}
   // the question box
   {const k=el('section','qc bqbox'); grid.append(k);
    const idx=order.indexOf(curId), prevId=curId==='done'?order[order.length-1]:(idx>0?order[idx-1]:null);
@@ -2088,11 +2103,9 @@ function renderBuild(){
      k.append(el('div','qtt','That’s everything.'),el('div','qs','The suggested plan is below. Go back to change an answer, or pick any answer in the list to jump to it.'));
    }else{
      const d=defs[curId]; k.append(el('div','qtt',d.title)); if(d.sub) k.append(el('div','qs',d.sub));
-     const body=el('div','qbody'); d.body(body); k.append(body);
+     const hasDate=curId==='start'||curId==='comp'||curId==='rtt'||(curId==='status'&&Q.status==='rtt'), body=el('div','qbody'+(hasDate?'':' scroll')); d.body(body); k.append(body);
      const foot=el('div','qfoot'), nx=el('button','btn primary',curId==='assume'?'Done':'Next →'); nx.type='button'; nx.disabled=!d.can(); nx.addEventListener('click',()=>bGo(curId,{}));
-     foot.append(el('span'),nx); k.append(foot)}
-   const answered=order.filter(id=>done(id)&&defs[id]&&defs[id].txt());
-   if(answered.length){const ch=el('div','qchips'); for(const id of answered){const t=el('button','qchip'+(id===curId?' on':'')); t.type='button'; t.append(document.createTextNode(defs[id].label+': '),el('b',null,defs[id].txt())); t.addEventListener('click',()=>{bStep=id; render()}); ch.append(t)} k.append(ch)}}
+     foot.append(el('span'),nx); k.append(foot)}}
   const complete=order.filter(id=>id!=='assume').every(done);
   // the suggested plan, below both boxes
   const missing=[]; if(!Q.start) missing.push('a start date'); if(eff.inj&&!Q.recovered) missing.push('the injury recovery question'); if(eff.inj&&Q.recovered==='no'&&!Q.canThrow) missing.push('whether they can begin throwing'); if(eff.inj&&Q.recovered==='no'&&Q.canThrow&&!Q.restrict) missing.push('the lifting restrictions question');
