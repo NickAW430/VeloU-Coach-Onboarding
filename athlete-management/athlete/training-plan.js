@@ -1375,7 +1375,7 @@ $('addForm').addEventListener('submit',e=>{e.preventDefault(); $('addOk').click(
 $('dlgDel').addEventListener('click',()=>{A.removed[swapRow.k]=swapRow.name; delete A.rowSwaps[swapRow.k]; closeDlg(); changed()});
 $('dlgForm').addEventListener('submit',e=>{e.preventDefault(); $('dlgAll').click()});
 // ---- 3-day calendar (data-view="days"): the next three dates of this plan, editable in place ----
-let dvOff=0, dvEdit=false, edCtx=null;
+window.__vdv=window.__vdv||{}; const VS=(window.__vdv[LANE]=window.__vdv[LANE]||{off:0,edit:false,open:[]}); let dvOff=VS.off, dvEdit=VS.edit, edCtx=null;
 const tidyN=x=>String(x||'').replace(/\s*⊃\s*superset/g,'').replace(/\s*\[[^\]]*\]\s*$/,'').trim();
 const pdt=x=>{const d=new Date(String(x||'')); return isNaN(d)?null:d};
 function dvDates(){const o=[]; for(let i=0;i<3;i++){const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dvOff+i); o.push(d)} return o}
@@ -1386,8 +1386,8 @@ function dvBar(){
   const bd=boardObj(), t=el('div','dvt');
   t.append(el('b',null,LANE==='lift'?'Lifting and corrective':'Patterning and throwing'), el('span',null,(LANE==='lift'?[bd.lift,bd.ac,bd.mob]:[bd.thr,bd.pat]).filter(Boolean).join(' · ')||'No program on the Program Board'));
   const a=el('div','acts2'), mk=(txt,fn,cls,dis,lab)=>{const b=el('button','btn sm'+(cls?' '+cls:''),txt); b.type='button'; if(lab) b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',fn); return b};
-  a.append(mk('←',()=>{dvOff-=1; render()},'',false,'Earlier days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; render()},'',!dvOff,'Back to today'), mk('→',()=>{dvOff+=1; render()},'',false,'Later days'));
-  a.append(mk(dvEdit?'Done editing':'Edit program',()=>{dvEdit=!dvEdit; coachOpen=dvEdit; render()},dvEdit?'primary':'',false));
+  a.append(mk('←',()=>{dvOff-=1; VS.off=dvOff; render()},'',false,'Earlier days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; VS.off=0; render()},'',!dvOff,'Back to today'), mk('→',()=>{dvOff+=1; VS.off=dvOff; render()},'',false,'Later days'));
+  a.append(mk(dvEdit?'Done editing':'Edit program',()=>{dvEdit=!dvEdit; VS.edit=dvEdit; coachOpen=dvEdit; render()},dvEdit?'primary':'',false));
   const st=el('span','note'); st.id='dvst'; st.textContent=$('status')?$('status').textContent:''; a.append(st); bar.append(t,a);
 }
 // per-date edits: A[kind][YYYY-MM-DD] = {r:{rowKey:{name,dose}}, x:[removed rowKeys], a:[{id,name,dose,grp}]}
@@ -1429,7 +1429,7 @@ function patEdX(pt,dt){ if(!pt||!dt) return pt; const o=(A.thrDays||{})[ymd(dt)]
   for(const r of rows){let b=by.find(x=>x.ch===r.blk); if(!b){b={ch:r.blk,label:r.blk,name:PATN[r.blk]||'Patterning',drills:[]}; by.push(b)} b.drills.push({name:r.name,dose:(r.sets?r.sets+' \u00d7 ':'')+(r.reps||''),video:''})}
   return Object.assign({},pt,{blocks:by})}
 // ---- Lifting lane: uniform day boxes, blocks, drag to move, copy and delete ----
-let liftOpen=new Set(), liftDrag=null;
+let liftOpen=new Set(VS.open), liftDrag=null;
 const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const liftName=n=>String(n||'').replace(/^[^—]*\s—\s/,'').trim();
 function liftParse(dose){
@@ -1506,7 +1506,7 @@ function renderDVL(){
     const open=coachOpen||liftOpen.has(dk), rows=d?d.rows:[], info=[];
     for(const [lab,prog,s0,e0] of [['Arm care',bd.ac,bd.acs,bd.ace],['Mobility',bd.mob,bd.mobs,bd.mobe]]){ if(!prog) continue; const a=pdt(s0), b=pdt(e0); if(a&&dt<new Date(a.getFullYear(),a.getMonth(),a.getDate())) continue; if(b&&dt>new Date(b.getFullYear(),b.getMonth(),b.getDate(),23,59)) continue; info.push([lab,prog]) }
     const content=!!(rows.length||info.length);
-    if(!coachOpen&&content){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); render()}); box.append(x)}
+    if(!coachOpen&&content){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); VS.open=[...liftOpen]; render()}); box.append(x)}
     if(open&&(content||coachOpen)){
       const list=el('div','lrws'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       if(coachOpen) hr.append(el('span')); hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int')); if(hasTmp) hr.append(el('span','n','Tempo')); if(coachOpen) hr.append(el('span'));
@@ -1574,7 +1574,7 @@ function renderDVT(){
     if(coachOpen&&d&&!d.out){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt},box)})}
     box.append(hd,el('div','lline'));
     const open=coachOpen||liftOpen.has(dk), rows=d&&!d.out?d.rows:[];
-    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); render()}); box.append(x)}
+    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); VS.open=[...liftOpen]; render()}); box.append(x)}
     if(open&&(rows.length||(coachOpen&&d&&!d.out))){
       const list=el('div','lrws'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int'));
