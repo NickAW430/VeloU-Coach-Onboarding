@@ -446,6 +446,7 @@ async function overview(env, url) {
 const PLAN_TAB = 'Athlete Plans';
 const addDays = (iso, n) => new Date(Date.parse(iso + 'T00:00:00Z') + n * 86400000).toISOString().slice(0, 10);
 const dayDiff = (a, b) => Math.round((Date.parse(a + 'T00:00:00Z') - Date.parse(b + 'T00:00:00Z')) / 86400000);
+const joinChunks = cells => cells.filter(Boolean).map(c => (c[0] === '~' ? c.slice(1) : c)).join('');
 const safeLink = v => (/^https?:\/\//.test(v || '') ? v : null);
 
 const libCache = new Map();
@@ -488,7 +489,7 @@ async function readPlan(env, name) {
   if (!body.length || h[0] !== 'Code') return null;
   body.sort((x, y) => (isoDate(y[2]) || '').localeCompare(isoDate(x[2]) || ''));
   try {
-    const plan = JSON.parse(body[0].slice(4).join('').replace(/^~/, ''));
+    const plan = JSON.parse(joinChunks(body[0].slice(4)));
     return plan && Array.isArray(plan.weeks) && plan.start ? plan : null;
   } catch (e) { return null; }
 }
@@ -673,12 +674,38 @@ async function athleteCalendar(env, athleteId, url) {
 const PLAN_KEY = /^(velou\.plan\.|velou\.history\.)[^\n]{1,120}$|^velou\.drills\.custom$/;
 const MAX_PLAN = 900 * 1024;
 
+// A coach's saved plan from the team sheet (the old plan tool wrote its state there), used until the plan is saved here.
+async function readCoachPlan(env, name) {
+  const lit = name.includes("'") ? '"' + name.replace(/"/g, '') + '"' : "'" + name + "'";
+  const rows = await fetchTab(env.SHEET_PROGRAMLIB, 'Coach Plans', `select * where lower(A) = ${lit.toLowerCase()}`);
+  const row = rows.slice(1).find(r => r.length > 3 && normName(r[0]) === normName(name));
+  if (!row) return null;
+  try {
+    const j = JSON.parse(joinChunks(row.slice(3)));
+    return j && j.state && j.state.startDate ? { state: j.state, hist: Array.isArray(j.hist) ? j.hist : [], updated: Number(row[1]) || 0 } : null;
+  } catch (e) { return null; }
+}
+
 async function listPlans(env, url) {
   const id = url.searchParams.get('athlete') || '';
-  if (id) await getAthlete(env, id);
-  const { results } = await env.DB.prepare(
-    "SELECT scope, key, data, updated_at, updated_by FROM plan_store WHERE scope = '*' OR scope = ?").bind(id).all();
-  return { items: results };
+  const a = id ? await getAthlete(env, id) : null;
+  let items = [], store = true;
+  try {
+    items = (await env.DB.prepare("SELECT scope, key, data, updated_at, updated_by FROM plan_store WHERE scope = '*' OR scope = ?").bind(id).all()).results;
+  } catch (e) { store = false; }
+  if (a) {
+    const name = `${a.first_name} ${a.last_name}`, pk = 'velou.plan.' + name, hk = 'velou.history.' + name;
+    if (!items.some(i => i.key === pk)) {
+      try {
+        const seed = await readCoachPlan(env, name);
+        if (seed) {
+          items.push({ scope: id, key: pk, data: JSON.stringify(seed.state), updated_at: null, updated_by: 'team sheet', seed: true });
+          if (seed.hist.length && !items.some(i => i.key === hk)) items.push({ scope: id, key: hk, data: JSON.stringify(seed.hist), updated_at: null, updated_by: 'team sheet', seed: true });
+        }
+      } catch (e) { /* the sheet is optional here */ }
+    }
+  }
+  return { items, store };
 }
 
 async function savePlan(env, body, coach) {

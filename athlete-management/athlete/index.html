@@ -1291,12 +1291,17 @@ class Component extends DCLogic {
       const j = await fetch('/api/v1/plans?athlete=' + encodeURIComponent(id), { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('network'); return r.json(); });
       if (name !== this.state.athlete) return;
       const mine = new Set(['velou.plan.' + name, 'velou.history.' + name, 'velou.drills.custom']);
-      const have = new Set(j.items.map(i => i.key));
-      for (const k of mine) PLAN_SYNC.raw.remove.call(localStorage, k);
-      for (const it of j.items) if (mine.has(it.key)) PLAN_SYNC.raw.set.call(localStorage, it.key, it.data);
+      const raw = PLAN_SYNC.raw, ls = window.localStorage, toPush = [];
+      for (const k of mine) {
+        const it = j.items.find(i => i.key === k), local = ls.getItem(k);
+        if (it && !it.seed) raw.set.call(ls, k, it.data);           // the saved copy wins
+        else if (local != null) { if (j.store) toPush.push(k); }    // keep this browser's copy and upload it
+        else if (it) raw.set.call(ls, k, it.data);                  // the team sheet copy is the starting point
+      }
       PLAN_SYNC.id = id; PLAN_SYNC.name = name;
       installPlanSync();
-      this.setState({ plansReady: true });
+      for (const k of toPush) planChanged(k, ls.getItem(k));
+      this.setState({ plansReady: true, plansErr: !j.store });
     } catch (e) { if (name === this.state.athlete) this.setState({ plansReady: true, plansErr: true }); }
   }
   async loadLibrary() {
