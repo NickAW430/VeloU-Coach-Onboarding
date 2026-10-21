@@ -205,6 +205,10 @@ button.rr:hover{background:var(--sunk)}
 .lcr{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:2px 0}
 .lcr b{font:600 11.5px var(--mono);text-align:right;overflow-wrap:anywhere}
 .lbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.lrow.ledit{display:flex;flex-direction:column;gap:4px;padding:6px 0}
+.lr1{display:grid;grid-template-columns:18px 26px minmax(0,1fr) auto;gap:6px;align-items:center}
+.lr2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding-left:50px}
+.lr2 .lin{text-align:left;font-size:11.5px}
 .wrap.dv.editing .dvbrief{display:none}
 .wrap.tv #lanes,.wrap.tv .dstr:not(.pat),.wrap.tv .sses:not(.pat),.wrap.tv .strtag:not(.pat),.wrap.tv .bst,.wrap.tv .brow.h span:last-child{display:none !important}
 .wrap.tv .brow{display:flex;flex-wrap:nowrap;gap:6px;align-items:center;padding:6px 0;overflow-x:auto}
@@ -1484,7 +1488,7 @@ function renderDVL(){
   const st=day0(A.startDate), today=new Date().toDateString(), bd=boardObj(), g=el('div','ldays'), dts=dvDates(), days=dts.map(dt=>st&&SDATA?liftDay(dt):null);
   {const dl=$('edList'); if(dl&&SDATA&&!dl.childNodes.length){const seen=new Set(); for(const n of (SDATA.ex||[])){const v=liftName(tidyN(n)); if(v&&!seen.has(v)){seen.add(v); const o=el('option'); o.value=v; dl.append(o)}}}}
   const hasInt=days.some(d=>d&&d.rows.some(r=>r.int)), hasTmp=days.some(d=>d&&d.rows.some(r=>r.tempo));
-  const cols=(coachOpen?['18px']:[]).concat(['28px','minmax(0,1fr)','34px','58px'],hasInt?['54px']:[],hasTmp?['78px']:[],coachOpen?['50px']:[]).join(' ');
+  const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ');
   dts.forEach((dt,ix)=>{
     const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk;
     const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','lhd');
@@ -1502,15 +1506,16 @@ function renderDVL(){
     if(open&&(content||coachOpen)){
       const list=el('div','lrows'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       if(coachOpen) hr.append(el('span')); hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int')); if(hasTmp) hr.append(el('span','n','Tempo')); if(coachOpen) hr.append(el('span'));
-      if(rows.length) list.append(hr);
+      if(rows.length&&!coachOpen) list.append(hr);
       rows.forEach((r,i)=>{
-        const re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')); re.style.gridTemplateColumns=cols; re.dataset.dk=dk; re.dataset.i=String(i);
-        const inp=(v,f,cls)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); if(f==='name') x.setAttribute('list','edList'); x.addEventListener('change',()=>liftEdit(dt,o=>{o.rows[i][f]=x.value.trim()})); return x};
-        if(coachOpen){const gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i},re)); re.append(gb)}
-        re.append(el('span','sl',r.slot||''));
-        if(coachOpen){re.append(inp(r.name,'name','nmi'),inp(r.sets,'sets'),inp(r.reps,'reps')); if(hasInt) re.append(inp(r.int,'int')); if(hasTmp) re.append(inp(r.tempo,'tempo'))}
-        else{re.append(el('span','nm2',r.name),el('span','n',r.sets),el('span','n',r.reps)); if(hasInt) re.append(el('span','n',r.int)); if(hasTmp) re.append(el('span','n',r.tempo))}
-        if(coachOpen){const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>liftEdit(dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>liftEdit(dt,o=>{o.rows.splice(i,1)}))); re.append(ac)}
+        const re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')+(coachOpen?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i);
+        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); if(ph) x.placeholder=ph; if(f==='name') x.setAttribute('list','edList'); x.addEventListener('change',()=>liftEdit(dt,o=>{o.rows[i][f]=x.value.trim()})); return x};
+        if(coachOpen){
+          const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i},re));
+          const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>liftEdit(dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>liftEdit(dt,o=>{o.rows.splice(i,1)})));
+          top.append(gb,el('span','sl',r.slot||''),inp(r.name,'name','nmi','Exercise'),ac); bot.append(inp(r.sets,'sets','','Sets'),inp(r.reps,'reps','','Reps'),inp(r.int,'int','','Intensity'),inp(r.tempo,'tempo','','Tempo / speed')); re.append(top,bot)}
+        else{
+          re.style.gridTemplateColumns=cols; re.append(el('span','sl',r.slot||''),el('span','nm2',r.name),el('span','n',r.sets),el('span','n',r.reps)); if(hasInt) re.append(el('span','n',r.int)); if(hasTmp) re.append(el('span','n',r.tempo))}
         list.append(re)});
       if(info.length){const hb=el('div','lcor'); hb.append(el('div','lh3','Corrective')); for(const [lab,prog] of info){const r=el('div','lcr'); r.append(el('span',null,lab),el('b',null,prog)); hb.append(r)} list.append(hb)}
       if(coachOpen){const bar=el('div','lbar'), ad=el('button','btn sm','+ Add exercise'); ad.type='button'; ad.addEventListener('click',()=>liftEdit(dt,o=>{o.rows.push({id:rid(),slot:'',blk:'+',name:'New exercise',sets:'',reps:'',int:'',tempo:''}); if(!o.title) o.title='Custom day'})); bar.append(ad);
