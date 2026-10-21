@@ -181,6 +181,15 @@ button.rr:hover{background:var(--sunk)}
 .lh2{font:700 18px/1.2 var(--body);color:#fff;margin:7px 0 12px;white-space:nowrap;overflow:hidden}
 .lrow.linfo{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:4px 0}
 .lrow.linfo b{font:600 11.5px var(--mono);text-align:right;overflow-wrap:anywhere}
+.lgiant{display:flex;flex-direction:column;gap:14px;border:1px solid var(--line);background:#0a0c0e;padding:14px}
+.lsec{border:1px solid #2f383e;background:rgba(255,255,255,.015)}
+.lsh{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;background:none;border:0;padding:11px 14px;color:#fff;text-align:left}
+.lsh:hover{background:rgba(255,255,255,.03)}
+.lst{display:flex;flex-direction:column;gap:2px;min-width:0}
+.lst b{font:600 12px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.lst span{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.lch{color:var(--muted);font-size:13px}
+.lsec .ldays{padding:2px 14px 14px}
 .lh2.off{color:var(--muted);font-weight:600}
 .lline{border-top:1px solid rgba(255,255,255,.09);margin:0 12px}
 .lexp{display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:9px 12px;color:var(--muted);font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:left;width:100%}
@@ -1062,7 +1071,7 @@ function dateFor(n,day){const d=day0(A.startDate); if(!d) return null; d.setDate
 function currentWeek(total){const d=day0(A.startDate); if(!d) return null; const n=Math.floor((new Date()-d)/6048e5)+1; return n>=1&&n<=total?n:null}
 function flagsOn(){const l=L(); return (l.arm!=null&&l.arm<85)||(l.injury&&!/^(none|—|-|n\/a)$/i.test(l.injury))}
 function render(){
-  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return renderLane(LANE);
+  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return renderAll();
   const p=prog(), weeks=planWeeks(), tl=isTL(), l=L(), v=V(); TP=testPlan(weeks); if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); try{renderLanes()}catch(e){console.warn(e)}
   for(const w of weeks){w.rows=weekRows(w); w.throws=w.rows.reduce((a,r)=>a+(r.plan?0:r.sets*r.reps),0); w.wv=w.rows.reduce((a,r)=>a+(r.wv||0),0); w.peak=w.rows.reduce((a,r)=>Math.max(a,r.rpe||0),0); w.hi=w.rows.reduce((a,r)=>a+(!r.plan&&r.rpe>=90?r.sets*r.reps:0),0)}
   {let prevB=null, prevD7=null, prevPD7=null, first=true;
@@ -1385,10 +1394,10 @@ function dvTargets(weeks){const base=day0(A.startDate); return dvDates().map(dt=
 function boardObj(){try{return JSON.parse(host.dataset.board||'{}')||{}}catch(e){return {}}}
 function dvBar(){
   const bar=$('dvbar'); if(!bar) return; bar.hidden=false; bar.textContent=''; {const wr=root.querySelector('.wrap'); if(wr) wr.classList.toggle('editing',!!coachOpen)}
-  const bd=boardObj(), cfg=LCFG[host.dataset.lane||''], t=el('div','dvt');
-  t.append(el('b',null,cfg?cfg.name:'Training'), el('span',null,(cfg?cfg.sub(bd):'')||'No program on the Program Board'));
+  const ds=dvDates(), t=el('div','dvt');
+  t.append(el('b',null,'Training plan'), el('span',null,fmt(ds[0])+' to '+fmt(ds[ds.length-1])));
   const a=el('div','acts2'), mk=(txt,fn,cls,dis,lab)=>{const b=el('button','btn sm'+(cls?' '+cls:''),txt); b.type='button'; if(lab) b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',fn); return b};
-  a.append(mk('←',()=>{dvOff-=1; VS.off=dvOff; render()},'',false,'Earlier days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; VS.off=0; render()},'',!dvOff,'Back to today'), mk('→',()=>{dvOff+=1; VS.off=dvOff; render()},'',false,'Later days'));
+  a.append(mk('\u2190',()=>{dvOff-=1; VS.off=dvOff; render()},'',false,'Earlier days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; VS.off=0; render()},'',!dvOff,'Back to today'), mk('\u2192',()=>{dvOff+=1; VS.off=dvOff; render()},'',false,'Later days'));
   a.append(mk(dvEdit?'Done editing':'Edit program',()=>{dvEdit=!dvEdit; VS.edit=dvEdit; coachOpen=dvEdit; render()},dvEdit?'primary':'',false));
   const st=el('span','note'); st.id='dvst'; st.textContent=$('status')?$('status').textContent:''; a.append(st); bar.append(t,a);
 }
@@ -1501,10 +1510,10 @@ const SVGI={
   grip:'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>'};
 function liftIcon(cls,svg,label,fn){const b=el('button',cls); b.type='button'; b.innerHTML=svg; b.setAttribute('aria-label',label); b.title=label; if(fn) b.addEventListener('click',fn); return b}
 function liftDrop(kind,info,t){
-  if(kind==='day'){ if(t.box&&t.box._dt) lnSwap(LANE,info.dt,t.box._dt); return }
+  if(kind==='day'){ if(t.box&&t.box._dt) lnSwap(info.lane,info.dt,t.box._dt); return }
   const from={dt:info.dt,i:info.i};
-  if(t.row){const dt=dvDates().find(d=>ymd(d)===t.row.dataset.dk); if(dt) lnMove(LANE,from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
-  else if(t.box&&t.box._dt){const d=lnDay(LANE,t.box._dt); lnMove(LANE,from,{dt:t.box._dt,i:d?d.rows.length:0})}
+  if(t.row){const dt=dvDates().find(d=>ymd(d)===t.row.dataset.dk); if(dt) lnMove(info.lane,from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
+  else if(t.box&&t.box._dt){const d=lnDay(info.lane,t.box._dt); lnMove(info.lane,from,{dt:t.box._dt,i:d?d.rows.length:0})}
 }
 function liftDragStart(e,kind,info,srcEl){
   if(!coachOpen||(e.button!=null&&e.button!==0)) return; e.preventDefault(); e.stopPropagation();
@@ -1513,7 +1522,7 @@ function liftDragStart(e,kind,info,srcEl){
   $('cal').append(gh); srcEl.classList.add('ldrag'); liftDrag={t:null};
   try{h.setPointerCapture(e.pointerId)}catch(_){}
   const clear=()=>root.querySelectorAll('.lover,.lbefore,.lafter').forEach(n=>n.classList.remove('lover','lbefore','lafter'));
-  const mark=(x,y)=>{clear(); liftDrag.t=null; const els=root.elementsFromPoint(x,y), row=els.find(n=>n.classList&&n.classList.contains('lrow')&&n!==srcEl&&!n.classList.contains('lhead')&&!n.classList.contains('linfo')), box=els.find(n=>n.classList&&n.classList.contains('lbox'));
+  const mark=(x,y)=>{clear(); liftDrag.t=null; const els=root.elementsFromPoint(x,y), row=els.find(n=>n.classList&&n.classList.contains('lrow')&&n!==srcEl&&!n.classList.contains('lhead')&&!n.classList.contains('linfo')&&n.dataset.lane===info.lane), box=els.find(n=>n.classList&&n.classList.contains('lbox')&&n.dataset.lane===info.lane);
     if(kind==='day'){ if(box&&box!==srcEl){box.classList.add('lover'); liftDrag.t={box}} }
     else if(row){const r2=row.getBoundingClientRect(), after=y>r2.top+r2.height/2; row.classList.add(after?'lafter':'lbefore'); liftDrag.t={row,after}}
     else if(box){box.classList.add('lover'); liftDrag.t={box}}};
@@ -1532,18 +1541,19 @@ function fitTitles(){
     if(t.scrollWidth>t.clientWidth){let s2=full; for(const [re,to] of ABBR) s2=s2.replace(re,to); t.textContent=s2; while(t.scrollWidth>t.clientWidth&&fs>9){fs-=0.5; t.style.fontSize=fs+'px'}}
   }
 }
-function renderLane(l){
-  const cal=$('cal'), cfg=LCFG[l]; cal.textContent='';
-  if((l==='lift'||l==='prep')&&A.str.on&&!SDATA) loadStrength(); if(l==='pat'&&A.pat.on&&!PAT) loadPattern(); dvBar();
+function renderSection(l){
+  const cfg=LCFG[l], bd=boardObj(), sec=el('section','lsec'), shut=!!(VS.coll&&VS.coll[l]);
+  const sh=el('button','lsh'); sh.type='button'; sh.setAttribute('aria-expanded',String(!shut));
+  const sl=el('span','lst'); sl.append(el('b',null,cfg.name),el('span',null,cfg.sub(bd)||'No program on the Program Board')); sh.append(sl,el('span','lch',shut?'▾':'▴'));
+  sh.addEventListener('click',()=>{VS.coll=VS.coll||{}; VS.coll[l]=!shut; render()}); sec.append(sh);
+  if(shut) return sec;
   const st=day0(A.startDate), today=new Date().toDateString(), g=el('div','ldays'), dts=dvDates(), needSt=l!=='corr';
   const days=dts.map(dt=>(st||!needSt)?lnDay(l,dt):null);
-  {const dl=$('edList'); if(dl&&!dl.childNodes.length){const seen=new Set(), add=n=>{const v=String(n||'').replace('*',' · ').trim(); if(v&&!seen.has(v)){seen.add(v); const o=el('option'); o.value=v; dl.append(o)}};
-    for(const n of ((SDATA&&SDATA.ex)||[])) add(liftName(tidyN(n))); for(const q of D.drills) add(q[0]); for(const k in ((PAT&&PAT.blocks)||{})) for(const n of PAT.blocks[k].drills) add(n.replace(/\s*\(\s*\d+\s*[x×]\s*\d+[^)]*\)\s*$/i,''))}}
   const rowsOf=d=>d&&!d.out&&!d.loading?d.rows:[];
   const hasInt=days.some(d=>rowsOf(d).some(r=>r.int)), hasTmp=days.some(d=>rowsOf(d).some(r=>r.tempo));
   const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ');
   dts.forEach((dt,ix)=>{
-    const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk;
+    const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk; box.dataset.lane=l;
     const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','ldh'), info=d&&d.day?' - Day '+d.day:'';
     hd.append(el('div','lh1',dow+' '+(dt.getMonth()+1)+'/'+dt.getDate()+info));
     let t2, off=false;
@@ -1555,20 +1565,20 @@ function renderLane(l){
     else {t2=lnHead(l,d); off=d.rest&&l!=='corr'}
     const h2=el('div','lh2'+(off?' off':''),t2); hd.append(h2);
     const real=d&&!d.out&&!d.loading;
-    if(coachOpen&&real){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt},box)})}
+    if(coachOpen&&real){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt,lane:l},box)})}
     box.append(hd,el('div','lline'));
-    const open=coachOpen||liftOpen.has(dk), rows=rowsOf(d);
-    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); VS.open=[...liftOpen]; render()}); box.append(x)}
+    const open=coachOpen||liftOpen.has(l+':'+dk), rows=rowsOf(d);
+    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(l+':'+dk):liftOpen.add(l+':'+dk); VS.open=[...liftOpen]; render()}); box.append(x)}
     if(open&&(rows.length||(coachOpen&&real))){
       const list=el('div','lrws'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int')); if(hasTmp) hr.append(el('span','n','Tempo'));
       if(rows.some(r=>!r.info)&&!coachOpen) list.append(hr);
       rows.forEach((r,i)=>{
-        if(r.info){const li=el('div','lrow linfo'); li.dataset.dk=dk; li.dataset.i=String(i); li.append(el('span',null,r.name),el('b',null,r.info)); list.append(li); return}
-        const re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')+(coachOpen?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i);
+        if(r.info){const li=el('div','lrow linfo'); li.dataset.dk=dk; li.dataset.i=String(i); li.dataset.lane=l; li.append(el('span',null,r.name),el('b',null,r.info)); list.append(li); return}
+        const re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')+(coachOpen?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i); re.dataset.lane=l;
         const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); if(ph) x.placeholder=ph; if(f==='name') x.setAttribute('list','edList'); x.addEventListener('change',()=>lnEdit(l,dt,o=>{o.rows[i][f]=x.value.trim()})); return x};
         if(coachOpen){
-          const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i},re));
+          const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i,lane:l},re));
           const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i,1)})));
           top.append(gb,el('span','sl',r.slot||''),inp(r.name,'name','nmi','Exercise'),ac); for(const [f,ph] of cfg.fields) bot.append(inp(r[f],f,'',ph)); bot.style.gridTemplateColumns='repeat('+cfg.fields.length+',minmax(0,1fr))'; re.append(top,bot)}
         else{
@@ -1579,7 +1589,14 @@ function renderLane(l){
         if(d.custom){const rs=el('button','btn sm','Reset to program'); rs.type='button'; rs.addEventListener('click',()=>{delete LS(l)[dk]; changed()}); bar.append(rs)} list.append(bar)}
       box.append(list)}
     g.append(box)});
-  cal.append(g); requestAnimationFrame(fitTitles)}
+  sec.append(g); return sec}
+
+function renderAll(){
+  const cal=$('cal'); cal.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); dvBar();
+  {const dl=$('edList'); if(dl&&!dl.childNodes.length){const seen=new Set(), add=n=>{const v=String(n||'').replace('*',' · ').trim(); if(v&&!seen.has(v)){seen.add(v); const o=el('option'); o.value=v; dl.append(o)}};
+    for(const n of ((SDATA&&SDATA.ex)||[])) add(liftName(tidyN(n))); for(const q of D.drills) add(q[0]); for(const k in ((PAT&&PAT.blocks)||{})) for(const n of PAT.blocks[k].drills) add(n.replace(/\s*\(\s*\d+\s*[x×]\s*\d+[^)]*\)\s*$/i,''))}}
+  const giant=el('div','lgiant'); for(const l of ['prep','pat','throw','lift','corr']) giant.append(renderSection(l));
+  cal.append(giant); requestAnimationFrame(fitTitles)}
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
