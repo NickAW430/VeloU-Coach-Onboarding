@@ -410,6 +410,16 @@ button.rr:hover{background:var(--sunk)}
 .qlift.on{border-color:var(--seam);background:rgba(225,6,0,.12)}
 .qwhy{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:1.4;color:#dfe7ea}
 .nh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.expop{position:fixed;z-index:9999;background:#0b0d0e;border:1px solid #56b7e6;box-shadow:0 14px 34px rgba(0,0,0,.75);overflow:auto;display:flex;flex-direction:column;max-width:calc(100vw - 16px)}
+.exph{position:sticky;top:0;padding:7px 10px;background:#0b0d0e;border-bottom:1px solid var(--line);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);z-index:1}
+.exi{display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;padding:7px 10px;border:0;border-bottom:1px solid #151a1d;background:transparent;color:#d4d9dc;font:500 13px/1.3 var(--body);text-align:left;cursor:pointer}
+.exi.on,.exi:hover{background:rgba(86,183,230,.16)}
+.exi .exn{overflow-wrap:anywhere}
+.exi b{color:#fff;font-weight:700}
+.exi small{font:400 11px var(--body);color:var(--muted)}
+.exi.exu{color:#9ed4f0;border-bottom:0}
+.exe{padding:12px;font-size:12.5px;color:var(--muted);line-height:1.4}
+.lin.nmi:focus{border-color:#56b7e6;outline:none}
 .qh2r{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
 .qh2r .qh2{margin-top:0}
 .qtbl.ed .qtr{grid-template-columns:110px minmax(0,1fr) auto 140px;align-items:center}
@@ -1920,7 +1930,7 @@ function renderBox(l,dt,ix,ctx){
       rows.forEach((r,i)=>{
         if(r.info){const li=el('div','lrow linfo'); li.dataset.dk=dk; li.dataset.i=String(i); li.dataset.lane=l; li.append(el('span',null,r.name),el('b',null,r.info)); list.append(li); return}
         const re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')+(coachOpen?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i); re.dataset.lane=l;
-        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); if(ph) x.placeholder=ph; if(f==='name') x.setAttribute('list','edList'); x.addEventListener('change',()=>lnEdit(l,dt,o=>{o.rows[i][f]=x.value.trim()})); return x};
+        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); if(ph) x.placeholder=ph; if(f==='name') exPick(x,l,(nm,dose)=>{x._picked=1; lnEdit(l,dt,o=>{const r=o.rows[i]; r.name=nm; if(dose&&!r.sets&&!r.reps){r.sets=dose.sets; r.reps=dose.reps}})}); x.addEventListener('change',()=>{ if(x._picked) return; lnEdit(l,dt,o=>{o.rows[i][f]=x.value.trim()}) }); return x};
         if(coachOpen){
           const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i,lane:l},re));
           const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i,1)})));
@@ -1935,8 +1945,6 @@ function renderBox(l,dt,ix,ctx){
     return box}
 function renderAll(){
   const cal=$('cal'); cal.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); dvBar();
-  {const dl=$('edList'); if(dl&&!dl.childNodes.length){const seen=new Set(), add=n=>{const v=String(n||'').replace('*',' · ').trim(); if(v&&!seen.has(v)){seen.add(v); const o=el('option'); o.value=v; dl.append(o)}};
-    for(const n of ((SDATA&&SDATA.ex)||[])) add(liftName(tidyN(n))); for(const q of D.drills) add(q[0]); for(const k in ((PAT&&PAT.blocks)||{})) for(const n of PAT.blocks[k].drills) add(n.replace(/\s*\(\s*\d+\s*[x×]\s*\d+[^)]*\)\s*$/i,''))}}
   const dts=dvDates(), st=day0(A.startDate), today=new Date().toDateString(), grid=el('div','lgrid'), rowsOf=d=>d&&!d.out&&!d.loading?d.rows:[];
   dts.forEach(dt=>{
     const h=el('div','ldcell'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); h._dt=dt; h.dataset.col='1';
@@ -2438,6 +2446,81 @@ function renderMapCal(weeks){
   for(const [cls,t] of li){const i=el('span','mcli'); i.append(el('i','sw '+cls),document.createTextNode(t)); lg.append(i)}
   box.append(lg);
   box.append(mapDetail(day0(MCS.sel)||st))}
+
+// ================= exercise search: pops up under an exercise name while editing a day =================
+let EXPO=null;
+const EXC={key:'',pools:null};
+const exNorm=s=>String(s||'').toLowerCase().replace(/\s+/g,' ').trim();
+const exTok=s=>exNorm(s).split(/[^a-z0-9]+/).filter(Boolean);
+function exClose(){ if(EXPO){ const o=EXPO; EXPO=null; o.off() } }
+// the exercises each kind of day can draw from, built from the program library and cached until it changes
+function exPools(){
+  const key=[SDATA?SDATA.ex.length:0,PAT&&PAT.blocks?Object.keys(PAT.blocks).length:0,D.drills.length,loadCustom().length].join('|');
+  if(EXC.pools&&EXC.key===key) return EXC.pools; EXC.key=key;
+  const mk=()=>({list:[],seen:new Set()}), P={lift:mk(),prep:mk(),throw:mk(),pat:mk(),corr:mk()};
+  const add=(pool,name,cat)=>{const v=String(name||'').replace('*',' · ').trim(); if(!v) return; const k=exNorm(v); if(pool.seen.has(k)) return; pool.seen.add(k); pool.list.push({name:v,k,cat:cat||''})};
+  if(SDATA) for(const code in SDATA.p){ const prep=/prep/i.test(code), pool=prep?P.prep:P.lift, p=SDATA.p[code];
+    for(const dur in p.d) for(const day of p.d[dur].days) for(const r of day[3]){ const raw=SDATA.ex[r[1]]; if(!raw) continue; const full=tidyN(raw), m=full.match(/^(.*?)\s[-—]\s/); add(pool,prep?full:liftName(full),m?m[1]:'') } }
+  for(const q of D.drills) add(P.throw,q[0],q[1]); for(const c of loadCustom()) add(P.throw,c.name,'Custom drill');
+  for(const code in (D.S||{})) for(const row of D.S[code]) for(let k=10;k<row.length;k++) if(typeof row[k]==='string') add(P.throw,row[k],'');
+  if(PAT&&PAT.blocks) for(const k in PAT.blocks) for(const n of PAT.blocks[k].drills) add(P.pat,n.replace(/\s*\(\s*\d+\s*[x×]\s*\d+[^)]*\)\s*$/i,''),'Patterning');
+  for(const l of ['lift','prep','pat']) for(const it of P[l].list) add(P.corr,it.name,it.cat);
+  for(const l in P) P[l].list.sort((a,b)=>a.name.localeCompare(b.name));
+  EXC.pools=P; return P }
+// typed words can match anywhere, in any order; words at the start of the name or of a word rank higher
+function exSearch(pool,q,orig){
+  const list=pool.list, toks=exTok(q);
+  if(!toks.length){ // nothing typed yet: show the exercises that sit next to the current one
+    const m=String(orig||'').match(/^(.*?)\s[-—]\s/), cat=exNorm(m?m[1]:String(orig||'').split(/\s+/)[0]);
+    const same=cat?list.filter(it=>exNorm(it.cat)===cat||it.k.startsWith(cat)):[];
+    return {title:same.length?'Similar to the current exercise':'Exercise library',items:(same.length?same:list).slice(0,40)}}
+  const scored=[];
+  for(const it of list){ const hay=it.k+' '+exNorm(it.cat); let s=0, ok=true;
+    for(const t of toks){ const i=hay.indexOf(t); if(i<0){ok=false; break} s+=i===0?40:(/[^a-z0-9]/.test(hay[i-1])?25:8) }
+    if(!ok) continue; if(it.k.includes(exNorm(q))) s+=30; s-=it.k.length*0.04; scored.push([s,it])}
+  scored.sort((a,b)=>b[0]-a[0]||a[1].name.localeCompare(b[1].name));
+  return {title:scored.length?scored.length+' match'+(scored.length>1?'es':'')+' in the library':'No match in the library',items:scored.slice(0,40).map(x=>x[1])}}
+function exMark(text,toks){
+  const frag=document.createDocumentFragment(); if(!toks.length){frag.append(text); return frag}
+  const re=new RegExp('('+toks.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','ig'); let last=0, m;
+  while((m=re.exec(text))){ if(m.index>last) frag.append(text.slice(last,m.index)); frag.append(el('b',null,m[0])); last=m.index+m[0].length; if(m[0].length===0) re.lastIndex++ }
+  if(last<text.length) frag.append(text.slice(last)); return frag}
+function exPick(input,lane,commit){
+  input.autocomplete='off'; input.setAttribute('role','combobox'); input.setAttribute('aria-autocomplete','list'); input.setAttribute('aria-expanded','false');
+  const orig=input.value; let typed=false, act=-1, items=[], pop=null, offs=[];
+  const place=()=>{ if(!pop) return; const r=input.getBoundingClientRect(), vw=window.innerWidth, vh=window.innerHeight, w=Math.min(460,vw-16), left=Math.min(Math.max(8,r.left),vw-w-8);
+    pop.style.width=w+'px'; pop.style.left=left+'px'; const below=vh-r.bottom-8, above=r.top-8, h=Math.min(pop.scrollHeight,340);
+    if(below<Math.min(h,220)&&above>below){pop.style.top='auto'; pop.style.bottom=(vh-r.top+4)+'px'; pop.style.maxHeight=Math.min(340,above)+'px'} else {pop.style.bottom='auto'; pop.style.top=(r.bottom+4)+'px'; pop.style.maxHeight=Math.min(340,Math.max(160,below))+'px'} };
+  const choose=it=>{ if(it.use){ exClose(); input.blur(); return } exClose(); input.value=it.name; const d=(lane==='pat'&&PAT&&PAT.dose)?PAT.dose[it.k]:''; let dose=null; if(d){const m=String(d).match(/^(\d+)\s*[x×]\s*(.+)$/i); if(m) dose={sets:m[1],reps:m[2].trim()}} commit(it.name,dose) };
+  const draw=()=>{
+    if(!pop) return; pop.textContent='';
+    const pools=exPools(), pool=pools[lane]||pools.corr, ready=pool.list.length;
+    if(!ready){ pop.append(el('div','exe','The exercise library is still loading. You can type a name as written.')); place(); return }
+    const q=typed?input.value:'', res=exSearch(pool,q,orig), toks=exTok(q); items=res.items.slice();
+    pop.append(el('div','exph',res.title));
+    const useRow=typed&&input.value.trim()&&!items.some(it=>it.k===exNorm(input.value)); if(useRow) items.push({use:true}); act=items.length?0:-1;
+    items.forEach((it,i)=>{const b=el('button','exi'+(it.use?' exu':'')+(i===act?' on':'')); b.type='button'; b.id='exi'+i; b.setAttribute('role','option');
+      if(it.use) b.append(el('span','exn','Use \u201c'+input.value.trim()+'\u201d as written'));
+      else{const nm=el('span','exn'); nm.append(exMark(it.name,toks)); b.append(nm); if(it.cat&&exNorm(it.cat)!==exNorm(it.name)) b.append(el('small',null,it.cat))}
+      b.addEventListener('mousedown',e=>e.preventDefault()); b.addEventListener('click',()=>choose(it)); b.addEventListener('mousemove',()=>{act=i; mark()}); pop.append(b)});
+    place()};
+  const mark=()=>{ if(!pop) return; [...pop.querySelectorAll('.exi')].forEach((b,i)=>{b.classList.toggle('on',i===act); if(i===act){ input.setAttribute('aria-activedescendant',b.id); b.scrollIntoView({block:'nearest'}) }}) };
+  const open=()=>{
+    if(EXPO&&EXPO.input===input) return; exClose();
+    pop=el('div','expop'); pop.setAttribute('role','listbox'); root.append(pop); input.setAttribute('aria-expanded','true');
+    const outside=e=>{const p=e.composedPath(); if(!p.includes(pop)&&!p.includes(input)) exClose()};
+    window.addEventListener('scroll',place,true); window.addEventListener('resize',place); document.addEventListener('pointerdown',outside,true);
+    offs=[()=>window.removeEventListener('scroll',place,true),()=>window.removeEventListener('resize',place),()=>document.removeEventListener('pointerdown',outside,true)];
+    EXPO={input,off:()=>{offs.forEach(f=>f()); offs=[]; if(pop){pop.remove(); pop=null} input.setAttribute('aria-expanded','false')}};
+    draw()};
+  input.addEventListener('focus',()=>{input.select(); open()}); input.addEventListener('click',open);
+  input.addEventListener('input',()=>{typed=true; open(); draw()});
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){ if(EXPO&&EXPO.input===input){e.preventDefault(); e.stopPropagation(); input.value=orig; exClose()} return }
+    if(!pop) return;
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); if(items.length){ act=(act+(e.key==='ArrowDown'?1:-1)+items.length)%items.length; mark() } }
+    else if(e.key==='Enter'){ if(act>=0&&items[act]&&typed){ e.preventDefault(); choose(items[act]) } else { exClose(); input.blur() } }
+    else if(e.key==='Tab'){ exClose() } })}
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
