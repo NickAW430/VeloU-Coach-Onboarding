@@ -205,6 +205,8 @@ button.rr:hover{background:var(--sunk)}
 .lcr{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:2px 0}
 .lcr b{font:600 11.5px var(--mono);text-align:right;overflow-wrap:anywhere}
 .lbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.lgrp{font:600 9.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--heat);padding:8px 0 2px}
+.lsub{font:400 11px var(--mono);color:var(--muted);margin-top:1px}
 .lrow.ledit{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:6px 0}
 .lr1{display:grid;grid-template-columns:18px 26px minmax(0,1fr) auto;gap:6px;align-items:center}
 .lr2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding-left:50px}
@@ -712,7 +714,7 @@ const root=host.shadowRoot;
 const $=id=>root.getElementById(id);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const fz=()=>{const f=String(host.dataset.focus||'').trim().toLowerCase(); return D.focus.find(x=>x.toLowerCase()===f)||FOCUS0};
-const blank=()=>({program:TL,level:'',focus:fz(),startDate:'',compDate:'',phaseWeeks:null,blocks:null,shift:0,velo:'',kneel:'',lt:'',swaps:{},rowSwaps:{},removed:{},rowEdits:{},added:{},order:{},baseline:{},dayMove:{},str:{on:1,fam:'',ph:''},pat:{on:1},patBlocks:[],strBlocks:[],coach1:'',coach2:'',deload:{},dlVol:60,dlInt:10,strEd:{},patEd:{},liftDays:{}});
+const blank=()=>({program:TL,level:'',focus:fz(),startDate:'',compDate:'',phaseWeeks:null,blocks:null,shift:0,velo:'',kneel:'',lt:'',swaps:{},rowSwaps:{},removed:{},rowEdits:{},added:{},order:{},baseline:{},dayMove:{},str:{on:1,fam:'',ph:''},pat:{on:1},patBlocks:[],strBlocks:[],coach1:'',coach2:'',deload:{},dlVol:60,dlInt:10,strEd:{},patEd:{},liftDays:{},thrDays:{}});
 let A=blank(), cur='', viewWeek=1, coachOpen=false, saved=false, compact=(()=>{try{return localStorage.getItem('velou.plan.compact')==='1'}catch(e){return false}})(), openDays=new Set();
 const L=()=>{const ds=host.dataset, m=String(ds.level||'').match(/[1-3]/); return {athlete:ds.athlete||'',level:m?Number(m[0]):null,levelRaw:ds.level||'',velo:numv(ds.velo),kneel:numv(ds.kneel),lt:numv(ds.lt),arm:numv(ds.armscore),injury:(ds.injury||'').trim()}};
 const VNK=s => String(s).toLowerCase().replace(/&/g,' and ').replace(/kikucki|kukuchi/g,'kikuchi').replace(/\bstide\b/g,'stride').replace(/\bthows\b/g,'throws').replace(/pendelum/g,'pendulum').replace(/hip-shoulder/g,'hip shoulder').replace(/roll-in/g,'roll in').replace(/windup/g,'wind up').split(/[^a-z0-9]+/).filter(Boolean).map(w => w === 'forwards' ? 'forward' : w).map(w => w.length > 3 && w.endsWith('s') ? w.slice(0,-1) : w).filter(w => w !== 'throw').join(' ');
@@ -1058,7 +1060,7 @@ function dateFor(n,day){const d=day0(A.startDate); if(!d) return null; d.setDate
 function currentWeek(total){const d=day0(A.startDate); if(!d) return null; const n=Math.floor((new Date()-d)/6048e5)+1; return n>=1&&n<=total?n:null}
 function flagsOn(){const l=L(); return (l.arm!=null&&l.arm<85)||(l.injury&&!/^(none|—|-|n\/a)$/i.test(l.injury))}
 function render(){
-  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV&&LANE==='lift') return renderDVL();
+  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV&&LANE==='lift') return renderDVL(); if(DV&&LANE==='throw') return renderDVT();
   const p=prog(), weeks=planWeeks(), tl=isTL(), l=L(), v=V(); TP=testPlan(weeks); if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); try{renderLanes()}catch(e){console.warn(e)}
   for(const w of weeks){w.rows=weekRows(w); w.throws=w.rows.reduce((a,r)=>a+(r.plan?0:r.sets*r.reps),0); w.wv=w.rows.reduce((a,r)=>a+(r.wv||0),0); w.peak=w.rows.reduce((a,r)=>Math.max(a,r.rpe||0),0); w.hi=w.rows.reduce((a,r)=>a+(!r.plan&&r.rpe>=90?r.sets*r.reps:0),0)}
   {let prevB=null, prevD7=null, prevPD7=null, first=true;
@@ -1422,9 +1424,10 @@ function dvPat(c,pd,dt){
 function strEdX(x,dt){ if(DV||!x||!dt) return x; const o=(A.liftDays||{})[ymd(dt)]; if(!o) return x;
   const dose=r=>[r.sets?r.sets+'x'+(r.reps||''):(r.reps||''),r.int?'@ '+r.int:'',r.tempo?'('+r.tempo+')':''].filter(Boolean).join(' ');
   return Object.assign({},x,{lift:(o.rows.length||o.title)?{title:o.title,min:'',rows:o.rows.map(r=>({code:r.slot||'+',name:r.name,dose:dose(r),tier:1,method:''}))}:null})}
-function patEdX(pt,dt){ if(!pt||!dt) return pt; const dk=ymd(dt), E=(A.patEd||{})[dk]; if(!E) return pt;
-  const blocks=pt.blocks.map(b=>Object.assign({},b,{drills:edApply('patEd',dk,b.drills.map((d,i)=>({k:b.ch+':'+i,name:d.name,dose:d.dose,video:d.video})),'__none__').map(d=>({name:d.name,dose:d.dose,video:d.video||''}))})), add=(E.a||[]).map(a=>({name:a.name,dose:a.dose,video:''}));
-  if(add.length) blocks.push({ch:'+',label:'Added',name:'Added',drills:add}); return Object.assign({},pt,{blocks})}
+function patEdX(pt,dt){ if(!pt||!dt) return pt; const o=(A.thrDays||{})[ymd(dt)]; if(!o) return pt;
+  const rows=o.rows.filter(r=>r.grp==='Patterning'); if(!rows.length) return null; const by=[];
+  for(const r of rows){let b=by.find(x=>x.ch===r.blk); if(!b){b={ch:r.blk,label:r.blk,name:PATN[r.blk]||'Patterning',drills:[]}; by.push(b)} b.drills.push({name:r.name,dose:(r.sets?r.sets+' \u00d7 ':'')+(r.reps||''),video:''})}
+  return Object.assign({},pt,{blocks:by})}
 // ---- Lifting lane: uniform day boxes, blocks, drag to move, copy and delete ----
 let liftOpen=new Set(), liftDrag=null;
 const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -1462,10 +1465,11 @@ const SVGI={
   grip:'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>'};
 function liftIcon(cls,svg,label,fn){const b=el('button',cls); b.type='button'; b.innerHTML=svg; b.setAttribute('aria-label',label); b.title=label; if(fn) b.addEventListener('click',fn); return b}
 function liftDrop(kind,info,t){
-  if(kind==='day'){ if(t.box&&t.box._dt) liftSwap(info.dt,t.box._dt); return }
+  const O=lops();
+  if(kind==='day'){ if(t.box&&t.box._dt) O.swap(info.dt,t.box._dt); return }
   const from={dt:info.dt,i:info.i};
-  if(t.row){const dt=dvDates().find(d=>ymd(d)===t.row.dataset.dk); if(dt) liftMove(from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
-  else if(t.box&&t.box._dt){const d=liftDay(t.box._dt); liftMove(from,{dt:t.box._dt,i:d?d.rows.length:0})}
+  if(t.row){const dt=dvDates().find(d=>ymd(d)===t.row.dataset.dk); if(dt) O.move(from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
+  else if(t.box&&t.box._dt){const d=O.day(t.box._dt); O.move(from,{dt:t.box._dt,i:d?d.rows.length:0})}
 }
 function liftDragStart(e,kind,info,srcEl){
   if(!coachOpen||(e.button!=null&&e.button!==0)) return; e.preventDefault(); e.stopPropagation();
@@ -1524,6 +1528,77 @@ function renderDVL(){
     g.append(box)});
   cal.append(g)}
 
+// ---- Throwing lane: uniform day boxes with patterning and throwing, drag to move, copy and delete ----
+const PATN={A:'Positional Control',B:'Dynamic Stability',C:'Dynamic Sequencing',D:'Dynamic Power'};
+function thrBase(dt){
+  const st=day0(A.startDate), weeks=planWeeks(); if(!st||!weeks.length) return null;
+  const off=Math.round((dt-st)/864e5); if(off<0) return null;
+  const w=weeks[Math.floor(off/7)]; if(!w) return {out:true,rest:true,rows:[],title:'',ph:'',lv:''};
+  const day=off%7+1, R=w.off?[]:weekRows(w).filter(r=>r.day===day&&!r.plan), ord=A.order[w.n+'-'+day]||[];
+  const dr=R.map((r,i)=>({r,i})).sort((a,b)=>{const x=ord.indexOf(a.r.k), y=ord.indexOf(b.r.k); return (x<0?1e3+a.i:x)-(y<0?1e3+b.i:y)}).map(o=>o.r);
+  const tr=dr.map((r,i)=>({id:rid(),grp:'Throwing',blk:'T',slot:String(i+1),name:String(r.name).replace('*',' · '),sets:String(r.sets||''),reps:String(r.reps||''),int:r.rpe?r.rpe+'%':'',ball:r.weight||''}));
+  const PW=patWeek(w,weeks), pd=PW&&PW.days[day], pr=[];
+  if(pd) for(const b of pd.blocks) for(const d of b.drills){const m=String(d.dose||'').match(/^(\d+)\s*[x×]\s*(.+)$/); pr.push({id:rid(),grp:'Patterning',blk:b.ch,slot:b.ch,name:d.name,sets:m?m[1]:'',reps:m?m[2].trim():String(d.dose||''),int:'',ball:''})}
+  return {day,out:false,rest:!tr.length,ph:w.code,lv:lvl(),title:tr.length?daySummary(dr,!!A.deload[w.n],w.uses?w.focus:''):'Rest day',rows:pr.concat(tr)};
+}
+function thrDay(dt){
+  const dk=ymd(dt), o=(A.thrDays||{})[dk], b=thrBase(dt);
+  if(o) return {dk,day:b?b.day:null,lv:o.lv,ph:o.ph,title:o.title,rows:o.rows,rest:!o.rows.some(r=>r.grp==='Throwing'),custom:true,out:false};
+  return b?Object.assign({dk,custom:false},b):null;
+}
+function thrPack(d){return d?{lv:d.lv,ph:d.ph,title:d.title,rows:d.rows.map(r=>Object.assign({},r))}:{lv:'',ph:'',title:'',rows:[]}}
+function thrNorm(o){o.rows=o.rows.filter(r=>r.grp==='Patterning').concat(o.rows.filter(r=>r.grp!=='Patterning')); if(!o.rows.some(r=>r.grp==='Throwing')&&o.title&&o.title!=='Rest day'&&o.title!=='Custom day') o.title='Rest day'}
+function thrEnsure(dt){const L=(A.thrDays=A.thrDays||{}), dk=ymd(dt); if(!L[dk]) L[dk]=thrPack(thrDay(dt)); return L[dk]}
+function thrEdit(dt,fn){const o=thrEnsure(dt); fn(o); thrNorm(o); changed()}
+function thrSwap(a,b){const L=(A.thrDays=A.thrDays||{}), pa=thrPack(thrDay(a)), pb=thrPack(thrDay(b)); L[ymd(a)]=pb; L[ymd(b)]=pa; changed()}
+function thrMove(from,to){
+  const src=thrEnsure(from.dt), dst=thrEnsure(to.dt), row=src.rows.splice(from.i,1)[0]; if(!row) return;
+  let at=to.i; if(src===dst&&from.i<at) at--; dst.rows.splice(Math.max(0,Math.min(at,dst.rows.length)),0,row);
+  if(!dst.title||dst.title==='Rest day'){dst.title=row.grp==='Throwing'?'Custom day':'Rest day'} thrNorm(src); thrNorm(dst); changed()}
+function renderDVT(){
+  const cal=$('cal'); cal.textContent=''; if(A.pat.on&&!PAT) loadPattern(); dvBar();
+  const weeks=planWeeks(), st=day0(A.startDate), today=new Date().toDateString(), g=el('div','ldays'), dts=dvDates();
+  if(!weeks.length){cal.append(el('p','note','No throwing plan for this athlete yet. Open the Throwing tab under Programming to start one.')); return}
+  const days=dts.map(dt=>st?thrDay(dt):null);
+  {const dl=$('edList'); if(dl&&!dl.childNodes.length){const seen=new Set(); const add=n=>{const v=String(n||'').replace('*',' · ').trim(); if(v&&!seen.has(v)){seen.add(v); const o=el('option'); o.value=v; dl.append(o)}}; for(const d of D.drills) add(d[0]); for(const k in ((PAT&&PAT.blocks)||{})) for(const n of PAT.blocks[k].drills) add(n.replace(/\s*\(\s*\d+\s*[x×]\s*\d+[^)]*\)\s*$/i,''))}}
+  const hasInt=days.some(d=>d&&d.rows.some(r=>r.int));
+  const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[]).join(' ');
+  dts.forEach((dt,ix)=>{
+    const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk;
+    const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','lhd');
+    hd.append(el('div','lh1',dow+' '+(dt.getMonth()+1)+'/'+dt.getDate()+(d&&d.day?' - Day '+d.day:'')));
+    let t2;
+    if(!st) t2='Set a start date in the Programming tab.'; else if(dt<st) t2='Plan starts '+fmt(st)+'.'; else if(!d||d.out) t2='Past the end of this plan.';
+    else t2=[d.lv?'L'+d.lv:'',d.ph,d.title].filter(Boolean).join(' - ');
+    hd.append(el('div','lh2'+(d&&!d.out&&!d.rest?'':' off'),t2));
+    if(coachOpen&&d&&!d.out){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt},box)})}
+    box.append(hd,el('div','lline'));
+    const open=coachOpen||liftOpen.has(dk), rows=d&&!d.out?d.rows:[];
+    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); render()}); box.append(x)}
+    if(open&&(rows.length||(coachOpen&&d&&!d.out))){
+      const list=el('div','lrows'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
+      hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int'));
+      if(rows.length&&!coachOpen) list.append(hr);
+      rows.forEach((r,i)=>{
+        if(i===0||r.grp!==rows[i-1].grp) list.append(el('div','lgrp',r.grp));
+        const re=el('div','lrow'+(i&&r.grp===rows[i-1].grp&&r.blk!==rows[i-1].blk?' newblk':'')+(coachOpen?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i);
+        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); if(ph) x.placeholder=ph; if(f==='name') x.setAttribute('list','edList'); x.addEventListener('change',()=>thrEdit(dt,o=>{o.rows[i][f]=x.value.trim()})); return x};
+        if(coachOpen){
+          const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i},re));
+          const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>thrEdit(dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>thrEdit(dt,o=>{o.rows.splice(i,1)})));
+          top.append(gb,el('span','sl',r.slot||''),inp(r.name,'name','nmi','Exercise'),ac); bot.append(inp(r.sets,'sets','','Sets'),inp(r.reps,'reps','','Reps'),inp(r.int,'int','','Intensity'),inp(r.ball,'ball','','Ball')); re.append(top,bot)}
+        else{
+          re.style.gridTemplateColumns=cols; const nm=el('span','nm2',r.name); if(r.ball){nm.append(el('div','lsub',r.ball))}
+          re.append(el('span','sl',r.slot||''),nm,el('span','n',r.sets),el('span','n',r.reps)); if(hasInt) re.append(el('span','n',r.int))}
+        list.append(re)});
+      if(coachOpen&&d&&!d.out){const bar=el('div','lbar'), mk=(txt,grp)=>{const b=el('button','btn sm',txt); b.type='button'; b.addEventListener('click',()=>thrEdit(dt,o=>{o.rows.push({id:rid(),grp,blk:grp==='Throwing'?'T':'+',slot:'',name:'New exercise',sets:'',reps:'',int:'',ball:''}); if(!o.title||o.title==='Rest day') o.title='Custom day'})); return b};
+        bar.append(mk('+ Throwing drill','Throwing'),mk('+ Patterning drill','Patterning'));
+        if(d.custom){const rs=el('button','btn sm','Reset to program'); rs.type='button'; rs.addEventListener('click',()=>{delete (A.thrDays||{})[dk]; changed()}); bar.append(rs)} list.append(bar)}
+      box.append(list)}
+    g.append(box)});
+  cal.append(g)}
+
+const lops=()=>LANE==='throw'?{day:thrDay,swap:thrSwap,move:thrMove}:{day:liftDay,swap:liftSwap,move:liftMove};
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
 const key=()=>'velou.plan.'+cur;
