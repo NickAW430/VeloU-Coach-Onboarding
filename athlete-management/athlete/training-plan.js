@@ -250,12 +250,13 @@ button.rr:hover{background:var(--sunk)}
 .qtt{font:600 20px/1.3 var(--body);color:#fff}
 .qbody{display:flex;flex-direction:column;gap:12px}
 .qbody.scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:4px}
-.qtri{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr);gap:12px;align-items:end}
+.qtri{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.3fr);gap:10px;align-items:end}
 .qduo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
 .qduo .qf{min-width:0}
 .qduo .qsel{width:100%;min-width:0}
 .qtri .qf{min-width:0}
-.qtri .qsel{width:100%;min-width:0;padding:8px 8px;font-size:13px}
+.qtri .qfl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;letter-spacing:.02em}
+.qtri .qsel{width:100%;min-width:0;padding:8px 4px 8px 6px;font-size:12px}
 .kans{display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px solid #1d2428}
 .kansh{font:500 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto}
@@ -265,10 +266,17 @@ button.rr:hover{background:var(--sunk)}
 .qchip:hover{border-color:#56b7e6}
 .qchip.on{border-color:#56b7e6;background:rgba(86,183,230,.1)}
 .qback:disabled{opacity:.35;cursor:default}
-@media (max-width:760px){.bgrid{grid-template-columns:1fr}.bknown,.bqbox{aspect-ratio:auto}.bknown{overflow:visible}.bqbox{order:-1}.qtri,.qduo{grid-template-columns:1fr}.qbody.scroll{overflow:visible}}
+@media (max-width:760px){.bgrid{grid-template-columns:1fr}.bknown,.bqbox{aspect-ratio:auto}.bknown{overflow:visible}.bqbox{order:-1}.qtri,.qduo{grid-template-columns:1fr}.qopts.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.qbody.scroll{overflow:visible}}
 .qh2{font:600 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--heat);margin-top:6px}
 .qs{font-size:12px;line-height:1.4;color:var(--muted)}
 .qopts{display:flex;flex-wrap:wrap;gap:8px}
+.qopts.g1,.qopts.g2,.qopts.g3{display:grid;gap:8px}
+.qopts.g1{grid-template-columns:minmax(0,1fr)}
+.qopts.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.qopts.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.qopts.g1 .qo,.qopts.g2 .qo,.qopts.g3 .qo{width:100%;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.qopts.g2,.qopts.g3{grid-auto-rows:1fr}
+.qopts.g3 .qo{padding:8px 10px;font-size:12.5px}
 .qo{background:transparent;border:1px solid var(--line);color:#d4d9dc;padding:8px 12px;font:600 13px var(--body);cursor:pointer;text-align:left}
 .qo:hover{border-color:#4a5258;color:#fff}
 .qo.on{border-color:var(--seam);background:rgba(225,6,0,.14);color:#fff}
@@ -1972,7 +1980,7 @@ function bDate(val,fn,o){
   w.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!pop.hidden){e.stopPropagation(); close(); b.focus()} });
   w.append(b,pop); return w}
 function bSel(list,val,fn,blank){const s=el('select','qsel'); if(blank){const o=el('option',null,blank); o.value=''; s.append(o)} for(const [v,t] of list){const o=el('option',null,t); o.value=String(v); s.append(o)} s.value=val==null?'':String(val); s.addEventListener('change',()=>fn(s.value)); return s}
-function bOpts(list,val,fn){const w=el('div','qopts'); for(const [v,t,h] of list){const b=el('button','qo'+(String(val)===String(v)?' on':'')); b.type='button'; b.append(document.createTextNode(t)); if(h) b.append(el('small',null,h)); b.addEventListener('click',()=>fn(v)); w.append(b)} return w}
+function bOpts(list,val,fn,cols){const w=el('div','qopts'+(cols?' g'+cols:'')); for(const [v,t,h] of list){const b=el('button','qo'+(String(val)===String(v)?' on':'')); b.type='button'; b.append(document.createTextNode(t)); if(h) b.append(el('small',null,h)); b.addEventListener('click',()=>fn(v)); w.append(b)} return w}
 function bChecks(list,vals,fn){const w=el('div','qchks'); for(const [v,t] of list){const l=el('label','qchk'), x=el('input'); x.type='checkbox'; x.checked=(vals||[]).includes(v); x.addEventListener('change',()=>{const s=new Set(vals||[]); x.checked?s.add(v):s.delete(v); fn([...s])}); l.append(x,el('span',null,t)); w.append(l)} return w}
 // ---- the question box: one question at a time, answers stay stored ----
 let bStep=null, bStepFor='';
@@ -2024,7 +2032,7 @@ function bDefs(c,Q,eff,level,theory){
   D.areas={label:'Area',title:'Which area is affected?',
     body:k=>k.append(bChecks([['upper','Shoulder, elbow, wrist or neck'],['lower','Knee, hip/back or foot']],Q.areas,v=>bset({areas:v}))), txt:()=>(Q.areas||[]).map(a=>a==='upper'?'Upper':'Lower').join(' + '), can:()=>(Q.areas||[]).length>0};
   D.sure={label:'Check',title:'Are you sure?',
-    body:k=>{k.append(el('div','qmsg','Typically if they are cleared to throw they should be cleared to lift without restriction.')); k.append(bOpts([['a','Oh, you’re right: no restriction'],['b','No, they still can’t do certain things']],Q.sure,v=>x.go('sure',{sure:v,upperR:v==='a'?[]:Q.upperR})))},
+    body:k=>{k.append(el('div','qmsg','Typically if they are cleared to throw they should be cleared to lift without restriction.')); k.append(bOpts([['a','Oh, you’re right: no restriction'],['b','No, they still can’t do certain things']],Q.sure,v=>x.go('sure',{sure:v,upperR:v==='a'?[]:Q.upperR}),1))},
     txt:()=>Q.sure==='a'?'No restriction':'Still restricted', can:()=>!!Q.sure};
   D.upper={label:'Upper limits',title:'Please select what the athlete can not complete in the weight room (shoulder, elbow, wrist or neck)',
     body:k=>k.append(bChecks(UPPER_R,Q.upperR,v=>bset({upperR:v}))), txt:()=>{const n=(Q.upperR||[]).length; return n+' limit'+(n===1?'':'s')}, can:()=>true};
@@ -2035,18 +2043,18 @@ function bDefs(c,Q,eff,level,theory){
   D.lower={label:'Lower limits',title:'Please select what the athlete can not complete in the weight room (knee, hip/back or foot)',
     body:k=>k.append(bChecks(LOWER_R,Q.lowerR,v=>bset({lowerR:v}))), txt:()=>{const n=(Q.lowerR||[]).length; return n+' limit'+(n===1?'':'s')}, can:()=>true};
   D.status={label:'Throwing',title:'Where is the athlete in their throwing?',
-    body:k=>{ k.append(bOpts(STATUS_OPTS,Q.status,v=>{ if(v==='onramp'||v==='offmound') x.go('status',{status:v}); else bset({status:v}) }));
+    body:k=>{ k.append(bOpts(STATUS_OPTS,Q.status,v=>{ if(v==='onramp'||v==='offmound') x.go('status',{status:v}); else bset({status:v}) },2));
       if(Q.status==='deload') k.append(bField('How many weeks? (patterning only during this time)',bSel([1,2,3,4].map(n=>[n,n+' week'+(n>1?'s':'')]),Q.deloadWeeks||1,v=>bset({deloadWeeks:Number(v)}))));
       if(Q.status==='rtt') rttBody(k,'Program start')},
     txt:()=>Q.status==='deload'?'Deload · '+(Q.deloadWeeks||1)+' wk':(STATUS_TXT[Q.status]||''), can:()=>!!Q.status&&(Q.status!=='rtt'||!!Q.rttCode)};
   D.focus={label:'Focus',title:'What is the athlete’s proposed focus for throwing development?',
-    body:k=>k.append(bOpts(FOCI.map(f=>[f,f]),Q.focus,v=>x.go('focus',{focus:v}))), txt:()=>Q.focus||'', can:()=>!!Q.focus};
+    body:k=>k.append(bOpts(FOCI.map(f=>[f,f]),Q.focus,v=>x.go('focus',{focus:v}),3)), txt:()=>Q.focus||'', can:()=>!!Q.focus};
   D.pat={label:'Patterning',title:'Do you want to include patterning?',
     body:k=>{ k.append(bOpts([['yes','Yes'],['no','No']],Q.patOn,v=>{ if(v==='no') x.go('pat',{patOn:'no'}); else bset({patOn:'yes'}) }));
-      if(Q.patOn==='yes'){k.append(el('div','qs','Which patterning focus?')); k.append(bOpts([['same','Same as throwing focus']].concat(FOCI.map(f=>[f,f])),Q.patFocus||'same',v=>x.go('pat',{patOn:'yes',patFocus:v})))}},
+      if(Q.patOn==='yes'){k.append(el('div','qs','Which patterning focus?')); k.append(bOpts([['same','Same as throwing focus']].concat(FOCI.map(f=>[f,f])),Q.patFocus||'same',v=>x.go('pat',{patOn:'yes',patFocus:v}),3))}},
     txt:()=>Q.patOn==='yes'?'Yes · '+((Q.patFocus&&Q.patFocus!=='same')?Q.patFocus:'same focus'):(Q.patOn==='no'?'No':''), can:()=>Q.patOn==='no'||Q.patOn==='yes'};
   D.equip={label:'Equipment',title:'What equipment does the athlete have access to?',
-    body:k=>k.append(bOpts(EQUIP,Q.equip,v=>x.go('equip',{equip:v}))), txt:()=>{const e=EQUIP.find(t=>t[0]===Q.equip); return e?e[1]:''}, can:()=>!!Q.equip};
+    body:k=>k.append(bOpts(EQUIP,Q.equip,v=>x.go('equip',{equip:v}),2)), txt:()=>{const e=EQUIP.find(t=>t[0]===Q.equip); return e?e[1]:''}, can:()=>!!Q.equip};
   D.assume={label:'Assumptions',title:'Check the assumptions',sub:'These come from the athlete’s profile. Change anything that looks wrong; the plan below updates as you do.',
     body:k=>{ const r=el('div','qtri');
       r.append(bField('Training days per week',bSel([[4,'4 days'],[5,'5 days'],[6,'6 days']],Q.days,v=>bset({days:Number(v)}))));
