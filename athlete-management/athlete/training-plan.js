@@ -886,8 +886,9 @@ let svCo=false, svSel=null;
 function svDays(n){const ws=planWeeks(), st=day0(A.startDate), o=[]; let meta=null;
   const pw=PREPL?patWeek(ws[n-1],ws):null;
   for(let d=1;d<=7;d++){const dt=dateFor(n,d); let x=null; if(strList().length&&st){const r=strDayInd(dt); if(r){meta=meta||r; x=r.day}} else {const w=ws[n-1], s=w?strWeek(w,ws):null; if(s){meta=meta||s; x=s.days[d]}}
+    x=x?strEdX(x,dt):x;
     if(LIFTL){x=x&&x.lift?{prep:null,lift:x.lift,pat:null}:null}
-    else if(PREPL){const pt=pw&&pw.days?pw.days[d]:null, pr=x&&x.prep?x.prep:null; x=(pt||pr)?{prep:pr,lift:null,pat:pt}:null}
+    else if(PREPL){const pt=patEdX(pw&&pw.days?pw.days[d]:null,dt), pr=x&&x.prep?x.prep:null; x=(pt||pr)?{prep:pr,lift:null,pat:pt}:null}
     o.push({d,dt,x})}
   return {days:o,meta}}
 function renderSV(){
@@ -1342,9 +1343,9 @@ function dvBar(){
 }
 // per-date edits: A[kind][YYYY-MM-DD] = {r:{rowKey:{name,dose}}, x:[removed rowKeys], a:[{id,name,dose,grp}]}
 function edStore(kind,dk){const S=(A[kind]=A[kind]||{}); return S[dk]=S[dk]||{}}
-function edApply(kind,dk,base){const E=((A[kind]||{})[dk])||{}, out=[];
+function edApply(kind,dk,base,gf){const E=((A[kind]||{})[dk])||{}, out=[];
   for(const r of base){ if((E.x||[]).includes(r.k)) continue; const o=(E.r||{})[r.k]; out.push(o?Object.assign({},r,{name:o.name||r.name,dose:o.dose!=null?o.dose:r.dose,edited:1}):r)}
-  for(const a of (E.a||[])) out.push({k:'+'+a.id,name:a.name,dose:a.dose,grp:a.grp,added:1});
+  for(const a of (E.a||[])) if(gf===undefined||a.grp===gf) out.push({k:'+'+a.id,name:a.name,dose:a.dose,grp:a.grp,added:1});
   return out}
 function edRow(kind,dk,r){const li=el('div','dvr'+(r.edited?' chg':'')+(r.added?' added':'')+(r.info?' info':'')), nm=el('span','dvn');
   if(r.video){const a=el('a',null,r.name); a.href=r.video; a.target='_blank'; a.rel='noopener'; nm.append(a)} else nm.textContent=r.name;
@@ -1371,6 +1372,12 @@ function dvPat(c,pd,dt){
   let last=null; for(const r of rows){ const gl=r.added?'Added':r.grp; if(gl!==last){last=gl; box.append(el('div','dvg',gl))} box.append(edRow('patEd',dk,r)) }
   if(coachOpen){const ab=el('button','addbtn','+ Add patterning drill'); ab.type='button'; ab.addEventListener('click',()=>openEd({kind:'patEd',dk,add:true,grp:'Added',grps:['Added']})); box.append(ab)}
   c.append(box)}
+function strEdX(x,dt){ if(!x||!dt) return x; const dk=ymd(dt); if(!((A.strEd||{})[dk])) return x;
+  const mk=(g,tag,grp)=>g?Object.assign({},g,{rows:edApply('strEd',dk,g.rows.map(r=>({k:tag+':'+r.code,name:r.name,dose:r.dose,code:r.code,tier:r.tier,method:r.method})),grp).map(r=>({code:r.code||'+',name:r.name,dose:r.dose,tier:r.tier||1,method:r.method||''}))}):g;
+  return Object.assign({},x,{prep:mk(x.prep,'prep','Prep'),lift:mk(x.lift,'lift','Lift')})}
+function patEdX(pt,dt){ if(!pt||!dt) return pt; const dk=ymd(dt), E=(A.patEd||{})[dk]; if(!E) return pt;
+  const blocks=pt.blocks.map(b=>Object.assign({},b,{drills:edApply('patEd',dk,b.drills.map((d,i)=>({k:b.ch+':'+i,name:d.name,dose:d.dose,video:d.video})),'__none__').map(d=>({name:d.name,dose:d.dose,video:d.video||''}))})), add=(E.a||[]).map(a=>({name:a.name,dose:a.dose,video:''}));
+  if(add.length) blocks.push({ch:'+',label:'Added',name:'Added',drills:add}); return Object.assign({},pt,{blocks})}
 function renderDVL(){
   const cal=$('cal'); cal.textContent=''; if(A.str.on&&!SDATA) loadStrength(); dvBar();
   const st=day0(A.startDate), today=new Date().toDateString(), bd=boardObj(), g=el('div','dvdays');
