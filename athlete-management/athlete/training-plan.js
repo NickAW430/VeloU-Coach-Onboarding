@@ -266,8 +266,8 @@ button.rr:hover{background:var(--sunk)}
 .mcd.off .mctg.thr{border-left-color:#5b6770}
 .mctg.str{border-left-color:#88e0c6;color:#bfeee0}
 .mcb{display:flex;flex-wrap:wrap;gap:3px;margin-top:auto;align-items:center}
-.mcsc{font:600 10px var(--mono);padding:1px 5px;color:#fff;background:rgba(86,183,230,calc(.15 + var(--h,0)*.55))}
-.mcsc.hot{background:rgba(225,6,0,calc(.35 + var(--h,0)*.5))}
+.mcsc{font:700 10px var(--mono);padding:1px 6px;color:#fff;background:#000;border:1px solid rgba(255,255,255,calc(.3 + var(--h,0)*.7))}
+.mcsc.hot{background:#fff;color:#000;border-color:#fff}
 .mcfl{font:700 9.5px var(--body);letter-spacing:.04em;text-transform:uppercase;padding:1px 5px}
 .mcfl.tst{background:#3a2f12;color:#ffd48a}
 .mcfl.dls{background:#0f2a1f;color:#88e0c6}
@@ -282,6 +282,8 @@ button.rr:hover{background:var(--sunk)}
 .mcli .sw.dls{background:#0f2a1f}
 .mcli .sw.comp{background:#ffd48a}
 .mcli .sw.today{background:#e10600;border-radius:50%;width:12px}
+.mcli .sw.sc{background:#000;border:1px solid rgba(255,255,255,.8)}
+.mcli .sw.hot{background:#fff;border:1px solid #fff}
 .mcdet{border:1px solid var(--line);background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .mcdh{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .mcdh b{font:600 15px var(--body);color:#fff;margin-right:4px}
@@ -2309,7 +2311,7 @@ function renderMapCal(weeks){
     c.addEventListener('click',()=>{MCS.sel=k; if(om) MCS.month=ymd(new Date(d.getFullYear(),d.getMonth(),1,12)); redraw()});
     grid.append(c)}
   box.append(grid);
-  const lg=el('div','mcl'); for(const [cls,t] of [['build','Build phase'],['mound','Mound phase'],['off','Deload or off'],['tst','Retest week'],['dls','Suggested deload'],['comp','Competition'],['today','Today']]){const i=el('span','mcli'); i.append(el('i','sw '+cls),document.createTextNode(t)); lg.append(i)}
+  const lg=el('div','mcl'); for(const [cls,t] of [['build','Build phase'],['mound','Mound phase'],['off','Deload or off'],['sc','Day score (brighter = harder)'],['hot','Day score 7 or more'],['tst','Retest week'],['dls','Suggested deload'],['comp','Competition'],['today','Today']]){const i=el('span','mcli'); i.append(el('i','sw '+cls),document.createTextNode(t)); lg.append(i)}
   box.append(lg);
   box.append(mapDetail(day0(MCS.sel)||st))}
 
