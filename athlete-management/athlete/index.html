@@ -1349,6 +1349,31 @@ class Component extends DCLogic {
       planPos: es(6), planPlay: es(3), planHand: es(7), planInjStatus: es(11), planInjLoc: es(12), planInjNote: es(13), planCoach: this.state.me || ''
     };
   }
+  async load(silent) {
+    const name = this.state.athlete;
+    if (!silent) this.setState({ status: 'loading' });
+    const nmPat = name.replace(/"/g, '').trim().toLowerCase().split('').map(ch => /['’‘`´]/.test(ch) ? "['’‘`´]?" : /\s/.test(ch) ? ' *' : /[.*+?^${}()|[\]\\]/.test(ch) ? '[' + ch + ']' : ch).join('').replace(/( \*)+/g, ' *');
+    const nmWhere = `lower(A) matches " *${nmPat} *"`;
+    const where = `select * where ${nmWhere}`;
+    const tmQ = `select A,C,J,M,P,W,X,Y,Z,AB,BN,BP,BR,BS,AC,N,O,Q,S,T,U where A = "${name.replace(/"/g, '')}"`;
+    const nm = name.replace(/"/g, '');
+    const tmP = Promise.all([
+      this.q(null, `select A,C,J,M,P,W,X,Y,Z,AB,BN,BP,BR,BS,AC,N,O where ${nmWhere}`, TRACKMAN_ID, 90000),
+      this.q(null, `select Q,S,T,U where ${nmWhere}`, TRACKMAN_ID, 90000).catch(() => null)
+    ]).then(([a, b]) => a ? a.map((r, i) => r.concat(b && b[i] ? b[i] : [null, null, null, null])) : null).catch(() => null);
+    this.setState({ xLoading: true });
+    this.q(null, `select * where ${nmWhere}`, EXTRA_ID, 90000).then(x => { if (name === this.state.athlete) this.setState({ x, xLoading: false, xErr: false }); }).catch(() => { if (name === this.state.athlete) this.setState({ xLoading: false, xErr: true }); });
+    const res = await Promise.all(TABS.map(([, t]) => this.q(t, where).catch(() => null)));
+    if (name !== this.state.athlete) return;
+    if (res.every(r => r == null)) { this.setState({ status: 'error' }); return; }
+    const d = {}; TABS.forEach(([k], i) => d[k] = res[i] || []);
+    d.tm = (this.state.d && this.state.d.tm) || [];
+    this.setState({ d, status: 'live', updated: new Date(), tmLoading: true });
+    const tm = await tmP;
+    if (name !== this.state.athlete) return;
+    this.setState(s => ({ d: { ...s.d, tm: tm || [] }, tmLoading: false }));
+  }
+
   extraVals() {
     const label = this.props.dataTabLabel ?? 'In-Season';
     const xr = this.state.xRange || 'All';
