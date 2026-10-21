@@ -164,6 +164,8 @@ button.rr:hover{background:var(--sunk)}
 .dvr.info .dvd{color:var(--muted);font-weight:400}
 .dvtt{padding:0 10px 6px;font:600 13px/1.25 var(--body);color:#fff}
 .dvmeta{padding:0 10px 8px;font:500 11px/1.3 var(--mono);color:var(--muted)}
+.wrap.dv:not(.editing) .drills{display:none}
+.wrap.dv.editing .dvbrief{display:none}
 .wrap.tv #lanes,.wrap.tv .dstr:not(.pat),.wrap.tv .sses:not(.pat),.wrap.tv .strtag:not(.pat),.wrap.tv .bst,.wrap.tv .brow.h span:last-child{display:none !important}
 .wrap.tv .brow{display:flex;flex-wrap:nowrap;gap:6px;align-items:center;padding:6px 0;overflow-x:auto}
 .wrap.tv .brow select{flex:1 1 0 !important;min-width:96px !important;width:auto !important}
@@ -1117,6 +1119,7 @@ function render(){
       if(isC){if(coachOpen&&!w.off){const ab=el('button','addbtn','+ Add drill'); ab.type='button'; ab.addEventListener('click',()=>openAdd(w.n,day)); c.append(ab)} if(sBtn) c.append(sBtn); g.append(c); continue}
       {const lg=LOGS[w.n+'-'+day]; if(lg&&(lg.status||lg.note)){const x=el('div','alog '+(lg.status||'')); x.append(el('b',null,'Athlete: '+({done:'Done',partial:'Partly done',skipped:'Skipped'}[lg.status]||'Note'))); if(lg.note) x.append(el('span',null,lg.note)); x.title='Logged '+(lg.updated?new Date(lg.updated).toLocaleString():''); c.append(x)}}
       const lab=(R.find(r=>r.label)||{}).label;
+      if(DV&&R.length){const ul=el('div','dvsec dvbrief'); ul.append(el('div','dvh','Throwing')); for(const r of dr){const li=el('div','dvr'); li.append(el('span','dvn',String(r.name).replace('*',' \u00b7 ')),el('b','dvd',r.sets+' \u00d7 '+r.reps+(r.rpe?' \u00b7 '+r.rpe+'%':''))); ul.append(li)} c.append(ul)}
       if(!R.length) c.append(el('div','offlabel','Off'));
       else{
         
@@ -1333,7 +1336,7 @@ function dvDates(){const o=[]; for(let i=0;i<3;i++){const d=new Date(); d.setHou
 function dvTargets(weeks){const base=day0(A.startDate); return dvDates().map(dt=>{ if(!base) return {w:null,dt,msg:'Set a start date in the Programming tab.'}; const off=Math.round((dt-base)/864e5), w=off>=0?weeks[Math.floor(off/7)]:null; return w?{w,day:off%7+1,dt}:{w:null,dt,msg:off<0?'Plan starts '+fmt(base)+'.':'Past the end of this plan.'}})}
 function boardObj(){try{return JSON.parse(host.dataset.board||'{}')||{}}catch(e){return {}}}
 function dvBar(){
-  const bar=$('dvbar'); if(!bar) return; bar.hidden=false; bar.textContent='';
+  const bar=$('dvbar'); if(!bar) return; bar.hidden=false; bar.textContent=''; {const wr=root.querySelector('.wrap'); if(wr) wr.classList.toggle('editing',!!coachOpen)}
   const bd=boardObj(), t=el('div','dvt');
   t.append(el('b',null,LANE==='lift'?'Lifting and corrective':'Patterning and throwing'), el('span',null,(LANE==='lift'?[bd.lift,bd.ac,bd.mob]:[bd.thr,bd.pat]).filter(Boolean).join(' · ')||'No program on the Program Board'));
   const a=el('div','acts2'), mk=(txt,fn,cls,dis,lab)=>{const b=el('button','btn sm'+(cls?' '+cls:''),txt); b.type='button'; if(lab) b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',fn); return b};
@@ -1348,7 +1351,7 @@ function edApply(kind,dk,base,gf){const E=((A[kind]||{})[dk])||{}, out=[];
   for(const a of (E.a||[])) if(gf===undefined||a.grp===gf) out.push({k:'+'+a.id,name:a.name,dose:a.dose,grp:a.grp,added:1});
   return out}
 function edRow(kind,dk,r){const li=el('div','dvr'+(r.edited?' chg':'')+(r.added?' added':'')+(r.info?' info':'')), nm=el('span','dvn');
-  if(r.video){const a=el('a',null,r.name); a.href=r.video; a.target='_blank'; a.rel='noopener'; nm.append(a)} else nm.textContent=r.name;
+  nm.textContent=r.name;
   li.append(nm,el('b','dvd',r.dose||'')); if(coachOpen&&!r.info){const b=el('button','btn sm','Edit'); b.type='button'; b.addEventListener('click',()=>openEd({kind,dk,row:r})); li.append(b)} return li}
 function openEd(ctx){edCtx=ctx; const r=ctx.row, d=pdt(ctx.dk+'T12:00:00');
   $('edTitle').textContent=ctx.add?'Add exercise':'Edit exercise'; $('edFrom').textContent=(d?d.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}):ctx.dk)+' · this date only'+(r&&r.grp?' · '+r.grp:'');
