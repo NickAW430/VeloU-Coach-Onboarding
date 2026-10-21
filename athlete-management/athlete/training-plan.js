@@ -175,15 +175,15 @@ button.rr:hover{background:var(--sunk)}
 .lbox.today{border-color:var(--seam);box-shadow:inset 0 3px 0 var(--seam)}
 .lbox.lover{border-color:var(--heat);box-shadow:inset 0 0 0 2px var(--heat)}
 .lbox.ldrag,.lrow.ldrag{opacity:.35}
-.lhd{padding:11px 12px 0;user-select:none}
-.lbox.lediting .lhd{cursor:grab;touch-action:none}
+.ldh{padding:11px 12px 0;user-select:none}
+.lbox.lediting .ldh{cursor:grab;touch-action:none}
 .lh1{font:600 11px/1.2 var(--mono);letter-spacing:.08em;color:var(--muted)}
 .lh2{font:700 21px/1.15 var(--body);color:#fff;margin:7px 0 12px;overflow-wrap:anywhere;min-height:48px}
 .lh2.off{color:var(--muted);font-weight:600}
 .lline{border-top:1px solid rgba(255,255,255,.09);margin:0 12px}
 .lexp{display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:9px 12px;color:var(--muted);font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:left;width:100%}
 .lexp:hover{color:#fff}
-.lrows{display:flex;flex-direction:column;padding:2px 12px 10px}
+.lrws{display:flex;flex-direction:column;padding:2px 12px 10px}
 .lrow{display:grid;gap:6px;align-items:center;padding:4px 0;border-top:1px solid #1d2428;font-size:12.5px;line-height:1.25}
 .lrow.newblk{margin-top:6px;border-top-color:#3a444a}
 .lrow.lhead{font:600 9.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-top:0}
@@ -1495,7 +1495,7 @@ function renderDVL(){
   const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ');
   dts.forEach((dt,ix)=>{
     const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk;
-    const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','lhd');
+    const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','ldh');
     hd.append(el('div','lh1',dow+' '+(dt.getMonth()+1)+'/'+dt.getDate()+(d&&d.day?' - Day '+d.day:'')));
     let t2;
     if(!st) t2='Set a start date in the Programming tab.'; else if(!SDATA) t2='Loading strength programs…'; else if(dt<st) t2='Plan starts '+fmt(st)+'.'; else if(!d||d.rest) t2='Rest day';
@@ -1508,7 +1508,7 @@ function renderDVL(){
     const content=!!(rows.length||info.length);
     if(!coachOpen&&content){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); render()}); box.append(x)}
     if(open&&(content||coachOpen)){
-      const list=el('div','lrows'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
+      const list=el('div','lrws'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       if(coachOpen) hr.append(el('span')); hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int')); if(hasTmp) hr.append(el('span','n','Tempo')); if(coachOpen) hr.append(el('span'));
       if(rows.length&&!coachOpen) list.append(hr);
       rows.forEach((r,i)=>{
@@ -1565,7 +1565,7 @@ function renderDVT(){
   const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[]).join(' ');
   dts.forEach((dt,ix)=>{
     const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk;
-    const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','lhd');
+    const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','ldh');
     hd.append(el('div','lh1',dow+' '+(dt.getMonth()+1)+'/'+dt.getDate()+(d&&d.day?' - Day '+d.day:'')));
     let t2;
     if(!st) t2='Set a start date in the Programming tab.'; else if(dt<st) t2='Plan starts '+fmt(st)+'.'; else if(!d||d.out) t2='Past the end of this plan.';
@@ -1576,7 +1576,7 @@ function renderDVT(){
     const open=coachOpen||liftOpen.has(dk), rows=d&&!d.out?d.rows:[];
     if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(dk):liftOpen.add(dk); render()}); box.append(x)}
     if(open&&(rows.length||(coachOpen&&d&&!d.out))){
-      const list=el('div','lrows'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
+      const list=el('div','lrws'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int'));
       if(rows.length&&!coachOpen) list.append(hr);
       rows.forEach((r,i)=>{
