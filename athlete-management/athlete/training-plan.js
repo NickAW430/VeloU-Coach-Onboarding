@@ -1375,7 +1375,7 @@ $('addForm').addEventListener('submit',e=>{e.preventDefault(); $('addOk').click(
 $('dlgDel').addEventListener('click',()=>{A.removed[swapRow.k]=swapRow.name; delete A.rowSwaps[swapRow.k]; closeDlg(); changed()});
 $('dlgForm').addEventListener('submit',e=>{e.preventDefault(); $('dlgAll').click()});
 // ---- 3-day calendar (data-view="days"): the next three dates of this plan, editable in place ----
-window.__vdv=window.__vdv||{}; const VS=(window.__vdv[LANE]=window.__vdv[LANE]||{off:0,edit:false,open:[]}); let dvOff=VS.off, dvEdit=VS.edit, edCtx=null;
+window.__vdv=window.__vdv||{}; const VS=(window.__vdv[host.dataset.lane||'']=window.__vdv[host.dataset.lane||'']||{off:0,edit:false,open:[]}); let dvOff=VS.off, dvEdit=VS.edit, edCtx=null;
 const tidyN=x=>String(x||'').replace(/\s*⊃\s*superset/g,'').replace(/\s*\[[^\]]*\]\s*$/,'').trim();
 const pdt=x=>{const d=new Date(String(x||'')); return isNaN(d)?null:d};
 function dvDates(){const o=[]; for(let i=0;i<3;i++){const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dvOff+i); o.push(d)} return o}
