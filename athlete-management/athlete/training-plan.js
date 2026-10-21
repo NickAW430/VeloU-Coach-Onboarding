@@ -228,7 +228,72 @@ button.rr:hover{background:var(--sunk)}
 .wrap.bv>*:not(#bview):not(#coach):not(.bar){display:none !important}
 .wrap.bv:not(.adv) #boardBtn,.wrap.bv:not(.adv) #pdfBtn,.wrap.bv:not(.adv) #expBtn,.wrap.bv:not(.adv) .filebtn{display:none}
 .wrap.nv>*:not(#nview){display:none !important}
-.wrap.mv>*:not(.top):not(#timeline):not(#lanes){display:none !important}
+.wrap.mv>*:not(.top):not(#mapbar):not(#timeline):not(#lanes):not(#mcal){display:none !important}
+.wrap.mv.cal #timeline,.wrap.mv.cal #lanes{display:none !important}
+.wrap.mv:not(.cal) #mcal{display:none !important}
+.mapbar{display:flex;align-items:center;gap:12px;margin:4px 0 2px}
+.mapbar[hidden]{display:none !important}
+.seg{display:inline-flex;border:1px solid var(--line)}
+.segb{background:transparent;border:0;color:var(--muted);font:600 13px var(--body);padding:9px 18px;cursor:pointer}
+.segb+.segb{border-left:1px solid var(--line)}
+.segb:hover{color:#fff}
+.segb.on{background:rgba(86,183,230,.14);color:#fff;box-shadow:inset 0 -2px 0 #56b7e6}
+#mcal{display:flex;flex-direction:column;gap:12px}
+#mcal[hidden]{display:none !important}
+.mch{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mct{font:600 17px var(--body);color:#fff;min-width:150px;text-align:center}
+.mcnb{width:34px;height:34px;background:transparent;border:1px solid var(--line);color:#fff;font:600 18px/1 var(--body);cursor:pointer}
+.mcnb:hover:not(:disabled){border-color:#56b7e6}
+.mcnb:disabled{opacity:.3;cursor:default}
+.mcg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.mcwd{font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;padding:2px 0}
+.mcd{display:flex;flex-direction:column;gap:3px;min-height:92px;padding:6px 6px 5px;text-align:left;background:transparent;border:1px solid #1d2428;border-top:3px solid #1d2428;color:#d4d9dc;cursor:pointer;min-width:0}
+.mcd.build{background:rgba(86,183,230,.08);border-color:#1f3a48;border-top-color:#56b7e6}
+.mcd.mound{background:rgba(225,6,0,.09);border-color:#4a1816;border-top-color:#e10600}
+.mcd.off{background:#151819;border-color:#2a3034;border-top-color:#5b6770}
+.mcd.xp{opacity:.5}
+.mcd.om{opacity:.45}
+.mcd:hover{border-color:#56b7e6}
+.mcd.sel{outline:2px solid #fff;outline-offset:-2px}
+.mcd.tst{box-shadow:inset 0 -3px 0 #ffb347}
+.mcd.comp{box-shadow:inset 0 0 0 2px #ffd48a}
+.mcdt{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.mcn1{font:600 13px var(--body);color:#fff;min-width:22px;height:22px;line-height:22px;text-align:center}
+.mcd.today .mcn1{background:#e10600;border-radius:50%}
+.mcwk{font:500 9.5px var(--mono);color:var(--muted);letter-spacing:.04em}
+.mctg{display:block;font:600 10px/1.25 var(--body);padding:1px 4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border-left:2px solid #56b7e6;background:rgba(0,0,0,.25)}
+.mcd.mound .mctg.thr{border-left-color:#e10600}
+.mcd.off .mctg.thr{border-left-color:#5b6770}
+.mctg.str{border-left-color:#88e0c6;color:#bfeee0}
+.mcb{display:flex;flex-wrap:wrap;gap:3px;margin-top:auto;align-items:center}
+.mcsc{font:600 10px var(--mono);padding:1px 5px;color:#fff;background:rgba(86,183,230,calc(.15 + var(--h,0)*.55))}
+.mcsc.hot{background:rgba(225,6,0,calc(.35 + var(--h,0)*.5))}
+.mcfl{font:700 9.5px var(--body);letter-spacing:.04em;text-transform:uppercase;padding:1px 5px}
+.mcfl.tst{background:#3a2f12;color:#ffd48a}
+.mcfl.dls{background:#0f2a1f;color:#88e0c6}
+.mcfl.comp{background:#ffd48a;color:#000}
+.mcl{display:flex;flex-wrap:wrap;gap:6px 16px;font:500 11px var(--body);color:var(--muted)}
+.mcli{display:inline-flex;align-items:center;gap:6px}
+.mcli .sw{display:inline-block;width:14px;height:12px;border:1px solid #2a3034}
+.mcli .sw.build{background:rgba(86,183,230,.25);border-top:3px solid #56b7e6}
+.mcli .sw.mound{background:rgba(225,6,0,.25);border-top:3px solid #e10600}
+.mcli .sw.off{background:#151819;border-top:3px solid #5b6770}
+.mcli .sw.tst{border-bottom:3px solid #ffb347}
+.mcli .sw.dls{background:#0f2a1f}
+.mcli .sw.comp{background:#ffd48a}
+.mcli .sw.today{background:#e10600;border-radius:50%;width:12px}
+.mcdet{border:1px solid var(--line);background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.mcdh{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.mcdh b{font:600 15px var(--body);color:#fff;margin-right:4px}
+.mcdc{font:600 10.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--line);color:#aeb6ba}
+.mcdc.tst{border-color:#ffb347;color:#ffd48a}
+.mcdc.dl{border-color:#56b7e6;color:#9ed4f0}
+.mcdc.dls{border-color:#88e0c6;color:#88e0c6}
+.mcdc.comp{background:#ffd48a;border-color:#ffd48a;color:#000}
+.mcdg{display:grid;grid-template-columns:110px minmax(0,1fr);gap:5px 12px;font-size:13px;line-height:1.35}
+.mcdk{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.mcdv{color:#e6eaec;overflow-wrap:anywhere}
+@media (max-width:640px){.mcd{min-height:46px;padding:3px}.mctg,.mcwk,.mcfl{display:none}.mcb{gap:2px}.mcsc{padding:0 3px}.mcn1{font-size:12px;min-width:18px;height:18px;line-height:18px}.mcdg{grid-template-columns:90px minmax(0,1fr)}.mct{min-width:0;flex:1}}
 .wrap.mv #lnEd{display:none !important}
 #bview,#nview{display:flex;flex-direction:column;gap:12px;border:0;padding:0;background:none}
 #bview[hidden],#nview[hidden]{display:none !important}
@@ -713,6 +778,7 @@ const HTML=`<div class="wrap">
       <button class="btn danger" id="delBtn" type="button">Reset plan</button>
     </div>
   </section>
+  <div class="mapbar" id="mapbar" hidden></div>
   <section class="panel" id="timeline" hidden>
     <h3>Offseason map</h3>
     <div class="mapkey"><span>Above each bar, top to bottom:</span><span><b style="color:var(--ink)">Weekly total</b></span><span><b>Rolling baseline</b></span><span><b style="color:#88e0c6">Rolling score</b> (amber above zero, red below)</span></div>
@@ -782,6 +848,7 @@ const HTML=`<div class="wrap">
   </div>
   <section class="panel" id="bview" hidden></section>
   <section class="panel" id="nview" hidden></section>
+  <section class="panel" id="mcal" hidden></section>
   <div class="dvbar" id="dvbar" hidden></div>
   <main id="cal"></main>
 </div>
@@ -1351,6 +1418,7 @@ function render(){
   for(const [t,m] of fs){const r=el('div','flag'); r.append(el('b',null,t),el('span',null,m)); fl.append(r)}
   fl.hidden=!fs.length;
   renderTimeline(weeks,N,mound,cw);
+  if(MV){mapBar(weeks); root.querySelector('.wrap').classList.toggle('cal',MAPV==='cal'); if(MAPV==='cal') renderMapCal(weeks); else $('mcal').hidden=true}
   const cal=$('cal'); cal.textContent='';
   const today=new Date().toDateString(), hiOn=flagsOn();
   if(!weeks.length&&DV){dvBar(); cal.append(el('p','note','No throwing plan for this athlete yet. Open the Throwing tab under Programming to start one.'))} else if(!weeks.length){cal.append(el('p','note',tl?(N==null?'Open Coach tools and enter a start date and a competition date for a suggested offseason stack, or add blocks by hand.':'There are no weeks in this plan yet.'):'This program has no weeks.'))}
@@ -2166,6 +2234,84 @@ function renderNotes(){
     acts.append(ed,rm); c.append(m,body,acts); box.append(c);
   }
 }
+
+// ================= Training Map: list view or calendar view =================
+const MAPK='velou.map.view';
+let MAPV=(()=>{try{return localStorage.getItem(MAPK)==='cal'?'cal':'list'}catch(e){return 'list'}})();
+const MCS=(window.__vdm=window.__vdm||{});   // month shown and day picked, kept while the page redraws
+let MCWK=null, MCT=new Set(), MCSL=[];
+function mapBar(weeks){
+  const bar=$('mapbar'); bar.hidden=!weeks.length; bar.textContent=''; if(!weeks.length) return;
+  const seg=el('div','seg'); seg.setAttribute('role','group'); seg.setAttribute('aria-label','Training map view');
+  for(const [v,t] of [['list','List view'],['cal','Calendar view']]){const b=el('button','segb'+(MAPV===v?' on':''),t); b.type='button'; b.setAttribute('aria-pressed',String(MAPV===v)); b.addEventListener('click',()=>{ if(MAPV===v) return; MAPV=v; try{localStorage.setItem(MAPK,v)}catch(e){} render() }); seg.append(b)}
+  bar.append(seg)}
+// what the plan says about one date
+function mapInfo(d){
+  const st=day0(A.startDate), ws=MCWK; if(!st||!ws||!ws.length) return null;
+  const off=Math.round((d-st)/864e5); if(off<0||off>=ws.length*7) return null;
+  const w=ws[Math.floor(off/7)], day=off%7+1, pw=off>0?ws[Math.floor((off-1)/7)]:null;
+  const sc=(w.rows||[]).reduce((a,x)=>a+(x.day===day?(x.wv||0):0),0)/12;
+  const pk=strPick(), hit=(A.str&&A.str.on)?laneAt(MCSL,d):null, fam=hit?(hit.b.fam||pk.fam):'', ph=hit?String(hit.b.ph||pk.ph):'';
+  return {w,day,off,sc,newBlock:off===0||(pw&&pw.bi!==w.bi),
+    str:(hit&&fam&&fam!=='none')?{fam,ph,start:hit.wi===1&&hit.dd===1}:null,
+    test:MCT.has(w.n), comp:A.compDate===ymd(d)}}
+const mapPhase=w=>w.off?(w.deload?'Deload':'Off week'):(w.code+((w.uses&&w.focus)?' · '+w.focus:''));
+function mapDetail(d){
+  const box=el('div','mcdet'), info=mapInfo(d), total=MCWK.length;
+  const hd=el('div','mcdh'); hd.append(el('b',null,d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})));
+  if(!info){ if(A.compDate===ymd(d)){hd.append(el('span','mcdc comp','Competition'))} box.append(hd); box.append(el('div','qs',A.compDate===ymd(d)?'Competition day.':'This date is outside the plan.')); return box}
+  const w=info.w; hd.append(el('span','mcdc','Week '+w.n+' of '+total),el('span','mcdc','Day '+(info.off+1)+' of '+(total*7)));
+  if(info.test) hd.append(el('span','mcdc tst','Retest week'));
+  if(A.deload[w.n]) hd.append(el('span','mcdc dl','Deload applied')); else if(w.sugDl) hd.append(el('span','mcdc dls','Suggested deload'));
+  if(info.comp) hd.append(el('span','mcdc comp','Competition'));
+  box.append(hd);
+  const g=el('div','mcdg'), row=(a,b)=>{g.append(el('span','mcdk',a),el('span','mcdv',b))};
+  row('Phase',(w.off?(w.deload?'Deload (patterning only)':'Off week'):w.phase+' · week '+w.pw)+((w.uses&&w.focus)?' · '+w.focus+' focus':''));
+  for(const [l,nm] of [['prep','Prep'],['pat','Patterning'],['throw','Throwing'],['lift','Lifting'],['corr','Corrective']]){
+    let t='—'; try{ const x=lnDay(l,d); t=!x?'—':x.loading?'Loading…':lnHead(l,x) }catch(e){}
+    row(nm,t)}
+  row('This week',w.throws+' throws · rolling '+(w.roll==null?'—':Math.round(w.roll))+' · baseline '+(w.base==null?'—':w.base.toFixed(1))+' · peak '+(w.peak?w.peak+'%':'—'));
+  box.append(g); return box}
+function renderMapCal(weeks){
+  const box=$('mcal'); box.textContent=''; const st=day0(A.startDate); box.hidden=!(st&&weeks.length); if(box.hidden) return;
+  MCWK=weeks; MCT=new Set(); for(let k=4;k<=weeks.length;k+=4) MCT.add(k); if(weeks.length%4) MCT.add(weeks.length); MCSL=strList();
+  const end=addD(st,weeks.length*7-1), cd=day0(A.compDate), last=cd&&cd>end?cd:end, now=new Date(), today=new Date(now.getFullYear(),now.getMonth(),now.getDate(),12), todayK=ymd(today);
+  const inPlan=today>=st&&today<=end;
+  if(MCS.cur!==cur||!MCS.month||!MCS.sel){MCS.cur=cur; MCS.sel=ymd(inPlan?today:st); const b=inPlan?today:st; MCS.month=ymd(new Date(b.getFullYear(),b.getMonth(),1,12))}
+  const m0=new Date(st.getFullYear(),st.getMonth(),1,12), m1=new Date(last.getFullYear(),last.getMonth(),1,12);
+  let view=day0(MCS.month); if(view<m0) view=m0; if(view>m1) view=m1;
+  const redraw=()=>renderMapCal(MCWK);
+  const go=n=>{view=new Date(view.getFullYear(),view.getMonth()+n,1,12); MCS.month=ymd(view); redraw()};
+  const hd=el('div','mch'), pv=el('button','mcnb','‹'), nx=el('button','mcnb','›'), tt=el('span','mct',view.toLocaleDateString(undefined,{month:'long',year:'numeric'})), tb=el('button','btn sm','Today');
+  pv.type=nx.type=tb.type='button'; pv.setAttribute('aria-label','Previous month'); nx.setAttribute('aria-label','Next month'); pv.disabled=view<=m0; nx.disabled=view>=m1;
+  pv.addEventListener('click',()=>go(-1)); nx.addEventListener('click',()=>go(1));
+  tb.addEventListener('click',()=>{const b=inPlan?today:st; MCS.sel=ymd(b); MCS.month=ymd(new Date(b.getFullYear(),b.getMonth(),1,12)); redraw()});
+  hd.append(pv,tt,nx,tb,el('span','note','Plan: '+fmt(st)+' to '+fmt(end)+' · '+weeks.length+' weeks')); box.append(hd);
+  const grid=el('div','mcg'); for(const n of ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']) grid.append(el('span','mcwd',n));
+  const first=new Date(view.getFullYear(),view.getMonth(),1,12), dim=new Date(view.getFullYear(),view.getMonth()+1,0,12).getDate(), rows=Math.ceil((first.getDay()+dim)/7), gs=addD(first,-first.getDay());
+  for(let i=0;i<rows*7;i++){
+    // a row of the month that holds no day of the plan and no competition is left out
+    if(i%7===0){let any=false; for(let j=0;j<7;j++){const dj=addD(gs,i+j); if(mapInfo(dj)||A.compDate===ymd(dj)){any=true; break}} if(!any){i+=6; continue}}
+    const d=addD(gs,i), k=ymd(d), om=d.getMonth()!==view.getMonth(), info=mapInfo(d);
+    const cls='mcd'+(om?' om':'')+(info?(info.w.off?' off':info.w.mound?' mound':' build'):' xp')+(k===MCS.sel?' sel':'')+(k===todayK?' today':'')+(info&&info.test?' tst':'')+(A.compDate===k?' comp':'');
+    const c=el('button',cls); c.type='button'; c.setAttribute('aria-label',d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})+(info?', week '+info.w.n+', '+mapPhase(info.w):'')); c.setAttribute('aria-pressed',String(k===MCS.sel));
+    const top=el('span','mcdt'); top.append(el('span','mcn1',String(d.getDate()))); if(info&&info.day===1) top.append(el('span','mcwk','W'+info.w.n)); c.append(top);
+    if(info){
+      const first1=d.getDate()===1;
+      if(info.newBlock||first1) c.append(el('span','mctg thr',mapPhase(info.w)));
+      if(info.str&&(info.str.start||first1)) c.append(el('span','mctg str',info.str.fam+' P'+info.str.ph+(info.str.fam!=='ML'?' + prep':'')));
+      const bt=el('span','mcb'); if(info.sc&&!info.w.off){const s=el('span','mcsc'+(info.sc>=7?' hot':''),String(Math.round(info.sc))); s.style.setProperty('--h',Math.min(info.sc/12,1).toFixed(3)); s.title='Day score '+info.sc.toFixed(2); bt.append(s)}
+      if(info.test&&info.day===1) bt.append(el('span','mcfl tst','Retest'));
+      if(!A.deload[info.w.n]&&info.w.sugDl&&info.day===1) bt.append(el('span','mcfl dls','Deload'));
+      if(info.comp) bt.append(el('span','mcfl comp','Comp'));
+      c.append(bt)
+    } else if(A.compDate===k){ const bt=el('span','mcb'); bt.append(el('span','mcfl comp','Comp')); c.append(bt) }
+    c.addEventListener('click',()=>{MCS.sel=k; if(om) MCS.month=ymd(new Date(d.getFullYear(),d.getMonth(),1,12)); redraw()});
+    grid.append(c)}
+  box.append(grid);
+  const lg=el('div','mcl'); for(const [cls,t] of [['build','Build phase'],['mound','Mound phase'],['off','Deload or off'],['tst','Retest week'],['dls','Suggested deload'],['comp','Competition'],['today','Today']]){const i=el('span','mcli'); i.append(el('i','sw '+cls),document.createTextNode(t)); lg.append(i)}
+  box.append(lg);
+  box.append(mapDetail(day0(MCS.sel)||st))}
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
