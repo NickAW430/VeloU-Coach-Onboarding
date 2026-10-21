@@ -205,7 +205,7 @@ button.rr:hover{background:var(--sunk)}
 .lcr{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:2px 0}
 .lcr b{font:600 11.5px var(--mono);text-align:right;overflow-wrap:anywhere}
 .lbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.lrow.ledit{display:flex;flex-direction:column;gap:4px;padding:6px 0}
+.lrow.ledit{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:6px 0}
 .lr1{display:grid;grid-template-columns:18px 26px minmax(0,1fr) auto;gap:6px;align-items:center}
 .lr2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding-left:50px}
 .lr2 .lin{text-align:left;font-size:11.5px}
