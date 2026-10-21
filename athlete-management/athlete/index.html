@@ -1326,7 +1326,7 @@ class Component extends DCLogic {
   planVals(d, prog, main, armScore, injury, tabFact, cmjFact, v, num) {
     const ev = (d.evalr || []).slice().sort((a, b) => (pD(b[49]) || 0) - (pD(a[49]) || 0))[0] || [];
     const es = i => String(ev[i] == null ? '' : ev[i]).trim();
-    const ratioNow = (() => { const ci = num(cmjFact(/^concentric impulse \[/i)), eb = num(cmjFact(/^eccentric braking impulse/i)); if (ci && eb && eb > 0) return ci / eb; const t = num(cmjFact(/^impulse ratio$/i)); return t == null ? null : t; })();
+    const ratioNow = (() => { const t = num(cmjFact(/^impulse ratio$/i)); if (t != null) return t; const ci = num(cmjFact(/^concentric impulse \[/i)), eb = num(cmjFact(/^eccentric braking impulse/i)); return ci && eb && eb > 0 ? ci / eb : null; })();
     const pc = (d.prog && d.prog.cols) || [];
     const pb = re => { for (const r of (d.prog || [])) { const i = pc.findIndex(l => re.test(String(l || ''))); if (i >= 0) { const n = parseFloat(r[i]); if (!isNaN(n)) return String(n); } } return ''; };
     const tmRows = d.tm || [];
