@@ -235,6 +235,27 @@ button.rr:hover{background:var(--sunk)}
 .qc{border:1px solid var(--line);background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .qh{font:600 15px/1.3 var(--body);color:#fff}
 .qhr{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bgrid{display:grid;grid-template-columns:minmax(270px,350px) minmax(0,1fr);gap:12px;align-items:stretch}
+.bknown{aspect-ratio:1/1;width:100%;box-sizing:border-box;align-self:start;gap:11px;padding:14px 16px}
+.bqbox{gap:14px;padding:16px 20px;position:relative}
+.kg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px 12px}
+.kg .k{display:flex;flex-direction:column;gap:2px;min-width:0}
+.kg .k.w{grid-column:1/-1}
+.kg .k span{font:500 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.kg .k b{font:600 13px/1.25 var(--body);overflow-wrap:anywhere}
+.kg .k b.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.qbh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.qprog{font:500 10.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.qtt{font:600 20px/1.3 var(--body);color:#fff}
+.qbody{display:flex;flex-direction:column;gap:12px}
+.qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto}
+.qchips{display:flex;flex-wrap:wrap;gap:6px;padding-top:12px;border-top:1px solid #1d2428}
+.qchip{background:transparent;border:1px solid var(--line);color:#9aa3a8;font:500 11px var(--body);padding:4px 9px;cursor:pointer}
+.qchip b{color:#fff;font-weight:600}
+.qchip:hover{border-color:#56b7e6}
+.qchip.on{border-color:#56b7e6;background:rgba(86,183,230,.1)}
+.qback:disabled{opacity:.35;cursor:default}
+@media (max-width:760px){.bgrid{grid-template-columns:1fr}.bknown{aspect-ratio:auto}}
 .qh2{font:600 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--heat);margin-top:6px}
 .qs{font-size:12px;line-height:1.4;color:var(--muted)}
 .qopts{display:flex;flex-wrap:wrap;gap:8px}
@@ -1830,12 +1851,13 @@ function bctx(){
     injStatus:String(d.injstatus||'').trim(),injLoc:String(d.injloc||'').trim(),injNote:String(d.injnote||'').trim(),arm:n(d.armscore),board:boardObj(),coach:d.coach||''};
 }
 const hasInjury=c=>/previous|current|rehab|injured/i.test(c.injStatus)&&!/^none$/i.test(c.injStatus);
-function areasOf(c,Q){
+function locAreas(c){
   const s=c.injLoc.toLowerCase(), r=[];
   if(/shoulder|elbow|wrist|arm|neck|hand|forearm/.test(s)) r.push('upper');
   if(/knee|leg|hip|pelvis|spine|torso|back|ankle|foot|core|groin/.test(s)) r.push('lower');
-  return r.length?r:(Q.areas||[]);
+  return r;
 }
+function areasOf(c,Q){const r=locAreas(c); return r.length?r:(Q.areas||[]);}
 const tcase=t=>String(t||'').split(/\s+/).map(w=>/^(UCL|TJ|PRP|AC|G\d)$/i.test(w)?w.toUpperCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
 function rttList(){
   return D.programs.filter(p=>/^THR•RT[TM]•/.test(p.code)).map(p=>{
@@ -1942,94 +1964,141 @@ function bDate(val,fn,o){
 function bSel(list,val,fn,blank){const s=el('select','qsel'); if(blank){const o=el('option',null,blank); o.value=''; s.append(o)} for(const [v,t] of list){const o=el('option',null,t); o.value=String(v); s.append(o)} s.value=val==null?'':String(val); s.addEventListener('change',()=>fn(s.value)); return s}
 function bOpts(list,val,fn){const w=el('div','qopts'); for(const [v,t,h] of list){const b=el('button','qo'+(String(val)===String(v)?' on':'')); b.type='button'; b.append(document.createTextNode(t)); if(h) b.append(el('small',null,h)); b.addEventListener('click',()=>fn(v)); w.append(b)} return w}
 function bChecks(list,vals,fn){const w=el('div','qchks'); for(const [v,t] of list){const l=el('label','qchk'), x=el('input'); x.type='checkbox'; x.checked=(vals||[]).includes(v); x.addEventListener('change',()=>{const s=new Set(vals||[]); x.checked?s.add(v):s.delete(v); fn([...s])}); l.append(x,el('span',null,t)); w.append(l)} return w}
+// ---- the question box: one question at a time, answers stay stored ----
+let bStep=null, bStepFor='';
+const SHORT=v=>{const d=day0(v); return d?d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):''};
+const STATUS_OPTS=[['onramp','Needs an on-ramp','They have just come off a deload'],['deload','Needs a deload','Just out of season. Patterning only for the weeks you choose'],['offmound','Recently off the mound','Ready for any intensity in a throwing plan'],['rtt','In return to throw','Choose where to start them']];
+const STATUS_TXT={onramp:'On-ramp',deload:'Deload',offmound:'Off the mound',rtt:'Return to throw'};
+// the questions that apply right now, in order
+function bOrder(c,Q,eff){
+  const o=['start','comp'];
+  if(eff.inj){ o.push('rec');
+    if(Q.recovered==='no'){ o.push('can');
+      if(Q.canThrow==='no') o.push('rtt');
+      if(Q.canThrow){ o.push('restrict');
+        if(Q.restrict==='yes'){
+          if(!locAreas(c).length) o.push('areas');
+          if(eff.areas.includes('upper')){ if(Q.canThrow==='yes') o.push('sure'); if(Q.canThrow==='no'||Q.sure==='b') o.push('upper') }
+          if(eff.areas.includes('lower')){ if(Q.canThrow==='yes') o.push('thr'); if(Q.canThrow==='no'||Q.thrImpact) o.push('lower') } } } } }
+  if(!eff.forcedRtt) o.push('status');
+  o.push('focus','pat','equip','assume');
+  return o}
+// answering a question stores it, marks it done and moves to the next one that now applies
+function bGo(id,patch){
+  const q=bq(); Object.assign(q,patch||{}); q.done=Object.assign({},q.done,{[id]:1}); delete q.applied;
+  const c=bctx(), o=bOrder(c,q,effective(c,q)), i=o.indexOf(id); bStep=i>=0&&o[i+1]?o[i+1]:'done'; changed()}
+function bDefs(c,Q,eff,level,theory){
+  const x={go:bGo,set:bset}, D={};
+  const rttBody=(k,startLabel)=>{
+    const list=rttList(), sg=rttSuggest(c.injNote,c.injLoc); if(sg) k.append(el('div','qmsg',sg));
+    k.append(bField('Which program do you plan to start them on?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
+    const pg=list.find(p=>p.code===Q.rttCode); if(pg) k.append(bField('Starting week',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)}))));
+    k.append(bField(startLabel,bDate(Q.rttStart||Q.start,v=>bset({rttStart:v}),{min:Q.start})))};
+  D.start={label:'Start',title:'What is the athlete’s start date?',
+    body:k=>k.append(bDate(Q.start,v=>x.go('start',{start:v||ymd(new Date())}))), txt:()=>SHORT(Q.start), can:()=>!!Q.start};
+  D.comp={label:'Competition',title:'When is their next expected competition?',
+    body:k=>{
+      const r=el('div','qrow'); r.append(bDate(Q.comp,v=>x.go('comp',{comp:v,noComp:false}),{clear:true,min:Q.start?PBL.addDays(Q.start,1):'',disabled:!!Q.noComp,placeholder:'Select a date'}));
+      const nb=el('button','qo'+(Q.noComp?' on':''),'No competition scheduled'); nb.type='button'; nb.addEventListener('click',()=>{ if(Q.noComp) bset({noComp:false}); else x.go('comp',{noComp:true,comp:''}) }); r.append(nb); k.append(r);
+      const N=(Q.comp&&!Q.noComp&&Q.start)?PBL.weeksBetween(Q.start,Q.comp):null; k.append(el('div','qs','Season: '+PBL.season(Q.noComp?null:N)+(N!=null&&N>0?' · '+N+' weeks to competition':'')))},
+    txt:()=>Q.noComp?'None':SHORT(Q.comp), can:()=>!!(Q.comp||Q.noComp)};
+  D.rec={label:'Recovered',title:'Has the athlete recovered from their '+(/current|rehab|^injured$/i.test(c.injStatus)?'current':'previous')+' injury?',sub:[c.injStatus,c.injLoc,c.injNote].filter(t=>t&&t!=='None').join(' · '),
+    body:k=>k.append(bOpts([['yes','Yes'],['no','No']],Q.recovered,v=>x.go('rec',{recovered:v}))), txt:()=>Q.recovered==='no'?'No':'Yes', can:()=>!!Q.recovered};
+  D.can={label:'Cleared to throw',title:'Can the athlete begin throwing yet?',
+    body:k=>k.append(bOpts([['yes','Yes'],['no','No, not yet']],Q.canThrow,v=>x.go('can',{canThrow:v}))), txt:()=>Q.canThrow==='no'?'Not yet':'Yes', can:()=>!!Q.canThrow};
+  D.rtt={label:'Return to throw',title:'Return to throw',sub:'The exact injury is shown on the left. Pick the program you plan to start them on.',
+    body:k=>rttBody(k,'When is the athlete expected to begin their RTT?'), txt:()=>{const p=rttList().find(p=>p.code===Q.rttCode); return p?p.label:''}, can:()=>!!Q.rttCode};
+  D.restrict={label:'Lifting limits',title:'Does the athlete have any restrictions regarding lifting?',
+    body:k=>k.append(bOpts([['yes','Yes'],['no','No']],Q.restrict,v=>x.go('restrict',{restrict:v}))), txt:()=>Q.restrict==='yes'?'Yes':'No', can:()=>!!Q.restrict};
+  D.areas={label:'Area',title:'Which area is affected?',
+    body:k=>k.append(bChecks([['upper','Shoulder, elbow, wrist or neck'],['lower','Knee, hip/back or foot']],Q.areas,v=>bset({areas:v}))), txt:()=>(Q.areas||[]).map(a=>a==='upper'?'Upper':'Lower').join(' + '), can:()=>(Q.areas||[]).length>0};
+  D.sure={label:'Check',title:'Are you sure?',
+    body:k=>{k.append(el('div','qmsg','Typically if they are cleared to throw they should be cleared to lift without restriction.')); k.append(bOpts([['a','Oh, you’re right: no restriction'],['b','No, they still can’t do certain things']],Q.sure,v=>x.go('sure',{sure:v,upperR:v==='a'?[]:Q.upperR})))},
+    txt:()=>Q.sure==='a'?'No restriction':'Still restricted', can:()=>!!Q.sure};
+  D.upper={label:'Upper limits',title:'Please select what the athlete can not complete in the weight room (shoulder, elbow, wrist or neck)',
+    body:k=>k.append(bChecks(UPPER_R,Q.upperR,v=>bset({upperR:v}))), txt:()=>{const n=(Q.upperR||[]).length; return n+' limit'+(n===1?'':'s')}, can:()=>true};
+  D.thr={label:'Throwing impact',title:'Are there restrictions to how this will impact throwing?',
+    body:k=>{k.append(bOpts([['yes','Yes'],['no','No']],Q.thrImpact,v=>{ if(v==='no') x.go('thr',{thrImpact:'no'}); else bset({thrImpact:'yes'}) }));
+      if(Q.thrImpact==='yes'){k.append(el('div','qs','Select what the athlete can do. Anything left unchecked is treated as restricted for now.')); k.append(bChecks(THROW_POS,Q.throwOk,v=>bset({throwOk:v})))}},
+    txt:()=>Q.thrImpact==='yes'?'Yes':'No', can:()=>!!Q.thrImpact};
+  D.lower={label:'Lower limits',title:'Please select what the athlete can not complete in the weight room (knee, hip/back or foot)',
+    body:k=>k.append(bChecks(LOWER_R,Q.lowerR,v=>bset({lowerR:v}))), txt:()=>{const n=(Q.lowerR||[]).length; return n+' limit'+(n===1?'':'s')}, can:()=>true};
+  D.status={label:'Throwing',title:'Where is the athlete in their throwing?',
+    body:k=>{ k.append(bOpts(STATUS_OPTS,Q.status,v=>{ if(v==='onramp'||v==='offmound') x.go('status',{status:v}); else bset({status:v}) }));
+      if(Q.status==='deload') k.append(bField('How many weeks? (patterning only during this time)',bSel([1,2,3,4].map(n=>[n,n+' week'+(n>1?'s':'')]),Q.deloadWeeks||1,v=>bset({deloadWeeks:Number(v)}))));
+      if(Q.status==='rtt') rttBody(k,'Date they begin this program')},
+    txt:()=>Q.status==='deload'?'Deload · '+(Q.deloadWeeks||1)+' wk':(STATUS_TXT[Q.status]||''), can:()=>!!Q.status&&(Q.status!=='rtt'||!!Q.rttCode)};
+  D.focus={label:'Focus',title:'What is the athlete’s proposed focus for throwing development?',
+    body:k=>k.append(bOpts(FOCI.map(f=>[f,f]),Q.focus,v=>x.go('focus',{focus:v}))), txt:()=>Q.focus||'', can:()=>!!Q.focus};
+  D.pat={label:'Patterning',title:'Do you want to include patterning?',
+    body:k=>{ k.append(bOpts([['yes','Yes'],['no','No']],Q.patOn,v=>{ if(v==='no') x.go('pat',{patOn:'no'}); else bset({patOn:'yes'}) }));
+      if(Q.patOn==='yes'){k.append(el('div','qs','Which patterning focus?')); k.append(bOpts([['same','Same as throwing focus']].concat(FOCI.map(f=>[f,f])),Q.patFocus||'same',v=>x.go('pat',{patOn:'yes',patFocus:v})))}},
+    txt:()=>Q.patOn==='yes'?'Yes · '+((Q.patFocus&&Q.patFocus!=='same')?Q.patFocus:'same focus'):(Q.patOn==='no'?'No':''), can:()=>Q.patOn==='no'||Q.patOn==='yes'};
+  D.equip={label:'Equipment',title:'What equipment does the athlete have access to?',
+    body:k=>k.append(bOpts(EQUIP,Q.equip,v=>x.go('equip',{equip:v}))), txt:()=>{const e=EQUIP.find(t=>t[0]===Q.equip); return e?e[1]:''}, can:()=>!!Q.equip};
+  D.assume={label:'Assumptions',title:'Check the assumptions',sub:'These come from the athlete’s profile. Change anything that looks wrong; the plan below updates as you do.',
+    body:k=>{ const r=el('div','qrow');
+      r.append(bField('Training days per week',bSel([[4,'4 days'],[5,'5 days'],[6,'6 days']],Q.days,v=>bset({days:Number(v)})),'6 for high school, 5 for college and pro'));
+      r.append(bField('Throwing level',bSel([[1,'Level 1'],[2,'Level 2'],[3,'Level 3']],Q.thrLevel||'',v=>bset({thrLevel:v}),c.thrLevel?'Auto: Level '+c.thrLevel:'Choose a level')));
+      r.append(bField('Training theory',bSel(Object.keys(FAMN).map(f=>[f,FAMN[f]]),Q.theory||'',v=>bset({theory:v}),c.autoTheory?'Auto: '+FAMN[c.autoTheory]:'Auto')));
+      const lm=el('label','qchk'), lx=el('input'); lx.type='checkbox'; lx.checked=!!Q.mound; lx.addEventListener('change',()=>bset({mound:lx.checked})); lm.append(lx,el('span',null,'Has mound access (pitchers are assumed to find mound time)')); r.append(lm); k.append(r)},
+    txt:()=>Q.days+' days · L'+level+' · '+theory, can:()=>true};
+  return D}
+// answers saved before the question box existed count as answered
+function bMigrate(c,Q,eff){
+  if(Q.done) return;
+  const has=k=>Q[k]!=null&&Q[k]!=='', d={};
+  const m={start:has('focus')||has('equip')||has('status'),comp:has('comp')||!!Q.noComp,rec:has('recovered'),can:has('canThrow'),rtt:has('rttCode'),restrict:has('restrict'),areas:!!(Q.areas&&Q.areas.length),sure:has('sure'),upper:Array.isArray(Q.upperR),thr:has('thrImpact'),lower:Array.isArray(Q.lowerR),status:has('status'),focus:has('focus'),pat:has('patOn'),equip:has('equip')};
+  for(const k in m) if(m[k]) d[k]=1;
+  Q.done=d}
 function renderBuild(){
   const box=$('bview'); box.hidden=false; box.textContent='';
   if(A.str.on&&!SDATA) loadStrength(); if(!PAT) loadPattern();
-  const c=bctx(), Q=bq(); const ds=host.dataset;
+  const c=bctx(), Q=bq();
+  if(bStepFor!==cur){bStep=null; bStepFor=cur}
   if(!Q.start){const t0=ymd(new Date()), s0=day0(A.startDate); Q.start=(s0&&s0>=day0(t0))?A.startDate:t0}
   if(Q.days==null) Q.days=PBL.daysFor(c.play);
   if(Q.mound==null) Q.mound=PBL.isPitcher(c.pos);
   root.querySelector('.wrap').classList.toggle('adv',coachOpen); $('coach').hidden=!coachOpen; $('coachBtn').textContent=coachOpen?'Close advanced coach tools':'Advanced coach tools'; if(coachOpen) renderCoach(weeksAvail(),planWeeks().length);
-  let qn=0; const card=(title,sub)=>{const k=el('section','qc'); k.append(el('div','qh',(++qn)+'. '+title)); if(sub) k.append(el('div','qs',sub)); box.append(k); return k};
   const eff=effective(c,Q), level=Q.thrLevel?Number(Q.thrLevel):(c.thrLevel||1), theory=Q.theory||c.autoTheory||'TL';
-  // what we already know
-  {const k=el('section','qc'), hr=el('div','qhr'); hr.append(el('div','qh','What we already know'));
-   if(Object.keys(Q).some(x=>x!=='start'&&x!=='days'&&x!=='mound')){const so=el('button','btn sm','Start over'); so.type='button'; so.addEventListener('click',()=>{if(confirm('Clear these answers and start a new plan build? The plan already applied stays as it is until you apply a new one.')){A.build={}; changed()}}); hr.append(so)}
+  bMigrate(c,Q,eff);
+  const order=bOrder(c,Q,eff), defs=bDefs(c,Q,eff,level,theory), done=id=>!!(Q.done&&Q.done[id]);
+  const firstOpen=order.find(id=>!done(id)&&id!=='assume');
+  let curId=(bStep&&order.includes(bStep))?bStep:(bStep==='done'&&!firstOpen?'done':(firstOpen||'done'));
+  if(curId==='done'&&!done('assume')&&bStep!=='done') curId='assume';
+  const grid=el('div','bgrid'); box.append(grid);
+  // what we already know: a compact square
+  {const k=el('section','qc bknown'), hr=el('div','qhr'); hr.append(el('div','qh','What we already know'));
+   if(Object.keys(Q).some(t=>!['start','days','mound','done'].includes(t))||Object.keys(Q.done||{}).length){const so=el('button','btn sm','Start over'); so.type='button'; so.addEventListener('click',()=>{if(confirm('Clear these answers and start a new plan build? The plan already applied stays as it is until you apply a new one.')){bStep=null; A.build={}; changed()}}); hr.append(so)}
    k.append(hr);
-   const g=el('div','qknown'), kv=(a,b)=>{const x=el('div','qk'); x.append(el('span',null,a),el('b',null,b||'—')); g.append(x)};
-   kv('Athlete',c.name); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · ')); kv('Throwing arm',c.hand);
-   kv('Throwing level',c.thrLevel?'Level '+c.thrLevel+' · transference '+c.xfer.toFixed(1):'Not available: no transference score'); kv('Lifting level',c.liftLevel?'Level '+c.liftLevel+' · production '+c.prod.toFixed(1):'Not available: no production score');
-   kv('Training theory',c.autoTheory?FAMN[c.autoTheory]+(c.liftLevel===3&&c.ratio!=null?' · impulse ratio '+c.ratio.toFixed(2):''):'—'); kv('Arm score',c.arm!=null?c.arm.toFixed(1):'');
-   kv('Injury',hasInjury(c)?[c.injStatus,c.injLoc!=='None'?c.injLoc:'',c.injNote].filter(Boolean).join(' · '):'None on file'); kv('Program Board',[c.board.thr,c.board.lift].filter(Boolean).join('  |  '));
-   k.append(g); const rn=PBL.ratioNote(c.ratio); if(c.liftLevel===3&&rn) k.append(el('div','qmsg qwarn',rn)); box.append(k)}
-  // 1 start date
-  {const k=card('What is the athlete’s start date?'); k.append(bDate(Q.start,v=>bset({start:v||ymd(new Date())})))}
-  // 2 competition
-  {const k=card('When is their next expected competition?'); const r=el('div','qrow'); const di=bDate(Q.comp,v=>bset({comp:v,noComp:false}),{clear:true,min:Q.start?PBL.addDays(Q.start,1):'',disabled:!!Q.noComp,placeholder:'Select a date'}); r.append(di);
-   const l=el('label','qchk'), x=el('input'); x.type='checkbox'; x.checked=!!Q.noComp; x.addEventListener('change',()=>bset({noComp:x.checked})); l.append(x,el('span',null,'No competition scheduled')); r.append(l); k.append(r);
-   const N=(Q.comp&&!Q.noComp&&Q.start)?PBL.weeksBetween(Q.start,Q.comp):null; k.append(el('div','qs','Season: '+PBL.season(Q.noComp?null:N)+(N!=null&&N>0?' · '+N+' weeks to competition':'')))}
-  // 3 injury
-  if(eff.inj){
-    const k=card('Has the athlete recovered from their '+(/current|rehab|^injured$/i.test(c.injStatus)?'current':'previous')+' injury?',[c.injStatus,c.injLoc,c.injNote].filter(x=>x&&x!=='None').join(' · '));
-    k.append(bOpts([['yes','Yes'],['no','No']],Q.recovered,v=>bset({recovered:v})));
-    if(Q.recovered==='no'){
-      const k2=card('Can the athlete begin throwing yet?'); k2.append(bOpts([['yes','Yes'],['no','No, not yet']],Q.canThrow,v=>bset({canThrow:v})));
-      if(Q.canThrow==='no'){
-        const k3=card('Return to throw','The exact injury on file is shown above. Pick the program you plan to start them on.');
-        const sug=rttSuggest(c.injNote,c.injLoc); if(sug) k3.append(el('div','qmsg',sug));
-        k3.append(bField('When is the athlete expected to begin their RTT?',bDate(Q.rttStart||'',v=>bset({rttStart:v}),{min:Q.start,clear:true})));
-        const list=rttList(); k3.append(bField('Which program do you plan to start them on?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
-        const pg=list.find(p=>p.code===Q.rttCode); if(pg) k3.append(bField('Starting week',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)}))));
-      }
-      if(Q.canThrow){
-        const k4=card('Does the athlete have any restrictions regarding lifting?'); k4.append(bOpts([['yes','Yes'],['no','No']],Q.restrict,v=>bset({restrict:v})));
-        if(Q.restrict==='yes'){
-          if(!eff.areas.length){const k5=card('Which area is affected?'); k5.append(bChecks([['upper','Shoulder, elbow, wrist or neck'],['lower','Knee, hip/back or foot']],Q.areas,v=>bset({areas:v})))}
-          if(eff.areas.includes('upper')){
-            if(Q.canThrow==='yes'){
-              const k6=card('Are you sure?'); k6.append(el('div','qmsg','Typically if they are cleared to throw they should be cleared to lift without restriction.')); k6.append(bOpts([['a','Oh, you’re right: no restriction'],['b','No, they still can’t do certain things']],Q.sure,v=>bset({sure:v,upperR:v==='a'?[]:Q.upperR})));
-            }
-            if(Q.canThrow==='no'||Q.sure==='b'){const k7=card('Please select what the athlete can not complete in the weight room (shoulder, elbow, wrist or neck)'); k7.append(bChecks(UPPER_R,Q.upperR,v=>bset({upperR:v})))}
-          }
-          if(eff.areas.includes('lower')){
-            if(Q.canThrow==='yes'){const k8=card('Are there restrictions to how this will impact throwing?'); k8.append(bOpts([['yes','Yes'],['no','No']],Q.thrImpact,v=>bset({thrImpact:v}))); if(Q.thrImpact==='yes'){k8.append(el('div','qs','Select what the athlete can do. Anything left unchecked is treated as restricted for now.')); k8.append(bChecks(THROW_POS,Q.throwOk,v=>bset({throwOk:v})))}}
-            if(Q.canThrow==='no'||Q.thrImpact){const k9=card('Please select what the athlete can not complete in the weight room (knee, hip/back or foot)'); k9.append(bChecks(LOWER_R,Q.lowerR,v=>bset({lowerR:v})))}
-          }
-        }
-      }
-    }
-  }
-  // throwing status
-  {const k=card('Where is the athlete in their throwing?');
-   if(eff.forcedRtt) k.append(el('div','qmsg','They are not cleared to throw yet, so the plan starts with the return to throw program chosen above.'));
-   else{
-     k.append(bOpts([['onramp','Needs an on-ramp','They have just come off a deload'],['deload','Needs a deload','Just out of season. Patterning only for the weeks you choose'],['offmound','Recently off the mound','Ready for any intensity in a throwing plan'],['rtt','In return to throw','Choose where to start them']],Q.status,v=>bset({status:v})));
-     if(Q.status==='deload') k.append(bField('How many weeks? (patterning only during this time)',bSel([1,2,3,4].map(n=>[n,n+' week'+(n>1?'s':'')]),Q.deloadWeeks||1,v=>bset({deloadWeeks:Number(v)}))));
-     if(Q.status==='rtt'){
-       const list=rttList(); k.append(bField('Which return to throw program?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
-       const pg=list.find(p=>p.code===Q.rttCode); if(pg){k.append(bField('Where are they starting?',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)})))); k.append(bField('Date they begin this program',bDate(Q.rttStart||Q.start,v=>bset({rttStart:v}),{min:Q.start})))}
-     }
-   }}
-  // focus
-  {const k=card('What is the athlete’s proposed focus for throwing development?'); k.append(bOpts(FOCI.map(f=>[f,f]),Q.focus,v=>bset({focus:v})))}
-  // patterning
-  {const k=card('Do you want to include patterning?'); k.append(bOpts([['yes','Yes'],['no','No']],Q.patOn,v=>bset({patOn:v})));
-   if(Q.patOn==='yes'){k.append(el('div','qs','Which patterning focus?')); k.append(bOpts([['same','Same as throwing focus']].concat(FOCI.map(f=>[f,f])),Q.patFocus||'same',v=>bset({patFocus:v})))}}
-  // equipment
-  {const k=card('What equipment does the athlete have access to?'); k.append(bOpts(EQUIP,Q.equip,v=>bset({equip:v})))}
-  // assumptions
-  {const k=el('section','qc'); k.append(el('div','qh','Assumptions (change if needed)'));
-   const r=el('div','qrow');
-   r.append(bField('Training days per week',bSel([[4,'4 days'],[5,'5 days'],[6,'6 days']],Q.days,v=>bset({days:Number(v)})),'6 for high school, 5 for college and pro'));
-   r.append(bField('Throwing level',bSel([[1,'Level 1'],[2,'Level 2'],[3,'Level 3']],Q.thrLevel||'',v=>bset({thrLevel:v}),c.thrLevel?'Auto: Level '+c.thrLevel:'Choose a level')));
-   r.append(bField('Training theory',bSel(Object.keys(FAMN).map(f=>[f,FAMN[f]]),Q.theory||'',v=>bset({theory:v}),c.autoTheory?'Auto: '+FAMN[c.autoTheory]:'Auto')));
-   const lm=el('label','qchk'), lx=el('input'); lx.type='checkbox'; lx.checked=!!Q.mound; lx.addEventListener('change',()=>bset({mound:lx.checked})); lm.append(lx,el('span',null,'Has mound access (pitchers are assumed to find mound time)')); r.append(lm);
-   k.append(r); box.append(k)}
-  // suggestion
+   const g=el('div','kg'), kv=(a,v,wide,clamp)=>{const t=el('div','k'+(wide?' w':'')), b=el('b',clamp?'clamp':null,v||'—'); if(clamp&&v) b.title=v; t.append(el('span',null,a),b); g.append(t)};
+   kv('Athlete',c.name,1); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · '),1);
+   kv('Throwing arm',c.hand); kv('Arm score',c.arm!=null?c.arm.toFixed(1):'');
+   kv('Throwing level',c.thrLevel?'L'+c.thrLevel+' · '+c.xfer.toFixed(1):'No score'); kv('Lifting level',c.liftLevel?'L'+c.liftLevel+' · '+c.prod.toFixed(1):'No score');
+   kv('Training theory',c.autoTheory?FAMN[c.autoTheory]+(c.liftLevel===3&&c.ratio!=null?' · ratio '+c.ratio.toFixed(2):''):'',1);
+   kv('Injury',hasInjury(c)?[c.injStatus,c.injLoc!=='None'?c.injLoc:'',c.injNote].filter(Boolean).join(' · '):'None on file',1,1);
+   kv('Program Board',[c.board.thr,c.board.lift].filter(Boolean).join('  |  '),1,1);
+   k.append(g); const rn=PBL.ratioNote(c.ratio); if(c.liftLevel===3&&rn) k.append(el('div','qmsg qwarn',rn)); grid.append(k)}
+  // the question box
+  {const k=el('section','qc bqbox'); grid.append(k);
+   const idx=order.indexOf(curId), prevId=curId==='done'?order[order.length-1]:(idx>0?order[idx-1]:null);
+   const head=el('div','qbh'), back=el('button','btn sm qback','← Back'); back.type='button'; back.disabled=!prevId; back.addEventListener('click',()=>{bStep=prevId; render()});
+   head.append(back,el('span','qprog',curId==='done'?'All questions answered':'Question '+(idx+1)+' of '+order.length)); k.append(head);
+   if(curId==='done'){
+     k.append(el('div','qtt','That’s everything.'),el('div','qs','The suggested plan is below. Go back to change an answer, or pick any answer in the list to jump to it.'));
+   }else{
+     const d=defs[curId]; k.append(el('div','qtt',d.title)); if(d.sub) k.append(el('div','qs',d.sub));
+     const body=el('div','qbody'); d.body(body); k.append(body);
+     const foot=el('div','qfoot'), nx=el('button','btn primary',curId==='assume'?'Done':'Next →'); nx.type='button'; nx.disabled=!d.can(); nx.addEventListener('click',()=>bGo(curId,{}));
+     foot.append(el('span'),nx); k.append(foot)}
+   const answered=order.filter(id=>done(id)&&defs[id]&&defs[id].txt());
+   if(answered.length){const ch=el('div','qchips'); for(const id of answered){const t=el('button','qchip'+(id===curId?' on':'')); t.type='button'; t.append(document.createTextNode(defs[id].label+': '),el('b',null,defs[id].txt())); t.addEventListener('click',()=>{bStep=id; render()}); ch.append(t)} k.append(ch)}}
+  const complete=order.filter(id=>id!=='assume').every(done);
+  // the suggested plan, below both boxes
   const missing=[]; if(!Q.start) missing.push('a start date'); if(eff.inj&&!Q.recovered) missing.push('the injury recovery question'); if(eff.inj&&Q.recovered==='no'&&!Q.canThrow) missing.push('whether they can begin throwing'); if(eff.inj&&Q.recovered==='no'&&Q.canThrow&&!Q.restrict) missing.push('the lifting restrictions question');
   if(!eff.status) missing.push('their throwing status'); if(eff.status==='rtt'&&!eff.rtt) missing.push('a return to throw program'); if(!Q.focus) missing.push('a throwing focus'); if(!Q.patOn) missing.push('the patterning question'); if(!Q.equip) missing.push('equipment access');
   const sug=el('section','qc qsug'); box.append(sug);
-  if(missing.length){sug.append(el('div','qh','Suggested 12 week plan'),el('div','qs','Still needed: '+missing.join(', ')+'.')); return}
+  if(!complete||missing.length){sug.append(el('div','qh','Suggested 12 week plan'),el('div','qs',complete?'Still needed: '+missing.join(', ')+'.':'Answer the questions above and the suggested plan appears here.')); return}
   const cont=detectCont(c,Q.start), contUse=cont&&cont.fam===theory?cont:null;
   const advance=contUse?(Q.contAdvance?Q.contAdvance==='adv':contUse.gap>=-7):true;
   const I={start:Q.start,comp:Q.noComp?'':Q.comp,theory,liftLevel:c.liftLevel,status:eff.status,deloadWeeks:Q.deloadWeeks||1,rtt:eff.rtt,restricted:eff.restricted,
