@@ -245,6 +245,30 @@ button.rr:hover{background:var(--sunk)}
 .qrow{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
 .qf{display:flex;flex-direction:column;gap:4px;min-width:150px}
 .qfl{font:500 11px var(--mono);letter-spacing:.04em;color:var(--muted)}
+.dp{position:relative;display:inline-block}
+.dpb{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 14px;background:#000;border:1px solid var(--line);color:#fff;font:600 15px var(--body);cursor:pointer;text-align:left}
+.dpb:hover:not(:disabled){border-color:#56b7e6}
+.dpb:disabled{opacity:.4;cursor:default}
+.dpb.empty .dpt{color:var(--muted);font-weight:500}
+.dpb svg{flex:none;color:#56b7e6}
+.dpp{position:absolute;top:calc(100% + 4px);left:0;z-index:40;width:292px;max-width:calc(100vw - 32px);box-sizing:border-box;padding:12px;background:#0b0d0e;border:1px solid #56b7e6;box-shadow:0 10px 28px rgba(0,0,0,.7)}
+.dpp[hidden]{display:none}
+.dph{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.dpm{font:600 14px var(--body);color:#fff}
+.dpn{width:34px;height:34px;background:transparent;border:1px solid var(--line);color:#fff;font:600 18px/1 var(--body);cursor:pointer}
+.dpn:hover{border-color:#56b7e6}
+.dpw,.dpg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dpw span{text-align:center;font:500 10px var(--mono);letter-spacing:.06em;color:var(--muted);padding:4px 0}
+.dpd{height:34px;background:transparent;border:1px solid transparent;color:#fff;font:500 13px var(--body);cursor:pointer;padding:0}
+.dpd:hover:not(:disabled){border-color:#56b7e6}
+.dpd.out{color:#5b6770}
+.dpd.today{border-color:#5b6770}
+.dpd.sel{background:#e10600;border-color:#e10600;color:#fff;font-weight:700}
+.dpd:disabled{opacity:.25;cursor:default}
+.dpf{display:flex;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.dpl{background:transparent;border:1px solid var(--line);color:#d4d9dc;font:600 12px var(--body);padding:6px 12px;cursor:pointer}
+.dpl:hover:not(:disabled){border-color:#56b7e6;color:#fff}
+.dpl:disabled{opacity:.3;cursor:default}
 .qdate,.qsel,.nta{background:#000;border:1px solid var(--line);padding:8px 10px;color:#fff;font:500 14px var(--body);min-height:40px}
 .nta{width:100%;resize:vertical;font-weight:400;line-height:1.4}
 .qchks{display:flex;flex-direction:column;gap:6px}
@@ -1190,15 +1214,16 @@ function renderLanes(){
   const pB=A.pat.on?tb.filter(b=>(b.code!=='OFF'||b.pcode)&&(!A.pat.only||b.code==='OFF')&&(!PAT||PAT.sch[b.code==='OFF'?b.pcode:b.code])).map(b=>({start:b.start,weeks:b.weeks,label:(b.code==='OFF'?'Deload':b.code)+' \u00b7 '+(b.pFoc||A.pat.foc||(b.uses?b.focus:'')||'Global'),cls:'pat'})):[];
   const sB=A.strBlocks.length?strList().map(b=>({start:b.start,weeks:b.weeks,label:b.fam==='none'?'None':(b.fam||pk.fam)+' P'+(b.ph||pk.ph),cls:'str'})):tb.filter(b=>b.code!=='OFF').map(b=>({start:b.start,weeks:b.weeks,label:pk.fam+' P'+pk.ph,cls:'str auto'}));
   const tB=tb.map(b=>({start:b.start,weeks:b.weeks,label:b.code==='OFF'?(b.dl?'Deload':'Off'):b.code+(b.uses&&b.focus?' \u00b7 '+b.focus:''),cls:'thr'+(b.code==='OFF'?' off':'')}));
+  const prepB=(A.strBlocks.length?strList():sB.map(b=>({start:b.start,weeks:b.weeks,fam:pk.fam,ph:pk.ph}))).filter(b=>{const f=b.fam||pk.fam; return f&&f!=='none'&&f!=='ML'}).map(b=>({start:b.start,weeks:b.weeks,label:(b.fam||pk.fam)+' Prep P'+(b.ph||pk.ph),cls:'str'+(A.strBlocks.length?'':' auto')}));
   const all=[...tB,...pB,...sB].filter(b=>day0(b.start));
   if(!s||!all.length){$('lnNote').textContent='Set a start date to line up the lanes on a calendar.'}
   else{
     const lo=Math.min(...all.map(b=>day0(b.start).getTime())), hi=Math.max(...all.map(b=>bEnd(b).getTime()))+864e5, span=hi-lo, pct=t=>((t-lo)/span*100).toFixed(3)+'%';
     const ax=el('div','lt ax'); for(let t=lo;t<hi;t+=6048e5*2){const sp=el('span',null,fmt(new Date(t))); sp.style.left=pct(t); ax.append(sp)} tl.append(el('span','ll',''),ax);
     const lane=(name,list)=>{const t=el('div','lt'); for(const b of list){const st=day0(b.start); if(!st) continue; const e=bEnd(b).getTime()+864e5, d=el('div','bk '+b.cls,b.label); d.style.left=pct(st.getTime()); d.style.width='calc('+((e-st.getTime())/span*100).toFixed(3)+'% - 2px)'; d.title=name+': '+b.label+' \u00b7 '+fmt(st)+' to '+fmt(bEnd(b))+' \u00b7 '+b.weeks+' wk'; t.append(d)} const now=Date.now(); if(now>=lo&&now<hi){const n=el('div','now'); n.style.left=pct(now); n.title='Today'; t.append(n)} tl.append(el('span','ll',name),t)};
-    lane('Patterning',pB); lane('Throwing',tB); lane('Strength',sB);
+    if(prepB.length) lane('Prep',prepB); lane('Patterning',pB); lane('Throwing',tB); lane('Strength',sB);
     {const tst=[], wn=planWeeks().length; for(let k=4;k<=wn;k+=4) tst.push({start:ymd(addD(new Date(lo),(k-1)*7)),weeks:1,label:'Retest',cls:'tst'}); if(wn%4) tst.push({start:ymd(addD(new Date(lo),(wn-1)*7)),weeks:1,label:'Retest',cls:'tst'}); lane('Retest',tst)}
-    $('lnNote').textContent='Patterning runs with each throwing phase, on the same days, and moves when a day moves. Strength can run on its own dates; dashed strength blocks follow the throwing phase.'}
+    $('lnNote').textContent='Patterning runs with each throwing phase, on the same days, and moves when a day moves. Strength can run on its own dates; dashed strength blocks follow the throwing phase. Prep runs before every lift and matches each strength block; Movement Literacy has none.'}
   const VW=host.dataset.view||''; const ed=$('lnEd'); ed.hidden=!(coachOpen||VW==='history'||VW==='strength'); if(ed.hidden) return;
   for(const [id,k] of [['lnC1','coach1'],['lnC2','coach2']]){const i=$(id); if(root.activeElement!==i) i.value=A[k]||''}
   const mkRow=(list,i,b,kind)=>{const r=el('div','lnr'), set=(k,v)=>{if(v===''||v==null) delete b[k]; else b[k]=v; changed()};
@@ -1882,8 +1907,38 @@ function applyBuild(c,Q,out,optIdx,eff,level,theory){
   Q.appliedAt=Date.now(); Q.applied=true; viewWeek=1;
   changed(); status('Plan applied. See the Training Map for all twelve weeks.');
 }
-function bField(label,control,hint){const w=el('label','qf'); w.append(el('span','qfl',label),control); if(hint) w.append(el('span','qs',hint)); return w}
-function bDate(val,fn){const x=el('input','qdate'); x.type='date'; x.value=val||''; x.addEventListener('change',()=>fn(x.value)); return x}
+function bField(label,control,hint){const w=el(control.classList&&control.classList.contains('dp')?'div':'label','qf'); w.append(el('span','qfl',label),control); if(hint) w.append(el('span','qs',hint)); return w}
+// calendar dropdown: a button showing the chosen date that opens a month grid
+function bDate(val,fn,o){
+  o=o||{};
+  const w=el('div','dp'), b=el('button','dpb'), pop=el('div','dpp'); b.type='button'; pop.hidden=true;
+  const show=v=>{const d=day0(v); return d?d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}):(o.placeholder||'Select a date')};
+  const ic=document.createElementNS('http://www.w3.org/2000/svg','svg'); ic.setAttribute('viewBox','0 0 16 16'); ic.setAttribute('width','16'); ic.setAttribute('height','16'); ic.setAttribute('aria-hidden','true'); ic.innerHTML='<rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2 6.5h12M5 1.5v3M11 1.5v3" stroke="currentColor" stroke-width="1.4" fill="none"/>';
+  b.append(ic,el('span','dpt',show(val))); if(!val) b.classList.add('empty'); if(o.disabled) b.disabled=true;
+  let view=day0(val)||day0(o.min)||new Date(); view=new Date(view.getFullYear(),view.getMonth(),1,12);
+  const onDoc=e=>{ if(!w.isConnected||!e.composedPath().includes(w)) close() };
+  function close(){ pop.hidden=true; b.setAttribute('aria-expanded','false'); root.removeEventListener('click',onDoc) }
+  function draw(){
+    pop.textContent='';
+    const head=el('div','dph'), prev=el('button','dpn','\u2039'), next=el('button','dpn','\u203a'), ttl=el('span','dpm',view.toLocaleDateString(undefined,{month:'long',year:'numeric'}));
+    prev.type=next.type='button'; prev.setAttribute('aria-label','Previous month'); next.setAttribute('aria-label','Next month');
+    prev.addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1,12); draw()});
+    next.addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1,12); draw()});
+    head.append(prev,ttl,next); pop.append(head);
+    const wk=el('div','dpw'); for(const d of ['Su','Mo','Tu','We','Th','Fr','Sa']) wk.append(el('span',null,d)); pop.append(wk);
+    const g=el('div','dpg'), first=new Date(view.getFullYear(),view.getMonth(),1,12), start=addD(first,-first.getDay()), today=ymd(new Date()), min=o.min||'';
+    for(let i=0;i<42;i++){
+      const d=addD(start,i), v=ymd(d), x=el('button','dpd'+(d.getMonth()!==view.getMonth()?' out':'')+(v===val?' sel':'')+(v===today?' today':''),String(d.getDate()));
+      x.type='button'; if(min&&v<min) x.disabled=true; x.setAttribute('aria-label',d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}));
+      x.addEventListener('click',()=>{close(); fn(v)}); g.append(x)}
+    pop.append(g);
+    const foot=el('div','dpf'), tb=el('button','dpl','Today'); tb.type='button'; if(min&&today<min) tb.disabled=true; tb.addEventListener('click',()=>{close(); fn(today)}); foot.append(tb);
+    if(o.clear&&val){const cb=el('button','dpl','Clear'); cb.type='button'; cb.addEventListener('click',()=>{close(); fn('')}); foot.append(cb)}
+    pop.append(foot)}
+  b.setAttribute('aria-haspopup','dialog'); b.setAttribute('aria-expanded','false');
+  b.addEventListener('click',()=>{ if(!pop.hidden){close(); return} draw(); pop.hidden=false; b.setAttribute('aria-expanded','true'); setTimeout(()=>root.addEventListener('click',onDoc),0) });
+  w.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!pop.hidden){e.stopPropagation(); close(); b.focus()} });
+  w.append(b,pop); return w}
 function bSel(list,val,fn,blank){const s=el('select','qsel'); if(blank){const o=el('option',null,blank); o.value=''; s.append(o)} for(const [v,t] of list){const o=el('option',null,t); o.value=String(v); s.append(o)} s.value=val==null?'':String(val); s.addEventListener('change',()=>fn(s.value)); return s}
 function bOpts(list,val,fn){const w=el('div','qopts'); for(const [v,t,h] of list){const b=el('button','qo'+(String(val)===String(v)?' on':'')); b.type='button'; b.append(document.createTextNode(t)); if(h) b.append(el('small',null,h)); b.addEventListener('click',()=>fn(v)); w.append(b)} return w}
 function bChecks(list,vals,fn){const w=el('div','qchks'); for(const [v,t] of list){const l=el('label','qchk'), x=el('input'); x.type='checkbox'; x.checked=(vals||[]).includes(v); x.addEventListener('change',()=>{const s=new Set(vals||[]); x.checked?s.add(v):s.delete(v); fn([...s])}); l.append(x,el('span',null,t)); w.append(l)} return w}
@@ -1908,9 +1963,9 @@ function renderBuild(){
    kv('Injury',hasInjury(c)?[c.injStatus,c.injLoc!=='None'?c.injLoc:'',c.injNote].filter(Boolean).join(' · '):'None on file'); kv('Program Board',[c.board.thr,c.board.lift].filter(Boolean).join('  |  '));
    k.append(g); const rn=PBL.ratioNote(c.ratio); if(c.liftLevel===3&&rn) k.append(el('div','qmsg qwarn',rn)); box.append(k)}
   // 1 start date
-  {const k=card('What is the athlete’s start date?'); k.append(bDate(Q.start,v=>bset({start:v}))); if(Q.start){const d=day0(Q.start); k.append(el('div','qs','Starts '+d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})))}}
+  {const k=card('What is the athlete’s start date?'); k.append(bDate(Q.start,v=>bset({start:v||ymd(new Date())})))}
   // 2 competition
-  {const k=card('When is their next expected competition?'); const r=el('div','qrow'); const di=bDate(Q.comp,v=>bset({comp:v,noComp:false})); di.disabled=!!Q.noComp; r.append(di);
+  {const k=card('When is their next expected competition?'); const r=el('div','qrow'); const di=bDate(Q.comp,v=>bset({comp:v,noComp:false}),{clear:true,min:Q.start?PBL.addDays(Q.start,1):'',disabled:!!Q.noComp,placeholder:'Select a date'}); r.append(di);
    const l=el('label','qchk'), x=el('input'); x.type='checkbox'; x.checked=!!Q.noComp; x.addEventListener('change',()=>bset({noComp:x.checked})); l.append(x,el('span',null,'No competition scheduled')); r.append(l); k.append(r);
    const N=(Q.comp&&!Q.noComp&&Q.start)?PBL.weeksBetween(Q.start,Q.comp):null; k.append(el('div','qs','Season: '+PBL.season(Q.noComp?null:N)+(N!=null&&N>0?' · '+N+' weeks to competition':'')))}
   // 3 injury
@@ -1922,7 +1977,7 @@ function renderBuild(){
       if(Q.canThrow==='no'){
         const k3=card('Return to throw','The exact injury on file is shown above. Pick the program you plan to start them on.');
         const sug=rttSuggest(c.injNote,c.injLoc); if(sug) k3.append(el('div','qmsg',sug));
-        k3.append(bField('When is the athlete expected to begin their RTT?',bDate(Q.rttStart||'',v=>bset({rttStart:v}))));
+        k3.append(bField('When is the athlete expected to begin their RTT?',bDate(Q.rttStart||'',v=>bset({rttStart:v}),{min:Q.start,clear:true})));
         const list=rttList(); k3.append(bField('Which program do you plan to start them on?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
         const pg=list.find(p=>p.code===Q.rttCode); if(pg) k3.append(bField('Starting week',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)}))));
       }
@@ -1952,7 +2007,7 @@ function renderBuild(){
      if(Q.status==='deload') k.append(bField('How many weeks? (patterning only during this time)',bSel([1,2,3,4].map(n=>[n,n+' week'+(n>1?'s':'')]),Q.deloadWeeks||1,v=>bset({deloadWeeks:Number(v)}))));
      if(Q.status==='rtt'){
        const list=rttList(); k.append(bField('Which return to throw program?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
-       const pg=list.find(p=>p.code===Q.rttCode); if(pg){k.append(bField('Where are they starting?',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)})))); k.append(bField('Date they begin this program',bDate(Q.rttStart||Q.start,v=>bset({rttStart:v}))))}
+       const pg=list.find(p=>p.code===Q.rttCode); if(pg){k.append(bField('Where are they starting?',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)})))); k.append(bField('Date they begin this program',bDate(Q.rttStart||Q.start,v=>bset({rttStart:v}),{min:Q.start})))}
      }
    }}
   // focus
@@ -1996,6 +2051,7 @@ function renderBuild(){
   const lopts=el('div','qlifts');
   out.lift.options.forEach((o,i)=>{const b=el('button','qlift'+(i===sel?' on':'')); b.type='button'; b.append(el('b',null,o.blocks.map(x=>x.weeks+'w P'+x.ph).join('  →  ')+(i===out.lift.rec?'   ★ suggested':''))); b.append(el('span',null,o.pat.join(' + ')+' weeks')); b.addEventListener('click',()=>bset({liftPat:i})); lopts.append(b)});
   sug.append(lopts);
+  if(theory!=='ML') sug.append(el('div','qs','Prep: '+FAMN[theory]+' prep for the same phase and split runs before every lift.'));
   sug.append(el('div','qh2','Retest')); sug.append(el('div','qs','The programs include their own test days. As a backstop, retest in weeks '+out.tests.join(', ')+'.'));
   const fl=flagSummary(out,opt,eff,Q,Q.days);
   if(fl&&fl.n) sug.append(el('div','qmsg qwarn',fl.n+' exercise'+(fl.n>1?'s':'')+' in these programs conflict with the restrictions or equipment (for example '+fl.names.slice(0,3).join(', ')+'). They are marked with a warning in the calendar so they can be swapped.'));
