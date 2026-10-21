@@ -426,11 +426,12 @@ button.rr:hover{background:var(--sunk)}
 .qlo .qlift{flex:1;min-width:0}
 .qedit{align-self:center}
 .qled{border:1px solid #2a3a44;background:#0a0f12;padding:12px;display:flex;flex-direction:column;gap:8px;margin:-2px 0 4px}
-.qlr{display:grid;grid-template-columns:64px minmax(0,1.5fr) 74px 84px auto;gap:8px;align-items:center}
+.qlr{display:grid;grid-template-columns:92px minmax(0,1.5fr) 74px 84px auto;gap:8px;align-items:center}
 .qlr .qsel{min-width:0;width:100%;min-height:34px;padding:5px 8px}
 .qlf{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .qs.warn{color:#ffb347}
 @media (max-width:640px){.qtbl.ed .qtr{grid-template-columns:1fr}.qlr{grid-template-columns:1fr 1fr}.qlr .qt1{grid-column:1/-1}}
+.qtbl.ed .qprog{width:100%;min-width:0;min-height:34px;padding:5px 8px;font-size:13px;text-transform:none;letter-spacing:0;font-weight:500}
 .nh h3{margin:0}
 .ncard{border:1px solid var(--line);background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .nm{font:500 11px var(--mono);color:var(--muted)}
@@ -1043,11 +1044,20 @@ const PBL=(()=>{
     }
     out.blocks=merge(blocks); out.throwWhy=why;
     out.base={W,codes:out.blocks.map(b=>b.code),weeks:out.blocks.map(b=>b.weeks)};
-    let Wt=W;
-    if(I.edit&&Array.isArray(I.edit.weeks)&&I.edit.weeks.length===out.blocks.length){
-      let ch=false; out.blocks.forEach((b,i)=>{const w=Math.round(Number(I.edit.weeks[i])); if(w>=1&&w<=16&&w!==b.weeks){b.weeks=w; ch=true}});
-      if(ch){ Wt=out.blocks.reduce((a,b)=>a+b.weeks,0); out.W=Wt; out.end=addDays(I.start,Wt*7-1); out.edited=true; out.throwWhy=why.concat(['You adjusted the weeks of the phases, so the plan runs '+Wt+' weeks.']) }
+    let Wt=W; const E=I.edit;
+    // the coach can swap the program of a phase and change its weeks; the window, the lifting options and the retests follow
+    if(E&&Array.isArray(E.codes)&&E.codes.length===out.blocks.length){
+      const src=out.blocks; let chc=false;
+      out.blocks=src.map((b,i)=>{const c=E.codes[i]; if(!c||c===b.code) return b; chc=true;
+        if(c==='OFF'){const nx=src.map((x,j)=>E.codes[j]||x.code).slice(i+1).find(x=>SEQ.includes(x)); return {code:'OFF',weeks:b.weeks,deload:1,pcode:nx||'REVO'}}
+        const pw=E.progWeeks&&E.progWeeks[c]; if(pw) return {code:c,weeks:Math.min(b.weeks,pw),pw0:0};
+        return {code:c,weeks:b.weeks}});
+      if(chc) out.edited=true;
     }
+    if(E&&Array.isArray(E.weeks)&&E.weeks.length===out.blocks.length){
+      out.blocks.forEach((b,i)=>{const w=Math.round(Number(E.weeks[i])), pw=E.progWeeks&&E.progWeeks[b.code], mx=pw?Math.max(1,pw-(Number(b.pw0)||0)):16; if(w>=1&&w<=mx&&w!==b.weeks){b.weeks=w; out.edited=true}});
+    }
+    if(out.edited){ Wt=out.blocks.reduce((a,b)=>a+b.weeks,0); out.W=Wt; out.end=addDays(I.start,Wt*7-1); out.throwWhy=why.concat(['You adjusted the phases, so the plan runs '+Wt+' weeks.']) }
     // lifting
     const startP=I.cont?Math.max(1,Math.min(3,I.cont.ph+(I.cont.advance?1:0))):1;
     const L=lifting({W:Wt,fam:I.theory,startP,blocks:out.blocks,rtt:status==='rtt',restricted:!!I.restricted,liftLevel:I.liftLevel,N});
@@ -2238,7 +2248,8 @@ function renderBuild(){
   const base=PBL.build(Object.assign({},I,{edit:null})), baseSig=base.blocks.map(x=>x.code).join('|');
   let te=(Q.te&&Q.te.sig===baseSig&&Array.isArray(Q.te.weeks)&&Q.te.weeks.length===base.blocks.length)?Q.te:null;
   if(Q.te&&!te) delete Q.te;   // an answer changed the phases, so the old edits no longer fit
-  const out=PBL.build(Object.assign({},I,{edit:te?{weeks:te.weeks}:null})), edited=!!out.edited||!!(te&&te.shift&&te.shift.some(s=>s!==''&&s!=null))||!!(te&&Number(te.def));
+  const progWeeks={}; for(const r of rttList()) progWeeks[r.code]=r.weeks;
+  const out=PBL.build(Object.assign({},I,{edit:te?{weeks:te.weeks,codes:Array.isArray(te.codes)?te.codes:[],progWeeks}:null})), edited=!!out.edited||!!(te&&te.shift&&te.shift.some(s=>s!==''&&s!=null))||!!(te&&Number(te.def));
   const opts=out.lift.options.map(o=>{const e=Q.le&&Q.le[o.key]; return (e&&e.W===out.W)?Object.assign({},o,{blocks:e.blocks.map(x=>Object.assign({},x)),pat:e.blocks.map(x=>x.weeks),edited:true}):o});
   if(bEditLift&&!opts.some(o=>o.key===bEditLift.key)) bEditLift=null;
   const sel=Q.liftPat!=null&&opts[Q.liftPat]?Q.liftPat:out.lift.rec, opt=opts[sel];
@@ -2249,7 +2260,8 @@ function renderBuild(){
   if(contUse){const r=el('div','qrow'); r.append(el('span','qs','Continuing '+FAMN[contUse.fam]+' from P'+contUse.ph+' ('+contUse.src+').')); r.append(bSel([['adv','Advance to P'+Math.min(3,contUse.ph+1)],['hold','Hold at P'+contUse.ph]],advance?'adv':'hold',v=>bset({contAdvance:v}))); sug.append(r)}
   else if(cont&&cont.fam!==theory) sug.append(el('div','qs','The previous lifting theory was '+FAMN[cont.fam]+'. A new training theory starts at P1.'));
   // ---- throwing: weeks per phase and the slide of the training days can be edited
-  const t0=()=>JSON.parse(JSON.stringify(te||{sig:baseSig,weeks:base.blocks.map(x=>x.weeks),shift:base.blocks.map(()=>''),def:0}));
+  const t0=()=>{const t=JSON.parse(JSON.stringify(te||{sig:baseSig,weeks:base.blocks.map(x=>x.weeks),shift:base.blocks.map(()=>''),def:0})); if(!Array.isArray(t.codes)||t.codes.length!==base.blocks.length) t.codes=base.blocks.map(()=>''); return t};
+  const PHOPT=[...D.programs.filter(x=>x.uses).map(p=>[p.code,p.code+' \u00b7 '+p.name.replace(/ \(.*/,'')]),['OFF','Deload (patterning only)'],...rttList().map(r=>[r.code,r.label])];
   const maxW=i=>{const rp=rttList().find(x=>x.code===out.blocks[i].code); return rp?Math.max(1,rp.weeks-(Number(out.blocks[i].pw0)||0)):16};
   const stepW=(i,d)=>{const t=t0(); t.weeks[i]=Math.max(1,Math.min(maxW(i),(Number(t.weeks[i])||1)+d)); bset({te:t})};
   const SLIDES=[['-3','3 days earlier'],['-2','2 days earlier'],['-1','1 day earlier'],['0','As written'],['1','1 day later'],['2','2 days later'],['3','3 days later']];
@@ -2261,7 +2273,8 @@ function renderBuild(){
   out.blocks.forEach((b,i)=>{const s=PBL.addDays(Q.start,wk*7), e=PBL.addDays(Q.start,(wk+b.weeks)*7-1), p=byCode(b.code), rp=rttList().find(x=>x.code===b.code), nm=b.code==='OFF'?'Deload (patterning only)':rp?rp.label:p?(p.name.replace(/ \(.*/,'')):b.code;
     const r=el('div','qtr'), sv=te&&te.shift?te.shift[i]:'';
     r.append(el('span','qt1','Weeks '+(wk+1)+(b.weeks>1?'–'+(wk+b.weeks):'')));
-    const nmEl=el('span','qt2',(b.code==='OFF'||rp?'':b.code+' · ')+nm); if(!bEditThr&&sv!==''&&sv!=null&&b.code!=='OFF'&&Number(sv)) nmEl.append(el('small','qslid',' · slid '+Math.abs(Number(sv))+(Number(sv)>0?' later':' earlier'))); r.append(nmEl);
+    if(bEditThr){const ps=el('select','qsel qprog'); ps.setAttribute('aria-label','Program for weeks '+(wk+1)+(b.weeks>1?' to '+(wk+b.weeks):'')); for(const [v,t] of PHOPT){const o=el('option',null,t); o.value=v; ps.append(o)} ps.value=b.code; ps.addEventListener('change',()=>{const t=t0(); t.codes[i]=ps.value===base.blocks[i].code?'':ps.value; bset({te:t})}); r.append(ps)}
+    else{const nmEl=el('span','qt2',(b.code==='OFF'||rp?'':b.code+' · ')+nm); if(sv!==''&&sv!=null&&b.code!=='OFF'&&Number(sv)) nmEl.append(el('small','qslid',' · slid '+Math.abs(Number(sv))+(Number(sv)>0?' later':' earlier'))); r.append(nmEl)}
     if(bEditThr){const ctl=el('span','qctl'), st=el('span','qstep'), mi=el('button',null,'\u2212'), pl=el('button',null,'+'), n=el('b',null,String(b.weeks));
       mi.type=pl.type='button'; mi.setAttribute('aria-label','Fewer weeks in '+nm); pl.setAttribute('aria-label','More weeks in '+nm); mi.disabled=b.weeks<=1; pl.disabled=b.weeks>=maxW(i); mi.addEventListener('click',()=>stepW(i,-1)); pl.addEventListener('click',()=>stepW(i,1)); st.append(mi,n,pl); ctl.append(st,el('span','note','wk'));
       const ss=el('select','qslide'); ss.setAttribute('aria-label','Slide the training days in '+nm); const o0=el('option',null,'Slide: default'); o0.value=''; ss.append(o0); for(const [v,t] of SLIDES){const o=el('option',null,t); o.value=v; ss.append(o)} ss.value=(sv==null?'':String(sv)); ss.disabled=b.code==='OFF'; ss.addEventListener('change',()=>{const t=t0(); t.shift[i]=ss.value; bset({te:t})}); ctl.append(ss); r.append(ctl)}
@@ -2278,10 +2291,11 @@ function renderBuild(){
   const lopts=el('div','qlifts');
   const liftEditor=(o,i)=>{
     const ed=bEditLift, w=el('div','qled');
-    ed.blocks.forEach((x,j)=>{const r=el('div','qlr'); r.append(el('span','qt1','Block '+(j+1)));
+    let at=0;
+    ed.blocks.forEach((x,j)=>{const r=el('div','qlr'), nw=Number(x.weeks)||1; r.append(el('span','qt1',nw>1?'Weeks '+(at+1)+'\u2013'+(at+nw):'Week '+(at+1))); at+=nw;
       r.append(bSel(Object.keys(FAMN).map(f=>[f,FAMN[f]]),x.fam,v=>{x.fam=v; render()}),bSel([[1,'P1'],[2,'P2'],[3,'P3']],x.ph,v=>{x.ph=String(v); render()}),bSel(Array.from({length:12},(_,k)=>[k+1,(k+1)+' wk']),x.weeks,v=>{x.weeks=Number(v); render()}));
       const rm=el('button','btn sm','Remove'); rm.type='button'; rm.disabled=ed.blocks.length<=1; rm.addEventListener('click',()=>{ed.blocks.splice(j,1); render()}); r.append(rm); w.append(r)});
-    const sum=ed.blocks.reduce((a,x)=>a+(Number(x.weeks)||0),0), want=out.W, foot=el('div','qlf'), add=el('button','btn sm','+ Add block'); add.type='button';
+    const sum=ed.blocks.reduce((a,x)=>a+(Number(x.weeks)||0),0), want=out.W, foot=el('div','qlf'), add=el('button','btn sm','+ Add program'); add.type='button';
     add.addEventListener('click',()=>{const l=ed.blocks[ed.blocks.length-1]||{fam:theory,ph:'1',weeks:4}; ed.blocks.push({fam:l.fam,ph:String(Math.min(3,Number(l.ph)+1)),weeks:Math.max(1,Math.min(12,want-sum))}); render()});
     foot.append(add,el('span','qs'+(sum===want?'':' warn'),'Total '+sum+' of '+want+' weeks'+(sum===want?'':sum<want?'. The lifting stops before the plan ends.':'. The lifting runs past the end of the plan.'))); w.append(foot);
     const bar=el('div','qrow'), sv=el('button','btn primary','Save and use this'), cn=el('button','btn','Cancel'); sv.type=cn.type='button';
