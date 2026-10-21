@@ -236,12 +236,14 @@ button.rr:hover{background:var(--sunk)}
 .qh{font:600 15px/1.3 var(--body);color:#fff}
 .qhr{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .bgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
-.bknown,.bqbox{aspect-ratio:1/1;min-height:0;width:100%;box-sizing:border-box}
-.bknown{gap:9px;padding:14px 16px;overflow:auto}
+.bknown,.bqbox{aspect-ratio:1/.88;min-height:400px;max-height:450px;width:100%;box-sizing:border-box}
+.bknown{gap:8px;padding:12px 16px;overflow:auto}
+.bknown .qhr .btn{padding:3px 10px;font-size:12px;min-height:0}
 .bqbox{gap:14px;padding:18px 22px;position:relative}
-.kg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 12px}
+.kg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px 10px}
 .kg .k{display:flex;flex-direction:column;gap:2px;min-width:0}
 .kg .k.w{grid-column:1/-1}
+.kg .k.h{grid-column:span 2}
 .kg .k span{font:500 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .kg .k b{font:600 13px/1.25 var(--body);overflow-wrap:anywhere}
 .kg .k b.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -257,16 +259,16 @@ button.rr:hover{background:var(--sunk)}
 .qtri .qf{min-width:0}
 .qtri .qfl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;letter-spacing:.02em}
 .qtri .qsel{width:100%;min-width:0;padding:8px 4px 8px 6px;font-size:12px}
-.kans{display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px solid #1d2428}
+.kans{display:flex;flex-direction:column;gap:5px;padding-top:8px;border-top:1px solid #1d2428}
 .kansh{font:500 9.5px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto}
 .qchips{display:flex;flex-wrap:wrap;gap:5px}
-.qchip{background:transparent;border:1px solid var(--line);color:#9aa3a8;font:500 10.5px var(--body);padding:3px 7px;cursor:pointer}
+.qchip{background:transparent;border:1px solid var(--line);color:#9aa3a8;font:500 10.5px var(--body);padding:2px 7px;cursor:pointer}
 .qchip b{color:#fff;font-weight:600}
 .qchip:hover{border-color:#56b7e6}
 .qchip.on{border-color:#56b7e6;background:rgba(86,183,230,.1)}
 .qback:disabled{opacity:.35;cursor:default}
-@media (max-width:760px){.bgrid{grid-template-columns:1fr}.bknown,.bqbox{aspect-ratio:auto}.bknown{overflow:visible}.bqbox{order:-1}.qtri,.qduo{grid-template-columns:1fr}.qopts.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.qbody.scroll{overflow:visible}}
+@media (max-width:760px){.kg{grid-template-columns:repeat(2,minmax(0,1fr))}.kg .k.h{grid-column:span 1}.bgrid{grid-template-columns:1fr}.bknown,.bqbox{aspect-ratio:auto;min-height:0;max-height:none}.bknown{overflow:visible}.bqbox{order:-1}.qtri,.qduo{grid-template-columns:1fr}.qopts.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.qbody.scroll{overflow:visible}}
 .qh2{font:600 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--heat);margin-top:6px}
 .qs{font-size:12px;line-height:1.4;color:var(--muted)}
 .qopts{display:flex;flex-wrap:wrap;gap:8px}
@@ -2091,13 +2093,13 @@ function renderBuild(){
   {const k=el('section','qc bknown'), hr=el('div','qhr'); hr.append(el('div','qh','What we already know'));
    if(Object.keys(Q).some(t=>!['start','days','mound','done'].includes(t))||Object.keys(Q.done||{}).length){const so=el('button','btn sm','Start over'); so.type='button'; so.addEventListener('click',()=>{if(confirm('Clear these answers and start a new plan build? The plan already applied stays as it is until you apply a new one.')){bStep=null; A.build={}; changed()}}); hr.append(so)}
    k.append(hr);
-   const g=el('div','kg'), kv=(a,v,wide,clamp)=>{const t=el('div','k'+(wide?' w':'')), b=el('b',clamp?'clamp':null,v||'—'); if(clamp&&v) b.title=v; t.append(el('span',null,a),b); g.append(t)};
-   kv('Athlete',c.name); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · '));
+   const g=el('div','kg'), kv=(a,v,kind,clamp)=>{const t=el('div','k'+(kind?' '+kind:'')), b=el('b',clamp?'clamp':null,v||'—'); if(clamp&&v) b.title=v; t.append(el('span',null,a),b); g.append(t)};
+   kv('Athlete',c.name,'h'); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · '),'h');
    kv('Throwing arm',c.hand); kv('Arm score',c.arm!=null?c.arm.toFixed(1):'');
    kv('Throwing level',c.thrLevel?'L'+c.thrLevel+' · '+c.xfer.toFixed(1):'No score'); kv('Lifting level',c.liftLevel?'L'+c.liftLevel+' · '+c.prod.toFixed(1):'No score');
-   kv('Training theory',c.autoTheory?FAMN[c.autoTheory]+(c.liftLevel===3&&c.ratio!=null?' · ratio '+c.ratio.toFixed(2):''):'',1);
-   kv('Injury',hasInjury(c)?[c.injStatus,c.injLoc!=='None'?c.injLoc:'',c.injNote].filter(Boolean).join(' · '):'None on file',1,1);
-   kv('Program Board',[c.board.thr,c.board.lift].filter(Boolean).join('  |  '),1,1);
+   kv('Training theory',c.autoTheory?FAMN[c.autoTheory]+(c.liftLevel===3&&c.ratio!=null?' · ratio '+c.ratio.toFixed(2):''):'','w');
+   kv('Injury',hasInjury(c)?[c.injStatus,c.injLoc!=='None'?c.injLoc:'',c.injNote].filter(Boolean).join(' · '):'None on file','w',1);
+   kv('Program Board',[c.board.thr,c.board.lift].filter(Boolean).join('  |  '),'w',1);
    k.append(g); const rn=PBL.ratioNote(c.ratio); if(c.liftLevel===3&&rn) k.append(el('div','qmsg qwarn',rn));
    {const answered=order.filter(id=>done(id)&&defs[id]&&defs[id].txt());
     if(answered.length){const w=el('div','kans'); w.append(el('div','kansh','Your answers')); const ch=el('div','qchips'); for(const id of answered){const t=el('button','qchip'+(id===curId?' on':'')); t.type='button'; t.append(document.createTextNode(defs[id].label+': '),el('b',null,defs[id].txt())); t.addEventListener('click',()=>{bStep=id; render()}); ch.append(t)} w.append(ch); k.append(w)}}
