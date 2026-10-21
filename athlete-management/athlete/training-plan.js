@@ -296,6 +296,17 @@ button.rr:hover{background:var(--sunk)}
 .mcdk{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px}
 .mcdv{color:#e6eaec;overflow-wrap:anywhere}
 @media (max-width:640px){.mcd{min-height:46px;padding:3px}.mctg,.mcwk,.mcfl{display:none}.mcb{gap:2px}.mcsc{padding:0 3px}.mcn1{font-size:12px;min-width:18px;height:18px;line-height:18px}.mcdg{grid-template-columns:90px minmax(0,1fr)}.mct{min-width:0;flex:1}}
+.mch .seg{margin-left:auto}
+.seg.sm .segb{padding:6px 12px;font-size:12px}
+.mcd.lf{background:rgba(136,224,198,.07);border-color:#1d3a33;border-top-color:#88e0c6}
+.mcd.nl{background:transparent;border-color:#1d2428;border-top-color:#2a3034}
+.mcsc.lf{color:#88e0c6;border-color:rgba(136,224,198,calc(.35 + var(--h,0)*.65))}
+.mcsc.lf.hot{background:#88e0c6;color:#000;border-color:#88e0c6}
+.mcsc small{font:600 9px var(--body);opacity:.85}
+.mcli .sw.lf{background:#000;border:1px solid #88e0c6}
+.mcli .sw.lfh{background:#88e0c6;border:1px solid #88e0c6}
+.mcli .sw.lfd{background:rgba(136,224,198,.25);border-top:3px solid #88e0c6}
+@media (max-width:640px){.mcsc small{display:none}.mch .seg{margin-left:0;width:100%}.mch .seg .segb{flex:1}}
 .wrap.mv #lnEd{display:none !important}
 #bview,#nview{display:flex;flex-direction:column;gap:12px;border:0;padding:0;background:none}
 #bview[hidden],#nview[hidden]{display:none !important}
@@ -2238,15 +2249,24 @@ function renderNotes(){
 }
 
 // ================= Training Map: list view or calendar view =================
-const MAPK='velou.map.view';
+const MAPK='velou.map.view', MAPLK='velou.map.layer';
 let MAPV=(()=>{try{return localStorage.getItem(MAPK)==='cal'?'cal':'list'}catch(e){return 'list'}})();
+let MAPL=(()=>{try{const v=localStorage.getItem(MAPLK); return v==='thr'||v==='lift'?v:'both'}catch(e){return 'both'}})();   // what the calendar shows: throwing, lifting or both
 const MCS=(window.__vdm=window.__vdm||{});   // month shown and day picked, kept while the page redraws
-let MCWK=null, MCT=new Set(), MCSL=[];
+let MCWK=null, MCT=new Set(), MCSL=[], MCW=new Map(), MCMAX=0;
 function mapBar(weeks){
   const bar=$('mapbar'); bar.hidden=!weeks.length; bar.textContent=''; if(!weeks.length) return;
   const seg=el('div','seg'); seg.setAttribute('role','group'); seg.setAttribute('aria-label','Training map view');
   for(const [v,t] of [['list','List view'],['cal','Calendar view']]){const b=el('button','segb'+(MAPV===v?' on':''),t); b.type='button'; b.setAttribute('aria-pressed',String(MAPV===v)); b.addEventListener('click',()=>{ if(MAPV===v) return; MAPV=v; try{localStorage.setItem(MAPK,v)}catch(e){} render() }); seg.append(b)}
   bar.append(seg)}
+// working sets in the lifting and prep programs, for each day of a plan week (edits included, rest days are 0)
+const mapSetN=s=>String(s||'').split('+').reduce((a,b)=>a+(Number(b)||0),0);
+function mapWeekSets(n){
+  if(MCW.has(n)) return MCW.get(n);
+  let out=null;
+  try{ out=svDays(n).days.map(e=>{const x=e.x, cnt=src=>src&&src.rows?src.rows.reduce((a,r)=>a+mapSetN(liftParse(r.dose).sets),0):0; return {lift:cnt(x&&x.lift),prep:cnt(x&&x.prep)}}) }catch(e){out=null}
+  MCW.set(n,out); return out}
+function mapSetsOn(d,kind){const st=day0(A.startDate); if(!st) return 0; const off=Math.round((d-st)/864e5); if(off<0) return 0; const w=mapWeekSets(Math.floor(off/7)+1); return w&&w[off%7]?w[off%7][kind]:0}
 // what the plan says about one date
 function mapInfo(d){
   const st=day0(A.startDate), ws=MCWK; if(!st||!ws||!ws.length) return null;
@@ -2254,7 +2274,7 @@ function mapInfo(d){
   const w=ws[Math.floor(off/7)], day=off%7+1, pw=off>0?ws[Math.floor((off-1)/7)]:null;
   const sc=(w.rows||[]).reduce((a,x)=>a+(x.day===day?(x.wv||0):0),0)/12;
   const pk=strPick(), hit=(A.str&&A.str.on)?laneAt(MCSL,d):null, fam=hit?(hit.b.fam||pk.fam):'', ph=hit?String(hit.b.ph||pk.ph):'';
-  return {w,day,off,sc,newBlock:off===0||(pw&&pw.bi!==w.bi),
+  return {w,day,off,sc,sets:mapSetsOn(d,'lift'),newBlock:off===0||(pw&&pw.bi!==w.bi),
     str:(hit&&fam&&fam!=='none')?{fam,ph,start:hit.wi===1&&hit.dd===1}:null,
     test:MCT.has(w.n), comp:A.compDate===ymd(d)}}
 const mapPhase=w=>w.off?(w.deload?'Deload':'Off week'):(w.code+((w.uses&&w.focus)?' · '+w.focus:''));
@@ -2271,12 +2291,15 @@ function mapDetail(d){
   row('Phase',(w.off?(w.deload?'Deload (patterning only)':'Off week'):w.phase+' · week '+w.pw)+((w.uses&&w.focus)?' · '+w.focus+' focus':''));
   for(const [l,nm] of [['prep','Prep'],['pat','Patterning'],['throw','Throwing'],['lift','Lifting'],['corr','Corrective']]){
     let t='—'; try{ const x=lnDay(l,d); t=!x?'—':x.loading?'Loading…':lnHead(l,x) }catch(e){}
-    row(nm,t)}
-  row('This week',w.throws+' throws · rolling '+(w.roll==null?'—':Math.round(w.roll))+' · baseline '+(w.base==null?'—':w.base.toFixed(1))+' · peak '+(w.peak?w.peak+'%':'—'));
+    const n=(l==='lift'||l==='prep')?mapSetsOn(d,l):0; row(nm,t+(n?' · '+n+' sets':''))}
+  const wk=mapWeekSets(w.n), sum=k=>wk?wk.reduce((a,x)=>a+x[k],0):0;
+  row('This week',w.throws+' throws · rolling '+(w.roll==null?'—':Math.round(w.roll))+' · baseline '+(w.base==null?'—':w.base.toFixed(1))+' · peak '+(w.peak?w.peak+'%':'—')+((sum('lift')||sum('prep'))?' · lifting '+sum('lift')+' sets · prep '+sum('prep')+' sets':''));
   box.append(g); return box}
 function renderMapCal(weeks){
   const box=$('mcal'); box.textContent=''; const st=day0(A.startDate); box.hidden=!(st&&weeks.length); if(box.hidden) return;
   MCWK=weeks; MCT=new Set(); for(let k=4;k<=weeks.length;k+=4) MCT.add(k); if(weeks.length%4) MCT.add(weeks.length); MCSL=strList();
+  MCW=new Map(); MCMAX=0; for(let n=1;n<=weeks.length;n++){const wk=mapWeekSets(n); if(wk) for(const x of wk) MCMAX=Math.max(MCMAX,x.lift)}
+  const showT=MAPL!=='lift', showL=MAPL!=='thr';
   const end=addD(st,weeks.length*7-1), cd=day0(A.compDate), last=cd&&cd>end?cd:end, now=new Date(), today=new Date(now.getFullYear(),now.getMonth(),now.getDate(),12), todayK=ymd(today);
   const inPlan=today>=st&&today<=end;
   if(MCS.cur!==cur||!MCS.month||!MCS.sel){MCS.cur=cur; MCS.sel=ymd(inPlan?today:st); const b=inPlan?today:st; MCS.month=ymd(new Date(b.getFullYear(),b.getMonth(),1,12))}
@@ -2288,21 +2311,28 @@ function renderMapCal(weeks){
   pv.type=nx.type=tb.type='button'; pv.setAttribute('aria-label','Previous month'); nx.setAttribute('aria-label','Next month'); pv.disabled=view<=m0; nx.disabled=view>=m1;
   pv.addEventListener('click',()=>go(-1)); nx.addEventListener('click',()=>go(1));
   tb.addEventListener('click',()=>{const b=inPlan?today:st; MCS.sel=ymd(b); MCS.month=ymd(new Date(b.getFullYear(),b.getMonth(),1,12)); redraw()});
-  hd.append(pv,tt,nx,tb,el('span','note','Plan: '+fmt(st)+' to '+fmt(end)+' · '+weeks.length+' weeks')); box.append(hd);
+  hd.append(pv,tt,nx,tb,el('span','note','Plan: '+fmt(st)+' to '+fmt(end)+' · '+weeks.length+' weeks'));
+  {const sg=el('div','seg sm'); sg.setAttribute('role','group'); sg.setAttribute('aria-label','What the calendar shows');
+   for(const [v,t] of [['thr','Throwing'],['lift','Lifting'],['both','Both']]){const b=el('button','segb'+(MAPL===v?' on':''),t); b.type='button'; b.setAttribute('aria-pressed',String(MAPL===v)); b.addEventListener('click',()=>{ if(MAPL===v) return; MAPL=v; try{localStorage.setItem(MAPLK,v)}catch(e){} redraw() }); sg.append(b)}
+   hd.append(sg)}
+  box.append(hd);
   const grid=el('div','mcg'); for(const n of ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']) grid.append(el('span','mcwd',n));
   const first=new Date(view.getFullYear(),view.getMonth(),1,12), dim=new Date(view.getFullYear(),view.getMonth()+1,0,12).getDate(), rows=Math.ceil((first.getDay()+dim)/7), gs=addD(first,-first.getDay());
   for(let i=0;i<rows*7;i++){
     // a row of the month that holds no day of the plan and no competition is left out
     if(i%7===0){let any=false; for(let j=0;j<7;j++){const dj=addD(gs,i+j); if(mapInfo(dj)||A.compDate===ymd(dj)){any=true; break}} if(!any){i+=6; continue}}
     const d=addD(gs,i), k=ymd(d), om=d.getMonth()!==view.getMonth(), info=mapInfo(d);
-    const cls='mcd'+(om?' om':'')+(info?(info.w.off?' off':info.w.mound?' mound':' build'):' xp')+(k===MCS.sel?' sel':'')+(k===todayK?' today':'')+(info&&info.test?' tst':'')+(A.compDate===k?' comp':'');
-    const c=el('button',cls); c.type='button'; c.setAttribute('aria-label',d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})+(info?', week '+info.w.n+', '+mapPhase(info.w):'')); c.setAttribute('aria-pressed',String(k===MCS.sel));
+    const tint=!info?' xp':MAPL==='lift'?(info.sets>0?' lf':' nl'):(info.w.off?' off':info.w.mound?' mound':' build');
+    const cls='mcd'+(om?' om':'')+tint+(k===MCS.sel?' sel':'')+(k===todayK?' today':'')+(info&&info.test?' tst':'')+(A.compDate===k?' comp':'');
+    const c=el('button',cls); c.type='button'; c.setAttribute('aria-label',d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})+(info?', week '+info.w.n+', '+mapPhase(info.w)+(info.sets?', '+info.sets+' lifting sets':''):'')); c.setAttribute('aria-pressed',String(k===MCS.sel));
     const top=el('span','mcdt'); top.append(el('span','mcn1',String(d.getDate()))); if(info&&info.day===1) top.append(el('span','mcwk','W'+info.w.n)); c.append(top);
     if(info){
       const first1=d.getDate()===1;
-      if(info.newBlock||first1) c.append(el('span','mctg thr',mapPhase(info.w)));
-      if(info.str&&(info.str.start||first1)) c.append(el('span','mctg str',info.str.fam+' P'+info.str.ph+(info.str.fam!=='ML'?' + prep':'')));
-      const bt=el('span','mcb'); if(info.sc&&!info.w.off){const s=el('span','mcsc'+(info.sc>=7?' hot':''),String(Math.round(info.sc))); s.style.setProperty('--h',Math.min(info.sc/12,1).toFixed(3)); s.title='Day score '+info.sc.toFixed(2); bt.append(s)}
+      if(showT&&(info.newBlock||first1)) c.append(el('span','mctg thr',mapPhase(info.w)));
+      if(showL&&info.str&&(info.str.start||first1)) c.append(el('span','mctg str',info.str.fam+' P'+info.str.ph+(info.str.fam!=='ML'?' + prep':'')));
+      const bt=el('span','mcb');
+      if(showT&&info.sc&&!info.w.off){const s=el('span','mcsc'+(info.sc>=7?' hot':''),String(Math.round(info.sc))); s.style.setProperty('--h',Math.min(info.sc/12,1).toFixed(3)); s.title='Day score '+info.sc.toFixed(2); bt.append(s)}
+      if(showL&&info.sets>0){const hot=MCMAX&&info.sets>=MCMAX*0.8, s=el('span','mcsc lf'+(hot?' hot':'')); s.append(document.createTextNode(String(info.sets)),el('small',null,' sets')); s.style.setProperty('--h',(MCMAX?Math.min(info.sets/MCMAX,1):0).toFixed(3)); s.title='Lifting: '+info.sets+' working sets'; bt.append(s)}
       if(info.test&&info.day===1) bt.append(el('span','mcfl tst','Retest'));
       if(!A.deload[info.w.n]&&info.w.sugDl&&info.day===1) bt.append(el('span','mcfl dls','Deload'));
       if(info.comp) bt.append(el('span','mcfl comp','Comp'));
@@ -2311,7 +2341,10 @@ function renderMapCal(weeks){
     c.addEventListener('click',()=>{MCS.sel=k; if(om) MCS.month=ymd(new Date(d.getFullYear(),d.getMonth(),1,12)); redraw()});
     grid.append(c)}
   box.append(grid);
-  const lg=el('div','mcl'); for(const [cls,t] of [['build','Build phase'],['mound','Mound phase'],['off','Deload or off'],['sc','Day score (brighter = harder)'],['hot','Day score 7 or more'],['tst','Retest week'],['dls','Suggested deload'],['comp','Competition'],['today','Today']]){const i=el('span','mcli'); i.append(el('i','sw '+cls),document.createTextNode(t)); lg.append(i)}
+  const lg=el('div','mcl'), li=[]; if(showT) li.push(['build','Build phase'],['mound','Mound phase'],['off','Deload or off'],['sc','Day score (brighter = harder)'],['hot','Day score 7 or more']);
+  if(showL) li.push(['lfd','Lifting day'],['lf','Lifting sets (brighter = more)'],['lfh','Top lifting days']);
+  li.push(['tst','Retest week'],['dls','Suggested deload'],['comp','Competition'],['today','Today']);
+  for(const [cls,t] of li){const i=el('span','mcli'); i.append(el('i','sw '+cls),document.createTextNode(t)); lg.append(i)}
   box.append(lg);
   box.append(mapDetail(day0(MCS.sel)||st))}
 
