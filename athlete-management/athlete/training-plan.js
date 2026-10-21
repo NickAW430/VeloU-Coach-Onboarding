@@ -145,6 +145,25 @@ button.rr:hover{background:var(--sunk)}
 .wrap.sv>*:not(#sview){display:none !important}
 .wrap.sv>#sview{display:flex !important}
 .wrap.sv>#sview[hidden]{display:none !important}
+.wrap.dv>*:not(#cal):not(#dvbar){display:none !important}
+.wrap.dv .days,.dvdays{display:grid !important;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)) !important;gap:16px !important;align-items:start}
+.dvbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.dvbar .dvt{display:flex;flex-direction:column;gap:2px;flex:1 1 280px;min-width:0}
+.dvbar .dvt b{font:600 12px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.dvbar .dvt span{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.dvbar .acts2{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.dvsec{display:flex;flex-direction:column;border-top:1px solid var(--line);margin:0 10px 10px;padding-top:6px}
+.dvh{font:600 10px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--heat);padding:4px 0}
+.dvg{font:600 10px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 0 2px}
+.dvr{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-top:1px solid #1d2428;font-size:13px;line-height:1.3}
+.dvr .dvn{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.dvr .dvn a{color:#fff;text-decoration:underline;text-decoration-color:var(--heat);text-underline-offset:3px}
+.dvr .dvd{flex:none;font:600 12px var(--mono);color:#fff;max-width:45%;text-align:right;overflow-wrap:anywhere}
+.dvr.chg .dvn::after{content:' \u00b7 edited';color:var(--heat);font-size:11px}
+.dvr.added .dvn::after{content:' \u00b7 added';color:var(--ok);font-size:11px}
+.dvr.info .dvd{color:var(--muted);font-weight:400}
+.dvtt{padding:0 10px 6px;font:600 13px/1.25 var(--body);color:#fff}
+.dvmeta{padding:0 10px 8px;font:500 11px/1.3 var(--mono);color:var(--muted)}
 .wrap.tv #lanes,.wrap.tv .dstr:not(.pat),.wrap.tv .sses:not(.pat),.wrap.tv .strtag:not(.pat),.wrap.tv .bst,.wrap.tv .brow.h span:last-child{display:none !important}
 .wrap.tv .brow{display:flex;flex-wrap:nowrap;gap:6px;align-items:center;padding:6px 0;overflow-x:auto}
 .wrap.tv .brow select{flex:1 1 0 !important;min-width:96px !important;width:auto !important}
@@ -578,6 +597,7 @@ const HTML=`<div class="wrap">
       <button class="btn sm" id="nextW" type="button" aria-label="Next week">&rarr;</button>
     </div>
   </div>
+  <div class="dvbar" id="dvbar" hidden></div>
   <main id="cal"></main>
 </div>
 <dialog id="dlg">
@@ -616,6 +636,23 @@ const HTML=`<div class="wrap">
       <button class="btn" type="button" id="addCancel">Cancel</button>
     </div>
   </form>
+</dialog>
+<dialog id="dlgE">
+  <form method="dialog" class="col" id="edForm">
+    <div><h4 id="edTitle">Edit exercise</h4><div class="note" id="edFrom"></div></div>
+    <label class="note" id="edGrpL">Section<select id="edGrp"></select></label>
+    <label class="note" for="edName">Exercise (type to search, or enter a new one)</label>
+    <input id="edName" list="edList" autocomplete="off">
+    <datalist id="edList"></datalist>
+    <label class="note" for="edDose">Sets and reps, or dose</label>
+    <input id="edDose" type="text" autocomplete="off" placeholder="e.g. 3x5 @ 75%">
+    <div class="acts">
+      <button class="btn primary" type="button" id="edOk">Save</button>
+      <button class="btn" type="button" id="edReset">Reset to program</button>
+      <button class="btn danger" type="button" id="edDel">Remove</button>
+      <button class="btn" type="button" id="edCancel">Cancel</button>
+    </div>
+  </form>
 </dialog>`;
 
 let BALLS=(()=>{const s=new Set(['Baseball','Football','3oz','5oz','8oz','12oz','16oz']); for(const k in D.S) for(const r of D.S[k]) for(const i of [4,5,6]) if(r[i]) s.add(String(r[i])); return [...s]})();
@@ -629,7 +666,7 @@ const root=host.shadowRoot;
 const $=id=>root.getElementById(id);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const fz=()=>{const f=String(host.dataset.focus||'').trim().toLowerCase(); return D.focus.find(x=>x.toLowerCase()===f)||FOCUS0};
-const blank=()=>({program:TL,level:'',focus:fz(),startDate:'',compDate:'',phaseWeeks:null,blocks:null,shift:0,velo:'',kneel:'',lt:'',swaps:{},rowSwaps:{},removed:{},rowEdits:{},added:{},order:{},baseline:{},dayMove:{},str:{on:1,fam:'',ph:''},pat:{on:1},patBlocks:[],strBlocks:[],coach1:'',coach2:'',deload:{},dlVol:60,dlInt:10});
+const blank=()=>({program:TL,level:'',focus:fz(),startDate:'',compDate:'',phaseWeeks:null,blocks:null,shift:0,velo:'',kneel:'',lt:'',swaps:{},rowSwaps:{},removed:{},rowEdits:{},added:{},order:{},baseline:{},dayMove:{},str:{on:1,fam:'',ph:''},pat:{on:1},patBlocks:[],strBlocks:[],coach1:'',coach2:'',deload:{},dlVol:60,dlInt:10,strEd:{},patEd:{}});
 let A=blank(), cur='', viewWeek=1, coachOpen=false, saved=false, compact=(()=>{try{return localStorage.getItem('velou.plan.compact')==='1'}catch(e){return false}})(), openDays=new Set();
 const L=()=>{const ds=host.dataset, m=String(ds.level||'').match(/[1-3]/); return {athlete:ds.athlete||'',level:m?Number(m[0]):null,levelRaw:ds.level||'',velo:numv(ds.velo),kneel:numv(ds.kneel),lt:numv(ds.lt),arm:numv(ds.armscore),injury:(ds.injury||'').trim()}};
 const VNK=s => String(s).toLowerCase().replace(/&/g,' and ').replace(/kikucki|kukuchi/g,'kikuchi').replace(/\bstide\b/g,'stride').replace(/\bthows\b/g,'throws').replace(/pendelum/g,'pendulum').replace(/hip-shoulder/g,'hip shoulder').replace(/roll-in/g,'roll in').replace(/windup/g,'wind up').split(/[^a-z0-9]+/).filter(Boolean).map(w => w === 'forwards' ? 'forward' : w).map(w => w.length > 3 && w.endsWith('s') ? w.slice(0,-1) : w).filter(w => w !== 'throw').join(' ');
@@ -974,7 +1011,7 @@ function dateFor(n,day){const d=day0(A.startDate); if(!d) return null; d.setDate
 function currentWeek(total){const d=day0(A.startDate); if(!d) return null; const n=Math.floor((new Date()-d)/6048e5)+1; return n>=1&&n<=total?n:null}
 function flagsOn(){const l=L(); return (l.arm!=null&&l.arm<85)||(l.injury&&!/^(none|—|-|n\/a)$/i.test(l.injury))}
 function render(){
-  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw();
+  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV&&LANE==='lift') return renderDVL();
   const p=prog(), weeks=planWeeks(), tl=isTL(), l=L(), v=V(); TP=testPlan(weeks); if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); try{renderLanes()}catch(e){console.warn(e)}
   for(const w of weeks){w.rows=weekRows(w); w.throws=w.rows.reduce((a,r)=>a+(r.plan?0:r.sets*r.reps),0); w.wv=w.rows.reduce((a,r)=>a+(r.wv||0),0); w.peak=w.rows.reduce((a,r)=>Math.max(a,r.rpe||0),0); w.hi=w.rows.reduce((a,r)=>a+(!r.plan&&r.rpe>=90?r.sets*r.reps:0),0)}
   {let prevB=null, prevD7=null, prevPD7=null, first=true;
@@ -1019,7 +1056,7 @@ function render(){
   renderTimeline(weeks,N,mound,cw);
   const cal=$('cal'); cal.textContent='';
   const today=new Date().toDateString(), hiOn=flagsOn();
-  if(!weeks.length){cal.append(el('p','note',tl?(N==null?'Open Coach tools and enter a start date and a competition date for a suggested offseason stack, or add blocks by hand.':'There are no weeks in this plan yet.'):'This program has no weeks.'))}
+  if(!weeks.length&&DV){dvBar(); cal.append(el('p','note','No throwing plan for this athlete yet. Open the Throwing tab under Programming to start one.'))} else if(!weeks.length){cal.append(el('p','note',tl?(N==null?'Open Coach tools and enter a start date and a competition date for a suggested offseason stack, or add blocks by hand.':'There are no weeks in this plan yet.'):'This program has no weeks.'))}
   else{
     const w=weeks[viewWeek-1], sec=el('section','week'), hd=el('div','wkhead'), SW=strWeek(w,weeks), PW=patWeek(w,weeks);
     hd.append(el('h2',null,'Week '+w.n));
@@ -1051,7 +1088,10 @@ function render(){
     }
     if(coachOpen&&!w.off&&!w.sugDl&&!A.deload[w.n]){const b=el('button','btn sm dlmk','Make this a deload week'); b.type='button'; b.addEventListener('click',()=>{A.deload[w.n]=1;changed()}); sec.append(b)}
     const g=el('div','days');
-    for(let day=1;day<=7;day++){
+    const TG=DV?dvTargets(weeks):[1,2,3,4,5,6,7].map(d=>({w,day:d}));
+    for(const T of TG){
+      if(!T.w){const c=el('article','day off'), dh=el('div','dh'), dn=el('div','dn',T.dt.toLocaleDateString(undefined,{weekday:'short'})); dn.append(el('small',null,fmt(T.dt))); dh.append(dn); c.append(dh,el('div','dsum off',T.msg)); g.append(c); continue}
+      const w=T.w, day=T.day, SW=strWeek(w,weeks), PW=patWeek(w,weeks);
       const R=w.rows.filter(r=>r.day===day), ok=w.n+'-'+day, ord=A.order[ok]||[], dr=R.filter(r=>!r.plan).map((r,i)=>({r,i})).sort((a,b)=>{const x=ord.indexOf(a.r.k), y=ord.indexOf(b.r.k); return (x<0?1e3+a.i:x)-(y<0?1e3+b.i:y)}).map(o=>o.r), c=el('article','day'+(R.length?'':' off')+(coachOpen?' coach':''));
       const dt=dateFor(w.n,day); if(dt&&dt.toDateString()===today) c.classList.add('today');
       const dh=el('div','dh'), dn=el('div','dn',dt?dt.toLocaleDateString(undefined,{weekday:'short'}):'Day '+day);
@@ -1071,8 +1111,8 @@ function render(){
         c.addEventListener('dragleave',e=>{if(!c.contains(e.relatedTarget)) c.classList.remove('dayover')});
         c.addEventListener('drop',e=>{if(!dayDrag||dayDrag.n!==w.n) return; e.preventDefault(); const f=dayDrag.day; dayDrag=null; moveDay(w.n,f,day)});
       }
-      const pd=PW&&PW.days[day]; if(pd){const k='p'+w.n+'-'+day, b=el('button','dstr pat'+(selStr===k?' sel':'')); b.type='button'; b.setAttribute('aria-expanded',String(selStr===k)); b.append(el('b',null,'Patterning'),el('span',null,pd.blocks.map(x=>x.name).join(' + ')),el('small',null,'L'+PW.lv+pd.code+' \u00b7 '+pd.blocks.reduce((a,x)=>a+x.drills.length,0)+' drills')); b.addEventListener('click',()=>{selStr=selStr===k?null:k; render()}); c.append(b)}
-      let sBtn=null; const sd=SW&&SW.days[day]; if(sd){const b=sBtn=el('button','dstr'+(selStr===w.n+'-'+day?' sel':'')); b.type='button'; b.setAttribute('aria-expanded',String(selStr===w.n+'-'+day)); b.append(el('b',null,'Strength'),el('span',null,(sd.lift?sd.lift.title:sd.prep.title)||'Session'),el('small',null,[sd.prep?'Prep'+(sd.prep.min?' '+sd.prep.min.replace(/\s*\u00b7.*$/,''):''):'',sd.lift?sd.lift.rows.length+' lifts':''].filter(Boolean).join(' \u00b7 '))); b.addEventListener('click',()=>{selStr=selStr===w.n+'-'+day?null:w.n+'-'+day; render()}); }
+      const pd=PW&&PW.days[day]; if(pd&&DV){dvPat(c,pd,dateFor(w.n,day))} else if(pd){const k='p'+w.n+'-'+day, b=el('button','dstr pat'+(selStr===k?' sel':'')); b.type='button'; b.setAttribute('aria-expanded',String(selStr===k)); b.append(el('b',null,'Patterning'),el('span',null,pd.blocks.map(x=>x.name).join(' + ')),el('small',null,'L'+PW.lv+pd.code+' \u00b7 '+pd.blocks.reduce((a,x)=>a+x.drills.length,0)+' drills')); b.addEventListener('click',()=>{selStr=selStr===k?null:k; render()}); c.append(b)}
+      let sBtn=null; const sd=!DV&&SW&&SW.days[day]; if(sd){const b=sBtn=el('button','dstr'+(selStr===w.n+'-'+day?' sel':'')); b.type='button'; b.setAttribute('aria-expanded',String(selStr===w.n+'-'+day)); b.append(el('b',null,'Strength'),el('span',null,(sd.lift?sd.lift.title:sd.prep.title)||'Session'),el('small',null,[sd.prep?'Prep'+(sd.prep.min?' '+sd.prep.min.replace(/\s*\u00b7.*$/,''):''):'',sd.lift?sd.lift.rows.length+' lifts':''].filter(Boolean).join(' \u00b7 '))); b.addEventListener('click',()=>{selStr=selStr===w.n+'-'+day?null:w.n+'-'+day; render()}); }
       if(isC){if(coachOpen&&!w.off){const ab=el('button','addbtn','+ Add drill'); ab.type='button'; ab.addEventListener('click',()=>openAdd(w.n,day)); c.append(ab)} if(sBtn) c.append(sBtn); g.append(c); continue}
       {const lg=LOGS[w.n+'-'+day]; if(lg&&(lg.status||lg.note)){const x=el('div','alog '+(lg.status||'')); x.append(el('b',null,'Athlete: '+({done:'Done',partial:'Partly done',skipped:'Skipped'}[lg.status]||'Note'))); if(lg.note) x.append(el('span',null,lg.note)); x.title='Logged '+(lg.updated?new Date(lg.updated).toLocaleString():''); c.append(x)}}
       const lab=(R.find(r=>r.label)||{}).label;
@@ -1128,7 +1168,7 @@ function render(){
       if(coachOpen&&!w.off){const ab=el('button','addbtn','+ Add drill'); ab.type='button'; ab.addEventListener('click',()=>openAdd(w.n,day)); c.append(ab)}
       g.append(c);
     }
-    sec.append(g);
+    sec.append(g); if(DV){sec.replaceChildren(g); dvBar()}
     if(PW&&selStr&&selStr[0]==='p'&&selStr.slice(1).split('-')[0]==String(w.n)&&PW.days[+selStr.split('-')[1]]){const dd=+selStr.split('-')[1], pd=PW.days[dd], dt=dateFor(w.n,dd), bx=el('section','sses pat'), hh=el('div','shd');
       hh.append(el('h3',null,'Patterning \u00b7 '+(dt?dt.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}):'Day '+dd)), el('span','note',PW.focus+' \u00b7 Level '+PW.lv+(PW.auto?' (from throwing level and phase)':' (coach set)')));
       const x=el('button','btn sm','Close'); x.type='button'; x.addEventListener('click',()=>{selStr=null; render()}); hh.append(x); bx.append(hh);
@@ -1284,9 +1324,83 @@ $('addOk').addEventListener('click',()=>{const name=$('addName').value.trim(); i
 $('addForm').addEventListener('submit',e=>{e.preventDefault(); $('addOk').click()});
 $('dlgDel').addEventListener('click',()=>{A.removed[swapRow.k]=swapRow.name; delete A.rowSwaps[swapRow.k]; closeDlg(); changed()});
 $('dlgForm').addEventListener('submit',e=>{e.preventDefault(); $('dlgAll').click()});
+// ---- 3-day calendar (data-view="days"): the next three dates of this plan, editable in place ----
+let dvOff=0, dvEdit=false, edCtx=null;
+const tidyN=x=>String(x||'').replace(/\s*⊃\s*superset/g,'').replace(/\s*\[[^\]]*\]\s*$/,'').trim();
+const pdt=x=>{const d=new Date(String(x||'')); return isNaN(d)?null:d};
+function dvDates(){const o=[]; for(let i=0;i<3;i++){const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dvOff+i); o.push(d)} return o}
+function dvTargets(weeks){const base=day0(A.startDate); return dvDates().map(dt=>{ if(!base) return {w:null,dt,msg:'Set a start date in the Programming tab.'}; const off=Math.round((dt-base)/864e5), w=off>=0?weeks[Math.floor(off/7)]:null; return w?{w,day:off%7+1,dt}:{w:null,dt,msg:off<0?'Plan starts '+fmt(base)+'.':'Past the end of this plan.'}})}
+function boardObj(){try{return JSON.parse(host.dataset.board||'{}')||{}}catch(e){return {}}}
+function dvBar(){
+  const bar=$('dvbar'); if(!bar) return; bar.hidden=false; bar.textContent='';
+  const bd=boardObj(), t=el('div','dvt');
+  t.append(el('b',null,LANE==='lift'?'Lifting and corrective':'Patterning and throwing'), el('span',null,(LANE==='lift'?[bd.lift,bd.ac,bd.mob]:[bd.thr,bd.pat]).filter(Boolean).join(' · ')||'No program on the Program Board'));
+  const a=el('div','acts2'), mk=(txt,fn,cls,dis,lab)=>{const b=el('button','btn sm'+(cls?' '+cls:''),txt); b.type='button'; if(lab) b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',fn); return b};
+  a.append(mk('←',()=>{dvOff-=1; render()},'',false,'Earlier days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; render()},'',!dvOff,'Back to today'), mk('→',()=>{dvOff+=1; render()},'',false,'Later days'));
+  a.append(mk(dvEdit?'Done editing':'Edit program',()=>{dvEdit=!dvEdit; coachOpen=dvEdit; render()},dvEdit?'primary':'',false));
+  const st=el('span','note'); st.id='dvst'; st.textContent=$('status')?$('status').textContent:''; a.append(st); bar.append(t,a);
+}
+// per-date edits: A[kind][YYYY-MM-DD] = {r:{rowKey:{name,dose}}, x:[removed rowKeys], a:[{id,name,dose,grp}]}
+function edStore(kind,dk){const S=(A[kind]=A[kind]||{}); return S[dk]=S[dk]||{}}
+function edApply(kind,dk,base){const E=((A[kind]||{})[dk])||{}, out=[];
+  for(const r of base){ if((E.x||[]).includes(r.k)) continue; const o=(E.r||{})[r.k]; out.push(o?Object.assign({},r,{name:o.name||r.name,dose:o.dose!=null?o.dose:r.dose,edited:1}):r)}
+  for(const a of (E.a||[])) out.push({k:'+'+a.id,name:a.name,dose:a.dose,grp:a.grp,added:1});
+  return out}
+function edRow(kind,dk,r){const li=el('div','dvr'+(r.edited?' chg':'')+(r.added?' added':'')+(r.info?' info':'')), nm=el('span','dvn');
+  if(r.video){const a=el('a',null,r.name); a.href=r.video; a.target='_blank'; a.rel='noopener'; nm.append(a)} else nm.textContent=r.name;
+  li.append(nm,el('b','dvd',r.dose||'')); if(coachOpen&&!r.info){const b=el('button','btn sm','Edit'); b.type='button'; b.addEventListener('click',()=>openEd({kind,dk,row:r})); li.append(b)} return li}
+function openEd(ctx){edCtx=ctx; const r=ctx.row, d=pdt(ctx.dk+'T12:00:00');
+  $('edTitle').textContent=ctx.add?'Add exercise':'Edit exercise'; $('edFrom').textContent=(d?d.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}):ctx.dk)+' · this date only'+(r&&r.grp?' · '+r.grp:'');
+  const gs=$('edGrp'); gs.textContent=''; for(const g of (ctx.grps||[])){const o=el('option',null,g); o.value=g; gs.append(o)} gs.value=ctx.grp||(ctx.grps||[])[0]||''; $('edGrpL').hidden=!(ctx.add&&(ctx.grps||[]).length>1);
+  $('edName').value=r?r.name:''; $('edDose').value=r?(r.dose||''):''; $('edReset').hidden=!(r&&!r.added&&r.edited); $('edDel').hidden=!r;
+  const dl=$('edList'); dl.textContent=''; const names=new Set(); if(ctx.kind==='strEd'){for(const n of ((SDATA&&SDATA.ex)||[])) names.add(tidyN(n))} else {for(const k in ((PAT&&PAT.blocks)||{})) for(const n of PAT.blocks[k].drills) names.add(n.replace(/\s*\(\s*\d+\s*[x×]\s*\d+[^)]*\)\s*$/i,'').trim())}
+  for(const n of [...names].slice(0,2500)){const o=el('option'); o.value=n; dl.append(o)}
+  $('dlgE').showModal(); $('edName').focus()}
+$('edCancel').addEventListener('click',()=>$('dlgE').close());
+$('edForm').addEventListener('submit',e=>{e.preventDefault(); $('edOk').click()});
+$('edOk').addEventListener('click',()=>{const name=$('edName').value.trim(); if(!name){$('edName').focus();return} const dose=$('edDose').value.trim(), {kind,dk,row,add}=edCtx, E=edStore(kind,dk);
+  if(add) (E.a=E.a||[]).push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),name,dose,grp:$('edGrp').value||edCtx.grp||''});
+  else if(row.added){const a=(E.a||[]).find(x=>'+'+x.id===row.k); if(a){a.name=name; a.dose=dose}}
+  else (E.r=E.r||{})[row.k]={name,dose};
+  $('dlgE').close(); changed()});
+$('edReset').addEventListener('click',()=>{const {kind,dk,row}=edCtx, E=edStore(kind,dk); if(E.r) delete E.r[row.k]; E.x=(E.x||[]).filter(k=>k!==row.k); $('dlgE').close(); changed()});
+$('edDel').addEventListener('click',()=>{const {kind,dk,row}=edCtx, E=edStore(kind,dk); if(row.added) E.a=(E.a||[]).filter(x=>'+'+x.id!==row.k); else {(E.x=E.x||[]).push(row.k); if(E.r) delete E.r[row.k]} $('dlgE').close(); changed()});
+function dvPat(c,pd,dt){
+  const dk=ymd(dt), base=[]; pd.blocks.forEach(b=>b.drills.forEach((d,i)=>base.push({k:b.ch+':'+i,name:d.name,dose:d.dose,video:d.video,grp:b.ch+' · '+b.name})));
+  const rows=edApply('patEd',dk,base), box=el('div','dvsec'); box.append(el('div','dvh','Patterning · '+pd.blocks.map(b=>b.ch).join('+')));
+  let last=null; for(const r of rows){ const gl=r.added?'Added':r.grp; if(gl!==last){last=gl; box.append(el('div','dvg',gl))} box.append(edRow('patEd',dk,r)) }
+  if(coachOpen){const ab=el('button','addbtn','+ Add patterning drill'); ab.type='button'; ab.addEventListener('click',()=>openEd({kind:'patEd',dk,add:true,grp:'Added',grps:['Added']})); box.append(ab)}
+  c.append(box)}
+function renderDVL(){
+  const cal=$('cal'); cal.textContent=''; if(A.str.on&&!SDATA) loadStrength(); dvBar();
+  const st=day0(A.startDate), today=new Date().toDateString(), bd=boardObj(), g=el('div','dvdays');
+  for(const dt of dvDates()){
+    const dk=ymd(dt), c=el('article','day'+(dt.toDateString()===today?' today':'')), dh=el('div','dh'), dn=el('div','dn',dt.toLocaleDateString(undefined,{weekday:'short'}));
+    let x=null, meta=null, n=0, d=0; if(st&&SDATA){const off=Math.round((dt-st)/864e5); if(off>=0){n=Math.floor(off/7)+1; d=off%7+1; const sd=svDays(n), e=sd.days[d-1]; x=e&&e.x; meta=sd.meta}}
+    dn.append(el('small',null,fmt(dt)+(d?' · Day '+d:''))); dh.append(dn); c.append(dh);
+    if(!st) c.append(el('div','dsum off','Set a start date in the Programming tab.'));
+    else if(!SDATA) c.append(el('div','dsum off','Loading strength programs…'));
+    else if(dt<st) c.append(el('div','dsum off','Plan starts '+fmt(st)+'.'));
+    else if(!meta&&!x) c.append(el('div','dsum off','No lifting in the plan for this date.'));
+    if(x&&x.lift&&x.lift.title) c.append(el('div','dvtt',x.lift.title));
+    if(meta) c.append(el('div','dvmeta',strLabel(meta)+' · week '+meta.wk+' of '+meta.dur));
+    const base=[]; if(x&&x.prep) for(const r of x.prep.rows) base.push({k:'prep:'+r.code,name:tidyN(r.name),dose:r.dose,grp:'Prep'+(x.prep.min?' · '+x.prep.min.replace(/\s*·.*$/,''):'')});
+    if(x&&x.lift) for(const r of x.lift.rows) base.push({k:'lift:'+r.code,name:r.name,dose:r.dose,grp:'Lift'});
+    const rows=edApply('strEd',dk,base), box=el('div','dvsec');
+    const grpOf=r=>r.added?(r.grp||'Lift'):String(r.grp||'').split(' · ')[0];
+    for(const G of ['Prep','Lift']){const list=rows.filter(r=>grpOf(r)===G); if(!list.length) continue; const first=list.find(r=>!r.added); box.append(el('div','dvh',first?first.grp:G)); for(const r of list) box.append(edRow('strEd',dk,r))}
+    const info=[]; for(const [lab,prog,s0,e0] of [['Arm care',bd.ac,bd.acs,bd.ace],['Mobility',bd.mob,bd.mobs,bd.mobe]]){ if(!prog) continue; const a=pdt(s0), b=pdt(e0); if(a&&dt<new Date(a.getFullYear(),a.getMonth(),a.getDate())) continue; if(b&&dt>new Date(b.getFullYear(),b.getMonth(),b.getDate(),23,59)) continue; info.push({k:'info:'+lab,name:lab,dose:prog,info:1}) }
+    const corr=rows.filter(r=>grpOf(r)==='Corrective');
+    if(info.length||corr.length||coachOpen){box.append(el('div','dvh','Corrective')); for(const r of info) box.append(edRow('strEd',dk,r)); for(const r of corr) box.append(edRow('strEd',dk,r))}
+    if(coachOpen){const ab=el('button','addbtn','+ Add exercise'); ab.type='button'; ab.addEventListener('click',()=>openEd({kind:'strEd',dk,add:true,grp:'Lift',grps:['Lift','Prep','Corrective']})); box.append(ab)}
+    if(box.childNodes.length) c.append(box);
+    g.append(c)}
+  cal.append(g)}
+window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
+  A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
 const key=()=>'velou.plan.'+cur;
-function status(t,warn){const s=$('status'); s.textContent=t; s.className='note'+(warn?' warn':'')}
-function changed(){if(A.shareCode&&A.pubAt) A.pubDirty=true; A.updated=Date.now(); setTimeout(()=>schedulePush(),0); try{setTimeout(()=>window.dispatchEvent(new CustomEvent('velou-plan-change')),0)}catch(e){} render(); try{localStorage.setItem(key(),JSON.stringify(A)); saved=true; status(connected()?'Saving to the team sheet\u2026':'Saved in this browser for '+cur+'.')}catch(e){status('Could not save in this browser.',true)} if(coachOpen) renderCoach(weeksAvail(),planWeeks().length)}
+function status(t,warn){const s=$('status'); s.textContent=t; s.className='note'+(warn?' warn':''); const d=$('dvst'); if(d){d.textContent=t; d.className='note'+(warn?' warn':'')}}
+function changed(){if(A.shareCode&&A.pubAt) A.pubDirty=true; A.updated=Date.now(); setTimeout(()=>schedulePush(),0); try{setTimeout(()=>window.dispatchEvent(new CustomEvent('velou-plan-change',{detail:{src:host}})),0)}catch(e){} render(); try{localStorage.setItem(key(),JSON.stringify(A)); saved=true; status(connected()?'Saving to the team sheet\u2026':'Saved in this browser for '+cur+'.')}catch(e){status('Could not save in this browser.',true)} if(coachOpen&&!DV) renderCoach(weeksAvail(),planWeeks().length)}
 function reload(){
   if(RV){renderRoster(); return}
   const name=L().athlete; if(name===cur&&cur) {if(!HV&&archiveIfDone()) status('Program completed and saved to Program History.'); if(!saved&&!A.fromBoard){const sd=boardSeed(); if(sd){A=Object.assign(blank(),sd.S); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; BOARD_ISS=sd.iss; viewWeek=currentWeek(planWeeks().length)||1; status('Draft loaded from the Program Board. Review it; your first change saves it.'+(BOARD_ISS.length?' Check: '+BOARD_ISS.join('; ')+'.':''),BOARD_ISS.length>0)}} draw();return}
@@ -1294,7 +1408,7 @@ function reload(){
   saved=!!o; A=Object.assign(blank(),o||{}); BOARD_ISS=[]; if(!saved){const sd=boardSeed(); if(sd){A=Object.assign(blank(),sd.S); BOARD_ISS=sd.iss}}
   A.swaps=A.swaps||{}; A.rowSwaps=A.rowSwaps||{}; A.removed=A.removed||{}; A.rowEdits=A.rowEdits||{}; A.added=A.added||{}; A.order=A.order||{}; A.dayMove=A.dayMove||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; if(A.str.fam==='none') A.str.fam=''; (A.strBlocks||[]).forEach(b=>{if(b.fam==='none') delete b.fam}); (A.blocks||[]).forEach(b=>{if(b.sFam==='none') delete b.sFam}); A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; A.baseline=A.baseline||{}; A.deload=A.deload||{};
   const n=planWeeks().length; viewWeek=currentWeek(n)||1;
-  coachOpen=coachOpen||!saved;
+  coachOpen=DV?dvEdit:(coachOpen||!saved);
   LOGS={}; CHECKS={}; TRES={}; LLIST=[]; CLIST=[]; TLIST=[]; logsFor=''; if(!HV) loadLogs();
   const arc=archiveIfDone(); if(arc){A.updated=Date.now(); try{localStorage.setItem(key(),JSON.stringify(A))}catch(e){}}
   pullRemote(cur,arc);
@@ -1408,8 +1522,8 @@ async function pullRemote(who,forcePush,adopt){if(!connected()||!who) return; le
   else if(saved&&(forcePush||!j.found||loc>j.updated)){if(!A.updated){A.updated=Date.now(); try{localStorage.setItem(key(),JSON.stringify(A))}catch(e){}} schedulePush()}
   else if(saved&&!RV) status('Plan is up to date with the team sheet.')}
 
-const HV=host.dataset.view==='history', SV=host.dataset.view==='strength', LANE=host.dataset.lane||'', PREPL=SV&&LANE==='prep', LIFTL=SV&&LANE==='lift';
-root.querySelector('.wrap').classList.add(HV?'hv':SV?'sv':host.dataset.view==='roster'?'rv':'tv');
+const HV=host.dataset.view==='history', SV=host.dataset.view==='strength', DV=host.dataset.view==='days', LANE=host.dataset.lane||'', PREPL=SV&&LANE==='prep', LIFTL=SV&&LANE==='lift';
+root.querySelector('.wrap').classList.add(DV?'dv':HV?'hv':SV?'sv':host.dataset.view==='roster'?'rv':'tv');
 const HK=()=>'velou.history.'+cur;
 const loadHist=()=>{try{return JSON.parse(localStorage.getItem(HK())||'[]')||[]}catch(e){return []}};
 const saveHist=h=>{try{localStorage.setItem(HK(),JSON.stringify(h))}catch(e){} A.updated=Date.now(); try{if(saved) localStorage.setItem(key(),JSON.stringify(A))}catch(e){} setTimeout(()=>schedulePush(),0)};

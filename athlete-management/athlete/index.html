@@ -174,61 +174,15 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
     </div>
   </section>
 
-  <section id="calendar" data-screen-label="Calendar" style="display:flex;flex-direction:column;gap:24px;border-top:1px solid rgba(91,103,112,.55);padding-top:22px">
+  <section id="calendar" data-screen-label="Calendar" style="display:flex;flex-direction:column;gap:28px;border-top:1px solid rgba(91,103,112,.55);padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap">
       <h2 style="margin:0;font-size:26px;font-weight:600">Next 3 Days <span style="color:rgba(255,255,255,.62);font-weight:400">· Training Calendar</span></h2>
     </div>
-    <sc-for list="{{ calSections }}" as="cs">
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
-          <span style="font:600 12px 'Barlow',sans-serif;letter-spacing:.1em;color:{{ cs.color }}">{{ cs.title }}</span>
-          <span style="font-size:13px;color:rgba(255,255,255,.62)">{{ cs.sub }}</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;align-items:stretch">
-          <sc-for list="{{ cs.days }}" as="cd">
-            <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);border-top:3px solid {{ cs.color }};padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0">
-              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-                <span style="font-size:18px;font-weight:600">{{ cd.label }}</span>
-                <span style="font:500 12px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ cd.date }}</span>
-              </div>
-              <sc-if value="{{ cd.hasMeta }}" hint-placeholder-val="{{ false }}">
-                <span style="font:500 11px 'Barlow',sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.62)">{{ cd.meta }}</span>
-              </sc-if>
-              <sc-if value="{{ cd.hasTitle }}" hint-placeholder-val="{{ false }}">
-                <span style="font-size:15px;font-weight:600;color:#FFFFFF">{{ cd.title }}</span>
-              </sc-if>
-              <sc-if value="{{ cd.hasSummary }}" hint-placeholder-val="{{ false }}">
-                <span style="font-size:12px;color:rgba(255,255,255,.62)">{{ cd.summary }}</span>
-              </sc-if>
-              <sc-if value="{{ cd.hasPrep }}" hint-placeholder-val="{{ false }}">
-                <div style="display:flex;flex-direction:column;border-top:1px solid rgba(91,103,112,.55)">
-                  <span style="font:600 10px 'Barlow',sans-serif;letter-spacing:.1em;color:rgba(255,255,255,.62);padding:8px 0 4px">PREP</span>
-                  <sc-for list="{{ cd.prep }}" as="pp">
-                    <div style="display:flex;justify-content:space-between;gap:10px;padding:3px 0;font-size:12px;line-height:1.35;color:rgba(255,255,255,.82)">
-                      <span>{{ pp.name }}</span><span style="flex:none;color:rgba(255,255,255,.62)">{{ pp.detail }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <sc-if value="{{ cd.hasItems }}" hint-placeholder-val="{{ false }}">
-                <div style="display:flex;flex-direction:column;border-top:1px solid rgba(91,103,112,.55)">
-                  <sc-for list="{{ cd.items }}" as="it">
-                    <div style="display:flex;flex-direction:column;gap:2px;padding:8px 0;border-bottom:1px solid rgba(91,103,112,.32)">
-                      <sc-if value="{{ it.hasLink }}" hint-placeholder-val="{{ false }}"><a href="{{ it.link }}" target="_blank" rel="noopener" style="font-size:14px;line-height:1.35;color:#FFFFFF;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35)" style-hover="color:#E10600">{{ it.name }}</a></sc-if>
-                      <sc-if value="{{ it.noLink }}" hint-placeholder-val="{{ true }}"><span style="font-size:14px;line-height:1.35">{{ it.name }}</span></sc-if>
-                      <span style="font:400 12px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ it.detail }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <sc-if value="{{ cd.empty }}" hint-placeholder-val="{{ true }}">
-                <span style="font-size:14px;color:rgba(255,255,255,.62)">{{ cd.emptyText }}</span>
-              </sc-if>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-    </sc-for>
+    <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
+      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261021a" data-view="days" data-lane="throw" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,420px"></x-import>
+      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261021a" data-view="days" data-lane="lift" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,420px"></x-import>
+    </sc-if>
+    <sc-if value="{{ plansLoading }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:rgba(255,255,255,.62)">Loading the plan…</span></sc-if>
   </section>
   </div>
   <div data-vm="host" onClick="{{ closeModal }}" style="display:{{ mdHost }};position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.84);overflow-y:auto;padding:32px 20px 64px;justify-content:center;align-items:flex-start">
@@ -607,13 +561,13 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
     <sc-if value="{{ hasLib }}" hint-placeholder-val="{{ false }}"><div data-noprint="1" style="font:400 11px 'Barlow',sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.62)">{{ libStatus }}</div></sc-if>
     <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
       <sc-if value="{{ subPrep }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261020a" data-view="strength" data-lane="prep" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261021a" data-view="strength" data-lane="prep" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
       </sc-if>
       <sc-if value="{{ subThrowing }}" hint-placeholder-val="{{ true }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261020a" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261021a" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
       </sc-if>
       <sc-if value="{{ subLifting }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261020a" data-view="strength" data-lane="lift" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261021a" data-view="strength" data-lane="lift" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,640px"></x-import>
       </sc-if>
     </sc-if>
     <sc-if value="{{ subCare }}" hint-placeholder-val="{{ false }}">
@@ -1242,20 +1196,19 @@ function installPlanSync() {
 }
 
 class Component extends DCLogic {
-  state = { tab: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], cal: null, modal: null, plansReady: false, sub: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.sub')) || 'throwing', care: null, d: null, status: 'loading', updated: null };
+  state = { tab: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], modal: null, plansReady: false, sub: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.sub')) || 'throwing', care: null, d: null, status: 'loading', updated: null };
 
   componentDidMount() {
     this.onBeforePrint = () => this.sizePage();
     window.addEventListener('beforeprint', this.onBeforePrint);
     this.loadAthletes();
     this.load();
-    this.loadCalendar();
     this.loadPlans();
     this.loadLibrary();
     this.onKey = e => { if (e.key === 'Escape' && this.state.modal) this.setState({ modal: null }); };
     window.addEventListener('keydown', this.onKey);
     const mins = this.props.refreshMinutes ?? 5;
-    if (mins > 0) this.timer = setInterval(() => { this.load(true); this.loadCalendar(true); }, mins * 60000);
+    if (mins > 0) this.timer = setInterval(() => { this.load(true); }, mins * 60000);
   }
   componentDidUpdate() {
     document.body.style.overflow = this.state.modal ? 'hidden' : '';
@@ -1270,41 +1223,9 @@ class Component extends DCLogic {
   componentWillUnmount() { clearInterval(this.timer); window.removeEventListener('beforeprint', this.onBeforePrint); window.removeEventListener('keydown', this.onKey); document.body.style.overflow = ''; }
   calVals() {
     const modal = this.state.modal;
-    const cal = this.state.cal;
-    const dayLabel = (iso, i) => {
-      const [y, m, d] = iso.split('-').map(Number);
-      const dt = new Date(y, m - 1, d);
-      return { label: i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : dt.toLocaleDateString('en-US', { weekday: 'long' }), date: dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) };
-    };
-    const programText = p => p ? p.program + (p.ends_on ? ' · ends ' + fMD(pD(p.ends_on)) : '') : '';
-    const build = (key, title, color, sec) => {
-      const dates = cal ? cal.dates : [];
-      const days = dates.map((iso, i) => {
-        const dd = sec ? sec.days[i] : null;
-        const base = { ...dayLabel(iso, i), meta: '', title: '', summary: '', items: [], prep: [], hasPrep: false, hasItems: false, hasTitle: false, hasSummary: false, hasMeta: false, empty: true, emptyText: '' };
-        if (!dd) return base;
-        if (dd.message) { base.emptyText = dd.message; base.meta = dd.week ? ['Week ' + dd.week, dd.phase, dd.focus].filter(Boolean).join(' · ') : ''; }
-        else if (dd.rest) { base.emptyText = 'Rest day.'; base.meta = ['Week ' + dd.week, dd.phase, dd.focus].filter(Boolean).join(' · '); }
-        else {
-          base.empty = false; base.hasItems = true;
-          base.meta = ['Week ' + dd.week, dd.phase, dd.focus].filter(Boolean).join(' · ');
-          base.title = dd.title || ''; base.summary = dd.summary || '';
-          base.items = dd.items.map(it => ({ name: it.name, detail: it.detail, link: it.link || '', hasLink: !!it.link, noLink: !it.link }));
-          base.prep = (dd.prep || []).map(it => ({ name: it.name, detail: it.detail }));
-          base.hasPrep = base.prep.length > 0;
-        }
-        base.hasMeta = !!base.meta; base.hasTitle = !!base.title; base.hasSummary = !!base.summary;
-        return base;
-      });
-      return { key, title, color, sub: !sec ? '' : sec.plan ? sec.plan + (sec.program ? ' · Board: ' + programText(sec.program) : '') : sec.program ? 'Assigned: ' + programText(sec.program) : 'No program assigned', days };
-    };
-    const loadingDays = [0, 1, 2].map(i => ({ label: ['Today', 'Tomorrow', 'Day 3'][i], date: '', meta: '', title: '', summary: '', items: [], hasItems: false, hasTitle: false, hasSummary: false, hasMeta: false, empty: true, emptyText: this.state.calErr ? 'Could not load the schedule.' : 'Loading…' }));
-    const sections = cal
-      ? [build('throwing', 'THROWING', '#E10600', cal.throwing), build('lifting', 'LIFTING', '#56B7E6', cal.lifting)]
-      : [{ key: 'throwing', title: 'THROWING', color: '#E10600', sub: '', days: loadingDays }, { key: 'lifting', title: 'LIFTING', color: '#56B7E6', sub: '', days: loadingDays }];
     const show = k => modal === k ? 'flex' : 'none';
     return {
-      calSections: sections,
+      plansLoading: !this.state.plansReady,
       mdHost: modal ? 'flex' : 'none',
       mdPotential: show('potential'), mdProduction: show('production'), mdInterference: show('interference'), mdTransference: show('transference'),
       closeModal: () => this.setState({ modal: null }),
@@ -1429,7 +1350,7 @@ class Component extends DCLogic {
       planKneel: pb(/kneel/i) || (num(main[23]) != null ? String(num(main[23])) : ''),
       planLt: pb(/long\s*toss|^lt\b/i),
       planArm: armScore == null ? '' : armScore.toFixed(1), planInjury: injury === 'None' ? '' : String(injury), planFocus: String(main[45] ?? ''),
-      planBoard: JSON.stringify({ c1: g(1), c2: g(2), thr: g(3), ts: g(4), te: g(5), pat: g(7), ps: g(8), pe: g(9), lift: g(11), ls: g(12), le: g(13) }),
+      planBoard: JSON.stringify({ c1: g(1), c2: g(2), thr: g(3), ts: g(4), te: g(5), pat: g(7), ps: g(8), pe: g(9), lift: g(11), ls: g(12), le: g(13), ac: g(19), acs: g(20), ace: g(21), mob: g(23), mobs: g(24), mobe: g(25) }),
       planPerf: (() => { try { return String(v(cmjFact(/level\s*assignment|performance\s*level/i), v(prog[28], '')) ?? ''); } catch (x) { return ''; } })(),
       planRec: (() => { try { return String(v(cmjFact(/program\s*recommendation|^program$/i), v(prog[29], '')) ?? ''); } catch (x) { return ''; } })(),
       planVideos: '{}'
@@ -1452,24 +1373,6 @@ class Component extends DCLogic {
       return { title: NAMES[cat].toUpperCase(), has: !!p, none: !p, name: p ? lines[0] : '', dates: p ? lines[1] : '', empty: progs == null ? (this.state.careErr ? 'Could not load the assignment.' : 'Loading…') : 'No ' + NAMES[cat].toLowerCase() + ' program assigned.' };
     };
     return { careCards: [card('arm_care'), card('mobility')] };
-  }
-  async loadCalendar(silent) {
-    const name = this.state.athlete;
-    if (!silent) this.setState({ cal: null, calErr: false });
-    const get = u => fetch(u, { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('network'); return r.json(); });
-    try {
-      let id = this.state.athleteId;
-      if (!id) {
-        const r = await get('/api/v1/overview?status=all&q=' + encodeURIComponent(name));
-        const m = r.athletes.find(a => nKey(a.first_name + a.last_name) === nKey(name));
-        if (!m) throw new Error('not found');
-        id = m.id;
-        if (name === this.state.athlete) this.setState({ athleteId: id });
-      }
-      const t = new Date(), today = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
-      const cal = await get('/api/v1/athletes/' + id + '/calendar?days=3&today=' + today);
-      if (name === this.state.athlete) this.setState({ cal, calErr: false });
-    } catch (e) { if (name === this.state.athlete && !silent) this.setState({ cal: null, calErr: true }); }
   }
   async load(silent) {
     const name = this.state.athlete;
@@ -1808,7 +1711,7 @@ class Component extends DCLogic {
       athleteSel: this.state.athlete,
       selKey: this.state.athlete + ':' + this.state.athletes.length,
       ...(() => {
-        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, cal: null, care: null, plansReady: false, plansErr: false, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadCalendar(); this.loadPlans(); }); };
+        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, care: null, plansReady: false, plansErr: false, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadPlans(); }); };
         const q = (this.state.sq || '').trim().toLowerCase();
         const all = athletes.includes(this.state.athlete) ? athletes : [this.state.athlete, ...athletes];
         const res = (q ? all.filter(a => a.toLowerCase().includes(q)).sort((x, y) => (y.toLowerCase().startsWith(q) - x.toLowerCase().startsWith(q))) : all).slice(0, 60);
