@@ -234,6 +234,7 @@ button.rr:hover{background:var(--sunk)}
 #bview[hidden],#nview[hidden]{display:none !important}
 .qc{border:1px solid var(--line);background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 .qh{font:600 15px/1.3 var(--body);color:#fff}
+.qhr{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .qh2{font:600 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--heat);margin-top:6px}
 .qs{font-size:12px;line-height:1.4;color:var(--muted)}
 .qopts{display:flex;flex-wrap:wrap;gap:8px}
@@ -1797,7 +1798,7 @@ function exFlagsWith(l,name,R,eq){
 }
 const exFlags=(l,name)=>exFlagsWith(l,name,A.restrict,A.equip);
 const bq=()=>(A.build=A.build||{});
-const bset=o=>{Object.assign(bq(),o); changed()};
+const bset=o=>{const q=bq(); Object.assign(q,o); delete q.applied; changed()};
 function bctx(){
   const d=host.dataset, n=PBL.num, xfer=n(d.xfer), prod=n(d.prod), ratio=n(d.ratio), lvT=PBL.xferLevel(xfer), lvL=PBL.prodLevel(prod);
   return {name:d.athlete||'',xfer,prod,ratio,thrLevel:lvT,liftLevel:lvL,autoTheory:PBL.theoryOf(lvL,ratio),pos:d.pos||'',play:d.playlevel||'',hand:d.hand||'',
@@ -1890,14 +1891,16 @@ function renderBuild(){
   const box=$('bview'); box.hidden=false; box.textContent='';
   if(A.str.on&&!SDATA) loadStrength(); if(!PAT) loadPattern();
   const c=bctx(), Q=bq(); const ds=host.dataset;
-  if(!Q.start) Q.start=(A.startDate&&!Q.applied)?A.startDate:ymd(new Date());
+  if(!Q.start){const t0=ymd(new Date()), s0=day0(A.startDate); Q.start=(s0&&s0>=day0(t0))?A.startDate:t0}
   if(Q.days==null) Q.days=PBL.daysFor(c.play);
   if(Q.mound==null) Q.mound=PBL.isPitcher(c.pos);
   root.querySelector('.wrap').classList.toggle('adv',coachOpen); $('coach').hidden=!coachOpen; $('coachBtn').textContent=coachOpen?'Close advanced coach tools':'Advanced coach tools'; if(coachOpen) renderCoach(weeksAvail(),planWeeks().length);
   let qn=0; const card=(title,sub)=>{const k=el('section','qc'); k.append(el('div','qh',(++qn)+'. '+title)); if(sub) k.append(el('div','qs',sub)); box.append(k); return k};
   const eff=effective(c,Q), level=Q.thrLevel?Number(Q.thrLevel):(c.thrLevel||1), theory=Q.theory||c.autoTheory||'TL';
   // what we already know
-  {const k=el('section','qc'); k.append(el('div','qh','What we already know'));
+  {const k=el('section','qc'), hr=el('div','qhr'); hr.append(el('div','qh','What we already know'));
+   if(Object.keys(Q).some(x=>x!=='start'&&x!=='days'&&x!=='mound')){const so=el('button','btn sm','Start over'); so.type='button'; so.addEventListener('click',()=>{if(confirm('Clear these answers and start a new plan build? The plan already applied stays as it is until you apply a new one.')){A.build={}; changed()}}); hr.append(so)}
+   k.append(hr);
    const g=el('div','qknown'), kv=(a,b)=>{const x=el('div','qk'); x.append(el('span',null,a),el('b',null,b||'—')); g.append(x)};
    kv('Athlete',c.name); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · ')); kv('Throwing arm',c.hand);
    kv('Throwing level',c.thrLevel?'Level '+c.thrLevel+' · transference '+c.xfer.toFixed(1):'Not available: no transference score'); kv('Lifting level',c.liftLevel?'Level '+c.liftLevel+' · production '+c.prod.toFixed(1):'Not available: no production score');
@@ -2003,7 +2006,7 @@ function renderBuild(){
 }
 function renderNotes(){
   const box=$('nview'); box.hidden=false; box.textContent='';
-  const h=el('div','nh'); h.append(el('h3',null,'Notes'),el('span','note','Visible to every coach working with this athlete.')); box.append(h);
+  const h=el('div','nh'); h.append(el('h3',null,'Notes'),el('span','note','Saved with this athlete\u2019s plan.')); box.append(h);
   const ta=el('textarea','nta'); ta.rows=4; ta.placeholder='Add a note about this athlete…'; box.append(ta);
   const bar=el('div','qrow'), add=el('button','btn primary','Add note'); add.type='button'; add.addEventListener('click',()=>{const t=ta.value.trim(); if(!t){ta.focus(); return} (A.notes=A.notes||[]).unshift({id:rid(),at:Date.now(),by:host.dataset.coach||'',text:t}); changed()}); bar.append(add); box.append(bar);
   const list=A.notes||[]; if(!list.length) box.append(el('div','qs','No notes yet.'));
