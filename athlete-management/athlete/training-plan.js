@@ -247,7 +247,7 @@ button.rr:hover{background:var(--sunk)}
 .mcnb:disabled{opacity:.3;cursor:default}
 .mcg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .mcwd{font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;padding:2px 0}
-.mcd{display:flex;flex-direction:column;gap:3px;min-height:92px;padding:6px 6px 5px;text-align:left;background:transparent;border:1px solid #1d2428;border-top:3px solid #1d2428;color:#d4d9dc;cursor:pointer;min-width:0}
+.mcd{display:flex;flex-direction:column;gap:3px;min-height:104px;padding:6px 6px 5px;text-align:left;background:transparent;border:1px solid #1d2428;border-top:3px solid #1d2428;color:#d4d9dc;cursor:pointer;min-width:0}
 .mcd.build{background:#0d1013;border-color:#1d2428;border-top-color:#56b7e6}
 .mcd.mound{background:#0d1013;border-color:#1d2428;border-top-color:#e10600}
 .mcd.off{background:#0d1013;border-color:#1d2428;border-top-color:#5b6770}
@@ -265,7 +265,9 @@ button.rr:hover{background:var(--sunk)}
 .mcd.mound .mctg.thr{border-left-color:#e10600}
 .mcd.off .mctg.thr{border-left-color:#5b6770}
 .mctg.str{border-left-color:#88e0c6;color:#bfeee0}
-.mcb{display:flex;flex-wrap:wrap;gap:3px;margin-top:auto;align-items:center}
+.mcb{display:flex;flex-wrap:wrap;gap:3px;align-items:center;margin-top:auto}
+.mcm{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:34px}
+.mcm .mcsc{font:700 21px/1 var(--mono);padding:7px 13px;min-width:44px;text-align:center}
 .mcsc{font:600 10px var(--mono);padding:1px 5px;color:#fff;background:rgba(86,183,230,calc(.15 + var(--h,0)*.55))}
 .mcsc.hot{background:rgba(225,6,0,calc(.35 + var(--h,0)*.5))}
 .mcfl{font:700 9.5px var(--body);letter-spacing:.04em;text-transform:uppercase;padding:1px 5px}
@@ -295,7 +297,7 @@ button.rr:hover{background:var(--sunk)}
 .mcdg{display:grid;grid-template-columns:110px minmax(0,1fr);gap:5px 12px;font-size:13px;line-height:1.35}
 .mcdk{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px}
 .mcdv{color:#e6eaec;overflow-wrap:anywhere}
-@media (max-width:640px){.mcd{min-height:46px;padding:3px}.mctg,.mcwk,.mcfl{display:none}.mcb{gap:2px}.mcsc{padding:0 3px}.mcn1{font-size:12px;min-width:18px;height:18px;line-height:18px}.mcdg{grid-template-columns:90px minmax(0,1fr)}.mct{min-width:0;flex:1}}
+@media (max-width:640px){.mcm{min-height:22px}.mcm .mcsc{font-size:12px;padding:3px 6px;min-width:22px}.mcd{min-height:64px;padding:3px}.mctg,.mcwk,.mcfl{display:none}.mcb{gap:2px}.mcsc{padding:0 3px}.mcn1{font-size:12px;min-width:18px;height:18px;line-height:18px}.mcdg{grid-template-columns:90px minmax(0,1fr)}.mct{min-width:0;flex:1}}
 .mch .seg{margin-left:auto}
 .seg.sm .segb{padding:6px 12px;font-size:12px}
 .mcd.lf{background:#0d1013;border-color:#1d2428;border-top-color:#88e0c6}
@@ -2328,12 +2330,15 @@ function renderMapCal(weeks){
       const first1=d.getDate()===1;
       if(showT&&(info.newBlock||first1)) c.append(el('span','mctg thr',mapPhase(info.w)));
       if(showL&&info.str&&(info.str.start||first1)) c.append(el('span','mctg str',info.str.fam+' P'+info.str.ph+(info.str.fam!=='ML'?' + prep':'')));
+      // the throwing score sits in the middle of the day, the flags and the lifting focus along the bottom
+      const mid=el('span','mcm');
+      if(showT&&info.sc&&!info.w.off){const s=el('span','mcsc'+(info.sc>=7?' hot':''),String(Math.round(info.sc))); s.style.setProperty('--h',Math.min(info.sc/12,1).toFixed(3)); s.title='Day score '+info.sc.toFixed(2); mid.append(s)}
+      c.append(mid);
       const bt=el('span','mcb');
-      if(showL&&(info.focus||info.sets>0)){const s=el('span','mcsc lf',info.focus?mapFocus(info.focus):'Lifting'); s.title='Lifting: '+(info.focus||'custom day')+(info.sets?' \u00b7 '+info.sets+' working sets':''); bt.append(s)}
-      if(showT&&info.sc&&!info.w.off){const s=el('span','mcsc'+(info.sc>=7?' hot':''),String(Math.round(info.sc))); s.style.setProperty('--h',Math.min(info.sc/12,1).toFixed(3)); s.title='Day score '+info.sc.toFixed(2); bt.append(s)}
       if(info.test&&info.day===1) bt.append(el('span','mcfl tst','Retest'));
       if(!A.deload[info.w.n]&&info.w.sugDl&&info.day===1) bt.append(el('span','mcfl dls','Deload'));
       if(info.comp) bt.append(el('span','mcfl comp','Comp'));
+      if(showL&&(info.focus||info.sets>0)){const s=el('span','mcsc lf',info.focus?mapFocus(info.focus):'Lifting'); s.title='Lifting: '+(info.focus||'custom day')+(info.sets?' \u00b7 '+info.sets+' working sets':''); bt.append(s)}
       c.append(bt)
     } else if(A.compDate===k){ const bt=el('span','mcb'); bt.append(el('span','mcfl comp','Comp')); c.append(bt) }
     c.addEventListener('click',()=>{MCS.sel=k; if(om) MCS.month=ymd(new Date(d.getFullYear(),d.getMonth(),1,12)); redraw()});
