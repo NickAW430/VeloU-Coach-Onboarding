@@ -1544,7 +1544,7 @@ function liftDragStart(e,kind,info,srcEl){
 const TMAX=32;
 const ABBR=[[/\s*\/\s*/g,'/'],[/\[Vertical\]/g,'[V]'],[/\[Horizontal\]/g,'[H]'],[/Deceleration/gi,'Decel'],[/Acceleration/gi,'Accel'],[/Rotation/gi,'Rot'],[/\(second exposure\)/i,'(2nd)'],
   [/resisted speed\/heavy push/i,'Resisted/Heavy'],[/overhead\/throw/i,'OH/Throw'],[/Horizontal/gi,'Horiz'],[/Vertical/gi,'Vert'],[/Posterior/gi,'Post'],[/Lower prep/i,'Low Prep'],[/Upper prep/i,'Up Prep'],
-  [/Upper/g,'Up'],[/Lower/g,'Low'],[/Resisted/gi,'Resist'],[/Dynamic/gi,'Dyn'],[/Sequencing/gi,'Seq'],[/Stability/gi,'Stab'],[/Overhead/gi,'OH']];
+  [/Upper/g,'Up'],[/Lower/g,'Low'],[/Resisted/gi,'Resist'],[/Dynamic/gi,'Dyn'],[/Sequencing/gi,'Seq'],[/Stability/gi,'Stab'],[/Overhead/gi,'OH'],[/\s-\s/g,' ']];
 function abbrTitle(t){let x=String(t||''); for(const [re,to] of ABBR){ if(x.length<=TMAX) break; x=x.replace(re,to)} return x.length>TMAX?x.slice(0,TMAX-1)+'…':x}
 function renderBox(l,dt,ix,ctx){
   const cfg=LCFG[l], {days,hasInt,hasTmp,cols,needSt,st,today}=ctx, rowsOf=ctx.rowsOf;
