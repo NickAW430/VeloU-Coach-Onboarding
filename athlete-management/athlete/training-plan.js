@@ -190,6 +190,12 @@ button.rr:hover{background:var(--sunk)}
 .lst span{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
 .lch{color:var(--muted);font-size:13px}
 .lsec .ldays{padding:2px 14px 14px}
+.lgrid{display:grid;grid-template-columns:repeat(3,minmax(250px,1fr));gap:10px;overflow-x:auto;align-items:stretch}
+.ldcell{background:#101417;border:1px solid var(--line);border-top:3px solid #3a444a;padding:10px 12px;font:700 16px/1.2 var(--body);letter-spacing:.04em;color:#fff;text-align:center;user-select:none}
+.ldcell.today{border-top-color:var(--seam)}
+.ldcell.lediting{cursor:grab;touch-action:none}
+.lbox .lh1{font:600 10.5px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--heat)}
+.lgrid .lbox.today{border-color:var(--line);box-shadow:none}
 .lh2.off{color:var(--muted);font-weight:600}
 .lline{border-top:1px solid rgba(255,255,255,.09);margin:0 12px}
 .lexp{display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:9px 12px;color:var(--muted);font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:left;width:100%}
@@ -1501,6 +1507,7 @@ const lnPack=d=>d?{fam:d.fam,ph:d.ph,lv:d.lv,title:d.title,rows:d.rows.map(r=>Ob
 function lnEnsure(l,dt){const S=LS(l), dk=ymd(dt); if(!S[dk]) S[dk]=lnPack(lnDay(l,dt)); return S[dk]}
 function lnEdit(l,dt,fn){fn(lnEnsure(l,dt)); changed()}
 function lnSwap(l,a,b){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa; changed()}
+function lnSwapAll(a,b){for(const l of ['prep','pat','throw','lift','corr']){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa} changed()}
 function lnMove(l,from,to){
   const src=lnEnsure(l,from.dt), dst=lnEnsure(l,to.dt), row=src.rows.splice(from.i,1)[0]; if(!row) return;
   let at=to.i; if(src===dst&&from.i<at) at--; dst.rows.splice(Math.max(0,Math.min(at,dst.rows.length)),0,row); if(!dst.title||/^(Rest day|No )/.test(dst.title)) dst.title='Custom day'; changed()}
@@ -1510,6 +1517,7 @@ const SVGI={
   grip:'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>'};
 function liftIcon(cls,svg,label,fn){const b=el('button',cls); b.type='button'; b.innerHTML=svg; b.setAttribute('aria-label',label); b.title=label; if(fn) b.addEventListener('click',fn); return b}
 function liftDrop(kind,info,t){
+  if(kind==='col'){ if(t.box&&t.box._dt) lnSwapAll(info.dt,t.box._dt); return }
   if(kind==='day'){ if(t.box&&t.box._dt) lnSwap(info.lane,info.dt,t.box._dt); return }
   const from={dt:info.dt,i:info.i};
   if(t.row){const dt=dvDates().find(d=>ymd(d)===t.row.dataset.dk); if(dt) lnMove(info.lane,from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
@@ -1522,8 +1530,9 @@ function liftDragStart(e,kind,info,srcEl){
   $('cal').append(gh); srcEl.classList.add('ldrag'); liftDrag={t:null};
   try{h.setPointerCapture(e.pointerId)}catch(_){}
   const clear=()=>root.querySelectorAll('.lover,.lbefore,.lafter').forEach(n=>n.classList.remove('lover','lbefore','lafter'));
-  const mark=(x,y)=>{clear(); liftDrag.t=null; const els=root.elementsFromPoint(x,y), row=els.find(n=>n.classList&&n.classList.contains('lrow')&&n!==srcEl&&!n.classList.contains('lhead')&&!n.classList.contains('linfo')&&n.dataset.lane===info.lane), box=els.find(n=>n.classList&&n.classList.contains('lbox')&&n.dataset.lane===info.lane);
-    if(kind==='day'){ if(box&&box!==srcEl){box.classList.add('lover'); liftDrag.t={box}} }
+  const mark=(x,y)=>{clear(); liftDrag.t=null; const els=root.elementsFromPoint(x,y), row=els.find(n=>n.classList&&n.classList.contains('lrow')&&n!==srcEl&&!n.classList.contains('lhead')&&!n.classList.contains('linfo')&&n.dataset.lane===info.lane), box=els.find(n=>n.classList&&n.classList.contains('lbox')&&(kind==='col'||n.dataset.lane===info.lane));
+    if(kind==='col'){ const tb=els.find(n=>n._dt&&n!==srcEl&&n._dt.toDateString()!==info.dt.toDateString()); if(tb){tb.classList.add('lover'); liftDrag.t={box:tb}} }
+    else if(kind==='day'){ if(box&&box!==srcEl){box.classList.add('lover'); liftDrag.t={box}} }
     else if(row){const r2=row.getBoundingClientRect(), after=y>r2.top+r2.height/2; row.classList.add(after?'lafter':'lbefore'); liftDrag.t={row,after}}
     else if(box){box.classList.add('lover'); liftDrag.t={box}}};
   const move=ev=>{gh.style.left=(ev.clientX-dx)+'px'; gh.style.top=(ev.clientY-dy)+'px'; if(ev.clientY<70) window.scrollBy(0,-14); else if(ev.clientY>window.innerHeight-70) window.scrollBy(0,14); mark(ev.clientX,ev.clientY)};
@@ -1541,21 +1550,10 @@ function fitTitles(){
     if(t.scrollWidth>t.clientWidth){let s2=full; for(const [re,to] of ABBR) s2=s2.replace(re,to); t.textContent=s2; while(t.scrollWidth>t.clientWidth&&fs>9){fs-=0.5; t.style.fontSize=fs+'px'}}
   }
 }
-function renderSection(l){
-  const cfg=LCFG[l], bd=boardObj(), sec=el('section','lsec'), shut=!!(VS.coll&&VS.coll[l]);
-  const sh=el('button','lsh'); sh.type='button'; sh.setAttribute('aria-expanded',String(!shut));
-  const sl=el('span','lst'); sl.append(el('b',null,cfg.name),el('span',null,cfg.sub(bd)||'No program on the Program Board')); sh.append(sl,el('span','lch',shut?'▾':'▴'));
-  sh.addEventListener('click',()=>{VS.coll=VS.coll||{}; VS.coll[l]=!shut; render()}); sec.append(sh);
-  if(shut) return sec;
-  const st=day0(A.startDate), today=new Date().toDateString(), g=el('div','ldays'), dts=dvDates(), needSt=l!=='corr';
-  const days=dts.map(dt=>(st||!needSt)?lnDay(l,dt):null);
-  const rowsOf=d=>d&&!d.out&&!d.loading?d.rows:[];
-  const hasInt=days.some(d=>rowsOf(d).some(r=>r.int)), hasTmp=days.some(d=>rowsOf(d).some(r=>r.tempo));
-  const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ');
-  dts.forEach((dt,ix)=>{
+function renderBox(l,dt,ix,ctx){
+  const cfg=LCFG[l], {days,hasInt,hasTmp,cols,needSt,st,today}=ctx, rowsOf=ctx.rowsOf;
     const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk; box.dataset.lane=l;
-    const dow=dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase(), hd=el('div','ldh'), info=d&&d.day?' - Day '+d.day:'';
-    hd.append(el('div','lh1',dow+' '+(dt.getMonth()+1)+'/'+dt.getDate()+info));
+    const hd=el('div','ldh'); hd.append(el('div','lh1',cfg.name)); hd.title=(cfg.sub(boardObj())||'');
     let t2, off=false;
     if(needSt&&!st) {t2='Set a start date in the Programming tab.'; off=true}
     else if((l==='lift'||l==='prep')&&!SDATA) {t2='Loading…'; off=true}
@@ -1567,8 +1565,8 @@ function renderSection(l){
     const real=d&&!d.out&&!d.loading;
     if(coachOpen&&real){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt,lane:l},box)})}
     box.append(hd,el('div','lline'));
-    const open=coachOpen||liftOpen.has(l+':'+dk), rows=rowsOf(d);
-    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(l+':'+dk):liftOpen.add(l+':'+dk); VS.open=[...liftOpen]; render()}); box.append(x)}
+    const open=coachOpen||liftOpen.has(l), rows=rowsOf(d);
+    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(l):liftOpen.add(l); VS.open=[...liftOpen]; render()}); box.append(x)}
     if(open&&(rows.length||(coachOpen&&real))){
       const list=el('div','lrws'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int')); if(hasTmp) hr.append(el('span','n','Tempo'));
@@ -1588,15 +1586,24 @@ function renderSection(l){
       if(coachOpen&&real){const bar=el('div','lbar'), ad=el('button','btn sm','+ Add exercise'); ad.type='button'; ad.addEventListener('click',()=>lnEdit(l,dt,o=>{o.rows.push({id:rid(),slot:'',blk:'+',name:'New exercise',sets:'',reps:'',int:'',tempo:'',ball:''}); if(!o.title||/^(Rest day|No )/.test(o.title)) o.title='Custom day'})); bar.append(ad);
         if(d.custom){const rs=el('button','btn sm','Reset to program'); rs.type='button'; rs.addEventListener('click',()=>{delete LS(l)[dk]; changed()}); bar.append(rs)} list.append(bar)}
       box.append(list)}
-    g.append(box)});
-  sec.append(g); return sec}
-
+    return box}
 function renderAll(){
   const cal=$('cal'); cal.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); dvBar();
   {const dl=$('edList'); if(dl&&!dl.childNodes.length){const seen=new Set(), add=n=>{const v=String(n||'').replace('*',' · ').trim(); if(v&&!seen.has(v)){seen.add(v); const o=el('option'); o.value=v; dl.append(o)}};
     for(const n of ((SDATA&&SDATA.ex)||[])) add(liftName(tidyN(n))); for(const q of D.drills) add(q[0]); for(const k in ((PAT&&PAT.blocks)||{})) for(const n of PAT.blocks[k].drills) add(n.replace(/\s*\(\s*\d+\s*[x×]\s*\d+[^)]*\)\s*$/i,''))}}
-  const giant=el('div','lgiant'); for(const l of ['prep','pat','throw','lift','corr']) giant.append(renderSection(l));
-  cal.append(giant); requestAnimationFrame(fitTitles)}
+  const dts=dvDates(), st=day0(A.startDate), today=new Date().toDateString(), grid=el('div','lgrid'), rowsOf=d=>d&&!d.out&&!d.loading?d.rows:[];
+  dts.forEach(dt=>{
+    const h=el('div','ldcell'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); h._dt=dt; h.dataset.col='1';
+    h.append(el('span',null,dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+' • '+(dt.getMonth()+1)+'/'+dt.getDate()));
+    if(coachOpen){h.title='Hold and drag onto another day to swap the whole day'; h.addEventListener('pointerdown',e=>liftDragStart(e,'col',{dt},h))}
+    grid.append(h)});
+  for(const l of ['prep','pat','throw','lift','corr']){
+    const needSt=l!=='corr', days=dts.map(dt=>(st||!needSt)?lnDay(l,dt):null);
+    const hasInt=days.some(d=>rowsOf(d).some(r=>r.int)), hasTmp=days.some(d=>rowsOf(d).some(r=>r.tempo));
+    const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ');
+    const ctx={days,hasInt,hasTmp,cols,needSt,st,today,rowsOf};
+    dts.forEach((dt,ix)=>grid.append(renderBox(l,dt,ix,ctx)))}
+  const giant=el('div','lgiant'); giant.append(grid); cal.append(giant); requestAnimationFrame(fitTitles)}
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
