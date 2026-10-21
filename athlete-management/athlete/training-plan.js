@@ -222,6 +222,58 @@ button.rr:hover{background:var(--sunk)}
 .lcr{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:2px 0}
 .lcr b{font:600 11.5px var(--mono);text-align:right;overflow-wrap:anywhere}
 .lbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.lflag{box-shadow:inset 2px 0 0 #ffb347}
+.lwarn{color:#ffb347;font-weight:700}
+.bk.tst{background:#3a2f12;border-color:#ffb347;color:#ffd48a}
+.wrap.bv>*:not(#bview):not(#coach):not(.bar){display:none !important}
+.wrap.bv:not(.adv) #boardBtn,.wrap.bv:not(.adv) #pdfBtn,.wrap.bv:not(.adv) #expBtn,.wrap.bv:not(.adv) .filebtn{display:none}
+.wrap.nv>*:not(#nview){display:none !important}
+.wrap.mv>*:not(.top):not(#timeline):not(#lanes){display:none !important}
+.wrap.mv #lnEd{display:none !important}
+#bview,#nview{display:flex;flex-direction:column;gap:12px;border:0;padding:0;background:none}
+#bview[hidden],#nview[hidden]{display:none !important}
+.qc{border:1px solid var(--line);background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.qh{font:600 15px/1.3 var(--body);color:#fff}
+.qh2{font:600 11px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--heat);margin-top:6px}
+.qs{font-size:12px;line-height:1.4;color:var(--muted)}
+.qopts{display:flex;flex-wrap:wrap;gap:8px}
+.qo{background:transparent;border:1px solid var(--line);color:#d4d9dc;padding:8px 12px;font:600 13px var(--body);cursor:pointer;text-align:left}
+.qo:hover{border-color:#4a5258;color:#fff}
+.qo.on{border-color:var(--seam);background:rgba(225,6,0,.14);color:#fff}
+.qo small{display:block;font:400 11px/1.3 var(--body);color:var(--muted);margin-top:2px;max-width:240px}
+.qrow{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.qf{display:flex;flex-direction:column;gap:4px;min-width:150px}
+.qfl{font:500 11px var(--mono);letter-spacing:.04em;color:var(--muted)}
+.qdate,.qsel,.nta{background:#000;border:1px solid var(--line);padding:8px 10px;color:#fff;font:500 14px var(--body);min-height:40px}
+.nta{width:100%;resize:vertical;font-weight:400;line-height:1.4}
+.qchks{display:flex;flex-direction:column;gap:6px}
+.qchk{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.35;color:#e6eaec}
+.qchk input{margin-top:2px}
+.qmsg{border-left:3px solid var(--heat);background:#0a1418;padding:10px 12px;font-size:13px;line-height:1.45;color:#dfe7ea}
+.qmsg.qwarn{border-left-color:#ffb347;background:#171108}
+.qknown{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.qk{background:var(--surface);padding:9px 12px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.qk span{font:500 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.qk b{font:600 13.5px/1.3 var(--body);overflow-wrap:anywhere}
+.qsug{border-color:var(--seam)}
+.qtbl{display:flex;flex-direction:column}
+.qtr{display:grid;grid-template-columns:110px minmax(0,1fr) 150px;gap:8px;padding:6px 0;border-top:1px solid #1d2428;font-size:13px}
+.qt1{font:600 11px var(--mono);color:var(--muted)}
+.qt3{font:500 12px var(--mono);color:var(--muted);text-align:right}
+.qlifts{display:flex;flex-direction:column;gap:6px}
+.qlift{display:flex;flex-direction:column;gap:2px;text-align:left;background:transparent;border:1px solid var(--line);padding:9px 12px;color:#d4d9dc;cursor:pointer}
+.qlift b{font:600 13px var(--body);color:#fff}
+.qlift span{font-size:11px;color:var(--muted)}
+.qlift.on{border-color:var(--seam);background:rgba(225,6,0,.12)}
+.qwhy{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:1.4;color:#dfe7ea}
+.nh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.nh h3{margin:0}
+.ncard{border:1px solid var(--line);background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.nm{font:500 11px var(--mono);color:var(--muted)}
+.nm b{color:#fff}
+.nt{white-space:pre-wrap;font-size:14px;line-height:1.5}
+.nact{display:flex;gap:8px}
+@media (max-width:640px){.qtr{grid-template-columns:1fr}.qt3{text-align:left}}
 .lgrp{font:600 9.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--heat);padding:8px 0 2px}
 .lsub{font:400 10px var(--mono);color:var(--muted)}
 .lrow.ledit{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:6px 0}
@@ -662,6 +714,8 @@ const HTML=`<div class="wrap">
       <button class="btn sm" id="nextW" type="button" aria-label="Next week">&rarr;</button>
     </div>
   </div>
+  <section class="panel" id="bview" hidden></section>
+  <section class="panel" id="nview" hidden></section>
   <div class="dvbar" id="dvbar" hidden></div>
   <main id="cal"></main>
 </div>
@@ -726,6 +780,115 @@ const CKEY='velou.drills.custom', LIBV={}, MOUNTS=new Set();
 const loadCustom=()=>{try{return JSON.parse(localStorage.getItem(CKEY)||'[]')||[]}catch(e){return []}};
 const saveCustom=l=>{try{localStorage.setItem(CKEY,JSON.stringify(l))}catch(e){}};
 const libHas=n=>{const k=String(n).trim().toLowerCase(); return D.drills.some(d=>String(d[0]).trim().toLowerCase()===k)||loadCustom().some(d=>d.name.toLowerCase()===k)};
+// ---- Plan Build logic (pure functions, no DOM) ----
+const PBL=(()=>{
+  const SEQ=['REVO','REIN','ENVO','ENIN','WATT','INT','REF','ENG'];
+  const num=x=>{const n=parseFloat(String(x==null?'':x).replace(/[,%\s]/g,''));return isNaN(n)?null:n};
+  const iso=ms=>new Date(ms).toISOString().slice(0,10);
+  const ms=s=>Date.parse(s+'T12:00:00Z');
+  const addDays=(s,n)=>iso(ms(s)+n*864e5);
+  const weeksBetween=(a,b)=>Math.floor((ms(b)-ms(a))/(7*864e5));
+  // levels
+  const xferLevel=s=>{s=num(s); return s==null?null:s<77.5?1:s<87.5?2:3};
+  const prodLevel=s=>{s=num(s); return s==null?null:s<77.5?1:s<=87.5?2:3};
+  // training theory: level 1 Movement Literacy, level 2 Tension Literacy, level 3 by the concentric:eccentric impulse ratio
+  const theoryOf=(lvl,ratio)=>{ if(lvl==null) return null; if(lvl===1) return 'ML'; if(lvl===2) return 'TL'; const r=num(ratio); if(r==null) return 'FC'; return r>3.1?'FC':r>=2.9?'AP':'AC'};
+  const ratioNote=r=>{r=num(r); if(r==null) return ''; if(r>3.1&&r<=3.2) return 'Ratio '+r.toFixed(2)+' is in the 3.1 to 3.2 transition zone, so Force Control stays until it settles into 2.9 to 3.1.'; if(r>=2.8&&r<2.9) return 'Ratio '+r.toFixed(2)+' is in the 2.8 to 2.9 transition zone, treated as a concentric deficit (Acceleration) until it reaches 2.9.'; return ''};
+  const daysFor=playLevel=>/college|pro/i.test(playLevel||'')?5:6;
+  const isPitcher=pos=>/pitcher|2-?way/i.test(pos||'');
+  // where the standard 32 week timeline sits when this many weeks remain before competition
+  const wbcIdx=w=>w>28?0:w>24?1:w>20?2:w>16?3:w>12?4:w>8?5:w>4?6:7;
+  function season(N){
+    if(N==null) return 'Off-season (no competition date)';
+    if(N<=0) return 'Competition date has passed';
+    if(N<=4) return 'Competition';
+    if(N<=12) return 'Pre-season';
+    if(N<=20) return 'Late off-season';
+    return 'Off-season';
+  }
+  function merge(blocks){const o=[]; for(const b of blocks){const l=o[o.length-1]; if(l&&l.code===b.code&&!b.deload&&!l.deload&&b.pw0==null&&l.pw0==null) l.weeks+=b.weeks; else o.push(Object.assign({},b))} return o}
+  // throwing phases for the weeks left after any deload or return to throw
+  function phases(o){
+    const lens=[]; let R=o.R; while(R>0){const l=Math.min(4,R); lens.push(l); R-=l}
+    const maxIdx=o.maxIdx==null?7:o.maxIdx, why=[], idxs=[];
+    const far=o.N==null||(o.N-o.t0)>32;
+    lens.forEach((l,k)=>{ if(far) idxs.push(Math.min(k,maxIdx)); else idxs.push(Math.min(wbcIdx(o.N-(o.t0+lens.slice(0,k).reduce((a,b)=>a+b,0))),maxIdx)) });
+    if(far) why.push(o.N==null?'No competition date, so the plan starts at the beginning of the off-season sequence.':'Competition is more than 32 weeks after this block, so the first phases of the off-season sequence are used.');
+    else why.push('Phases are placed on the standard timeline so Integrate, Refine and Engage land in the final 12 weeks before competition.');
+    if(o.onramp&&idxs.length&&idxs[0]>0){ idxs[0]=0; why.push('On-ramp: the first phase is Restructure Volume. The later phases catch up to the timeline, so earlier phases are skipped.') }
+    if(o.maxIdx!=null&&o.maxIdx<7) why.push(o.maxIdx===0?'Standing throws are restricted, so only Restructure Volume (seated and kneeling work) is used.':'No mound access, so the mound phases (Integrate, Refine, Engage) are not used.');
+    const blocks=merge(lens.map((l,k)=>({code:SEQ[idxs[k]],weeks:l})));
+    return {blocks,why};
+  }
+  // lifting block patterns for a window
+  function liftPatterns(W){
+    if(W>=12) return [[8,4],[4,4,4],[4,8],[2,2,8]];
+    if(W===8) return [[4,4],[8]];
+    const o=[]; let r=W; while(r>=4){o.push(4); r-=4} if(r>=2) o.push(r); else if(r>0){ if(o.length) o[o.length-1]+=r; else o.push(r) }
+    return [o];
+  }
+  function phaseLabels(pat,startP,kind){
+    // a new training theory starts at P1 and moves to P2; a continuing one starts where it left off
+    return pat.map((w,i)=>{
+      if(kind==='1,1,2') return Math.min(3,startP+(i>=2?1:0));
+      if(kind==='1,2,2') return Math.min(3,startP+(i>=1?1:0));
+      return Math.min(3,startP+(i>=1?1:0));
+    });
+  }
+  function lifting(o){
+    const pats=liftPatterns(o.W), opts=[];
+    for(const pat of pats){
+      const key=pat.join('+'), kind=key==='2+2+8'?'1,1,2':key==='4+4+4'?'1,2,2':'1,2';
+      const ph=phaseLabels(pat,o.startP,kind);
+      opts.push({key,pat,blocks:pat.map((w,i)=>({weeks:w,fam:o.fam,ph:String(ph[i])}))});
+    }
+    // choose
+    let rec=0; const why=[];
+    const mound=o.blocks.some(b=>['INT','REF','ENG'].includes(b.code));
+    const idx=k=>Math.max(0,opts.findIndex(x=>x.key===k));
+    if(o.W<12){ rec=0; why.push(o.W<8?'A short window runs as one block per four weeks, ending on competition.':'The window is shorter than 12 weeks, so blocks run four weeks each.') }
+    else if(o.rtt||o.restricted){ rec=idx('2+2+8'); why.push('Return to throw or lifting restrictions: two short blocks first so the plan can be re-checked as restrictions clear, then an eight week block.') }
+    else if(mound||(o.N!=null&&o.N<=12)){ rec=idx('4+4+4'); why.push('Throwing intensity climbs into the mound phases, so lifting is re-diagnosed every four weeks.') }
+    else if(o.liftLevel!=null&&o.liftLevel<=2){ rec=idx('8+4'); why.push('Throwing load is still building and the athlete needs accumulation, so the first block runs eight weeks, then four.') }
+    else { rec=idx('4+8'); why.push('Throwing load is still building. Four weeks to establish the theory, then an eight week block at P2.') }
+    return {options:opts,rec,why};
+  }
+  function build(I){
+    const why=[], out={warn:[]};
+    const N0=I.comp?weeksBetween(I.start,I.comp):null;
+    let N=N0; if(N!=null&&N<=0){ out.warn.push('The competition date is on or before the start date, so it was ignored.'); N=null }
+    const W=(N!=null&&N<12)?Math.max(1,N):12;
+    out.N=N; out.W=W; out.season=season(N0); out.end=addDays(I.start,W*7-1);
+    let blocks=[], t=0;
+    const maxIdx=I.maxIdx==null?(I.mound===false?4:7):I.maxIdx;
+    const status=I.status;
+    if(status==='rtt'&&I.rtt){
+      const pre=Math.max(0,Math.min(W,Math.round((ms(I.rtt.startDate||I.start)-ms(I.start))/(7*864e5))));
+      if(pre>0){ blocks.push({code:'OFF',weeks:pre,deload:1,pcode:'REVO'}); why.push('The return to throw begins in week '+(pre+1)+'. Until then the athlete is off throwing, with patterning only.') }
+      const left=Math.max(0,I.rtt.weeks-(I.rtt.startWeek-1)), take=Math.min(left,W-pre);
+      if(take>0){ blocks.push({code:I.rtt.code,weeks:take,pw0:I.rtt.startWeek-1}); why.push('Return to throw: '+I.rtt.label+' from week '+I.rtt.startWeek+' of '+I.rtt.weeks+'.') }
+      t=pre+take;
+      const rem=W-t;
+      if(rem>0){ const p=phases({R:rem,N:null,t0:0,maxIdx,onramp:false}); blocks=blocks.concat(p.blocks); why.push('After the return to throw the athlete restarts the off-season sequence at Restructure Volume.') }
+    } else {
+      let d=0;
+      if(status==='deload'){ d=Math.max(1,Math.min(4,Number(I.deloadWeeks)||1)); d=Math.min(d,W); blocks.push({code:'OFF',weeks:d,deload:1,pcode:'REVO'}); why.push('Deload: '+d+' week'+(d>1?'s':'')+' of patterning only, no throwing.') }
+      const p=phases({R:W-d,N,t0:d,maxIdx,onramp:status==='onramp'}); blocks=blocks.concat(p.blocks); why.push(...p.why);
+    }
+    out.blocks=merge(blocks); out.throwWhy=why;
+    // lifting
+    const startP=I.cont?Math.max(1,Math.min(3,I.cont.ph+(I.cont.advance?1:0))):1;
+    const L=lifting({W,fam:I.theory,startP,blocks:out.blocks,rtt:status==='rtt',restricted:!!I.restricted,liftLevel:I.liftLevel,N});
+    out.lift=L;
+    out.liftWhy=L.why.slice();
+    if(I.cont) out.liftWhy.push('Continuing '+I.theory+' from P'+I.cont.ph+': '+(I.cont.advance?'advancing to P'+startP:'holding at P'+startP)+'.'); else out.liftWhy.push('A new training theory starts at P1 and moves to P2.');
+    out.tests=[]; for(let w=4;w<=W;w+=4) out.tests.push(w);
+    if(!out.tests.length||out.tests[out.tests.length-1]!==W) out.tests.push(W);
+    return out;
+  }
+  return {SEQ,num,xferLevel,prodLevel,theoryOf,ratioNote,daysFor,isPitcher,wbcIdx,season,build,addDays,weeksBetween,liftPatterns};
+})();
+
 function mount(host){
 const root=host.shadowRoot;
 const $=id=>root.getElementById(id);
@@ -790,8 +953,8 @@ function planWeeks(){
     const p=byCode(b.code), off=b.code==='OFF'; bi++;
     for(let i=1;i<=b.weeks;i++){
       const shf=b.shift==null||b.shift===''?null:Number(b.shift);
-      if(off) o.push({n:o.length+1,bi,code:'OFF',pw:i,off:true,phase:'Off week',short:'OFF'});
-      else if(p) o.push({n:o.length+1,bi,code:p.code,pw:((i-1)%p.weeks)+1,rep:i>p.weeks?Math.floor((i-1)/p.weeks)+1:0,shift:shf,key:p.uses?D.map[p.code+lvl()]:p.code,rk:p.code+':',uses:p.uses,pLv:b.pLv||'',pFoc:b.pFoc||'',sFam:b.sFam||'',sPh:b.sPh||'',sSplit:b.sSplit||'',focus:(p.uses&&b.focus)||A.focus,mound:MOUND.includes(p.code),phase:phaseName(p),short:p.uses?p.code:p.code.replace('THR\u2022','').replace(/\u2022/g,' ')});
+      if(off) o.push({n:o.length+1,bi,code:'OFF',pw:i,off:true,deload:b.deload?1:0,pcode:b.pcode||'',focus:A.focus,phase:b.deload?'Deload':'Off week',short:'OFF'});
+      else if(p) o.push({n:o.length+1,bi,code:p.code,pw:((i-1+(Number(b.pw0)||0))%p.weeks)+1,rep:(i+(Number(b.pw0)||0))>p.weeks?Math.floor((i-1+(Number(b.pw0)||0))/p.weeks)+1:0,shift:shf,key:p.uses?D.map[p.code+lvl()]:p.code,rk:p.code+':',uses:p.uses,pLv:b.pLv||'',pFoc:b.pFoc||'',sFam:b.sFam||'',sPh:b.sPh||'',sSplit:b.sSplit||'',focus:(p.uses&&b.focus)||A.focus,mound:MOUND.includes(p.code),phase:phaseName(p),short:p.uses?p.code:p.code.replace('THR\u2022','').replace(/\u2022/g,' ')});
     }
   }
   return o;
@@ -849,7 +1012,7 @@ function logStats(days,logAt){
 const painFlag=(so,pain)=>(Number(so)>=5)||/shoulder|elbow/i.test(pain||'');
 const SFAM={ML:'Movement Literacy',TL:'Tension Literacy',FC:'Force Control',AC:'Acceleration',AP:'Applied Power'};
 const SSPLIT={a6:{lift:'Axial',prep:'Prep',n:6,label:'Axial 6-day'},a5:{lift:'Axial',prep:'Prep Axial',n:5,label:'Axial 5-day'},n5:{lift:'Non-Axial',prep:'Prep Non-Axial',n:5,label:'Non-Axial 5-day'},n4:{lift:'Non-Axial',prep:'Prep Non-Axial',n:4,label:'Non-Axial 4-day'}};
-const SPLITOF=c=>/^(REVO|REIN)$/.test(c)?'a6':/^(ENVO|ENIN)$/.test(c)?'a5':/^(WATT|INT)$/.test(c)?'n5':/^(REF|ENG)$/.test(c)?'n4':'a6';
+const SPLITOF=(c,days)=>{const b=/^(REVO|REIN)$/.test(c)?'a6':/^(ENVO|ENIN)$/.test(c)?'a5':/^(WATT|INT)$/.test(c)?'n5':/^(REF|ENG)$/.test(c)?'n4':'a6', d=Number(days)||6; if(d>=6) return b; if(d===5) return b==='a6'?'a5':b==='n4'?'n5':b; return 'n4'};
 const SFALL={n4:['n4','n5','a5','a6'],n5:['n5','a5','a6'],a5:['a5','a6'],a6:['a6']};
 let SDATA=window.VELOU_STRENGTH||null, sLoading=false;
 function parseStrength(pr,sc){
@@ -887,7 +1050,7 @@ function strFor(fam,ph,sk){for(const k of SFALL[sk]){const s=SSPLIT[k]; const li
 const SDAYIX={MON:1,TUE:2,WED:3,THU:4,FRI:5,SAT:6,SUN:7};
 function strWeek(w,weeks){
   if(strList().length&&day0(A.startDate)){if(!SDATA||!A.str.on||!w) return null; let meta=null; const days={}; for(let d=1;d<=7;d++){const r=strDayInd(dateFor(w.n,d)); if(r){meta=meta||r; if(r.day) days[d]=r.day}} return meta?Object.assign({},meta,{days,ind:1}):null}
-  if(!SDATA||!A.str.on||!w||w.off||false) return null; const pk0=strPick(), pk={fam:w.sFam||pk0.fam,ph:w.sPh||pk0.ph}, sk=w.sSplit||SPLITOF(w.code), f=strFor(pk.fam,pk.ph,sk); if(!f) return null;
+  if(!SDATA||!A.str.on||!w||w.off||false) return null; const pk0=strPick(), pk={fam:w.sFam||pk0.fam,ph:w.sPh||pk0.ph}, sk=w.sSplit||SPLITOF(w.code,A.days), f=strFor(pk.fam,pk.ph,sk); if(!f) return null;
   const blk=weeks.filter(x=>!x.off&&x.bi===w.bi), idx=Math.max(0,blk.indexOf(blk.find(x=>x.n===w.n))), len=blk.length||1;
   const pick=code=>{const p=strProg(code); if(!p) return null; const ds=Object.keys(p.d).map(Number).sort((a,b)=>a-b); const dur=ds.includes(len)?len:(ds.find(d=>d>=len)||ds[ds.length-1]); return {p,dur,col:Math.min(idx,dur-1)}};
   const L_=pick(f.lift), P_=f.prep?pick(f.prep):null, perm=permOf(w.n), days={};
@@ -927,13 +1090,13 @@ function strBase(){return A.strBlocks.length?A.strBlocks.map(b=>b.fam==='none'?O
 function strList(){let t=day0((A.strBlocks.length&&A.strStart)||A.startDate); return strBase().map(b=>{const st=t?ymd(t):''; if(t) t=addD(t,(Number(b.weeks)||1)*7); return Object.assign({},b,{start:st})})}
 function laneAt(list,dt){if(!dt) return null; for(const b of list){const s=day0(b.start), e=bEnd(b); if(s&&e&&dt>=s&&dt<=e){const di=Math.round((dt-s)/864e5); return {b,wi:Math.floor(di/7)+1,dd:di%7+1}}} return null}
 function thrAt(dt){const s=day0(A.startDate); if(!s||!dt) return null; const di=Math.round((dt-s)/864e5); if(di<0) return null; return planWeeks()[Math.floor(di/7)]||null}
-const thrBlocks=()=>{const ws=planWeeks(), s=day0(A.startDate), o=[]; for(const w of ws){const l=o[o.length-1], c=w.off?'OFF':w.code; if(l&&l.bi===w.bi&&l.code===c){l.weeks++; continue} o.push({bi:w.bi,code:c,weeks:1,n0:w.n,focus:w.focus,uses:w.uses,pFoc:w.pFoc,pLv:w.pLv,start:s?ymd(addD(s,(w.n-1)*7)):''})} return o};
+const thrBlocks=()=>{const ws=planWeeks(), s=day0(A.startDate), o=[]; for(const w of ws){const l=o[o.length-1], c=w.off?'OFF':w.code; if(l&&l.bi===w.bi&&l.code===c){l.weeks++; continue} o.push({bi:w.bi,code:c,weeks:1,n0:w.n,dl:w.deload,pcode:w.pcode,focus:w.focus,uses:w.uses,pFoc:w.pFoc,pLv:w.pLv,start:s?ymd(addD(s,(w.n-1)*7)):''})} return o};
 function patDayInd(dt){const hit=laneAt(A.patBlocks,dt); if(!hit||!PAT) return null; const b=hit.b, wk=PAT.sch[b.code]; if(!wk||!wk.length||b.lv==='none') return null;
   const tl=Math.max(1,Math.min(3,Number(lvl())||1)), lv=b.lv||(PAT.prog[b.code]&&PAT.prog[b.code][tl])||String(tl), fname=b.foc&&PAT.foc.includes(b.foc)?b.foc:'Global';
   const cell=String(((wk[(hit.wi-1)%wk.length]||{})[fname]||[])[hit.dd-1]||'').toUpperCase(), Ls=[...cell].filter(ch=>'ABCD'.includes(ch));
   if(!Ls.length||cell==='OFF') return {lv,focus:fname,b,day:null};
   return {lv,focus:fname,b,day:{code:Ls.join('+'),blocks:Ls.map(ch=>{const k=PAT.blocks[fname+'|'+lv+'|'+ch]||{label:fname+' Patterning : Level '+lv+ch,drills:[]}; return {ch,label:k.label,name:{A:'Positional Control',B:'Dynamic Stability',C:'Dynamic Sequencing',D:'Dynamic Power'}[ch],drills:k.drills.map(n=>{const m=n.match(/\(?\s*(\d+)\s*[x\u00d7]\s*(\d+\s*\w*)\s*\)?\s*$/i); return {name:m?n.slice(0,m.index).trim():n,video:PAT.vids[n.toLowerCase()]||vid(n)||'',dose:(PAT.dose&&PAT.dose[n.toLowerCase()])||(m?m[1]+' \u00d7 '+m[2].trim():'1 \u00d7 10')}})}})}}}
-function strDayInd(dt){const hit=laneAt(strList(),dt); if(!hit||!SDATA||false) return null; const b=hit.b, pk0=strPick(), fam=b.fam||pk0.fam, ph=b.ph||pk0.ph, tw=thrAt(dt), sk=b.split||SPLITOF(tw&&!tw.off?tw.code:'REVO'), f=strFor(fam,ph,sk); if(!f) return null;
+function strDayInd(dt){const hit=laneAt(strList(),dt); if(!hit||!SDATA||false) return null; const b=hit.b, pk0=strPick(), fam=b.fam||pk0.fam, ph=b.ph||pk0.ph, tw=thrAt(dt), sk=b.split||SPLITOF(tw&&!tw.off?tw.code:'REVO',A.days), f=strFor(fam,ph,sk); if(!f) return null;
   const len=Number(b.weeks)||1, pick=code=>{const p=strProg(code); if(!p) return null; const ds=Object.keys(p.d).map(Number).sort((a,c)=>a-c); const dur=ds.includes(len)?len:(ds.find(d=>d>=len)||ds[ds.length-1]); return {p,dur,col:Math.min(hit.wi-1,dur-1)}};
   const Lp=pick(f.lift), Pp=f.prep?pick(f.prep):null, o={prep:null,lift:null};
   const put=(src,kind)=>{if(!src) return; const d=src.p.d[src.dur].days.find(x=>(SDAYIX[x[0]]||Number(String(x[0]).replace(/\D/g,''))||0)===hit.dd); if(!d) return; o[kind]={title:d[1],min:d[2],rows:d[3].map(r=>({code:r[0],name:SDATA.ex[r[1]],method:SDATA.me[r[2]],dose:r[3][src.col]||r[3][r[3].length-1]||'',tier:r[4]})).filter(r=>r.dose&&r.dose!=='\u2014'&&r.dose!=='-')}};
@@ -1023,9 +1186,9 @@ function renderLanes(){
   const box=$('lanes'); if(!box) return; const s=day0(A.startDate), tb=thrBlocks();
   box.hidden=!tb.length; if(!tb.length) return;
   const tl=$('lnTl'); tl.textContent=''; const pk=strPick();
-  const pB=A.pat.on?tb.filter(b=>b.code!=='OFF'&&true&&(!PAT||PAT.sch[b.code])).map(b=>({start:b.start,weeks:b.weeks,label:b.code+' \u00b7 '+(b.pFoc||A.pat.foc||(b.uses?b.focus:'')||'Global'),cls:'pat'})):[];
+  const pB=A.pat.on?tb.filter(b=>(b.code!=='OFF'||b.pcode)&&(!A.pat.only||b.code==='OFF')&&(!PAT||PAT.sch[b.code==='OFF'?b.pcode:b.code])).map(b=>({start:b.start,weeks:b.weeks,label:(b.code==='OFF'?'Deload':b.code)+' \u00b7 '+(b.pFoc||A.pat.foc||(b.uses?b.focus:'')||'Global'),cls:'pat'})):[];
   const sB=A.strBlocks.length?strList().map(b=>({start:b.start,weeks:b.weeks,label:b.fam==='none'?'None':(b.fam||pk.fam)+' P'+(b.ph||pk.ph),cls:'str'})):tb.filter(b=>b.code!=='OFF').map(b=>({start:b.start,weeks:b.weeks,label:pk.fam+' P'+pk.ph,cls:'str auto'}));
-  const tB=tb.map(b=>({start:b.start,weeks:b.weeks,label:b.code==='OFF'?'Off':b.code+(b.uses&&b.focus?' \u00b7 '+b.focus:''),cls:'thr'+(b.code==='OFF'?' off':'')}));
+  const tB=tb.map(b=>({start:b.start,weeks:b.weeks,label:b.code==='OFF'?(b.dl?'Deload':'Off'):b.code+(b.uses&&b.focus?' \u00b7 '+b.focus:''),cls:'thr'+(b.code==='OFF'?' off':'')}));
   const all=[...tB,...pB,...sB].filter(b=>day0(b.start));
   if(!s||!all.length){$('lnNote').textContent='Set a start date to line up the lanes on a calendar.'}
   else{
@@ -1033,6 +1196,7 @@ function renderLanes(){
     const ax=el('div','lt ax'); for(let t=lo;t<hi;t+=6048e5*2){const sp=el('span',null,fmt(new Date(t))); sp.style.left=pct(t); ax.append(sp)} tl.append(el('span','ll',''),ax);
     const lane=(name,list)=>{const t=el('div','lt'); for(const b of list){const st=day0(b.start); if(!st) continue; const e=bEnd(b).getTime()+864e5, d=el('div','bk '+b.cls,b.label); d.style.left=pct(st.getTime()); d.style.width='calc('+((e-st.getTime())/span*100).toFixed(3)+'% - 2px)'; d.title=name+': '+b.label+' \u00b7 '+fmt(st)+' to '+fmt(bEnd(b))+' \u00b7 '+b.weeks+' wk'; t.append(d)} const now=Date.now(); if(now>=lo&&now<hi){const n=el('div','now'); n.style.left=pct(now); n.title='Today'; t.append(n)} tl.append(el('span','ll',name),t)};
     lane('Patterning',pB); lane('Throwing',tB); lane('Strength',sB);
+    {const tst=[], wn=planWeeks().length; for(let k=4;k<=wn;k+=4) tst.push({start:ymd(addD(new Date(lo),(k-1)*7)),weeks:1,label:'Retest',cls:'tst'}); if(wn%4) tst.push({start:ymd(addD(new Date(lo),(wn-1)*7)),weeks:1,label:'Retest',cls:'tst'}); lane('Retest',tst)}
     $('lnNote').textContent='Patterning runs with each throwing phase, on the same days, and moves when a day moves. Strength can run on its own dates; dashed strength blocks follow the throwing phase.'}
   const VW=host.dataset.view||''; const ed=$('lnEd'); ed.hidden=!(coachOpen||VW==='history'||VW==='strength'); if(ed.hidden) return;
   for(const [id,k] of [['lnC1','coach1'],['lnC2','coach2']]){const i=$(id); if(root.activeElement!==i) i.value=A[k]||''}
@@ -1050,8 +1214,8 @@ function renderLanes(){
   const t=el('table'), th=el('thead'), hr=el('tr'); for(const c of ['Athlete','Throwing coach','Strength coach','Lane','Program','Start','End','Weeks']) hr.append(el('th',null,c)); th.append(hr); t.append(th); const tbd=el('tbody'); for(const r of laneRows()){const tr=el('tr'); for(const c of r) tr.append(el('td',null,String(c))); tbd.append(tr)} t.append(tbd); const rb=$('lnRows'); rb.textContent=''; rb.append(t);
 }
 function patWeek(w,weeks){
-  if(!PAT||!A.pat.on||!w||w.off||false) return null; const wk=PAT.sch[w.code]; if(!wk||!wk.length) return null;
-  const tl=Math.max(1,Math.min(3,Number(lvl())||1)), lv=(PAT.prog[w.code]&&PAT.prog[w.code][tl])||String(tl);
+  if(!PAT||!A.pat.on||!w||(w.off&&!w.pcode)||(A.pat.only&&!w.off)) return null; const pc=w.off?w.pcode:w.code, wk=PAT.sch[pc]; if(!wk||!wk.length) return null;
+  const tl=Math.max(1,Math.min(3,Number(lvl())||1)), lv=(PAT.prog[pc]&&PAT.prog[pc][tl])||String(tl);
   const want=w.pFoc||A.pat.foc||w.focus, fname=want&&PAT.foc.includes(want)?want:'Global', row=(wk[((w.pw||1)-1)%wk.length]||{})[fname]||[], perm=permOf(w.n), days={};
   row.forEach((cell,i)=>{const s=String(cell||'').toUpperCase(); if(!s||s==='OFF') return; const L=[...s].filter(ch=>'ABCD'.includes(ch)); if(!L.length) return; const pos=perm.indexOf(i+1)+1||(i+1);
     days[pos]={code:L.join('+'),blocks:L.map(ch=>{const b=PAT.blocks[fname+'|'+lv+'|'+ch]||{label:fname+' Patterning : Level '+lv+ch,drills:[]}; return {ch,label:b.label,name:{A:'Positional Control',B:'Dynamic Stability',C:'Dynamic Sequencing',D:'Dynamic Power'}[ch],drills:b.drills.map(n=>{const m=n.match(/\(?\s*(\d+)\s*[x\u00d7]\s*(\d+\s*\w*)\s*\)?\s*$/i); return {name:m?n.slice(0,m.index).trim():n,video:PAT.vids[n.toLowerCase()]||vid(n)||'',dose:(PAT.dose&&PAT.dose[n.toLowerCase()])||(m?m[1]+' \u00d7 '+m[2].trim():'1 \u00d7 10')}})}})}});
@@ -1077,7 +1241,7 @@ function dateFor(n,day){const d=day0(A.startDate); if(!d) return null; d.setDate
 function currentWeek(total){const d=day0(A.startDate); if(!d) return null; const n=Math.floor((new Date()-d)/6048e5)+1; return n>=1&&n<=total?n:null}
 function flagsOn(){const l=L(); return (l.arm!=null&&l.arm<85)||(l.injury&&!/^(none|—|-|n\/a)$/i.test(l.injury))}
 function render(){
-  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return renderAll();
+  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return renderAll(); if(BV) return renderBuild(); if(NV) return renderNotes();
   const p=prog(), weeks=planWeeks(), tl=isTL(), l=L(), v=V(); TP=testPlan(weeks); if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); try{renderLanes()}catch(e){console.warn(e)}
   for(const w of weeks){w.rows=weekRows(w); w.throws=w.rows.reduce((a,r)=>a+(r.plan?0:r.sets*r.reps),0); w.wv=w.rows.reduce((a,r)=>a+(r.wv||0),0); w.peak=w.rows.reduce((a,r)=>Math.max(a,r.rpe||0),0); w.hi=w.rows.reduce((a,r)=>a+(!r.plan&&r.rpe>=90?r.sets*r.reps:0),0)}
   {let prevB=null, prevD7=null, prevPD7=null, first=true;
@@ -1335,12 +1499,12 @@ function renderCoach(N,planned){
         mk('\u2193','Move block '+(i+1)+' later',()=>edit(c=>{const t=c[i+1];c[i+1]=c[i];c[i]=t}),i===bl.length-1),
         mk('\u00d7','Remove block '+(i+1),()=>edit(c=>{c.splice(i,1)})));
       {const pk=strPick(), off=b.code==='OFF'||!A.str.on, mkS=(lab,opts,val,fn)=>{const s=el('select'); s.setAttribute('aria-label','Block '+(i+1)+' '+lab); for(const [v,t] of opts){const o=el('option',null,t); o.value=v; s.append(o)} s.value=val||''; for(const o of s.options) if(o.value===s.value) o.setAttribute('selected',''); s.disabled=off; s.addEventListener('change',e=>edit(c=>fn(c[i],e.target.value))); return s};
-       const autoSplit=SSPLIT[SPLITOF(b.code)].label;
+       const autoSplit=SSPLIT[SPLITOF(b.code,A.days)].label;
        sb.append(
          mkS('strength program',[['','Program: '+SFAM[pk.fam]+(A.str.fam?'':' (auto)')],...Object.entries(SFAM).map(([k,t])=>[k,t])],b.sFam==='none'?'':b.sFam,(c,v)=>{if(v) c.sFam=v; else delete c.sFam}),
          mkS('strength phase',[['','Phase: P'+pk.ph+(A.str.ph?'':' (auto)')],['1','P1'],['2','P2'],['3','P3']],b.sPh,(c,v)=>{if(v) c.sPh=v; else delete c.sPh}),
          mkS('strength split',[['','Split: '+autoSplit+' (auto)'],...Object.entries(SSPLIT).map(([k,s])=>[k,s.label])],b.sSplit,(c,v)=>{if(v) c.sSplit=v; else delete c.sSplit}));
-       if(!off&&SDATA&&b.sFam!=='none'){const f=strFor(b.sFam||pk.fam,b.sPh||pk.ph,b.sSplit||SPLITOF(b.code)); sb.append(el('span','bsn',f?f.lift.replace(/\u2022/g,' \u00b7 ')+(f.prep?' + prep':'')+(f.sk!==(b.sSplit||SPLITOF(b.code))?' \u00b7 closest available split':''):'No matching strength program'))}
+       if(!off&&SDATA&&b.sFam!=='none'){const f=strFor(b.sFam||pk.fam,b.sPh||pk.ph,b.sSplit||SPLITOF(b.code,A.days)); sb.append(el('span','bsn',f?f.lift.replace(/\u2022/g,' \u00b7 ')+(f.prep?' + prep':'')+(f.sk!==(b.sSplit||SPLITOF(b.code,A.days))?' \u00b7 closest available split':''):'No matching strength program'))}
        if(off&&b.code==='OFF') sb.append(el('span','bsn','Off week: no strength'))}
       {const off=b.code==='OFF'||!A.pat.on, s=el('select'); s.setAttribute('aria-label','Block '+(i+1)+' patterning level'); const tl=Math.max(1,Math.min(3,Number(lvl())||1)), au=PAT&&PAT.prog[b.code]?PAT.prog[b.code][tl]:'';
         for(const [v,t] of [['','Patterning: '+(au?'L'+au+' (auto)':PAT?'none for this phase':'auto')],['1','Patterning L1'],['2','Patterning L2'],['3','Patterning L3'],['none','No patterning']]){const o=el('option',null,t); o.value=v; s.append(o)} s.value=b.pLv||''; for(const o of s.options) if(o.value===s.value) o.setAttribute('selected',''); s.disabled=off; s.addEventListener('change',e=>edit(c=>{if(e.target.value) c[i].pLv=e.target.value; else delete c[i].pLv})); 
@@ -1472,14 +1636,15 @@ const LB={
     const off=Math.round((dt-st)/864e5); if(off<0) return null; const w=weeks[Math.floor(off/7)]; if(!w) return {out:true,rest:true,rows:[]};
     const day=off%7+1, R=w.off?[]:weekRows(w).filter(r=>r.day===day&&!r.plan), ord=A.order[w.n+'-'+day]||[];
     const dr=R.map((r,i)=>({r,i})).sort((a,b)=>{const x=ord.indexOf(a.r.k), y=ord.indexOf(b.r.k); return (x<0?1e3+a.i:x)-(y<0?1e3+b.i:y)}).map(o=>o.r);
-    return {day,rest:!dr.length,ph:w.code,lv:lvl(),title:dr.length?daySummary(dr,!!A.deload[w.n],w.uses?w.focus:''):'Rest day',
+    return {day,rest:!dr.length,ph:w.off?(w.deload?'DELOAD':'OFF'):w.code,lv:lvl(),title:dr.length?daySummary(dr,!!A.deload[w.n],w.uses?w.focus:''):'Rest day',
       rows:dr.map((r,i)=>({id:rid(),slot:String(i+1),blk:'T',name:String(r.name).replace('*',' · '),sets:String(r.sets||''),reps:String(r.reps||''),int:r.rpe?r.rpe+'%':'',ball:r.weight||''}))}},
   pat(dt){const st=day0(A.startDate), weeks=planWeeks(); if(!st||!weeks.length) return null;
     const off=Math.round((dt-st)/864e5); if(off<0) return null; const w=weeks[Math.floor(off/7)]; if(!w) return {out:true,rest:true,rows:[]};
+    if(!A.pat.on) return {day:off%7+1,rest:true,ph:'',lv:lvl(),title:'No patterning',rows:[]};
     if(!PAT) return {loading:true,rest:true,rows:[]};
     const day=off%7+1, PW=patWeek(w,weeks), pd=PW&&PW.days[day], rows=[];
     if(pd) for(const b of pd.blocks) for(const q of b.drills){const m=String(q.dose||'').match(/^(\d+)\s*[x×]\s*(.+)$/); rows.push({id:rid(),slot:b.ch,blk:b.ch,name:q.name,sets:m?m[1]:'',reps:m?m[2].trim():String(q.dose||'')})}
-    return {day,rest:!rows.length,ph:w.code,lv:PW?PW.lv:lvl(),title:rows.length?(PW.focus||''):'No patterning',rows}},
+    return {day,rest:!rows.length,ph:w.off?(w.pcode||'OFF'):w.code,lv:PW?PW.lv:lvl(),title:rows.length?(PW.focus||''):'No patterning',rows}},
   corr(dt){const bd=boardObj(), rows=[]; let arm='', mob='';
     for(const [lab,prog,s0,e0] of [['Arm care',bd.ac,bd.acs,bd.ace],['Mobility',bd.mob,bd.mobs,bd.mobe]]){ if(!prog) continue; const a=pdt(s0), b=pdt(e0); if(a&&dt<new Date(a.getFullYear(),a.getMonth(),a.getDate())) continue; if(b&&dt>new Date(b.getFullYear(),b.getMonth(),b.getDate(),23,59)) continue;
       rows.push({id:rid(),slot:'',blk:'i',name:lab,info:prog}); const p=String(prog).split('•').map(x=>x.trim()); if(lab==='Arm care') arm=['AC',p[1],p[2]].filter(Boolean).join(' '); else mob=['MOB',p[1]].filter(Boolean).join(' ')}
@@ -1575,9 +1740,9 @@ function renderBox(l,dt,ix,ctx){
         if(coachOpen){
           const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i,lane:l},re));
           const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i,1)})));
-          top.append(gb,el('span','sl',r.slot||''),inp(r.name,'name','nmi','Exercise'),ac); for(const [f,ph] of cfg.fields) bot.append(inp(r[f],f,'',ph)); bot.style.gridTemplateColumns='repeat('+cfg.fields.length+',minmax(0,1fr))'; re.append(top,bot)}
+          const ni=inp(r.name,'name','nmi','Exercise'); {const fg=exFlags(l,r.name); if(fg.length){ni.title=fg.join('; '); re.classList.add('lflag')}} top.append(gb,el('span','sl',r.slot||''),ni,ac); for(const [f,ph] of cfg.fields) bot.append(inp(r[f],f,'',ph)); bot.style.gridTemplateColumns='repeat('+cfg.fields.length+',minmax(0,1fr))'; re.append(top,bot)}
         else{
-          re.style.gridTemplateColumns=cols; const nm=el('span','nm2',r.name); if(r.ball) nm.append(el('div','lsub',r.ball));
+          re.style.gridTemplateColumns=cols; const nm=el('span','nm2',r.name); if(r.ball) nm.append(el('div','lsub',r.ball)); {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' \u26a0')); nm.title=fg.join('; '); re.classList.add('lflag')}}
           re.append(el('span','sl',r.slot||''),nm,el('span','n',r.sets),el('span','n',r.reps)); if(hasInt) re.append(el('span','n',r.int)); if(hasTmp) re.append(el('span','n',r.tempo))}
         list.append(re)});
       if(coachOpen&&real){const bar=el('div','lbar'), ad=el('button','btn sm','+ Add exercise'); ad.type='button'; ad.addEventListener('click',()=>lnEdit(l,dt,o=>{o.rows.push({id:rid(),slot:'',blk:'+',name:'New exercise',sets:'',reps:'',int:'',tempo:'',ball:''}); if(!o.title||/^(Rest day|No )/.test(o.title)) o.title='Custom day'})); bar.append(ad);
@@ -1602,6 +1767,245 @@ function renderAll(){
     dts.forEach((dt,ix)=>grid.append(renderBox(l,dt,ix,ctx)))}
   const giant=el('div','lgiant'); giant.append(grid); cal.append(giant)}
 
+// ================= Plan Build, Training Map and Notes =================
+const FOCI=['Global','Vertical Force','Linear Force','Lateral Force','Lower Rotation','Upper Rotation','Upper Deceleration','Lower Deceleration'];
+const FAMN={ML:'Movement Literacy',TL:'Tension Literacy',FC:'Force Control',AC:'Acceleration',AP:'Applied Power'};
+const FAMR={'movement literacy':'ML','tension literacy':'TL','force control':'FC','acceleration':'AC','applied power':'AP'};
+const UPPER_R=[['neutral','Neutral grip only [no barbell exercises]'],['wristext','No wrist extension'],['wristflex','No wrist flexion'],['frontsq','No front squat position for squatting']];
+const LOWER_R=[['squat','No squatting or excessive flexion'],['hinge','No hinging or spinal flexion'],['lunge','No lunging or split squat'],['jump','No jumping or sprinting']];
+const THROW_POS=[['seated','Throw from a seated position'],['kneeling','Throw from tall kneeling or half-kneeling'],['standing','Throw from a standing or step-in position'],['mound','Throw on the mound']];
+const EQUIP=[['veloU','At VeloU'],['commercial','At a commercial gym'],['home','Home gym'],['limited','Extremely limited','Just dumbbell, kettlebell and bodyweight']];
+const RXR={
+  neutral:[/\bBB\b|barbell|\bEZ\b|straight[- ]bar|safety bar/i,'Neutral grip only: no barbell'],
+  wristext:[/push-?up|crawl|handstand|bear walk|\bdips?\b|cartwheel|\bpike\b|\b(?:high|front|straight[- ]arm)\s+plank|plank (?:walk|shoulder|row|up)/i,'No wrist extension'],
+  wristflex:[/curl|wrist|carry|hanging|\bkip\b/i,'No wrist flexion'],
+  frontsq:[/front squat|goblet|zercher|front rack|\bclean\b|cross-?arm/i,'No front squat position'],
+  squat:[/squat|leg press|hack|sissy|pendulum/i,'No squatting or excessive flexion'],
+  hinge:[/deadlift|\bRDL\b|hinge|good ?morning|back extension|hyper|crunch|sit-?up|hollow|roll|nordic|swing|jefferson|stiff[- ]leg|pull[- ]through/i,'No hinging or spinal flexion'],
+  lunge:[/lunge|split squat|step[- ]?up|bulgarian|curtsy|cowboy/i,'No lunging or split squat'],
+  jump:[/jump|hop|bound|sprint|broad|\bbox\b|depth drop|plyo|hurdle|wicket|skip|build[- ]up run|flying/i,'No jumping or sprinting']
+};
+const EQX={commercial:/pendulum|belt squat|sled|reverse hyper/i,home:/machine|cable|leg press|hack|pulldown|pendulum|belt squat|sled|ghd|glider|trx|reverse hyper|leg curl|leg extension/i,limited:/\bBB\b|barbell|machine|cable|leg press|hack|pulldown|pendulum|belt squat|sled|ghd|glider|trx|landmine|trap bar|smith|jefferson|leg curl|leg extension|\bbox\b|hurdle|wicket/i};
+const throwPosOf=n=>/bullpen|mound|\blive\b|simulated/i.test(n)?'mound':/seated/i.test(n)?'seated':/kneel/i.test(n)?'kneeling':'standing';
+const POSN={seated:'a seated position',kneeling:'kneeling',standing:'a standing position',mound:'the mound'};
+function exFlagsWith(l,name,R,eq){
+  const out=[], n=String(name||''); R=R||{};
+  if(l==='lift'||l==='prep') for(const id of [...(R.upper||[]),...(R.lower||[])]){const r=RXR[id]; if(r&&r[0].test(n)) out.push(r[1])}
+  if(l==='throw'&&R.throwOk){const p=throwPosOf(n); if(!R.throwOk.includes(p)) out.push('Throwing from '+POSN[p]+' is restricted')}
+  if((l==='lift'||l==='prep')&&eq&&EQX[eq]&&EQX[eq].test(n)) out.push('May need equipment this athlete does not have');
+  return out;
+}
+const exFlags=(l,name)=>exFlagsWith(l,name,A.restrict,A.equip);
+const bq=()=>(A.build=A.build||{});
+const bset=o=>{Object.assign(bq(),o); changed()};
+function bctx(){
+  const d=host.dataset, n=PBL.num, xfer=n(d.xfer), prod=n(d.prod), ratio=n(d.ratio), lvT=PBL.xferLevel(xfer), lvL=PBL.prodLevel(prod);
+  return {name:d.athlete||'',xfer,prod,ratio,thrLevel:lvT,liftLevel:lvL,autoTheory:PBL.theoryOf(lvL,ratio),pos:d.pos||'',play:d.playlevel||'',hand:d.hand||'',
+    injStatus:String(d.injstatus||'').trim(),injLoc:String(d.injloc||'').trim(),injNote:String(d.injnote||'').trim(),arm:n(d.armscore),board:boardObj(),coach:d.coach||''};
+}
+const hasInjury=c=>/previous|current|rehab|injured/i.test(c.injStatus)&&!/^none$/i.test(c.injStatus);
+function areasOf(c,Q){
+  const s=c.injLoc.toLowerCase(), r=[];
+  if(/shoulder|elbow|wrist|arm|neck|hand|forearm/.test(s)) r.push('upper');
+  if(/knee|leg|hip|pelvis|spine|torso|back|ankle|foot|core|groin/.test(s)) r.push('lower');
+  return r.length?r:(Q.areas||[]);
+}
+const tcase=t=>String(t||'').split(/\s+/).map(w=>/^(UCL|TJ|PRP|AC|G\d)$/i.test(w)?w.toUpperCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
+function rttList(){
+  return D.programs.filter(p=>/^THR•RT[TM]•/.test(p.code)).map(p=>{
+    const m=p.code.match(/^THR•(RT[TM])•(\d+)W•(.+)$/), inj=m?tcase(m[3]):p.code;
+    return {code:p.code,weeks:Number(p.weeks)||Number(m&&m[2])||8,kind:m?m[1]:'RTT',injury:inj,label:(m&&m[1]==='RTM'?'Return to mound':'Return to throw')+' · '+inj+' · '+(Number(p.weeks)||Number(m&&m[2])||8)+' wks'};
+  }).sort((a,b)=>a.label.localeCompare(b.label));
+}
+function rttSuggest(note){
+  const t=String(note||'').toLowerCase(); if(!t) return '';
+  const want=/revision/.test(t)?'REVISION':/hybrid/.test(t)?'HYBRID':/repair|brace/.test(t)?'REPAIR':/sprain.*(g2|grade 2|ii\b|2)/.test(t)?'SPRAIN G2':/sprain|strain/.test(t)?'SPRAIN G1':/pain|sore/.test(t)?'ELBOW PAIN':/tj|tommy|reconstruct/.test(t)?'HYBRID':'';
+  const hit=rttList().find(p=>p.code.endsWith('•'+want)&&/RTT/.test(p.kind)); return hit&&want?hit.label:'';
+}
+function detectCont(c,start){
+  const st=day0(start); if(!st) return null;
+  if(A.strBlocks&&A.strBlocks.length&&A.startDate&&A.startDate!==start){
+    const end=addD(day0(A.startDate),A.strBlocks.reduce((a,b)=>a+(Number(b.weeks)||0),0)*7-1), last=A.strBlocks[A.strBlocks.length-1], gap=Math.round((st-end)/864e5);
+    if(last.fam&&last.fam!=='none'&&gap<=21&&gap>=-84) return {fam:last.fam,ph:Number(last.ph)||1,gap,src:'the saved plan'};
+  }
+  const bd=c.board; if(bd.lift){
+    const parts=String(bd.lift).split('•').map(x=>x.trim()), fam=FAMR[(parts[0]||'').toLowerCase()], m=(parts[1]||'').match(/^P([123])/i), e=pdt(bd.le);
+    if(fam&&m){const gap=e?Math.round((st-new Date(e.getFullYear(),e.getMonth(),e.getDate(),12))/864e5):0; if(gap<=21) return {fam,ph:+m[1],gap,src:'the Program Board'}}
+  }
+  return null;
+}
+// restrictions and routing that follow from the injury answers
+function effective(c,Q){
+  const inj=hasInjury(c), rec=inj?Q.recovered:'yes', canThrow=(inj&&rec==='no')?Q.canThrow:'yes', areas=areasOf(c,Q);
+  const forcedRtt=inj&&rec==='no'&&canThrow==='no';
+  const status=forcedRtt?'rtt':Q.status;
+  let upper=[], lower=[], throwOk=null, askedRestrict=false;
+  if(inj&&rec==='no'&&Q.restrict==='yes'){
+    askedRestrict=true;
+    if(areas.includes('upper')&&(canThrow==='no'||Q.sure==='b')) upper=(Q.upperR||[]).slice();
+    if(areas.includes('lower')){ lower=(Q.lowerR||[]).slice(); if(canThrow==='yes'&&Q.thrImpact==='yes') throwOk=(Q.throwOk||[]).slice() }
+  }
+  const list=rttList(), prog=list.find(p=>p.code===Q.rttCode)||null;
+  const rtt=status==='rtt'&&prog?{code:prog.code,weeks:prog.weeks,label:prog.label,startWeek:Math.max(1,Math.min(prog.weeks,Number(Q.rttWeek)||1)),startDate:Q.rttStart||Q.start}:null;
+  return {inj,rec,canThrow,areas,forcedRtt,status,upper,lower,throwOk,restricted:upper.length>0||lower.length>0||!!throwOk,rtt,askedRestrict};
+}
+// the restriction flags a plan would trigger in its lifting programs
+function flagSummary(out,opt,eff,Q,days){
+  if(!SDATA) return null;
+  const R={upper:eff.upper,lower:eff.lower,throwOk:eff.throwOk}, none=!(eff.upper.length||eff.lower.length)&&(!Q.equip||Q.equip==='veloU');
+  if(none) return {n:0,names:[]};
+  const splits=new Set(out.blocks.filter(b=>PBL.SEQ.includes(b.code)).map(b=>SPLITOF(b.code,days))); if(!splits.size) splits.add(SPLITOF('REVO',days));
+  const names=new Set();
+  try{ for(const b of opt.blocks) for(const sk of splits){ const f=strFor(b.fam,b.ph,sk); if(!f) continue;
+    for(const code of [f.lift,f.prep]){ if(!code) continue; const p=strProg(code); if(!p) continue; const ds=Object.keys(p.d).map(Number).sort((a,b)=>a-b), dd=p.d[ds[0]]; if(!dd) continue;
+      for(const day of dd.days) for(const r of day[3]){ const nm=liftName(tidyN(SDATA.ex[r[1]]||'')); if(nm&&exFlagsWith('lift',nm,R,Q.equip).length) names.add(nm) } } } }catch(e){}
+  return {n:names.size,names:[...names].slice(0,6)};
+}
+function applyBuild(c,Q,out,optIdx,eff,level,theory){
+  const hasEdits=saved&&(Object.keys(A.laneDays||{}).some(k=>Object.keys(A.laneDays[k]||{}).length)||Object.keys(A.swaps||{}).length||Object.keys(A.rowEdits||{}).length||Object.keys(A.added||{}).length);
+  if(hasEdits&&!confirm('Replace the current plan? Day edits, swaps and added drills for this athlete will be cleared.')) return;
+  const opt=out.lift.options[optIdx];
+  A.program=TL; A.level=String(level); A.focus=Q.focus; A.startDate=Q.start; A.compDate=Q.noComp?'':(Q.comp||''); A.phaseWeeks=null;
+  A.blocks=out.blocks.map(b=>Object.assign({},b)); A.str={on:1,fam:'',ph:''}; A.strBlocks=opt.blocks.map(b=>({weeks:b.weeks,fam:b.fam,ph:b.ph})); A.strStart='';
+  const dl=eff.status==='deload'; A.pat={on:(Q.patOn==='yes'||dl)?1:0,only:(Q.patOn!=='yes'&&dl)?1:0,foc:(Q.patFocus&&Q.patFocus!=='same'&&Q.patFocus!==Q.focus)?Q.patFocus:''}; A.patBlocks=[];
+  for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','laneDays']) A[k]={};
+  A.days=Q.days; A.mound=Q.mound; A.equip=Q.equip||''; A.restrict={upper:eff.upper,lower:eff.lower,throwOk:eff.throwOk};
+  Q.appliedAt=Date.now(); Q.applied=true; viewWeek=1;
+  changed(); status('Plan applied. See the Training Map for all twelve weeks.');
+}
+function bField(label,control,hint){const w=el('label','qf'); w.append(el('span','qfl',label),control); if(hint) w.append(el('span','qs',hint)); return w}
+function bDate(val,fn){const x=el('input','qdate'); x.type='date'; x.value=val||''; x.addEventListener('change',()=>fn(x.value)); return x}
+function bSel(list,val,fn,blank){const s=el('select','qsel'); if(blank){const o=el('option',null,blank); o.value=''; s.append(o)} for(const [v,t] of list){const o=el('option',null,t); o.value=String(v); s.append(o)} s.value=val==null?'':String(val); s.addEventListener('change',()=>fn(s.value)); return s}
+function bOpts(list,val,fn){const w=el('div','qopts'); for(const [v,t,h] of list){const b=el('button','qo'+(String(val)===String(v)?' on':'')); b.type='button'; b.append(document.createTextNode(t)); if(h) b.append(el('small',null,h)); b.addEventListener('click',()=>fn(v)); w.append(b)} return w}
+function bChecks(list,vals,fn){const w=el('div','qchks'); for(const [v,t] of list){const l=el('label','qchk'), x=el('input'); x.type='checkbox'; x.checked=(vals||[]).includes(v); x.addEventListener('change',()=>{const s=new Set(vals||[]); x.checked?s.add(v):s.delete(v); fn([...s])}); l.append(x,el('span',null,t)); w.append(l)} return w}
+function renderBuild(){
+  const box=$('bview'); box.hidden=false; box.textContent='';
+  if(A.str.on&&!SDATA) loadStrength(); if(!PAT) loadPattern();
+  const c=bctx(), Q=bq(); const ds=host.dataset;
+  if(!Q.start) Q.start=(A.startDate&&!Q.applied)?A.startDate:ymd(new Date());
+  if(Q.days==null) Q.days=PBL.daysFor(c.play);
+  if(Q.mound==null) Q.mound=PBL.isPitcher(c.pos);
+  root.querySelector('.wrap').classList.toggle('adv',coachOpen); $('coach').hidden=!coachOpen; $('coachBtn').textContent=coachOpen?'Close advanced coach tools':'Advanced coach tools'; if(coachOpen) renderCoach(weeksAvail(),planWeeks().length);
+  let qn=0; const card=(title,sub)=>{const k=el('section','qc'); k.append(el('div','qh',(++qn)+'. '+title)); if(sub) k.append(el('div','qs',sub)); box.append(k); return k};
+  const eff=effective(c,Q), level=Q.thrLevel?Number(Q.thrLevel):(c.thrLevel||1), theory=Q.theory||c.autoTheory||'TL';
+  // what we already know
+  {const k=el('section','qc'); k.append(el('div','qh','What we already know'));
+   const g=el('div','qknown'), kv=(a,b)=>{const x=el('div','qk'); x.append(el('span',null,a),el('b',null,b||'—')); g.append(x)};
+   kv('Athlete',c.name); kv('Position / level',[c.pos,c.play].filter(Boolean).join(' · ')); kv('Throwing arm',c.hand);
+   kv('Throwing level',c.thrLevel?'Level '+c.thrLevel+' · transference '+c.xfer.toFixed(1):'Not available: no transference score'); kv('Lifting level',c.liftLevel?'Level '+c.liftLevel+' · production '+c.prod.toFixed(1):'Not available: no production score');
+   kv('Training theory',c.autoTheory?FAMN[c.autoTheory]+(c.liftLevel===3&&c.ratio!=null?' · impulse ratio '+c.ratio.toFixed(2):''):'—'); kv('Arm score',c.arm!=null?c.arm.toFixed(1):'');
+   kv('Injury',hasInjury(c)?[c.injStatus,c.injLoc!=='None'?c.injLoc:'',c.injNote].filter(Boolean).join(' · '):'None on file'); kv('Program Board',[c.board.thr,c.board.lift].filter(Boolean).join('  |  '));
+   k.append(g); const rn=PBL.ratioNote(c.ratio); if(c.liftLevel===3&&rn) k.append(el('div','qmsg qwarn',rn)); box.append(k)}
+  // 1 start date
+  {const k=card('What is the athlete’s start date?'); k.append(bDate(Q.start,v=>bset({start:v}))); if(Q.start){const d=day0(Q.start); k.append(el('div','qs','Starts '+d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})))}}
+  // 2 competition
+  {const k=card('When is their next expected competition?'); const r=el('div','qrow'); const di=bDate(Q.comp,v=>bset({comp:v,noComp:false})); di.disabled=!!Q.noComp; r.append(di);
+   const l=el('label','qchk'), x=el('input'); x.type='checkbox'; x.checked=!!Q.noComp; x.addEventListener('change',()=>bset({noComp:x.checked})); l.append(x,el('span',null,'No competition scheduled')); r.append(l); k.append(r);
+   const N=(Q.comp&&!Q.noComp&&Q.start)?PBL.weeksBetween(Q.start,Q.comp):null; k.append(el('div','qs','Season: '+PBL.season(Q.noComp?null:N)+(N!=null&&N>0?' · '+N+' weeks to competition':'')))}
+  // 3 injury
+  if(eff.inj){
+    const k=card('Has the athlete recovered from their '+(/current|rehab|^injured$/i.test(c.injStatus)?'current':'previous')+' injury?',[c.injStatus,c.injLoc,c.injNote].filter(x=>x&&x!=='None').join(' · '));
+    k.append(bOpts([['yes','Yes'],['no','No']],Q.recovered,v=>bset({recovered:v})));
+    if(Q.recovered==='no'){
+      const k2=card('Can the athlete begin throwing yet?'); k2.append(bOpts([['yes','Yes'],['no','No, not yet']],Q.canThrow,v=>bset({canThrow:v})));
+      if(Q.canThrow==='no'){
+        const k3=card('Return to throw','The exact injury on file is shown above. Pick the program you plan to start them on.');
+        const sug=rttSuggest(c.injNote); if(sug) k3.append(el('div','qmsg','Suggested from the injury notes: '+sug));
+        k3.append(bField('When is the athlete expected to begin their RTT?',bDate(Q.rttStart||'',v=>bset({rttStart:v}))));
+        const list=rttList(); k3.append(bField('Which program do you plan to start them on?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
+        const pg=list.find(p=>p.code===Q.rttCode); if(pg) k3.append(bField('Starting week',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)}))));
+      }
+      if(Q.canThrow){
+        const k4=card('Does the athlete have any restrictions regarding lifting?'); k4.append(bOpts([['yes','Yes'],['no','No']],Q.restrict,v=>bset({restrict:v})));
+        if(Q.restrict==='yes'){
+          if(!eff.areas.length){const k5=card('Which area is affected?'); k5.append(bChecks([['upper','Shoulder, elbow, wrist or neck'],['lower','Knee, hip/back or foot']],Q.areas,v=>bset({areas:v})))}
+          if(eff.areas.includes('upper')){
+            if(Q.canThrow==='yes'){
+              const k6=card('Are you sure?'); k6.append(el('div','qmsg','Typically if they are cleared to throw they should be cleared to lift without restriction.')); k6.append(bOpts([['a','Oh, you’re right: no restriction'],['b','No, they still can’t do certain things']],Q.sure,v=>bset({sure:v,upperR:v==='a'?[]:Q.upperR})));
+            }
+            if(Q.canThrow==='no'||Q.sure==='b'){const k7=card('Please select what the athlete can not complete in the weight room (shoulder, elbow, wrist or neck)'); k7.append(bChecks(UPPER_R,Q.upperR,v=>bset({upperR:v})))}
+          }
+          if(eff.areas.includes('lower')){
+            if(Q.canThrow==='yes'){const k8=card('Are there restrictions to how this will impact throwing?'); k8.append(bOpts([['yes','Yes'],['no','No']],Q.thrImpact,v=>bset({thrImpact:v}))); if(Q.thrImpact==='yes'){k8.append(el('div','qs','Select what the athlete can do. Anything left unchecked is treated as restricted for now.')); k8.append(bChecks(THROW_POS,Q.throwOk,v=>bset({throwOk:v})))}}
+            if(Q.canThrow==='no'||Q.thrImpact){const k9=card('Please select what the athlete can not complete in the weight room (knee, hip/back or foot)'); k9.append(bChecks(LOWER_R,Q.lowerR,v=>bset({lowerR:v})))}
+          }
+        }
+      }
+    }
+  }
+  // throwing status
+  {const k=card('Where is the athlete in their throwing?');
+   if(eff.forcedRtt) k.append(el('div','qmsg','They are not cleared to throw yet, so the plan starts with the return to throw program chosen above.'));
+   else{
+     k.append(bOpts([['onramp','Needs an on-ramp','They have just come off a deload'],['deload','Needs a deload','Just out of season. Patterning only for the weeks you choose'],['offmound','Recently off the mound','Ready for any intensity in a throwing plan'],['rtt','In return to throw','Choose where to start them']],Q.status,v=>bset({status:v})));
+     if(Q.status==='deload') k.append(bField('How many weeks? (patterning only during this time)',bSel([1,2,3,4].map(n=>[n,n+' week'+(n>1?'s':'')]),Q.deloadWeeks||1,v=>bset({deloadWeeks:Number(v)}))));
+     if(Q.status==='rtt'){
+       const list=rttList(); k.append(bField('Which return to throw program?',bSel(list.map(p=>[p.code,p.label]),Q.rttCode,v=>bset({rttCode:v,rttWeek:1}),'Choose a program')));
+       const pg=list.find(p=>p.code===Q.rttCode); if(pg){k.append(bField('Where are they starting?',bSel(Array.from({length:pg.weeks},(_,i)=>[i+1,'Week '+(i+1)]),Q.rttWeek||1,v=>bset({rttWeek:Number(v)})))); k.append(bField('Date they begin this program',bDate(Q.rttStart||Q.start,v=>bset({rttStart:v}))))}
+     }
+   }}
+  // focus
+  {const k=card('What is the athlete’s proposed focus for throwing development?'); k.append(bOpts(FOCI.map(f=>[f,f]),Q.focus,v=>bset({focus:v})))}
+  // patterning
+  {const k=card('Do you want to include patterning?'); k.append(bOpts([['yes','Yes'],['no','No']],Q.patOn,v=>bset({patOn:v})));
+   if(Q.patOn==='yes'){k.append(el('div','qs','Which patterning focus?')); k.append(bOpts([['same','Same as throwing focus']].concat(FOCI.map(f=>[f,f])),Q.patFocus||'same',v=>bset({patFocus:v})))}}
+  // equipment
+  {const k=card('What equipment does the athlete have access to?'); k.append(bOpts(EQUIP,Q.equip,v=>bset({equip:v})))}
+  // assumptions
+  {const k=el('section','qc'); k.append(el('div','qh','Assumptions (change if needed)'));
+   const r=el('div','qrow');
+   r.append(bField('Training days per week',bSel([[4,'4 days'],[5,'5 days'],[6,'6 days']],Q.days,v=>bset({days:Number(v)})),'6 for high school, 5 for college and pro'));
+   r.append(bField('Throwing level',bSel([[1,'Level 1'],[2,'Level 2'],[3,'Level 3']],Q.thrLevel||'',v=>bset({thrLevel:v}),c.thrLevel?'Auto: Level '+c.thrLevel:'Choose a level')));
+   r.append(bField('Training theory',bSel(Object.keys(FAMN).map(f=>[f,FAMN[f]]),Q.theory||'',v=>bset({theory:v}),c.autoTheory?'Auto: '+FAMN[c.autoTheory]:'Auto')));
+   const lm=el('label','qchk'), lx=el('input'); lx.type='checkbox'; lx.checked=!!Q.mound; lx.addEventListener('change',()=>bset({mound:lx.checked})); lm.append(lx,el('span',null,'Has mound access (pitchers are assumed to find mound time)')); r.append(lm);
+   k.append(r); box.append(k)}
+  // suggestion
+  const missing=[]; if(!Q.start) missing.push('a start date'); if(eff.inj&&!Q.recovered) missing.push('the injury recovery question'); if(eff.inj&&Q.recovered==='no'&&!Q.canThrow) missing.push('whether they can begin throwing'); if(eff.inj&&Q.recovered==='no'&&Q.canThrow&&!Q.restrict) missing.push('the lifting restrictions question');
+  if(!eff.status) missing.push('their throwing status'); if(eff.status==='rtt'&&!eff.rtt) missing.push('a return to throw program'); if(!Q.focus) missing.push('a throwing focus'); if(!Q.patOn) missing.push('the patterning question'); if(!Q.equip) missing.push('equipment access');
+  const sug=el('section','qc qsug'); box.append(sug);
+  if(missing.length){sug.append(el('div','qh','Suggested 12 week plan'),el('div','qs','Still needed: '+missing.join(', ')+'.')); return}
+  const cont=detectCont(c,Q.start), contUse=cont&&cont.fam===theory?cont:null;
+  const advance=contUse?(Q.contAdvance?Q.contAdvance==='adv':contUse.gap>=-7):true;
+  const I={start:Q.start,comp:Q.noComp?'':Q.comp,theory,liftLevel:c.liftLevel,status:eff.status,deloadWeeks:Q.deloadWeeks||1,rtt:eff.rtt,restricted:eff.restricted,
+    mound:!!Q.mound&&!(eff.throwOk&&!eff.throwOk.includes('mound')),maxIdx:(eff.throwOk&&!eff.throwOk.includes('standing'))?0:null,cont:contUse?{ph:contUse.ph,advance}:null};
+  I.maxIdx=I.maxIdx==null?(I.mound?7:4):I.maxIdx;
+  const out=PBL.build(I), sel=Q.liftPat!=null&&out.lift.options[Q.liftPat]?Q.liftPat:out.lift.rec, opt=out.lift.options[sel];
+  sug.append(el('div','qh','Suggested '+out.W+' week plan'),el('div','qs',day0(Q.start).toLocaleDateString(undefined,{month:'short',day:'numeric'})+' to '+day0(out.end).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' · '+out.season+(out.N!=null?' · '+out.N+' weeks to competition':'')));
+  for(const w of out.warn) sug.append(el('div','qmsg qwarn',w));
+  if(contUse){const r=el('div','qrow'); r.append(el('span','qs','Continuing '+FAMN[contUse.fam]+' from P'+contUse.ph+' ('+contUse.src+').')); r.append(bSel([['adv','Advance to P'+Math.min(3,contUse.ph+1)],['hold','Hold at P'+contUse.ph]],advance?'adv':'hold',v=>bset({contAdvance:v}))); sug.append(r)}
+  else if(cont&&cont.fam!==theory) sug.append(el('div','qs','The previous lifting theory was '+FAMN[cont.fam]+'. A new training theory starts at P1.'));
+  const tbl=el('div','qtbl'), row=(a,b,cc)=>{const r=el('div','qtr'); r.append(el('span','qt1',a),el('span','qt2',b),el('span','qt3',cc||'')); tbl.append(r)};
+  let wk=0; sug.append(el('div','qh2','Throwing'));
+  for(const b of out.blocks){const s=PBL.addDays(Q.start,wk*7), e=PBL.addDays(Q.start,(wk+b.weeks)*7-1), p=byCode(b.code), rp=rttList().find(x=>x.code===b.code), nm=b.code==='OFF'?'Deload (patterning only)':rp?rp.label:p?(p.name.replace(/ \(.*/,'')):b.code;
+    row('Weeks '+(wk+1)+(b.weeks>1?'–'+(wk+b.weeks):''),(b.code==='OFF'||rp?'':b.code+' · ')+nm,day0(s).toLocaleDateString(undefined,{month:'short',day:'numeric'})+' to '+day0(e).toLocaleDateString(undefined,{month:'short',day:'numeric'})); wk+=b.weeks}
+  sug.append(tbl); sug.append(el('div','qs','Level '+level+' · focus '+Q.focus+' · patterning '+(Q.patOn==='yes'?'included ('+(Q.patFocus&&Q.patFocus!=='same'?Q.patFocus:'same as throwing')+')':eff.status==='deload'?'only during the deload weeks':'left out')));
+  sug.append(el('div','qh2','Lifting · '+FAMN[theory]+' · '+Q.days+' days per week'));
+  const lopts=el('div','qlifts');
+  out.lift.options.forEach((o,i)=>{const b=el('button','qlift'+(i===sel?' on':'')); b.type='button'; b.append(el('b',null,o.blocks.map(x=>x.weeks+'w P'+x.ph).join('  →  ')+(i===out.lift.rec?'   ★ suggested':''))); b.append(el('span',null,o.pat.join(' + ')+' weeks')); b.addEventListener('click',()=>bset({liftPat:i})); lopts.append(b)});
+  sug.append(lopts);
+  sug.append(el('div','qh2','Retest')); sug.append(el('div','qs','The programs include their own test days. As a backstop, retest in weeks '+out.tests.join(', ')+'.'));
+  const fl=flagSummary(out,opt,eff,Q,Q.days);
+  if(fl&&fl.n) sug.append(el('div','qmsg qwarn',fl.n+' exercise'+(fl.n>1?'s':'')+' in these programs conflict with the restrictions or equipment (for example '+fl.names.slice(0,3).join(', ')+'). They are marked with a warning in the calendar so they can be swapped.'));
+  sug.append(el('div','qh2','Why')); const ul=el('ul','qwhy'); for(const t of out.throwWhy.concat(out.liftWhy)) ul.append(el('li',null,t)); sug.append(ul);
+  const bar=el('div','qrow'), ap=el('button','btn primary','Apply this plan'); ap.type='button'; ap.addEventListener('click',()=>applyBuild(c,Q,out,sel,eff,level,theory)); bar.append(ap);
+  if(Q.applied){const go=el('button','btn','Open the Training Map'); go.type='button'; go.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('velou-goto',{detail:'map'}))); bar.append(go); bar.append(el('span','note','Applied '+new Date(Q.appliedAt).toLocaleString()))}
+  sug.append(bar);
+}
+function renderNotes(){
+  const box=$('nview'); box.hidden=false; box.textContent='';
+  const h=el('div','nh'); h.append(el('h3',null,'Notes'),el('span','note','Visible to every coach working with this athlete.')); box.append(h);
+  const ta=el('textarea','nta'); ta.rows=4; ta.placeholder='Add a note about this athlete…'; box.append(ta);
+  const bar=el('div','qrow'), add=el('button','btn primary','Add note'); add.type='button'; add.addEventListener('click',()=>{const t=ta.value.trim(); if(!t){ta.focus(); return} (A.notes=A.notes||[]).unshift({id:rid(),at:Date.now(),by:host.dataset.coach||'',text:t}); changed()}); bar.append(add); box.append(bar);
+  const list=A.notes||[]; if(!list.length) box.append(el('div','qs','No notes yet.'));
+  for(const n of list){
+    const c=el('article','ncard'), m=el('div','nm'); m.append(el('b',null,new Date(n.at).toLocaleString(undefined,{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})),el('span',null,(n.by?' · '+n.by:'')+(n.edited?' · edited':'')));
+    const body=el('div','nt',n.text), acts=el('div','nact');
+    const ed=el('button','btn sm','Edit'); ed.type='button'; ed.addEventListener('click',()=>{const t2=el('textarea','nta'); t2.rows=4; t2.value=n.text; const sv=el('button','btn sm primary','Save'); sv.type='button'; sv.addEventListener('click',()=>{const v=t2.value.trim(); if(!v) return; n.text=v; n.edited=Date.now(); changed()}); body.replaceWith(t2); acts.replaceChildren(sv)});
+    const rm=el('button','btn sm danger','Delete'); rm.type='button'; rm.addEventListener('click',()=>{if(confirm('Delete this note?')){A.notes=(A.notes||[]).filter(x=>x!==n); changed()}});
+    acts.append(ed,rm); c.append(m,body,acts); box.append(c);
+  }
+}
+
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
 const key=()=>'velou.plan.'+cur;
@@ -1614,7 +2018,7 @@ function reload(){
   saved=!!o; A=Object.assign(blank(),o||{}); BOARD_ISS=[]; if(!saved){const sd=boardSeed(); if(sd){A=Object.assign(blank(),sd.S); BOARD_ISS=sd.iss}}
   A.swaps=A.swaps||{}; A.rowSwaps=A.rowSwaps||{}; A.removed=A.removed||{}; A.rowEdits=A.rowEdits||{}; A.added=A.added||{}; A.order=A.order||{}; A.dayMove=A.dayMove||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; if(A.str.fam==='none') A.str.fam=''; (A.strBlocks||[]).forEach(b=>{if(b.fam==='none') delete b.fam}); (A.blocks||[]).forEach(b=>{if(b.sFam==='none') delete b.sFam}); A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; A.baseline=A.baseline||{}; A.deload=A.deload||{};
   const n=planWeeks().length; viewWeek=currentWeek(n)||1;
-  coachOpen=DV?dvEdit:(coachOpen||!saved);
+  coachOpen=DV?dvEdit:(BV?coachOpen:(coachOpen||!saved));
   LOGS={}; CHECKS={}; TRES={}; LLIST=[]; CLIST=[]; TLIST=[]; logsFor=''; if(!HV) loadLogs();
   const arc=archiveIfDone(); if(arc){A.updated=Date.now(); try{localStorage.setItem(key(),JSON.stringify(A))}catch(e){}}
   pullRemote(cur,arc);
@@ -1728,8 +2132,8 @@ async function pullRemote(who,forcePush,adopt){if(!connected()||!who) return; le
   else if(saved&&(forcePush||!j.found||loc>j.updated)){if(!A.updated){A.updated=Date.now(); try{localStorage.setItem(key(),JSON.stringify(A))}catch(e){}} schedulePush()}
   else if(saved&&!RV) status('Plan is up to date with the team sheet.')}
 
-const HV=host.dataset.view==='history', SV=host.dataset.view==='strength', DV=host.dataset.view==='days', LANE=host.dataset.lane||'', PREPL=SV&&LANE==='prep', LIFTL=SV&&LANE==='lift';
-root.querySelector('.wrap').classList.add(DV?'dv':HV?'hv':SV?'sv':host.dataset.view==='roster'?'rv':'tv');
+const HV=host.dataset.view==='history', SV=host.dataset.view==='strength', DV=host.dataset.view==='days', BV=host.dataset.view==='build', NV=host.dataset.view==='notes', MV=host.dataset.view==='map', LANE=host.dataset.lane||'', PREPL=SV&&LANE==='prep', LIFTL=SV&&LANE==='lift';
+root.querySelector('.wrap').classList.add(DV?'dv':BV?'bv':NV?'nv':MV?'mv':HV?'hv':SV?'sv':host.dataset.view==='roster'?'rv':'tv');
 const HK=()=>'velou.history.'+cur;
 const loadHist=()=>{try{return JSON.parse(localStorage.getItem(HK())||'[]')||[]}catch(e){return []}};
 const saveHist=h=>{try{localStorage.setItem(HK(),JSON.stringify(h))}catch(e){} A.updated=Date.now(); try{if(saved) localStorage.setItem(key(),JSON.stringify(A))}catch(e){} setTimeout(()=>schedulePush(),0)};
@@ -1873,7 +2277,7 @@ async function renderRoster(force){
 $('rRef').addEventListener('click',()=>renderRoster(true));
 function draw(){if(RV) return renderRoster(); if(HV){if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); try{renderLanes()}catch(e){console.warn(e)} return renderHist()} if(SV) return renderSV(); render()}
 const hst=(t,w)=>{const s=$('hStatus'); s.textContent=t; s.className='note'+(w?' warn':'')};
-$('boardBtn').addEventListener('click',()=>{const sd=boardSeed(); if(!sd){status('This athlete has nothing on the Program Board.',true); return} if(saved&&!confirm('Replace this plan with the Program Board throwing, patterning and lifting programs?')) return; A=Object.assign(blank(),sd.S); BOARD_ISS=sd.iss; viewWeek=currentWeek(planWeeks().length)||1; changed(); status('Loaded from the Program Board.'+(sd.iss.length?' Check: '+sd.iss.join('; ')+'.':''),sd.iss.length>0)});
+$('boardBtn').addEventListener('click',()=>{const sd=boardSeed(); if(!sd){status('This athlete has nothing on the Program Board.',true); return} if(saved&&!confirm('Replace this plan with the Program Board throwing, patterning and lifting programs?')) return; {const kn=A.notes, kb=A.build; A=Object.assign(blank(),sd.S); if(kn) A.notes=kn; if(kb) A.build=kb} BOARD_ISS=sd.iss; viewWeek=currentWeek(planWeeks().length)||1; changed(); status('Loaded from the Program Board.'+(sd.iss.length?' Check: '+sd.iss.join('; ')+'.':''),sd.iss.length>0)});
 $('pdfBtn').addEventListener('click',()=>printDoc(planHTML(A)));
 $('expBtn').addEventListener('click',expFile); $('hExp').addEventListener('click',expFile);
 $('impIn').addEventListener('change',e=>{impFile(e.target.files[0],status); e.target.value=''});
@@ -1920,7 +2324,7 @@ window.VeloUPlan={setStrength,setLibrary,current(name,opt){
   return {phase:post?'Plan complete':(pre?'Starts '+fmt(st)+' \u00b7 '+w.phase:w.phase), focus:w.focus||fd.focus||o.focus||'',strength,sFam,sPh};
 }};
 class VeloUTrainingPlan extends HTMLElement{
-  static get observedAttributes(){return ['data-perf','data-strrec','data-names','data-athlete','data-level','data-velo','data-kneel','data-lt','data-armscore','data-injury','data-focus','data-videos','data-board']}
+  static get observedAttributes(){return ['data-perf','data-strrec','data-names','data-athlete','data-level','data-velo','data-kneel','data-lt','data-armscore','data-injury','data-focus','data-videos','data-board','data-xfer','data-prod','data-ratio','data-pos','data-playlevel','data-injstatus','data-injloc','data-injnote','data-hand','data-coach']}
   connectedCallback(){
     if(!this.shadowRoot){const r=this.attachShadow({mode:'open'}); r.innerHTML='<style>'+CSS+'</style>'+HTML; this.api=mount(this)}
     this.api.reload();
