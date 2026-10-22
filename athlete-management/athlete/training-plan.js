@@ -1972,8 +1972,8 @@ const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const liftName=n=>String(n||'').replace(/^[^—]*\s—\s/,'').trim();
 // the heading before the first dash ("Rotational Flow - Dive Roll Flow (...)") is the exercise's category, not part of its name: show the exercise alone.
 // Names that are a movement plus a variant ("Bunt Play - First", "Water Bag ... + CVB - Random Tension") keep their dash. The stored name is never changed (flags and video matching still read it).
-const exShow=n=>{const s=String(n||''), m=/^(.+?)\s[-–—]\s+(\S.*)$/.exec(s); if(!m) return s; const h=m[1], r=m[2].trim(); return h.split(/\s+/).filter(w=>/[a-z0-9]/i.test(w)).length>4||/[+(]/.test(h)||/^(?:first|second|third|fourth|fifth)$/i.test(r)?s:r};
-const exTip=(n,fg)=>[exShow(n)!==n?n:'',fg&&fg.length?fg.join('; '):''].filter(Boolean).join(' — ');   // hover text: the full stored name, then any flags
+const exShow=(n,l)=>{const s=String(n||''), m=l==='throw'?null:/^(.+?)\s[-–—]\s+(\S.*)$/.exec(s); if(!m) return s; const h=m[1], r=m[2].trim(); return h.split(/\s+/).filter(w=>/[a-z0-9]/i.test(w)).length>4||/[+(]/.test(h)||/^(?:first|second|third|fourth|fifth)$/i.test(r)?s:r};
+const exTip=(n,fg,l)=>[exShow(n,l)!==n?n:'',fg&&fg.length?fg.join('; '):''].filter(Boolean).join(' — ');   // hover text: the full stored name, then any flags
 const abbrFocus=t=>String(t||'').replace(/\s*\/\s*/g,'/').replace(/\[Vertical\]/g,'[V]').replace(/\[Horizontal\]/g,'[H]');
 const PATN={A:'Positional Control',B:'Dynamic Stability',C:'Dynamic Sequencing',D:'Dynamic Power'};
 const dayNo=dt=>{const st=day0(A.startDate); if(!st) return null; const off=Math.round((dt-st)/864e5); return off>=0?off%7+1:null};
@@ -2123,20 +2123,20 @@ function renderBox(l,dt,ix,ctx){
       rows.forEach((r,i)=>{
         if(r.info){const li=el('div','lrow linfo'); li.dataset.dk=dk; li.dataset.i=String(i); li.dataset.lane=l; li.append(el('span',null,r.name),el('b',null,r.info)); list.append(li); return}
         const slotTxt=l==='throw'?String(i+1):(r.slot||''), re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')+(edit?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i); re.dataset.lane=l;
-        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=f==='name'?exShow(v):(v||''); x.setAttribute('aria-label',f); x.dataset.fk=[l,dk,i,f].join('|'); if(ph) x.placeholder=ph;
+        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=f==='name'?exShow(v,l):(v||''); x.setAttribute('aria-label',f); x.dataset.fk=[l,dk,i,f].join('|'); if(ph) x.placeholder=ph;
           const stored=()=>{const dd=lnDay(l,dt), rr=dd&&dd.rows[i]; return rr?rr.name:v};   // the name as saved: the box shows it without its heading
           if(f==='name') exPick(x,l,(nm,dose)=>{lnEdit(l,dt,o=>{const r=o.rows[i]; r.name=nm; if(dose&&!r.sets&&!r.reps){r.sets=dose.sets; r.reps=dose.reps; return true}},true)},stored);
-          x.addEventListener('change',()=>{ if(f==='name'&&x.value.trim()===exShow(stored())) return; lnEdit(l,dt,o=>{o.rows[i][f]=x.value.trim()},true)}); return x};
+          x.addEventListener('change',()=>{ if(f==='name'&&x.value.trim()===exShow(stored(),l)) return; lnEdit(l,dt,o=>{o.rows[i][f]=x.value.trim()},true)}); return x};
         if(edit){
           const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i,lane:l,ctx},re));
           const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i,1)})));
           const ni=inp(r.name,'name','nmi','Exercise'); {const fg=exFlags(l,r.name); ni.title=[r.name].concat(fg.length?[fg.join('; ')]:[]).join(' \u2014 '); if(fg.length) re.classList.add('lflag')} top.append(gb,el('span','sl',slotTxt),ni,ac); for(const [f,ph] of cfg.fields) bot.append(inp(r[f],f,'',ph)); bot.style.gridTemplateColumns='repeat('+cfg.fields.length+',minmax(0,1fr))'; re.append(top,bot)}
         else if(ctx.narrow){
-          re.classList.add('lnar'); re.style.gridTemplateColumns='22px minmax(0,1fr)'; const nb=el('div','lnb'), nm=el('span','nm2',exShow(r.name)); {const tp=exTip(r.name); if(tp) nm.title=tp}
-          {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' ⚠')); nm.title=exTip(r.name,fg); re.classList.add('lflag')}}
+          re.classList.add('lnar'); re.style.gridTemplateColumns='22px minmax(0,1fr)'; const nb=el('div','lnb'), nm=el('span','nm2',exShow(r.name,l)); {const tp=exTip(r.name,null,l); if(tp) nm.title=tp}
+          {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' ⚠')); nm.title=exTip(r.name,fg,l); re.classList.add('lflag')}}
           nb.append(nm); const ds=lnDose(r); if(ds) nb.append(el('div','ldose',ds)); re.append(el('span','sl',slotTxt),nb)}
         else{
-          re.style.gridTemplateColumns=cols; const nm=el('span','nm2',exShow(r.name)); {const tp=exTip(r.name); if(tp) nm.title=tp} if(r.ball) nm.append(el('div','lsub',r.ball)); {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' ⚠')); nm.title=exTip(r.name,fg); re.classList.add('lflag')}}
+          re.style.gridTemplateColumns=cols; const nm=el('span','nm2',exShow(r.name,l)); {const tp=exTip(r.name,null,l); if(tp) nm.title=tp} if(r.ball) nm.append(el('div','lsub',r.ball)); {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' ⚠')); nm.title=exTip(r.name,fg,l); re.classList.add('lflag')}}
           re.append(el('span','sl',slotTxt),nm,el('span','n',r.sets),el('span','n',r.reps)); if(hasInt) re.append(el('span','n',r.int)); if(hasTmp) re.append(el('span','n',r.tempo))}
         list.append(re)});
       if(edit&&real){const bar=el('div','lbar'), ad=el('button','btn sm','+ Add exercise'); ad.type='button'; ad.addEventListener('click',()=>{PENDF=[l,dk,d.rows.length,'name'].join('|'); lnEdit(l,dt,o=>{o.rows.push({id:rid(),slot:'',blk:'+',name:'New exercise',sets:'',reps:'',int:'',tempo:'',ball:''}); if(!o.title||/^(Rest day|No )/.test(o.title)) o.title='Custom day'})}); bar.append(ad);
@@ -2711,7 +2711,7 @@ function exPick(input,lane,commit,full){
   const place=()=>{ if(!pop) return; const r=input.getBoundingClientRect(), vw=window.innerWidth, vh=window.innerHeight, vv=window.visualViewport, vt=vv?vv.offsetTop:0, vb=vv?Math.min(vh,vt+vv.height):vh, w=Math.min(460,vw-16), left=Math.min(Math.max(8,r.left),vw-w-8);
     pop.style.width=w+'px'; pop.style.left=left+'px'; const below=vb-r.bottom-8, above=r.top-vt-8, h=Math.min(pop.scrollHeight,340);
     if(below<Math.min(h,220)&&above>below){pop.style.top='auto'; pop.style.bottom=(vh-r.top+4)+'px'; pop.style.maxHeight=Math.min(340,above)+'px'} else {pop.style.bottom='auto'; pop.style.top=(r.bottom+4)+'px'; pop.style.maxHeight=Math.min(340,Math.max(160,below))+'px'} };
-  const choose=it=>{ if(it.use){ exClose(); input.blur(); return } exClose(); input.value=exShow(it.name); const d=(lane==='pat'&&PAT&&PAT.dose)?PAT.dose[it.k]:''; let dose=null; if(d){const m=String(d).match(/^(\d+)\s*[x×]\s*(.+)$/i); if(m) dose={sets:m[1],reps:m[2].trim()}} commit(it.name,dose) };
+  const choose=it=>{ if(it.use){ exClose(); input.blur(); return } exClose(); input.value=exShow(it.name,lane); const d=(lane==='pat'&&PAT&&PAT.dose)?PAT.dose[it.k]:''; let dose=null; if(d){const m=String(d).match(/^(\d+)\s*[x×]\s*(.+)$/i); if(m) dose={sets:m[1],reps:m[2].trim()}} commit(it.name,dose) };
   const draw=()=>{
     if(!pop) return; pop.textContent='';
     const pools=exPools(), pool=pools[lane]||pools.corr, ready=pool.list.length;
@@ -2721,7 +2721,7 @@ function exPick(input,lane,commit,full){
     const useRow=typed&&input.value.trim()&&!items.some(it=>it.k===exNorm(input.value)); if(useRow) items.push({use:true}); act=items.length?0:-1;
     items.forEach((it,i)=>{const b=el('button','exi'+(it.use?' exu':'')+(i===act?' on':'')); b.type='button'; b.id='exi'+i; b.setAttribute('role','option');
       if(it.use) b.append(el('span','exn','Use \u201c'+input.value.trim()+'\u201d as written'));
-      else{const nm=el('span','exn'); nm.append(exMark(exShow(it.name),toks)); b.append(nm); if(it.cat&&exNorm(it.cat)!==exNorm(it.name)) b.append(el('small',null,it.cat))}
+      else{const nm=el('span','exn'); nm.append(exMark(exShow(it.name,lane),toks)); b.append(nm); if(it.cat&&exNorm(it.cat)!==exNorm(it.name)) b.append(el('small',null,it.cat))}
       b.addEventListener('mousedown',e=>e.preventDefault()); b.addEventListener('click',()=>choose(it)); b.addEventListener('mousemove',()=>{act=i; mark()}); pop.append(b)});
     place()};
   const mark=()=>{ if(!pop) return; [...pop.querySelectorAll('.exi')].forEach((b,i)=>{b.classList.toggle('on',i===act); if(i===act){ input.setAttribute('aria-activedescendant',b.id); b.scrollIntoView({block:'nearest'}) }}) };
@@ -2983,7 +2983,7 @@ function avCard(m,r,pset){
   const e=r.eff, X=avGet(m.dk,r.key)||{sets:[]}, kind=avKind(r,e), nSet=avSetN(e.sets,e.reps), N=nSet.n||1, band=r.band, c=el('article','avx'+(r.ac?' ac':'')+(e.skip?' skip':''));
   c.dataset.k=r.key; const top=el('div','avxh'), attach=()=>avPut(m.dk,r.key,X);
   if(r.slot&&r.lane!=='throw') top.append(el('span','avslot',r.slot));
-  const nm=el('div','avname'); nm.append(el('b',null,exShow(e.name))); if(r.swapped) nm.append(el('span','avsw',(r.saved?'Your usual swap for ':'Swapped for ')+exShow(r.orig))); top.append(nm);
+  const nm=el('div','avname'); nm.append(el('b',null,exShow(e.name,r.lane))); if(r.swapped) nm.append(el('span','avsw',(r.saved?'Your usual swap for ':'Swapped for ')+exShow(r.orig,r.lane))); top.append(nm);
   const v=avVid(r), vb=el('button','avvid'+(v?'':' none'),v?'▶ Video':'No video'); vb.type='button'; vb.addEventListener('click',()=>avWatch(r,v)); top.append(vb); c.append(top);
   const rx=el('div','avrx'), chip=(t,cls)=>rx.append(el('span','avchip'+(cls?' '+cls:''),t));
   chip(N+(nSet.bonus?' ('+(N-nSet.bonus)+' + '+nSet.bonus+' bonus)':'')+' × '+(e.reps||'—'),'main'); if(e.int) chip('@ '+e.int);
@@ -3036,47 +3036,47 @@ function avSheet(title,cls){ avClose(); if(!AVW){ AVW=true; window.addEventListe
   const o=el('div','avov'), p=el('div','avpn'+(cls?' '+cls:'')), h=el('div','avph'), x=el('button','mdx','✕'); x.type='button'; x.setAttribute('aria-label','Close'); x.addEventListener('click',avClose); h.append(el('b',null,title),x); p.append(h); o.append(p);
   o.addEventListener('pointerdown',e=>{ if(e.target===o) avClose() }); root.append(o); AVO=o; const body=el('div','avpb'); p.append(body); return body }
 function avClose(){ if(AVO){ AVO.remove(); AVO=null } exClose() }
-function avWatch(r,v){ const b=avSheet(exShow(r.eff?r.eff.name:r.name),'vid');
+function avWatch(r,v){ const b=avSheet(exShow(r.eff?r.eff.name:r.name,r.lane),'vid');
   if(!v){ b.append(el('p','avmsg','No video is linked to this exercise yet.')); avFixBtn(b,r); return }
   if(v.kind==='youtube'||v.kind==='vimeo'){ const f=document.createElement('iframe'); f.src=v.embed; f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen'); f.setAttribute('allowfullscreen',''); f.className='avfr'; b.append(f) }
   else if(v.kind==='mp4'){ const vd=document.createElement('video'); vd.src=v.embed; vd.controls=true; vd.setAttribute('playsinline',''); vd.className='avfr'; b.append(vd) }
-  if(v.via&&v.q!=='fix'&&v.q!=='sheet') b.append(el('p','avcap','Closest video in the library: '+exShow(v.via)));
+  if(v.via&&v.q!=='fix'&&v.q!=='sheet') b.append(el('p','avcap','Closest video in the library: '+exShow(v.via,r.lane)));
   const a=el('a','avlink','Open the video in a new tab'); a.href=v.watch; a.target='_blank'; a.rel='noopener'; b.append(a); avFixBtn(b,r) }
 function avFixBtn(b,r){ const x=el('button','btn sm','Wrong or missing video? Choose another'); x.type='button'; x.addEventListener('click',()=>avPickVideo(r)); b.append(x) }
 // choose the right video for an exercise: search the library, pick one, and every athlete gets it
-function avPickVideo(r,back){ const nm=r.eff?r.eff.name:r.name, b=avSheet('Choose the video for '+exShow(nm)), nk=xCore(nm)||exNorm(nm);
+function avPickVideo(r,back){ const nm=r.eff?r.eff.name:r.name, b=avSheet('Choose the video for '+exShow(nm,r.lane)), nk=xCore(nm)||exNorm(nm);
   const inp=el('input','avsrch'); inp.type='search'; inp.placeholder='Type an exercise name'; inp.setAttribute('aria-label','Search the exercise library'); const list=el('div','avres2'); b.append(inp,list);
   if(VFIX[nk]){ const rm=el('button','btn sm','Remove the correction'); rm.type='button'; rm.addEventListener('click',()=>{ delete VFIX[nk]; try{localStorage.setItem(VFK,JSON.stringify(VFIX))}catch(e){} avClose(); render(); if(back) back() }); b.append(rm) }
   const draw=()=>{ list.textContent=''; if(!XL){ list.append(el('p','avmsg','The exercise library is loading…')); return } const q=inp.value, hits=(q.trim()?avFind(q):avSimilarLib(nm)).filter(x=>x.v).slice(0,40);
-    for(const e of hits){ const it=el('button','avit'); it.type='button'; const t=el('span','avitn'); t.append(exMark(exShow(e.n),exTok(q))); it.append(t,el('small',null,[e.cat,e.body].filter(Boolean).join(' · '))); it.addEventListener('click',()=>{ VFIX[nk]={c:e.v,n:e.n}; try{localStorage.setItem(VFK,JSON.stringify(VFIX))}catch(x){} avClose(); render(); if(back) back() }); list.append(it) }
+    for(const e of hits){ const it=el('button','avit'); it.type='button'; const t=el('span','avitn'); t.append(exMark(exShow(e.n,r.lane),exTok(q))); it.append(t,el('small',null,[e.cat,e.body].filter(Boolean).join(' · '))); it.addEventListener('click',()=>{ VFIX[nk]={c:e.v,n:e.n}; try{localStorage.setItem(VFK,JSON.stringify(VFIX))}catch(x){} avClose(); render(); if(back) back() }); list.append(it) }
     if(!list.childNodes.length) list.append(el('p','avmsg',q.trim()?'No video found for that name.':'Type to search the library.')) };
   inp.addEventListener('input',draw); draw(); setTimeout(()=>inp.focus(),50) }
 function avFind(q){ const toks=exTok(q); if(!toks.length||!XL) return []; const out=[]; for(const e of XL.E){ const hay=e.c+' '+exNorm(e.cat); let s=0, ok=true; for(const t of toks){ const i=hay.indexOf(t); if(i<0){ok=false; break} s+=i===0?40:(/[^a-z0-9]/.test(hay[i-1])?25:8) } if(!ok) continue; if(e.c.includes(exNorm(q))) s+=30; s-=e.n.length*0.04; if(e.v) s+=6; out.push([s,e]) } out.sort((a,b)=>b[0]-a[0]); return out.slice(0,60).map(x=>x[1]) }
 function avSimilarLib(name){ if(!XL) return []; const m=xFind(name,'lift'), me=m&&m.e, q=new Set(xToks(xCat(name))), out=[]; for(const e of XL.E){ if(me&&e.i===me.i) continue; let s=xDice(q,e.t)*10; if(!s) continue; if(me){ if(me.pat&&e.pat===me.pat) s+=3; if(me.mus&&e.mus===me.mus) s+=2; if(me.body&&e.body===me.body) s+=1; if(me.cat===e.cat) s+=0.5 } out.push([s+(e.v?0.3:0),e]) } out.sort((a,b)=>b[0]-a[0]); const seen=new Set(), res=[]; for(const [,e] of out){ if(seen.has(e.c)) continue; seen.add(e.c); res.push(e); if(res.length>=60) break } return res }
 function avReview(m){ const b=avSheet('Videos for '+m.dt.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}),'rev'), rows=[], list=el('div','avrv'); let ok=0; for(const s of m.secs) for(const r of s.rows) if(!r.info) rows.push(r);
-  for(const r of rows){ const v=avVid(r), q=v?(v.q==='exact'||v.q==='sheet'||v.q==='fix'?'ok':'sim'):'none'; if(q==='ok') ok++; const it=el('div','avrvr '+q), nm=el('div','avrvn'); nm.append(el('b',null,exShow(r.eff.name)),el('small',null,v?(v.q==='exact'?'Matched by name':v.q==='sheet'?'From the program library':v.q==='fix'?'Chosen by a coach':'Closest match: '+exShow(v.via)):'No video found')); const bt=el('button','btn sm',v?'Change':'Find a video'); bt.type='button'; bt.addEventListener('click',()=>avPickVideo(r,()=>avReview(m))); it.append(nm,bt); list.append(it) }
+  for(const r of rows){ const v=avVid(r), q=v?(v.q==='exact'||v.q==='sheet'||v.q==='fix'?'ok':'sim'):'none'; if(q==='ok') ok++; const it=el('div','avrvr '+q), nm=el('div','avrvn'); nm.append(el('b',null,exShow(r.eff.name,r.lane)),el('small',null,v?(v.q==='exact'?'Matched by name':v.q==='sheet'?'From the program library':v.q==='fix'?'Chosen by a coach':'Closest match: '+exShow(v.via,r.lane)):'No video found')); const bt=el('button','btn sm',v?'Change':'Find a video'); bt.type='button'; bt.addEventListener('click',()=>avPickVideo(r,()=>avReview(m))); it.append(nm,bt); list.append(it) }
   b.append(el('p','avmsg',ok+' of '+rows.length+' have a video that matches the exercise by name. The rest show the closest video, or none, until a coach picks one.'),list) }
 function avPrompt(title,msg,btns){ const b=avSheet(title,'ask'); b.append(el('p','avmsg',msg)); const row=el('div','avbtns'); for(const [t,fn,cls] of btns){ const x=el('button','btn'+(cls?' '+cls:''),t); x.type='button'; x.addEventListener('click',()=>{avClose(); fn()}); row.append(x) } b.append(row) }
-function avSwap(m,r){ const b=avSheet('Swap '+exShow(r.eff.name),'swap'), inp=el('input','avsrch'), list=el('div','avres2'); inp.type='search'; inp.placeholder='Type the exercise you want to do instead'; inp.setAttribute('aria-label','Search for a substitute exercise'); b.append(inp,list);
+function avSwap(m,r){ const b=avSheet('Swap '+exShow(r.eff.name,r.lane),'swap'), inp=el('input','avsrch'), list=el('div','avres2'); inp.type='search'; inp.placeholder='Type the exercise you want to do instead'; inp.setAttribute('aria-label','Search for a substitute exercise'); b.append(inp,list);
   const pools=exPools(), choose=n=>{ if(exNorm(n)===exNorm(r.eff.name)){ avClose(); return } avClose(); const X=avGet(m.dk,r.key)||{sets:[]}; X.sub={n}; avPut(m.dk,r.key,X); avSave();
-    avPrompt('Use this swap next time too?','Swap “'+exShow(r.orig)+'” for “'+exShow(n)+'” every time it is in your program?',[['Just today',()=>render()],['Every time',()=>{ AVS.prefs.sub[r.nk]={n}; delete X.sub; avSave(); render() },'primary']]) };
+    avPrompt('Use this swap next time too?','Swap “'+exShow(r.orig,r.lane)+'” for “'+exShow(n,r.lane)+'” every time it is in your program?',[['Just today',()=>render()],['Every time',()=>{ AVS.prefs.sub[r.nk]={n}; delete X.sub; avSave(); render() },'primary']]) };
   const draw=()=>{ list.textContent=''; const q=inp.value.trim(); let items=[]; if(!XL&&!q){ list.append(el('p','avmsg','The exercise library is loading…')); return }
     if(q){ const seen=new Set(); for(const it of exSearch(pools[r.lane]||pools.corr,q,r.orig).items){ seen.add(xCore(it.name)); items.push({n:it.name,cat:it.cat}) } for(const e of avFind(q)){ if(seen.has(e.c)) continue; seen.add(e.c); items.push({n:e.n,cat:[e.cat,e.body].filter(Boolean).join(' · ')}) } items=items.slice(0,40) }
-    else { items=avSimilarLib(r.orig).slice(0,30).map(e=>({n:e.n,cat:[e.cat,e.body].filter(Boolean).join(' · ')})); list.append(el('div','avhd','Similar to '+exShow(r.eff.name))) }
-    for(const it of items){ const bt=el('button','avit'), t=el('span','avitn'); bt.type='button'; t.append(exMark(exShow(it.n),exTok(q))); bt.append(t,el('small',null,it.cat||'')); bt.addEventListener('click',()=>choose(it.n)); list.append(bt) }
+    else { items=avSimilarLib(r.orig).slice(0,30).map(e=>({n:e.n,cat:[e.cat,e.body].filter(Boolean).join(' · ')})); list.append(el('div','avhd','Similar to '+exShow(r.eff.name,r.lane))) }
+    for(const it of items){ const bt=el('button','avit'), t=el('span','avitn'); bt.type='button'; t.append(exMark(exShow(it.n,r.lane),exTok(q))); bt.append(t,el('small',null,it.cat||'')); bt.addEventListener('click',()=>choose(it.n)); list.append(bt) }
     if(q&&!items.some(x=>exNorm(x.n)===exNorm(q))){ const bt=el('button','avit use'); bt.type='button'; bt.append(el('span','avitn','Use “'+q+'” as written')); bt.addEventListener('click',()=>choose(q)); list.append(bt) }
     if(!list.querySelector('.avit')) list.append(el('p','avmsg','No match. Keep typing, or use your own name.')) };
   inp.addEventListener('input',draw); draw(); setTimeout(()=>inp.focus(),50) }
-function avAdjust(m,r){ const b=avSheet('Adjust '+exShow(r.eff.name),'adj'), e=r.eff, f={};
+function avAdjust(m,r){ const b=avSheet('Adjust '+exShow(r.eff.name,r.lane),'adj'), e=r.eff, f={};
   const row=(lab,key,val,ph)=>{ const l=el('label','avfld'), i=el('input','avin avwide'); l.append(el('span',null,lab)); i.value=val==null?'':val; i.placeholder=ph||''; i.addEventListener('input',()=>{f[key]=i.value}); l.append(i); b.append(l); f[key]=i.value };
   b.append(el('p','avmsg','Change what you will do for this exercise.')); row('Sets','sets',e.sets,'e.g. 3'); row('Reps','reps',e.reps,'e.g. 5'); if(e.int||r.lane==='lift') row('Intensity','int',e.int,'e.g. 80%');
   const sk=el('label','avchk'), cb=document.createElement('input'); cb.type='checkbox'; cb.checked=!!e.skip; sk.append(cb,el('span',null,'Skip this exercise')); b.append(sk);
   const bt=el('div','avbtns'), ok=el('button','btn primary','Apply'), cn=el('button','btn','Cancel'); ok.type=cn.type='button'; cn.addEventListener('click',avClose);
   ok.addEventListener('click',()=>{ const adj={}; for(const k of ['sets','reps','int']){ if(!(k in f)) continue; const v=String(f[k]==null?'':f[k]).trim(); if(v!==String(r[k]==null?'':r[k]).trim()) adj[k]=v } if(cb.checked) adj.skip=true; avClose();
     const X=avGet(m.dk,r.key)||{sets:[]}; if(!Object.keys(adj).length){ delete X.adj; avPut(m.dk,r.key,X); avSave(); render(); return }
-    X.adj=adj; avPut(m.dk,r.key,X); avSave(); avPrompt('Make this change every time?','Use these changes every time “'+exShow(r.orig)+'” is in your program?',[['Just today',()=>render()],['Every time',()=>{ AVS.prefs.adj[r.nk]=Object.assign({},adj); delete X.adj; avSave(); render() },'primary']]) });
+    X.adj=adj; avPut(m.dk,r.key,X); avSave(); avPrompt('Make this change every time?','Use these changes every time “'+exShow(r.orig,r.lane)+'” is in your program?',[['Just today',()=>render()],['Every time',()=>{ AVS.prefs.adj[r.nk]=Object.assign({},adj); delete X.adj; avSave(); render() },'primary']]) });
   bt.append(ok,cn); b.append(bt) }
-function avNote(m,r){ const b=avSheet('Note for '+exShow(r.eff.name),'adj'), t=document.createElement('textarea'), X=avGet(m.dk,r.key)||{sets:[]}; t.className='avta'; t.rows=4; t.value=X.note||''; t.placeholder='How did it feel? Anything your coach should know?'; b.append(t);
+function avNote(m,r){ const b=avSheet('Note for '+exShow(r.eff.name,r.lane),'adj'), t=document.createElement('textarea'), X=avGet(m.dk,r.key)||{sets:[]}; t.className='avta'; t.rows=4; t.value=X.note||''; t.placeholder='How did it feel? Anything your coach should know?'; b.append(t);
   const row=el('div','avbtns'), ok=el('button','btn primary','Save'); ok.type='button'; ok.addEventListener('click',()=>{ X.note=t.value.trim(); avPut(m.dk,r.key,X); avSave(); avClose(); render() }); row.append(ok); b.append(row); setTimeout(()=>t.focus(),50) }
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
