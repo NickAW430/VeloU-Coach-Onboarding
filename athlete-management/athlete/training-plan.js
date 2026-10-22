@@ -530,26 +530,32 @@ button.rr:hover{background:var(--sunk)}
 .aa-bk svg{width:24px;height:24px}
 .aa-bt{flex:1;min-width:0;text-align:center;font:400 19px/1 'Anton',var(--body);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .aa-logo{display:block;height:24px;width:auto}
-.aa-me{flex:none;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--aa-line2);background:#10161a center/cover no-repeat;color:#fff;font:600 13px var(--body);overflow:hidden}
+.aa-me{flex:none;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;border:1px solid var(--aa-line2);background:#10161a center/cover no-repeat;color:#fff;font:600 13px var(--body);overflow:hidden}
 .aa-me.ph{border-color:#E10600}
-.aa-logorow{display:flex;justify-content:center;padding:26px 0 22px}
-.aa-logorow .aa-logo{height:22px}
+.aa-bg0{position:fixed;inset:0;z-index:-2;pointer-events:none;background:#000}
+.aa-topo{position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("/assets/topo-bg.webp") center/cover no-repeat;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 30%,#000 70%,transparent 100%)}
+.aa-logorow{display:flex;justify-content:center;padding:30px 0 24px}
+.aa-nylogo{display:block;width:min(250px,72%);height:auto}
 .aa-prof{display:flex;align-items:center;gap:16px;min-width:0}
-.aa-ring{flex:none;width:92px;height:92px;padding:3px;border-radius:50%;background:#E10600}
-.aa-photo{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;border:3px solid #000;background:#10161a center 30%/cover no-repeat;color:#fff;font:400 30px/1 'Anton',var(--body);letter-spacing:.03em;filter:saturate(.85)}
+.aa-ring{flex:none;width:96px;height:96px;padding:3px;border-radius:14px;background:#E10600}
+.aa-photo{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:11px;border:3px solid #000;background:#10161a center 30%/cover no-repeat;color:#fff;font:400 30px/1 'Anton',var(--body);letter-spacing:.03em;filter:saturate(.85)}
 .aa-photo.none{filter:none}
-.aa-pt{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
-.aa-pt h1{margin:0;font:600 32px/.98 var(--body);letter-spacing:-.03em;color:#fff;overflow-wrap:anywhere}
-.aa-pl{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;font:500 14px/1.35 var(--body);color:rgba(255,255,255,.82)}
+.aa-pt{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.aa-pt h1{margin:0;font:600 30px/.98 var(--body);letter-spacing:-.03em;color:#fff;overflow-wrap:anywhere}
+.aa-pl{display:flex;flex-wrap:wrap;align-items:center;gap:2px 7px;font:500 13.5px/1.35 var(--body);color:rgba(255,255,255,.82)}
 .aa-pl i{font-style:normal;color:#5B6770}
 .aa-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:28px}
-.aa-tile{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:10px;aspect-ratio:1/1;padding:18px 14px 14px;border:0;border-radius:8px;overflow:hidden;text-align:left;color:#fff;cursor:pointer;background:linear-gradient(165deg,#151c21 0%,#0a0e11 100%);box-shadow:inset 0 0 0 1px #1d262b;transition:transform .12s}
-.aa-tile::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--tc)}
-.aa-tile:active{transform:scale(.975)}
-.aa-tile svg{flex:none;width:30px;height:30px;color:var(--tc)}
-.aa-tile .tx b{display:block;font:400 18px/1.08 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
-.aa-tile .tx span{display:block;margin-top:5px;font:500 12.5px/1.3 var(--body);color:var(--aa-sub)}
-.aa-tile em{position:absolute;right:10px;top:16px;padding:3px 8px;border:1px solid var(--tc);border-radius:10px;font:600 11px/1.2 var(--body);font-style:normal;letter-spacing:.03em;color:var(--tc);background:rgba(0,0,0,.35)}
+.aa-tile{position:relative;display:flex;flex-direction:column;gap:8px;aspect-ratio:1/1;padding:16px 14px 16px;border:0;border-radius:14px;overflow:hidden;text-align:left;color:#fff;cursor:pointer;background:linear-gradient(180deg,#161616 0%,rgba(22,22,22,0) 100%);transition:transform .15s ease}
+.aa-tile::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--tc,#fff);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.aa-tile:active::before,.aa-tile:focus-visible::before{transform:scaleX(1)}
+.aa-tile:active{transform:scale(.98)}
+@media (hover:hover){.aa-tile:hover::before{transform:scaleX(1)}.aa-tile:hover{transform:translateY(-3px);background:linear-gradient(180deg,#202020 0%,rgba(32,32,32,0) 100%)}}
+.aa-tile:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.aa-tile .eb{display:flex;align-items:center;justify-content:space-between;gap:6px;font:700 11px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.aa-tile .eb em{flex:none;padding:2px 7px;border:1px solid var(--tc);border-radius:10px;font:600 10.5px/1.2 var(--body);font-style:normal;letter-spacing:.02em;text-transform:none;color:var(--tc);white-space:nowrap}
+.aa-tile b{display:block;margin:0;font:400 22px/1.08 'Anton',var(--body);letter-spacing:.01em}
+.aa-tile .ds{display:block;font:400 13px/1.4 var(--body);color:#a8a8a8}
+.aa-tile .cta{margin-top:auto;font:700 13px var(--body);letter-spacing:.03em;color:#fff}
 .aa-soon{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:24px 0;padding:22px 18px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:10px}
 .aa-soon svg{width:34px;height:34px;color:var(--aa-blue)}
 .aa-soon b{font:400 26px/1.1 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
@@ -3452,14 +3458,20 @@ const AAICON={
   today:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>',
   week:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.01M8 17.5h2M12 17.5h2"/></svg>',
   chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1h-8l-4.5 3.5V17H4a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1Z"/></svg>'};
-// the opening page: the VeloU mark, the athlete (the dashboard's left-hand block), and four squares
+// the opening page, in the look of the portal home: the topo background, the VeloU New York logo, the athlete (the dashboard's left-hand block), and four gradient squares
 function aaHome(app,S){
-  const p=aaProf(), logo=el('div','aa-logorow'), img=el('img','aa-logo'); img.src='/assets/velou-wordmark.png'; img.alt='VeloU'; logo.append(img); app.append(logo);
+  const p=aaProf(); app.append(el('div','aa-bg0'),el('div','aa-topo'));
+  const logo=el('div','aa-logorow'), img=el('img','aa-nylogo'); img.src='/assets/velou-new-york.webp'; img.alt='VeloU New York'; logo.append(img); app.append(logo);
   const pf=el('section','aa-prof'), ring=el('div','aa-ring'), ph=el('div','aa-photo'); if(p.photo) ph.style.backgroundImage='url("'+p.photo+'")'; else { ph.classList.add('none'); ph.textContent=aaInit(p.name) } ring.append(ph);
-  const tx=el('div','aa-pt'); tx.append(el('h1',null,p.name));
   const ok=t=>t&&t!=='—', line=a=>{ const x=a.filter(ok); if(!x.length) return null; const d=el('div','aa-pl'); x.forEach((t,i)=>{ if(i) d.append(el('i',null,'·')); d.append(el('span',null,t)) }); return d };
-  const l1=line([p.position,p.team,p.level]), l2=line([ok(p.age)?'Age '+p.age:'',p.height,p.bw,p.residence]); if(l1) tx.append(l1); if(l2) tx.append(l2);
-  pf.append(ring,tx); app.append(pf);
+  const l1=line([p.position,p.team,p.level]), l2=line([ok(p.age)?'Age '+p.age:'',p.height,p.bw,p.residence]);
+  const tx=el('div','aa-pt'); tx.append(el('h1',null,p.name)); if(l1) tx.append(l1); if(l2) tx.append(l2); pf.append(ring,tx); app.append(pf);
+  // the photo is a rounded square as tall as the words beside it. A bigger photo leaves the words less room (they wrap, and grow), so try a few sizes and keep the one that matches best (80 to 128px)
+  const fit=()=>{ const set=v=>{ ring.style.width=ring.style.height=v+'px' }, hh=()=>Math.round(tx.getBoundingClientRect().height), cl=v=>Math.max(80,Math.min(128,v));
+    let sz=80; set(sz); let th=hh(); const seen=[[sz,th]];
+    for(let k=0;k<3;k++){ const nx=cl(th); if(Math.abs(nx-sz)<=1) break; sz=nx; set(sz); th=hh(); seen.push([sz,th]) }
+    let best=seen[0]; for(const x of seen) if(Math.abs(x[0]-x[1])<Math.abs(best[0]-best[1])) best=x; set(best[0]) };
+  if(S.ro){ try{S.ro.disconnect()}catch(e){} S.ro=null } if(window.ResizeObserver){ S.ro=new ResizeObserver(fit); S.ro.observe(tx) } fit(); requestAnimationFrame(fit);
   // what the squares say: today's sets, and the days done this week
   let todayStat='', weekStat=''; const st=day0(A.startDate), weeks=planWeeks();
   if(st&&weeks.length){
@@ -3468,8 +3480,10 @@ function aaHome(app,S){
       if(off>=0&&off<weeks.length*7){ const sx=aaStat(td,st,weeks); todayStat=sx.rest?'Rest day':(sx.fin||(sx.all&&sx.done>=sx.all))?'Done ✓':sx.done+' of '+sx.all+' sets';
         let n=0,dn=0; const base=addD(st,Math.floor(off/7)*7); for(let k=0;k<7;k++){ const d=addD(base,k); if(Math.round((d-st)/864e5)>=weeks.length*7) break; const x=aaStat(d,st,weeks); if(x&&!x.rest){ n++; if(x.fin||(x.all&&x.done>=x.all)) dn++ } } weekStat=n?dn+' of '+n+' days':'' } } }
   const tiles=el('nav','aa-tiles');
-  for(const [id,name,desc,col,stat] of [['dash','Athlete dashboard','Your energy profile and scores','#E10600',''],['today','Today’s training','Today’s workout, step by step','#56B7E6',todayStat],['week','Training for the week','Your week at a glance','#88E0C6',weekStat],['chat','Chat with your coach','Message and share video','#FFFFFF','']]){
-    const b=el('button','aa-tile'); b.type='button'; b.style.setProperty('--tc',col); b.setAttribute('aria-label',name); b.innerHTML=AAICON[id]; const t=el('div','tx'); t.append(el('b',null,name),el('span',null,desc)); b.append(t); if(stat) b.append(el('em',null,stat)); b.addEventListener('click',()=>aaGo(id)); tiles.append(b) }
+  for(const [id,eyebrow,name,desc,cta,col,stat] of [['dash','Progress','Athlete Dashboard','Your energy profile and scores','Open Dashboard →','#E10600',''],['today','Workout','Today’s Training','Today’s workout, step by step','Open Today →','#56B7E6',todayStat],['week','Calendar','Training for the Week','Your week at a glance','Open Week →','#88E0C6',weekStat],['chat','Messages','Chat with Your Coach','Message and share video','Open Chat →','#FFFFFF','']]){
+    const b=el('button','aa-tile'); b.type='button'; b.style.setProperty('--tc',col); b.setAttribute('aria-label',name);
+    const eb=el('span','eb'); eb.append(el('span',null,eyebrow)); if(stat) eb.append(el('em',null,stat));
+    b.append(eb,el('b',null,name),el('span','ds',desc),el('span','cta',cta)); b.addEventListener('click',()=>aaGo(id)); tiles.append(b) }
   app.append(tiles) }
 // the screens that are not built yet say what will live there
 const AASOON={dash:['Your athlete dashboard','Your energy profile, scores and progress, laid out for your phone.'],week:['Your week at a glance','Every day of your week in a calendar: what is planned and what is done.'],chat:['Message your coach','Chat with your coach and share videos. If you both have a phone number on file, messages also reach iMessage; otherwise they stay in the app.']};
@@ -3803,7 +3817,7 @@ window.VeloUPlan={setStrength,setLibrary,current(name,opt){
   return {phase:post?'Plan complete':(pre?'Starts '+fmt(st)+' \u00b7 '+w.phase:w.phase), focus:w.focus||fd.focus||o.focus||'',strength,sFam,sPh};
 }};
 class VeloUTrainingPlan extends HTMLElement{
-  static get observedAttributes(){return ['data-perf','data-strrec','data-names','data-athlete','data-level','data-velo','data-kneel','data-lt','data-armscore','data-injury','data-focus','data-videos','data-board','data-xfer','data-prod','data-ratio','data-pos','data-playlevel','data-injstatus','data-injloc','data-injnote','data-hand','data-coach']}
+  static get observedAttributes(){return ['data-perf','data-strrec','data-names','data-athlete','data-level','data-velo','data-kneel','data-lt','data-armscore','data-injury','data-focus','data-videos','data-board','data-xfer','data-prod','data-ratio','data-pos','data-playlevel','data-injstatus','data-injloc','data-injnote','data-hand','data-coach','data-profile']}
   connectedCallback(){
     if(!this.shadowRoot){const r=this.attachShadow({mode:'open'}); r.innerHTML='<style>'+CSS+'</style>'+HTML; this.api=mount(this)}
     this.api.reload();
