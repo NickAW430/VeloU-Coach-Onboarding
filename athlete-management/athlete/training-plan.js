@@ -869,7 +869,7 @@ const HTML=`<div class="wrap">
     <h3>Offseason map</h3>
     <div class="mapkey"><span>Above each bar, top to bottom:</span><span><b style="color:var(--ink)">Weekly total</b></span><span><b>Rolling baseline</b></span><span><b style="color:#88e0c6">Rolling score</b> (amber above zero, red below)</span></div>
     <div class="barscroll"><div class="bars" id="bars"></div></div>
-    <div class="legend"><span><i></i>Build phases</span><span><i class="m"></i>Mound phases</span><span><i style="background:var(--ok)"></i>Suggested deload</span><span><i></i>Deload applied (week number highlighted)</span><span>Plyo-ball days are named by focus plus a load grade from the day score (volume \u00d7 intensity): A under 3, B 3\u20135, C 5\u20137, D 7+. Bar height is weekly volume (weighted throws / 12); the number above is the rolling week score. Rolling score adds each pair of back-to-back day scores and subtracts the week baseline, carrying day 7 into the next week's day 1. Baseline is set from the programmed week so the rolling score sits near zero, so it climbs with the program as volume, intensity and frequency build and eases down no more than 5% in a lighter programmed week. A positive score means the week is loading faster than the baseline; a negative score (deloads, removed drills) means it is lighter. Coaches can override the baseline in the week view. Squares are day scores for days 1 to 7.</span></div>
+    <div class="legend"><span><i></i>Build phases</span><span><i class="m"></i>Mound phases</span><span><i style="background:var(--ok)"></i>Suggested deload</span><span><i></i>Deload applied (week number highlighted)</span><span>Plyo-ball days are named by focus plus a load grade from the day score (volume \u00d7 intensity): A under 3, B 3\u20135, C 5\u20137, D 7+. Bar height is weekly volume (weighted throws / 12); the number above is the rolling week score. Rolling score adds each pair of back-to-back day scores and subtracts the week baseline, carrying day 7 into the next week's day 1. Baseline is set from the programmed week so the rolling score sits near zero, so it climbs with the program as volume, intensity and frequency build and eases down no more than 5% in a lighter programmed week. A positive score means the week is loading faster than the baseline; a negative score (deloads, removed drills) means it is lighter. Coaches can override the baseline in the week view. Squares are day scores for days 1 to 7. Rest the pointer on a square to see that day, click it to keep it open, then use Edit day to change it.</span></div>
     <div class="tlsum" id="tlSum"></div>
     <div class="barscroll"><div class="map" id="map"></div></div>
   </section>
@@ -1913,7 +1913,7 @@ function lnEnsure(l,dt){const S=LS(l), dk=ymd(dt); if(!S[dk]) S[dk]=lnPack(lnDay
 function lnEdit(l,dt,fn,quiet){const redo=fn(lnEnsure(l,dt)); changed(!!quiet&&!redo); if(quiet&&!redo) lnShowReset(l,ymd(dt))}
 function lnShowReset(l,dk){for(const b of root.querySelectorAll('.lbox[data-lane="'+l+'"][data-dk="'+dk+'"] .lreset[hidden], .ldcell[data-dk="'+dk+'"] .ldreset[hidden]')) b.hidden=false}
 function lnSwap(l,a,b){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa; changed()}
-function lnSwapAll(a,b){for(const l of LANES){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa} changed()}
+function lnSwapAll(a,b,lanes){for(const l of (lanes||LANES)){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa} changed()}
 function lnMove(l,from,to){
   const src=lnEnsure(l,from.dt), dst=lnEnsure(l,to.dt), row=src.rows.splice(from.i,1)[0]; if(!row) return;
   let at=to.i; if(src===dst&&from.i<at) at--; dst.rows.splice(Math.max(0,Math.min(at,dst.rows.length)),0,row); if(!dst.title||/^(Rest day|No )/.test(dst.title)) dst.title='Custom day'; changed()}
@@ -1929,7 +1929,7 @@ const SVGI={
 function liftIcon(cls,svg,label,fn){const b=el('button',cls); b.type='button'; b.innerHTML=svg; b.setAttribute('aria-label',label); b.title=label; if(fn) b.addEventListener('click',fn); return b}
 function liftDrop(kind,info,t){
   const ds=(info.ctx&&info.ctx.dates)||dvDates();
-  if(kind==='col'){ if(t.box&&t.box._dt) lnSwapAll(info.dt,t.box._dt); return }
+  if(kind==='col'){ if(t.box&&t.box._dt) lnSwapAll(info.dt,t.box._dt,info.ctx&&info.ctx.lanes); return }
   if(kind==='day'){ if(t.box&&t.box._dt) lnSwap(info.lane,info.dt,t.box._dt); return }
   const from={dt:info.dt,i:info.i};
   if(t.row){const dt=ds.find(d=>ymd(d)===t.row.dataset.dk); if(dt) lnMove(info.lane,from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
@@ -2010,7 +2010,7 @@ function renderBox(l,dt,ix,ctx){
 // one block of day columns: a header cell per day, then a box per day for each of the five lanes
 function buildGrid(host2,dts,o){
   const st=day0(A.startDate), today=new Date().toDateString(), rowsOf=d=>d&&!d.out&&!d.loading?d.rows:[], gap=8, n=dts.length, edit=!!o.edit;
-  const lanes=o.lanes||LANES, W=Math.max(220,o.width||host2.clientWidth||960), minW=edit?250:(n>3?150:250);
+  const lanes=o.lanes||LANES, W=Math.max(220,o.width>100?o.width:(host2.clientWidth>100?host2.clientWidth:960)), minW=edit?250:(n>3?150:250);
   let per=Math.max(1,Math.min(n,Math.floor((W+gap)/(minW+gap)))); const nb=Math.ceil(n/per); per=Math.ceil(n/nb);
   const lm=n===1&&o.lanesCols>1, colW=lm?(W-gap)/o.lanesCols:(W-(per-1)*gap)/per, narrow=!edit&&(!!o.compact||colW<300), tight=edit&&colW<300, LC={};
   for(const l of lanes){const needSt=l!=='corr', days=dts.map(dt=>(st||!needSt)?lnDay(l,dt):null);
@@ -2019,7 +2019,7 @@ function buildGrid(host2,dts,o){
   for(let b=0;b<nb;b++){
     const grid=el('div','lgrid'+(narrow?' lgn':'')+(lm?' lgm':'')), idx=[]; for(let k=b*per;k<Math.min(n,(b+1)*per);k++) idx.push(k);
     if(!lm) grid.style.gridTemplateColumns='repeat('+per+',minmax(0,1fr))'; else grid.style.columnCount=String(o.lanesCols);
-    const cx={edit,all:!!o.all,narrow,tight,layer:o.layer,scroller:o.scroller||null,dates:dts,st,today,rowsOf};
+    const cx={edit,all:!!o.all,narrow,tight,lanes,layer:o.layer,scroller:o.scroller||null,dates:dts,st,today,rowsOf};
     if(!o.noHead) idx.forEach((k,j)=>{const dt=dts[k], dk=ymd(dt), h=el('div','ldcell'+(dt.toDateString()===today?' today':'')+(edit?' lediting':'')+(o.focusDk===dk?' pick':'')); h._dt=dt; h.dataset.col='1'; h.dataset.dk=dk; if(j===0) h.style.gridColumnStart='1';
       h.append(el('span','ldt',dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+' • '+(dt.getMonth()+1)+'/'+dt.getDate()));
       if(o.chip){const c=o.chip(dt); if(c){c.classList.add('ldchip'); h.append(c)}}
