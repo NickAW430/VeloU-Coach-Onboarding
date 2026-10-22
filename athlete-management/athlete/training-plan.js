@@ -522,6 +522,156 @@ button.rr:hover{background:var(--sunk)}
 .avsets.inl .avset{gap:0}
 .avsets.inl .avck{width:48px;height:48px;font:700 17px var(--mono);color:#e6eaed}
 .avsets.inl .avck.on{color:#000}
+.avapp{--aa-card:#0b0f12;--aa-line:#1d262b;--aa-line2:#2b373e;--aa-sub:#b6c0c6;--aa-mut:#86939b;--aa-blue:#56B7E6;--aa-teal:#88E0C6;--aa-red:#E10600;max-width:520px;margin:0 auto;padding:0 0 150px;display:block;gap:0}
+.avapp button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.avapp .aa-chev{flex:none;width:9px;height:9px;margin:0 4px 3px 4px;border-right:2px solid var(--aa-mut);border-bottom:2px solid var(--aa-mut);transform:rotate(45deg);transition:transform .15s}
+.aa-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;height:56px;margin:0 -14px;padding:0 14px;background:rgba(0,0,0,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--aa-line)}
+.aa-logo{display:block;height:24px;width:auto}
+.aa-me{width:34px;height:34px;border-radius:50%;border:1px solid var(--aa-line2);display:flex;align-items:center;justify-content:center;background:#10161a;color:#fff;font:600 14px var(--body)}
+.aa-week{display:flex;align-items:center;gap:2px;margin:14px 0 2px}
+.aa-days{flex:1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.aa-wk{flex:none;width:26px;height:52px;background:none;border:0;color:var(--aa-sub);font:400 26px/1 var(--body);cursor:pointer;padding:0}
+.aa-wk:disabled{opacity:.2;cursor:default}
+.aa-day{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0 8px;background:var(--aa-card);border:1px solid var(--aa-line);border-radius:6px;color:#fff;cursor:pointer;min-width:0}
+.aa-day small{font:600 10px/1 var(--body);letter-spacing:.1em;color:var(--aa-mut);text-transform:uppercase}
+.aa-day b{font:400 21px/1 'Anton',var(--body);letter-spacing:.01em}
+.aa-day i{display:block;width:7px;height:7px;border-radius:50%;border:1.5px solid transparent}
+.aa-day.part i{border-color:var(--aa-teal);background:linear-gradient(90deg,var(--aa-teal) 50%,transparent 50%)}
+.aa-day.done i{border-color:var(--aa-teal);background:var(--aa-teal)}
+.aa-day.rest i{width:8px;height:2px;border:0;border-radius:0;background:#3a464d}
+.aa-day.today small{color:var(--aa-blue)}
+.aa-day.sel{background:#fff;border-color:#fff;color:#000}
+.aa-day.sel small{color:#3a464d}
+.aa-day.sel.part i{border-color:#0a8a6a;background:linear-gradient(90deg,#0a8a6a 50%,transparent 50%)}
+.aa-day.sel.done i{border-color:#0a8a6a;background:#0a8a6a}
+.aa-hero{position:relative;padding:18px 0 6px}
+.aa-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font:600 12px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--aa-mut)}
+.aa-meta b{padding:3px 8px;border:1px solid var(--aa-blue);color:var(--aa-blue);font-weight:700}
+.aa-title{margin:8px 0 0;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;font:400 46px/1 'Anton',var(--body);letter-spacing:.01em;text-transform:uppercase;color:#fff}
+.aa-title em{font-style:normal;font-size:22px;letter-spacing:.05em;color:var(--aa-blue)}
+.aa-today{position:absolute;right:0;top:16px;min-height:34px;padding:0 14px;background:none;border:1px solid var(--aa-blue);border-radius:17px;color:var(--aa-blue);font:600 13px var(--body);cursor:pointer}
+.aa-pr{display:flex;align-items:center;gap:12px;margin-top:16px}
+.aa-track{flex:1;height:8px;border-radius:4px;background:#182026;overflow:hidden}
+.aa-track i{display:block;height:100%;width:0;background:var(--aa-blue);border-radius:4px;transition:width .25s}
+.aa-pr.alld .aa-track i{background:var(--aa-teal)}
+.aa-prt{flex:none;font:600 13px var(--body);color:var(--aa-sub)}
+.aa-note{display:flex;flex-direction:column;gap:4px;margin:16px 0;padding:18px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:8px}
+.aa-note b{font:400 24px/1.1 'Anton',var(--body);letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.aa-note span{font:500 15px/1.4 var(--body);color:var(--aa-sub)}
+.aa-note .aa-ahead{margin-top:6px;color:var(--aa-blue);font-weight:600}
+.aa-next{display:flex;align-items:center;gap:12px;width:100%;margin:14px 0 0;padding:12px 14px;background:var(--aa-card);border:1px solid var(--aa-line2);border-left:4px solid var(--aa-blue);border-radius:8px;color:#fff;text-align:left;cursor:pointer}
+.aa-next .t{flex:1;min-width:0}
+.aa-next small{display:block;font:700 11px var(--body);letter-spacing:.14em;color:var(--aa-blue);text-transform:uppercase}
+.aa-next b{display:block;margin-top:3px;font:600 17px/1.25 var(--body);overflow-wrap:anywhere}
+.aa-next span{display:block;margin-top:2px;font:500 13px var(--body);color:var(--aa-sub)}
+.aa-go{flex:none;font:400 30px/1 var(--body);font-style:normal;color:var(--aa-blue)}
+.aa-next.alld{border-left-color:var(--aa-teal)}
+.aa-next.alld small,.aa-next.alld .aa-go{color:var(--aa-teal)}
+.aa-ac{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 0;padding:10px 12px;border:1px solid #6b2a28;border-radius:8px;background:rgba(225,6,0,.09);color:#fff;text-align:left;cursor:pointer}
+.aa-ac svg{flex:none;width:20px;height:20px;color:var(--aa-red)}
+.aa-ac span{flex:1;font:500 13.5px/1.35 var(--body);color:#f1d6d4}
+.aa-ac b{display:block;margin-bottom:1px;font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:#ff8a85}
+.aa-ac u{flex:none;font:600 13px var(--body);color:#ff8a85}
+.aa-blk{margin:22px 0 0}
+.aa-blkh{display:flex;align-items:center;gap:10px;width:100%;padding:6px 0 8px;background:none;border:0;border-bottom:1px solid var(--aa-line2);color:#fff;text-align:left;cursor:pointer}
+.aa-blkh .bar{flex:none;align-self:stretch;width:4px;min-height:34px;border-radius:2px;background:var(--lane)}
+.aa-blkh .t{flex:1;min-width:0}
+.aa-blkh .t b{display:block;font:400 24px/1.05 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
+.aa-blkh .t span{display:block;margin-top:2px;font:500 13px/1.3 var(--body);color:var(--aa-mut)}
+.aa-blkh .ct{flex:none;font:600 13px var(--body);color:var(--aa-sub)}
+.aa-blkh.done .ct{color:var(--aa-teal)}
+.aa-blk:not(.open) .aa-chev{transform:rotate(-45deg)}
+.aa-blkb{display:none;flex-direction:column;gap:8px;padding-top:10px}
+.aa-blk.open>.aa-blkb{display:flex}
+.aa-unit{scroll-margin-top:70px;display:flex;flex-direction:column;gap:0;min-width:0}
+.aa-ss{padding-left:12px;border-left:3px solid var(--lane);gap:6px}
+.aa-ssh{display:flex;align-items:center;gap:10px;width:100%;padding:4px 0 2px;background:none;border:0;color:#fff;text-align:left;cursor:pointer}
+.aa-ssh .t{flex:1;min-width:0}
+.aa-ssh b{display:block;font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--lane)}
+.aa-ssh span{display:block;margin-top:1px;font:500 12.5px/1.3 var(--body);color:var(--aa-mut)}
+.aa-ssh .ct{flex:none;font:600 13px var(--body);color:var(--aa-sub)}
+.aa-ex{background:var(--aa-card);border:1px solid var(--aa-line);border-radius:8px;overflow:hidden}
+.aa-ex.done{border-color:#24473d}
+.aa-exh{display:flex;align-items:center;gap:10px;width:100%;min-height:64px;padding:10px 12px;background:none;border:0;color:#fff;text-align:left;font-family:inherit;cursor:pointer}
+div.aa-exh{cursor:default}
+.aa-slot{flex:none;min-width:28px;text-align:center;font:700 13px var(--body);letter-spacing:.05em;color:var(--lane)}
+.aa-exn{flex:1;min-width:0}
+.aa-exn b{display:block;font:600 16px/1.25 var(--body);overflow-wrap:anywhere}
+.aa-exn small{display:block;margin-top:2px;font:500 13px/1.3 var(--body);color:var(--aa-sub)}
+.aa-exn small em{font-style:normal;font-weight:700;color:var(--aa-blue)}
+.aa-exn small.aa-tag{color:#9ed4f0}
+.aa-exs{flex:none;display:flex;align-items:center;gap:4px}
+.aa-exs .d{display:block;width:9px;height:9px;border-radius:50%;border:1.5px solid #4d5b63}
+.aa-exs .d.on{background:var(--aa-teal);border-color:var(--aa-teal)}
+.aa-exs .aa-ok{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--aa-teal);color:#000;font:700 14px/1 var(--body);font-style:normal}
+.aa-exs .aa-cnt,.aa-exs .aa-sk{font:600 13px var(--body);color:var(--aa-sub)}
+.aa-unit.open .aa-exh .aa-chev,.aa-unit.open .aa-ssh .aa-chev{transform:rotate(-135deg)}
+.aa-exb{display:none;padding:0 12px 14px;border-top:1px solid var(--aa-line)}
+.aa-unit.open .aa-exb{display:block}
+.aa-info{display:flex;align-items:center;gap:12px;padding:10px 12px}
+.aa-info .avck{flex:none}
+.aa-vid{margin:12px 0 0}
+.aa-vbtn{display:flex;align-items:center;gap:12px;width:100%;padding:6px;background:#05080a;border:1px solid var(--aa-line);border-radius:8px;color:#fff;text-align:left;cursor:pointer}
+.aa-vth{position:relative;flex:none;display:flex;align-items:center;justify-content:center;width:112px;aspect-ratio:16/9;border-radius:5px;overflow:hidden;background:linear-gradient(135deg,#0f171c,#05080a)}
+.aa-vth img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
+.aa-pi{position:relative;z-index:1;display:block;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.62);border:2px solid #fff}
+.aa-pi::after{content:'';position:absolute;left:11px;top:7px;border-left:10px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.aa-vtx b{display:block;font:600 15px var(--body)}
+.aa-vtx small{display:block;margin-top:2px;font:500 12.5px var(--body);color:var(--aa-mut)}
+.aa-vid.on{position:relative;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#000;border:1px solid var(--aa-line)}
+.aa-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.aa-exb .avrx{margin-top:12px}
+.aa-exb .avcue{margin-top:10px;font-size:14px;line-height:1.45;color:#cfd7db}
+.aa-sh{display:flex;align-items:center;gap:8px;margin:16px 0 4px;font:700 10.5px var(--body);letter-spacing:.12em;color:var(--aa-mut)}
+.aa-sh span{flex:1 1 0;min-width:0;text-align:center}
+.aa-sh .n{flex:none;width:26px}
+.aa-sh .c{flex:none;width:48px}
+.avapp .avsets{gap:8px;margin-top:10px}
+.avapp .aa-sh+.avsets{margin-top:0}
+.avapp .avset{gap:8px;align-items:center}
+.avapp .avsn{flex:none;width:26px;font:700 15px var(--body);color:var(--aa-mut)}
+.avapp .avin{flex:1 1 0;min-width:0;height:50px;border-radius:6px;background:#05080a;border:1px solid var(--aa-line2);font:600 20px var(--body)}
+.avapp .avin:focus{border-color:var(--aa-blue)}
+.avapp .avck{order:5;flex:none;width:48px;height:48px}
+.avapp .avsp{order:9;flex:1 1 100%;gap:8px}
+.avapp .avres{min-height:46px;border-radius:6px;font:700 14px var(--body)}
+.avapp .avlock{order:10;flex:1 1 100%}
+.avapp .avsets.inl{gap:10px}
+.avapp .avsets.inl .avck{width:52px;height:52px;font:700 18px var(--body)}
+.aa-last{margin:10px 0 0;font:500 13px/1.4 var(--body);color:var(--aa-mut)}
+.aa-last b{font-weight:600;color:var(--aa-sub)}
+.aa-act{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.aa-act button{min-height:44px;background:none;border:1px solid var(--aa-line2);border-radius:6px;color:#fff;font:600 14px var(--body);cursor:pointer}
+.aa-back{display:block;margin:10px auto 0;padding:6px;background:none;border:0;color:var(--aa-mut);font:500 13px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.aa-exb .avnote{margin-top:10px}
+.aa-fin{display:block;width:100%;min-height:60px;margin:28px 0 0;border:0;border-radius:8px;background:var(--aa-red);color:#fff;font:400 22px 'Anton',var(--body);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.aa-fin.on{background:var(--aa-teal);color:#000}
+.aa-rest{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:12px;width:min(496px,calc(100% - 20px));padding:10px 12px;background:#10171b;border:1px solid var(--aa-blue);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.65)}
+.aa-rest[hidden]{display:none}
+.aa-rlab{flex:none;font:700 11px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--aa-blue)}
+.aa-rtime{flex:none;min-width:44px;font:400 24px/1 'Anton',var(--body);letter-spacing:.02em;color:#fff}
+.aa-rnext{flex:1;min-width:0;min-height:40px;padding:0 4px;background:none;border:0;color:var(--aa-sub);font:500 13.5px/1.25 var(--body);text-align:left;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aa-rx{flex:none;width:36px;height:36px;background:none;border:0;color:var(--aa-mut);font-size:16px;cursor:pointer}
+.aa-sheet .avpn{background:#0b0f12;border:1px solid var(--aa-line2,#2b373e);border-top:3px solid #56B7E6;border-radius:16px 16px 0 0}
+.aa-sheet .avph{padding:14px 16px;border-bottom:1px solid #1d262b}
+.aa-sheet .avph b{font:400 22px/1.15 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
+.aa-sheet .avpb{padding:16px}
+@media (min-width:700px){.aa-sheet .avpn{border-radius:14px}}
+.aa-rl{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px;font:500 15px/1.45 var(--body);color:#e6eaed}
+.aa-fs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.aa-fs div{display:flex;flex-direction:column;gap:2px;padding:12px;background:#10171b;border:1px solid #1d262b;border-radius:8px}
+.aa-fs b{font:400 30px/1 'Anton',var(--body);color:#fff}
+.aa-fs span{font:600 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:#86939b}
+.aa-q{margin:4px 0 0;font:600 14px var(--body);color:#b6c0c6}
+.aa-feel{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.aa-feel button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;min-height:56px;background:none;border:1px solid #2b373e;border-radius:8px;color:#fff;cursor:pointer}
+.aa-feel b{font:400 22px/1 'Anton',var(--body)}
+.aa-feel span{font:500 11px var(--body);color:#86939b}
+.aa-feel button.on{background:#56B7E6;border-color:#56B7E6;color:#000}
+.aa-feel button.on span{color:#0b2a3a}
+.aa-sheet .btn{min-height:48px;border-radius:8px;font:600 15px var(--body)}
+.aa-sheet .btn.primary{background:#E10600;border-color:#E10600;color:#fff}
+.aa-sheet .avmsg{margin:0;font:500 14.5px/1.45 var(--body);color:#b6c0c6}
 .ldcell{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
 .ldcell.pick{border-top-color:var(--heat);background:#14202a}
 .ldcell .ldt{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -2949,10 +3099,11 @@ function avModel(dt){
   return {dt,dk,secs,ac} }
 // rows that sit in the same lettered slot (A1, A2) are a superset
 function avGroups(rows){ const g=[]; for(const r of rows){ const sl=String(r.slot||''), L=r.info?'':sl.replace(/\d+$/,''), last=g[g.length-1]; if(last&&L&&last.L===L&&/\d$/.test(sl)) last.rows.push(r); else g.push({L,rows:[r]}) } for(const x of g) x.ss=x.rows.length>1&&!!x.L&&x.rows.every(r=>/\d$/.test(String(r.slot||''))); return g }
-function avTotals(m){ let done=0,all=0; for(const s of m.secs) for(const r of s.rows){ const X=avGet(m.dk,r.key)||{sets:[]}; if(r.info){ all++; if(X.done) done++; continue } if(r.eff.skip) continue; const n=avSetN(r.eff.sets,r.eff.reps).n||1; all+=n; for(let i=0;i<n;i++) if(X.sets[i]&&X.sets[i].ok) done++ } return {done,all} }
+function avTotals(m){ let done=0,all=0; for(const s of m.secs) for(const r of s.rows){ const X=avGet(m.dk,r.key)||{sets:[]}; if(r.info){ all++; if(X.done) done++; continue } if(r.eff.skip) continue; const nSet=avSetN(r.eff.sets,r.eff.reps), n=avReq(X,nSet,nSet.n||1); all+=n; for(let i=0;i<n;i++) if(X.sets[i]&&X.sets[i].ok) done++ } return {done,all} }
 
 // ---- the screen ----
 function renderAthlete(){
+  if(host.dataset.app==='1') return aaRender();   // the athlete's own screen (app_block.js)
   const box=$('aview'); box.hidden=false; box.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); xlLoad(); avLoad();
   const today=ymd(new Date(new Date().setHours(12,0,0,0))); if(!AVN.dk) AVN.dk=today;
   const dt=day0(AVN.dk)||day0(today), st=day0(A.startDate), app=el('div','av'); box.append(app);
@@ -2980,8 +3131,10 @@ function renderAthlete(){
     app.append(sec) }
   const fin=el('button','btn primary avfin','Finish the day'); fin.type='button'; fin.addEventListener('click',()=>{ const t=avTotals(m), L=(AVS.logs[m.dk]=AVS.logs[m.dk]||{}); L._fin=Date.now(); avSave(); fin.textContent=(t.done>=t.all?'All done':t.done+' of '+t.all+' done')+' ✓ saved'; fin.classList.add('on') }); app.append(fin);
   if((AVS.logs[m.dk]||{})._fin){ fin.textContent='Saved ✓'; fin.classList.add('on') } }
-function avRules(){ const b=el('div','avrules'), u=el('ul'); b.append(el('b',null,'Acceleration day: follow the completion rules'),u);
-  for(const t of ['Every rep is max intent. Start where the exercise says (dead start off the pins, or the start position) and move as fast as you can.','The speed band is marked on each lift. For every set, record the result: in the band, or below it.','The moment speed drops below the band, the set is over. Log the reps you completed and go to the next set.','The bonus set (the "+1") is only done when every set before it held the band.','Rest fully between sets. Quality reps only.']) u.append(el('li',null,t)); return b }
+const AV_RULES=['Every rep is max intent. Start where the exercise says (dead start off the pins, or the start position) and move as fast as you can.','The speed band is marked on each lift. For every set, record the result: in the band, or below it.','The moment speed drops below the band, the set is over. Log the reps you completed and go to the next set.','The bonus set (the "+1") is only done when every set before it held the band.','Rest fully between sets. Quality reps only.'];
+function avRules(){ const b=el('div','avrules'), u=el('ul'); b.append(el('b',null,'Acceleration day: follow the completion rules'),u); for(const t of AV_RULES) u.append(el('li',null,t)); return b }
+// the sets that still count: the bonus set is skipped once a working set dropped below the speed band
+function avReq(X,nSet,N){ const low=nSet.bonus&&((X&&X.sets)||[]).slice(0,N-nSet.bonus).some(s=>s&&s.res==='low'); return low?N-nSet.bonus:N }
 function avInfo(m,r,pset){ const c=el('article','avx avi'), X=avGet(m.dk,r.key)||{sets:[]}, top=el('div','avxh'); const ck=el('button','avck'+(X.done?' on':''),'✓'); ck.type='button'; ck.setAttribute('aria-label','Mark done');
   ck.addEventListener('click',()=>{ X.done=!X.done; avPut(m.dk,r.key,X); ck.classList.toggle('on',X.done); c.classList.toggle('done',X.done); avSave(); pset() }); c.classList.toggle('done',!!X.done); const nm=el('div','avname'); nm.append(el('b',null,r.name),el('span',null,r.prog)); top.append(ck,nm); c.append(top); return c }
 function avCard(m,r,pset){
@@ -3001,7 +3154,7 @@ function avCard(m,r,pset){
   btn('Swap exercise',()=>avSwap(m,r)); btn('Adjust',()=>avAdjust(m,r)); btn(X.note?'Note ✓':'Add a note',()=>avNote(m,r));
   if(r.swapped||r.adjusted||e.skip) btn('Back to the coach’s version',()=>{ const L=AVS.logs[m.dk]&&AVS.logs[m.dk][r.key]; if(L){ delete L.sub; delete L.adj } delete AVS.prefs.sub[r.nk]; delete AVS.prefs.adj[r.nk]; avSave(); render() }); c.append(act);
   if(X.note) c.append(el('p','avnote',X.note));
-  c._dn=()=>{ if(e.skip) return; let ok=true; for(let i=0;i<N;i++) if(!(X.sets[i]&&X.sets[i].ok)) ok=false; c.classList.toggle('done',ok) }; c._dn(); return c }
+  c._dn=()=>{ if(e.skip) return; let ok=true; for(let i=0,n=avReq(X,nSet,N);i<n;i++) if(!(X.sets[i]&&X.sets[i].ok)) ok=false; c.classList.toggle('done',ok) }; c._dn(); return c }
 // the weight the athlete used the last time this exercise was in a log
 function avLast(nk,dk){ avLoad(); for(const d of Object.keys(AVS.logs).sort().reverse()){ if(d>=dk) continue; const L=AVS.logs[d]; for(const ek in L){ if(ek.replace(/#\d+$/,'').split('|')[1]!==nk) continue; const s=((L[ek]&&L[ek].sets)||[]).filter(x=>x&&x.ok&&x.w); if(s.length) return s[s.length-1].w } } return '' }
 function avSets(m,r,X,attach,kind,N,nSet,band,pset,card){
@@ -3038,7 +3191,7 @@ function avSets(m,r,X,attach,kind,N,nSet,band,pset,card){
 
 // ---- sheets ----
 function avSheet(title,cls){ avClose(); if(!AVW){ AVW=true; window.addEventListener('keydown',e=>{ if(e.key==='Escape'&&AVO&&!EXPO&&host.isConnected) avClose() }) }
-  const o=el('div','avov'), p=el('div','avpn'+(cls?' '+cls:'')), h=el('div','avph'), x=el('button','mdx','✕'); x.type='button'; x.setAttribute('aria-label','Close'); x.addEventListener('click',avClose); h.append(el('b',null,title),x); p.append(h); o.append(p);
+  const o=el('div','avov'+(host.dataset.app==='1'?' aa-sheet':'')), p=el('div','avpn'+(cls?' '+cls:'')), h=el('div','avph'), x=el('button','mdx','✕'); x.type='button'; x.setAttribute('aria-label','Close'); x.addEventListener('click',avClose); h.append(el('b',null,title),x); p.append(h); o.append(p);
   o.addEventListener('pointerdown',e=>{ if(e.target===o) avClose() }); root.append(o); AVO=o; const body=el('div','avpb'); p.append(body); return body }
 function avClose(){ if(AVO){ AVO.remove(); AVO=null } exClose() }
 function avWatch(r,v){ const b=avSheet(exShow(r.eff?r.eff.name:r.name,r.lane),'vid');
@@ -3083,6 +3236,179 @@ function avAdjust(m,r){ const b=avSheet('Adjust '+exShow(r.eff.name,r.lane),'adj
   bt.append(ok,cn); b.append(bt) }
 function avNote(m,r){ const b=avSheet('Note for '+exShow(r.eff.name,r.lane),'adj'), t=document.createElement('textarea'), X=avGet(m.dk,r.key)||{sets:[]}; t.className='avta'; t.rows=4; t.value=X.note||''; t.placeholder='How did it feel? Anything your coach should know?'; b.append(t);
   const row=el('div','avbtns'), ok=el('button','btn primary','Save'); ok.type='button'; ok.addEventListener('click',()=>{ X.note=t.value.trim(); avPut(m.dk,r.key,X); avSave(); avClose(); render() }); row.append(ok); b.append(row); setTimeout(()=>t.focus(),50) }
+
+// ================= Athlete App: the athlete's own screen (?app=1) =================
+// The day as one screen: a week strip, what is next, the day's blocks (prep, patterning, throwing, lifting, corrective), a rest timer and a finish summary.
+// The set logging (avSets), the sheets (swap, adjust, note) and the day's data (avModel) are the same code the coach-facing Athlete's View runs.
+window.__vaa=window.__vaa||{};
+const AAS=()=>{const k=host.dataset.athlete||cur||''; return window.__vaa[k]=window.__vaa[k]||{dk:'',open:{},blk:{},rest:null,tick:0,init:false}};   // what survives a redraw
+const aaDay=(d,o)=>d.toLocaleDateString(undefined,o);
+const aaClock=ms=>{const s=Math.max(0,Math.floor(ms/1000)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const AALANE={prep:'#88E0C6',pat:'#56B7E6',throw:'#E10600',lift:'#FFFFFF',corr:'#8b98a0'};
+const AAFEEL=[['1','Easy'],['2','Good'],['3','Solid'],['4','Hard'],['5','All out']];
+
+// how far an exercise is: its sets (the bonus set drops out once speed fell below the band), or a single check for the corrective rows
+function aaExStat(m,r){ const X=avGet(m.dk,r.key)||{sets:[]};
+  if(r.info) return {n:1,ok:X.done?1:0,done:!!X.done,info:true,next:1};
+  if(r.eff.skip) return {n:0,ok:0,done:true,skip:true,next:0};
+  const nSet=avSetN(r.eff.sets,r.eff.reps), N=nSet.n||1, n=avReq(X,nSet,N); let ok=0, next=0;
+  for(let i=0;i<n;i++){ if(X.sets&&X.sets[i]&&X.sets[i].ok) ok++; else if(!next) next=i+1 }
+  return {n,ok,done:ok>=n,next:next||n} }
+// the next thing to do: the first unfinished unit; inside a superset, the exercise that is a set behind
+function aaNext(m,units){ for(const u of units){ let best=null; for(const r of u.rows){ const s=aaExStat(m,r); if(s.done) continue; if(!best||s.ok<best.s.ok) best={r,s} } if(best) return {u,r:best.r,set:best.s.next,of:best.s.n} } return null }
+function aaStat(d,st,weeks){ const off=Math.round((d-st)/864e5); if(off<0||off>=weeks.length*7) return null; const m=avModel(d); if(!m.secs.some(s=>s.rows.length)) return {rest:true}; const t=avTotals(m); return {done:t.done,all:t.all,fin:!!((AVS.logs[m.dk]||{})._fin)} }
+const aaMark=(b,sx)=>{ for(const c of ['rest','part','done']) b.classList.remove(c); if(sx) b.classList.add(...(sx.rest?['rest']:sx.fin||(sx.all&&sx.done>=sx.all)?['done']:sx.done?['part']:[])) };
+const aaName=r=>exShow(r.eff?r.eff.name:r.name,r.lane);
+// what the last time looked like: the day, and the sets that were done
+function aaLast(nk,dk){ avLoad(); for(const d of Object.keys(AVS.logs).sort().reverse()){ if(d>=dk) continue; const L=AVS.logs[d]; for(const ek in L){ if(ek.charAt(0)==='_'||ek.replace(/#\d+$/,'').split('|')[1]!==nk) continue; const ss=((L[ek]&&L[ek].sets)||[]).filter(x=>x&&x.ok); if(ss.length) return {d,ss} } } return null }
+const aaRules=()=>{ const b=avSheet('Acceleration rules','aarules'); const u=el('ul','aa-rl'); for(const t of AV_RULES) u.append(el('li',null,t)); b.append(u) };
+
+function aaBar(){ const b=el('header','aa-bar'), img=el('img','aa-logo'); img.src='/assets/velou-wordmark.png'; img.alt='VeloU'; const nm=String(host.dataset.athlete||cur||'').trim(), me=el('span','aa-me',(nm.charAt(0)||'?').toUpperCase()); me.title=nm; b.append(img,me); return b }
+function aaNote(h,p){ const n=el('section','aa-note'); n.append(el('b',null,h)); if(p) n.append(el('span',null,p)); return n }
+function aaWeek(st,weeks,wi,dt,today){
+  const nav=el('nav','aa-week'), go=n=>{AVN.dk=ymd(addD(dt,n)); render()}, row=el('div','aa-days'), base=addD(st,wi*7);
+  const arrow=(t,lab,n,dis)=>{const b=el('button','aa-wk',t); b.type='button'; b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',()=>go(n)); return b};
+  nav.append(arrow('‹','Previous week',-7,wi<=0));
+  for(let k=0;k<7;k++){ const d=addD(base,k); if(Math.round((d-st)/864e5)>=weeks.length*7) break; const sel=ymd(d)===ymd(dt), b=el('button','aa-day'+(sel?' sel':'')+(ymd(d)===today?' today':''));
+    b.type='button'; b.dataset.dk=ymd(d); b.setAttribute('aria-label',aaDay(d,{weekday:'long',month:'long',day:'numeric'})); b.append(el('small',null,aaDay(d,{weekday:'short'})),el('b',null,String(d.getDate())),el('i')); aaMark(b,aaStat(d,st,weeks)); b.addEventListener('click',()=>{AVN.dk=ymd(d); render()}); row.append(b) }
+  nav.append(row,arrow('›','Next week',7,wi>=weeks.length-1)); return nav }
+// the first training day after a rest day
+function aaAhead(dt,st,weeks){ for(let k=1;k<=14;k++){ const d=addD(dt,k); if(Math.round((d-st)/864e5)>=weeks.length*7) return null; const m=avModel(d); if(m.secs.some(s=>s.rows.length)) return {d,lanes:m.secs.map(s=>s.name)} } return null }
+
+// the video plays inside the exercise: a compact row with a picture (YouTube has one) that opens into the player
+function aaVideo(r){ const v=avVid(r); if(!v) return null;   // a missing video is the coach's to fix, not something to show the athlete
+  const w=el('div','aa-vid'), b=el('button','aa-vbtn'), th=el('span','aa-vth'), tx=el('span','aa-vtx'); b.type='button'; b.setAttribute('aria-label','Play the video');
+  if(v.kind==='youtube'){ const im=el('img'); im.src='https://i.ytimg.com/vi/'+v.code.slice(2)+'/hqdefault.jpg'; im.alt=''; im.loading='lazy'; th.append(im) }
+  th.append(el('i','aa-pi')); tx.append(el('b',null,'Watch the video'),el('small',null,v.kind==='link'?'Opens in a new tab':'Plays right here')); b.append(th,tx); w.append(b);
+  b.addEventListener('click',()=>{ if(v.kind==='link'){ window.open(v.watch,'_blank','noopener'); return } w.textContent=''; w.classList.add('on');
+    if(v.kind==='mp4'){ const vd=document.createElement('video'); vd.src=v.embed; vd.controls=true; vd.autoplay=true; vd.setAttribute('playsinline',''); vd.className='aa-frame'; w.append(vd) }
+    else { const f=document.createElement('iframe'); f.src=v.embed+(v.embed.indexOf('?')<0?'?':'&')+'autoplay=1'; f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen'); f.setAttribute('allowfullscreen',''); f.className='aa-frame'; w.append(f) } });
+  return w }
+
+// the line under an exercise's name: sets x reps @ intensity, and the speed band
+function aaDose(r,e,nSet,N){ const f=document.createDocumentFragment(); if(r.info){ f.append(r.prog||''); return f }
+  const sets=nSet.bonus?(N-nSet.bonus)+'+'+nSet.bonus:String(N); f.append(sets+' × '+(e.reps||'—')+(e.int?' @ '+e.int:''));
+  if(r.band){ f.append(' · '); f.append(el('em',null,r.band.txt)) } else if(r.target){ f.append(' · '); f.append(el('em',null,'target '+r.target)) } else if(r.ball){ f.append(' · '+r.ball) }
+  return f }
+// the corrective rows (arm care, mobility) are a single check
+function aaInfoRow(m,r,pset){ const wrap=el('div','aa-ex aa-info'), X0=avGet(m.dk,r.key), ck=el('button','avck'+(X0&&X0.done?' on':''),'✓'); ck.type='button'; ck.setAttribute('aria-label','Mark '+r.name+' done');
+  const nm=el('div','aa-exn'); nm.append(el('b',null,r.name),el('small',null,r.prog||'')); wrap.append(ck,nm);
+  ck.addEventListener('click',()=>{ const Y=avGet(m.dk,r.key)||{sets:[]}; Y.done=!Y.done; avPut(m.dk,r.key,Y); avSave(); pset() });
+  return {wrap,paint:s=>{ ck.classList.toggle('on',!!s.done); wrap.classList.toggle('done',!!s.done) }} }
+// the open exercise: video, markers, the coach's cue, the sets, last time, and the ways to change it
+function aaBody(m,r,pset){
+  const e=r.eff, X=avGet(m.dk,r.key)||{sets:[]}, kind=avKind(r,e), nSet=avSetN(e.sets,e.reps), N=nSet.n||1, band=r.band, b=el('div','aa-exb'), attach=()=>avPut(m.dk,r.key,X);
+  { const vv=aaVideo(r); if(vv) b.append(vv) }
+  const rx=el('div','avrx'), chip=(t,cls)=>rx.append(el('span','avchip'+(cls?' '+cls:''),t));
+  chip(N+(nSet.bonus?' ('+(N-nSet.bonus)+' + '+nSet.bonus+' bonus)':'')+' × '+(e.reps||'—'),'main'); if(e.int) chip('@ '+e.int);
+  if(band) chip('SPEED '+band.txt,'speed'); if(r.tempoCode) chip('TEMPO '+r.tempoCode,'tempo'); if(r.target) chip('TARGET '+r.target,'speed'); if(r.ball) chip('BALL '+r.ball);
+  if(/max(?:imal)?[- ]intent/i.test(String(r.method||''))) chip('MAX INTENT','speed'); if(/VBT/i.test(String(r.method||''))&&!band) chip('VBT','speed'); if(r.ac) chip('ACCELERATION RULES','ac');
+  if(r.adjusted) chip('Adjusted','adj'); if(e.skip) chip('Skipped','adj'); b.append(rx);
+  if(r.method) b.append(el('p','avcue',r.method));
+  if(!e.skip){
+    const inline=!kind.w&&!kind.t&&!r.ac, cols=[]; if(kind.w){ cols.push('LB'); if(!kind.hold) cols.push('REPS') } if(kind.t) cols.push('SEC'); if(r.ac&&band) cols.push('M/S');
+    if(!inline&&cols.length){ const h=el('div','aa-sh'); h.append(el('span','n')); for(const c of cols) h.append(el('span',null,c)); h.append(el('span','c')); b.append(h) }
+    b.append(avSets(m,r,X,attach,kind,N,nSet,band,pset,{}));
+    const last=kind.w?aaLast(r.nk,m.dk):null; if(last){ const p=el('p','aa-last'); p.append('Last time ('+fmt(day0(last.d))+'): '); p.append(el('b',null,last.ss.map(s=>(s.w?s.w:'')+(s.r?(s.w?' × ':'')+s.r:'')).filter(Boolean).join('  ·  '))); b.append(p) } }
+  const act=el('div','aa-act'), btn=(t,fn)=>{const x=el('button',null,t); x.type='button'; x.addEventListener('click',fn); act.append(x)};
+  btn('Swap',()=>avSwap(m,r)); btn('Adjust',()=>avAdjust(m,r)); btn(X.note?'Note ✓':'Note',()=>avNote(m,r)); b.append(act);
+  if(r.swapped||r.adjusted||e.skip){ const u=el('button','aa-back','Back to the program'); u.type='button'; u.addEventListener('click',()=>{ const L=AVS.logs[m.dk]&&AVS.logs[m.dk][r.key]; if(L){ delete L.sub; delete L.adj } delete AVS.prefs.sub[r.nk]; delete AVS.prefs.adj[r.nk]; avSave(); render() }); b.append(u) }
+  if(X.note) b.append(el('p','avnote',X.note));
+  return b }
+
+function aaFinish(m){
+  const t=avTotals(m), L=(AVS.logs[m.dk]=AVS.logs[m.dk]||{}), all=t.all>0&&t.done>=t.all, b=avSheet(all?'Workout complete':'Finish this workout?','aafin');
+  const st=el('div','aa-fs'); for(const [n,l] of [[t.done+' / '+t.all,'sets done'],[L._start?aaClock(Date.now()-L._start):'—','time']]){ const c=el('div'); c.append(el('b',null,n),el('span',null,l)); st.append(c) } b.append(st);
+  if(!all) b.append(el('p','avmsg','You can come back and finish the rest, or save what you did now.'));
+  let feel=L._rpe||''; b.append(el('p','aa-q','How did it feel?')); const fr=el('div','aa-feel');
+  for(const [v,l] of AAFEEL){ const x=el('button',v===String(feel)?'on':'',null); x.type='button'; x.append(el('b',null,v),el('span',null,l)); x.addEventListener('click',()=>{ feel=v; for(const y of fr.children) y.classList.toggle('on',y===x) }); fr.append(x) } b.append(fr);
+  const ta=document.createElement('textarea'); ta.className='avta'; ta.rows=3; ta.value=L._note||''; ta.placeholder='Anything your coach should know? (optional)'; b.append(ta);
+  const row=el('div','avbtns'), ok=el('button','btn primary','Save workout'), no=el('button','btn',all?'Close':'Keep going'); ok.type=no.type='button'; no.addEventListener('click',avClose);
+  ok.addEventListener('click',()=>{ L._fin=Date.now(); L._rpe=feel; L._note=ta.value.trim(); avSave(); avClose(); render() }); row.append(ok,no); b.append(row) }
+
+function aaRender(){
+  const box=$('aview'); box.hidden=false; box.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); xlLoad(); avLoad();
+  const S=AAS(); clearInterval(S.tick); S.tick=0;
+  const today=ymd(new Date(new Date().setHours(12,0,0,0))); if(!AVN.dk) AVN.dk=today;
+  const dt=day0(AVN.dk)||day0(today), st=day0(A.startDate), app=el('div','av avapp'); box.append(app); app.append(aaBar());
+  if(!st){ app.append(aaNote('Your program has no start date yet','Your coach will set it up.')); return }
+  const weeks=planWeeks(); if(!weeks.length){ app.append(aaNote('Your program is not ready yet','Check back soon.')); return }
+  const off=Math.round((dt-st)/864e5), wi=Math.max(0,Math.min(weeks.length-1,Math.floor(off/7)));
+  app.append(aaWeek(st,weeks,wi,dt,today));
+  if(off<0){ app.append(aaNote('Your program starts '+aaDay(st,{weekday:'long',month:'long',day:'numeric'}),'Tap a day above to look ahead.')); return }
+  if(off>=weeks.length*7){ app.append(aaNote('That is the end of your program','Nice work. Your coach will set the next one.')); return }
+  const w=weeks[wi], m=avModel(dt), some=m.secs.some(s=>s.rows.length), busy=(A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading);
+  const hero=el('section','aa-hero'), meta=el('div','aa-meta'); meta.append(el('span',null,'Week '+w.n+' · Day '+(off%7+1)));
+  { const ph=w.off?(w.deload?'Deload':'Off week'):w.code; if(ph) meta.append(el('b',null,ph)); if(!w.off&&w.uses&&w.focus) meta.append(el('span',null,w.focus)) }
+  const ttl=el('h1','aa-title'); ttl.append(el('span',null,aaDay(dt,{weekday:'long'})),el('em',null,aaDay(dt,{month:'short',day:'numeric'}))); hero.append(meta,ttl);
+  if(AVN.dk!==today){ const tb=el('button','aa-today','Today'); tb.type='button'; tb.addEventListener('click',()=>{AVN.dk=''; render()}); hero.append(tb) }
+  app.append(hero);
+  if(busy){ app.append(aaNote('Loading your program…')); S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected) render() },700); return }   // the lanes arrive one library at a time: wait for all of them
+  S.wait=0;
+  if(!some&&A.str.on&&!SDATA){ app.append(aaNote('Your program could not be loaded','Reload the page to try again.')); return }
+  const miss=(A.str.on&&!SDATA)||(A.pat.on&&!PAT);
+  if(!some){ const nx=aaAhead(dt,st,weeks), n=aaNote('Rest day','Nothing planned. Recover well.'); if(nx){ n.append(el('span','aa-ahead','Next: '+aaDay(nx.d,{weekday:'long'})+' · '+nx.lanes.join(', '))) } app.append(n); return }
+
+  // the day, as units: one exercise, or a superset (an A1 and an A2 done in turns)
+  const blocks=[], units=[];
+  for(const s of m.secs){ const bl={s,units:[]}; for(const g of avGroups(s.rows)){ if(g.ss) bl.units.push({id:'g:'+s.l+':'+g.L,ss:true,L:g.L,rows:g.rows,lane:s.l}); else for(const r of g.rows) bl.units.push({id:r.key,ss:false,rows:[r],lane:s.l}) } blocks.push(bl); units.push(...bl.units) }
+  if(S.dk!==m.dk){ S.dk=m.dk; S.open={}; S.blk={}; S.init=false }
+  if(!S.init){ S.init=true; const nx=aaNext(m,units); if(nx) S.open[nx.u.id]=true;
+    for(const bl of blocks) if(bl.units.every(u=>u.rows.every(r=>aaExStat(m,r).done))) S.blk[bl.s.l]=true }
+  const REG={last:avTotals(m).done};
+
+  if(miss) app.append(aaNote('Part of your program did not load','Reload the page to try again.'));
+  // progress and what is next
+  const pr=el('div','aa-pr'), track=el('div','aa-track'), fill=el('i'), ptx=el('span','aa-prt'); track.append(fill); pr.append(track,ptx); hero.append(pr);
+  const nextB=el('button','aa-next'); nextB.type='button';
+  app.append(nextB);
+  if(m.ac){ const ab=el('button','aa-ac'); ab.type='button'; ab.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.5h-5.7z"/></svg>'; const t=el('span'); t.append(el('b',null,'Acceleration day'),'Every rep is max intent. Stop the set the moment speed drops below the band.'); ab.append(t,el('u',null,'Rules')); ab.addEventListener('click',aaRules); app.append(ab) }
+
+  const go=u=>{ S.open[u.id]=true; u.setOpen(true); if(u.bl&&S.blk[u.bl.s.l]) u.bl.setOpen(true); setTimeout(()=>aaScroll(u.el),60) };
+  const aaScroll=e=>{ try{ e.scrollIntoView({behavior:'smooth',block:'start'}) }catch(x){ e.scrollIntoView() } };
+  const paint=()=>{ const t=avTotals(m); fill.style.width=(t.all?Math.round(t.done/t.all*100):0)+'%'; ptx.textContent=t.all?t.done+' of '+t.all+' sets':'Nothing planned'; pr.classList.toggle('alld',t.all>0&&t.done>=t.all);
+    for(const bl of blocks){ let ok=0,n=0,alld=true; for(const u of bl.units){ const c=u.paint(); ok+=c.ok; n+=c.n; if(!c.done) alld=false } bl.ct.textContent=alld?'Done':ok+' / '+n; bl.hd.classList.toggle('done',alld) }
+    const nx=aaNext(m,units); nextB.classList.toggle('alld',!nx); nextB.textContent='';
+    if(nx){ const c=el('div','t'); c.append(el('small',null,t.done?'Next up':'Start here'),el('b',null,aaName(nx.r)),el('span',null,[LCFG[nx.u.lane].name,nx.r.slot&&nx.r.lane!=='throw'?nx.r.slot:'',nx.of>1?'set '+nx.set+' of '+nx.of:''].filter(Boolean).join(' · '))); nextB.append(c,el('i','aa-go','›')); nextB.onclick=()=>go(nx.u) }
+    else { const c=el('div','t'); c.append(el('small',null,'All done'),el('b',null,'Every set is logged'),el('span',null,'Finish the workout to save it.')); nextB.append(c,el('i','aa-go','›')); nextB.onclick=()=>aaFinish(m) }
+    const sel=app.querySelector('.aa-day.sel'); if(sel) aaMark(sel,{done:t.done,all:t.all,fin:!!((AVS.logs[m.dk]||{})._fin)});
+    restPaint() };
+  const advance=()=>{ let closed=false; for(const u of units){ const c=u.stat(); if(c.done&&!u.was){ u.was=true; if(S.open[u.id]){ delete S.open[u.id]; u.setOpen(false); closed=true } } else if(!c.done) u.was=false }
+    if(closed){ const nx=aaNext(m,units); if(nx&&!S.open[nx.u.id]){ S.open[nx.u.id]=true; nx.u.setOpen(true); setTimeout(()=>aaScroll(nx.u.el),220) } } };
+  const pset=()=>{ const t=avTotals(m); if(t.done>REG.last){ S.rest={t:Date.now()}; const L=(AVS.logs[m.dk]=AVS.logs[m.dk]||{}); if(!L._start) L._start=Date.now(); avSave(); try{ if(navigator.vibrate) navigator.vibrate(12) }catch(x){} } REG.last=t.done; advance(); paint() };
+
+  // the rest timer: how long since the last set, and what comes next
+  const rest=el('div','aa-rest'), rl=el('span','aa-rlab','Rest'), rt=el('b','aa-rtime','0:00'), rn=el('button','aa-rnext'), rx=el('button','aa-rx','✕'); rest.hidden=true; rn.type=rx.type='button'; rx.setAttribute('aria-label','Hide the rest timer'); rest.append(rl,rt,rn,rx);
+  const restPaint=()=>{ const r=S.rest, nx=aaNext(m,units); if(!r||!nx||Date.now()-r.t>20*60e3||!host.isConnected){ rest.hidden=true; return } rest.hidden=false; rt.textContent=aaClock(Date.now()-r.t); rn.textContent='Next: '+aaName(nx.r)+(nx.of>1?' · set '+nx.set:''); rn.onclick=()=>go(nx.u) };
+  rx.addEventListener('click',()=>{ S.rest=null; restPaint() });
+
+  for(const bl of blocks){
+    const sec=el('section','aa-blk'), hd=el('button','aa-blkh'), body=el('div','aa-blkb'); sec.dataset.lane=bl.s.l; sec.style.setProperty('--lane',AALANE[bl.s.l]||'#fff'); hd.type='button'; bl.hd=hd;
+    const t=el('div','t'); t.append(el('b',null,bl.s.name),el('span',null,bl.s.head)); bl.ct=el('span','ct'); hd.append(el('i','bar'),t,bl.ct,el('i','aa-chev')); sec.append(hd,body); bl.el=sec;
+    bl.setOpen=o=>{ sec.classList.toggle('open',o); hd.setAttribute('aria-expanded',String(o)); if(o) delete S.blk[bl.s.l]; else S.blk[bl.s.l]=true }; hd.addEventListener('click',()=>bl.setOpen(!sec.classList.contains('open'))); bl.setOpen(!S.blk[bl.s.l]);
+    for(const u of bl.units){ u.bl=bl; const card=el('article','aa-unit'+(u.ss?' aa-ss':'')); card.dataset.uid=u.id; u.el=card; u.exs=[]; u.was=u.rows.every(r=>aaExStat(m,r).done);
+      let sh=null; if(u.ss){ sh=el('button','aa-ssh'); sh.type='button'; const t2=el('div','t'); t2.append(el('b',null,'Superset '+u.L),el('span',null,u.rows.map(r=>r.slot).join(' → ')+' · alternate, rest after each pair')); u.rc=el('span','ct'); sh.append(t2,u.rc,el('i','aa-chev')); card.append(sh) }
+      u.info=u.rows.every(r=>r.info); if(u.info) card.classList.add('aa-uinfo');
+      for(const r of u.rows){ if(r.info){ const ir=aaInfoRow(m,r,pset); card.append(ir.wrap); u.exs.push({r,paint:ir.paint}); continue }
+        const ex={r}, e=r.eff, nSet=avSetN(e.sets,e.reps), N=nSet.n||1;
+        const wrap=el('div','aa-ex'), hdr=el(u.ss?'div':'button','aa-exh'); if(!u.ss) hdr.type='button';
+        if(r.slot&&r.lane!=='throw') hdr.append(el('span','aa-slot',r.slot));
+        const nm=el('div','aa-exn'); nm.append(el('b',null,aaName(r))); const sub=el('small'); sub.append(aaDose(r,e,nSet,N)); nm.append(sub);
+        if(r.swapped){ nm.append(el('small','aa-tag',(r.saved?'Your usual swap for ':'Swapped for ')+exShow(r.orig,r.lane))) } else if(r.adjusted){ nm.append(el('small','aa-tag','Adjusted')) }
+        ex.st=el('span','aa-exs'); hdr.append(nm,ex.st); if(!u.ss) hdr.append(el('i','aa-chev')); wrap.append(hdr);
+        wrap.append(aaBody(m,r,pset));
+        ex.paint=s=>{ ex.st.textContent=''; if(s.skip){ ex.st.append(el('span','aa-sk','Skipped')) } else if(s.done){ ex.st.append(el('i','aa-ok','✓')) } else if(s.n<=6){ for(let i=0;i<s.n;i++) ex.st.append(el('i','d'+(i<s.ok?' on':''))) } else ex.st.append(el('span','aa-cnt',s.ok+'/'+s.n)); wrap.classList.toggle('done',!!s.done&&!s.skip) };
+        u.exs.push(ex); card.append(wrap) }
+      u.stat=()=>{ let ok=0,n=0,done=true; for(const x of u.exs){ const s=aaExStat(m,x.r); ok+=s.ok; n+=s.n; if(!s.done) done=false } return {ok,n,done} };
+      u.paint=()=>{ let ok=0,n=0,done=true; for(const x of u.exs){ const s=aaExStat(m,x.r); x.paint(s); ok+=s.ok; n+=s.n; if(!s.done) done=false } card.classList.toggle('done',done); if(u.rc){ const rounds=Math.max(...u.exs.map(x=>aaExStat(m,x.r).n)), made=Math.min(...u.exs.map(x=>aaExStat(m,x.r).ok)); u.rc.textContent=done?'Done':'Round '+Math.min(made+1,rounds)+' of '+rounds } return {ok,n,done} };
+      u.setOpen=o=>{ if(u.info) return; card.classList.toggle('open',o); for(const h of card.querySelectorAll(':scope .aa-exh,:scope .aa-ssh')) if(h.tagName==='BUTTON') h.setAttribute('aria-expanded',String(o)) };
+      const toggle=()=>{ const o=!card.classList.contains('open'); u.setOpen(o); if(o) S.open[u.id]=true; else delete S.open[u.id] };
+      if(!u.info){ if(u.ss) sh.addEventListener('click',toggle); else card.querySelector('.aa-exh').addEventListener('click',toggle) }
+      u.setOpen(!!S.open[u.id]); body.append(card) }
+    app.append(sec) }
+  const fin=el('button','aa-fin'); fin.type='button'; const done=!!((AVS.logs[m.dk]||{})._fin); fin.textContent=done?'Workout saved ✓':'Finish workout'; fin.classList.toggle('on',done); fin.addEventListener('click',()=>aaFinish(m)); app.append(fin);
+  app.append(rest); paint();
+  S.tick=setInterval(()=>{ if(!host.isConnected){ clearInterval(S.tick); return } restPaint() },1000) }
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
