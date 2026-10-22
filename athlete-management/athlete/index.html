@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Athlete Dashboard · VeloU</title>
 <script src="/player-report/support.js"></script>
+<script>try{if(new URLSearchParams(location.search).get('app')==='1'){document.documentElement.setAttribute('data-app','1');document.title='VeloU'}}catch(e){}</script>
 </head>
 <body>
 <x-dc>
@@ -35,9 +36,19 @@ a{color:#E10600}a:hover{color:#FFFFFF}
 html[data-measuring] [data-vm="host"]{display:block !important;position:static !important;padding:0 !important;overflow:visible !important}
 html[data-measuring] [data-vm="panel"]{border:0 !important;padding:0 !important;box-shadow:none !important}
 html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(91,103,112,.55);padding-top:22px;margin-top:40px}
+/* ?app=1 is the athlete's own screen: only the app, none of the coach page around it */
+html[data-app] .vroot{max-width:none !important;padding:12px 14px 56px !important;gap:0 !important}
+html[data-app] .vroot>*:not(.vappwrap){display:none !important}
+/* the temporary Athlete App tab: the same page in a phone-sized frame */
+.vphone{display:flex;flex-direction:column;align-items:center;gap:12px}
+.vphonebar{width:100%;max-width:760px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;font:400 13px 'Barlow',sans-serif;color:rgba(255,255,255,.62)}
+.vphonebar a{font:600 13px 'Barlow',sans-serif;color:#56B7E6;text-decoration:none;border:1px solid #56B7E6;padding:6px 12px;white-space:nowrap}
+.vphoneframe{width:412px;max-width:100%;height:min(860px,calc(100vh - 150px));min-height:560px;border:11px solid #1b1f22;border-radius:38px;background:#000;overflow:hidden;box-shadow:0 0 0 1px #3a444a,0 24px 60px rgba(0,0,0,.6)}
+.vphoneframe iframe{display:block;width:100%;height:100%;border:0;background:#000}
+@media (max-width:520px){.vphoneframe{border:0;border-radius:0;box-shadow:none;height:calc(100vh - 170px)}}
 </style>
 </helmet>
-<div style="max-width:1180px;margin:0 auto;padding:32px 28px 96px;display:flex;flex-direction:column;gap:40px">
+<div class="vroot" style="max-width:1180px;margin:0 auto;padding:32px 28px 96px;display:flex;flex-direction:column;gap:40px">
 
   <div data-noprint="true" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:10px 14px">
     <div class="vgrp" style="display:flex;align-items:center;gap:14px">
@@ -180,7 +191,7 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
       <h2 style="margin:0;font-size:26px;font-weight:600">Next 6 Days <span style="color:rgba(255,255,255,.62);font-weight:400">· Training Calendar</span></h2>
     </div>
     <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
-      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022p" data-view="days" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,900px"></x-import>
+      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022q" data-view="days" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,900px"></x-import>
     </sc-if>
     <sc-if value="{{ plansLoading }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:rgba(255,255,255,.62)">Loading the plan…</span></sc-if>
   </section>
@@ -561,17 +572,23 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
     <sc-if value="{{ hasLib }}" hint-placeholder-val="{{ false }}"><div data-noprint="1" style="font:400 11px 'Barlow',sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.62)">{{ libStatus }}</div></sc-if>
     <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
       <sc-if value="{{ subBuild }}" hint-placeholder-val="{{ true }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022p" data-view="build" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,900px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022q" data-view="build" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,900px"></x-import>
       </sc-if>
       <sc-if value="{{ subMap }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022p" data-view="map" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,640px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022q" data-view="map" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,640px"></x-import>
       </sc-if>
       <sc-if value="{{ subNotes }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022p" data-view="notes" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022q" data-view="notes" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
       </sc-if>
       <sc-if value="{{ subAthlete }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022p" data-view="athlete" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022q" data-view="athlete" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
       </sc-if>
+    </sc-if>
+    <sc-if value="{{ subApp }}" hint-placeholder-val="{{ false }}">
+      <div class="vphone" data-noprint="1">
+        <div class="vphonebar"><span>Exactly what the athlete sees, at phone width. What you log, swap or adjust here is saved in this browser. This tab is temporary.</span><a href="{{ appUrl }}" target="_blank" rel="noopener">Open full screen</a></div>
+        <div class="vphoneframe"><iframe src="{{ appUrl }}" title="Athlete app preview"></iframe></div>
+      </div>
     </sc-if>
   </section>
   </sc-if>
@@ -810,6 +827,14 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
   </section>
   </sc-if>
 
+  <sc-if value="{{ appMode }}" hint-placeholder-val="{{ false }}">
+    <div class="vappwrap">
+      <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022q" data-view="athlete" data-app="1" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+      </sc-if>
+    </div>
+  </sc-if>
+
   <footer style="border-top:3px solid #E10600;padding-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font:400 12px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">
     <span>VeloU · {{ name }}</span>
   </footer>
@@ -1028,6 +1053,7 @@ const SCREEN = [[14, 'Right Ankle Dorsiflexion'], [15, 'Left Ankle Dorsiflexion'
 const TABS = [['main', 'Athlete Mainframe'], ['cmp', 'Athlete Score Comparison'], ['prog', 'Program Board'], ['evalr', 'VeloU On-Site Athlete Evaluation'], ['cmj', 'CMJ'], ['imtp', 'IMTP'], ['sj', 'Squat Jump'], ['cmjr', 'CMJR'], ['ppu', 'Plyo Pushup'], ['ei', 'Energy Interference'], ['et', 'Energy Transference']];
 
 // Plan storage: the programming tool keeps its plan in localStorage; mirror those keys to the database.
+const APPMODE = (() => { try { return new URLSearchParams(location.search).get('app') === '1'; } catch (x) { return false; } })();
 const PLAN_SYNC = { id: null, name: null, timers: {}, installed: false, raw: { set: Storage.prototype.setItem, remove: Storage.prototype.removeItem } };
 function planScope(k) {
   if (k === 'velou.drills.custom') return '*';
@@ -1053,7 +1079,7 @@ function installPlanSync() {
 }
 
 class Component extends DCLogic {
-  state = { tab: (typeof localStorage !== 'undefined' && ['eval', 'prog', 'pitch'].includes(localStorage.getItem('velou.ad.tab')) && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], modal: null, plansReady: false, sub: (() => { try { const k = localStorage.getItem('velou.ad.sub'); return ['build', 'map', 'notes', 'athlete'].includes(k) ? k : 'build'; } catch (x) { return 'build'; } })(), me: '', d: null, status: 'loading', updated: null };
+  state = { tab: (typeof localStorage !== 'undefined' && ['eval', 'prog', 'pitch'].includes(localStorage.getItem('velou.ad.tab')) && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], modal: null, plansReady: false, sub: (() => { try { const k = localStorage.getItem('velou.ad.sub'); return ['build', 'map', 'notes', 'athlete', 'app'].includes(k) ? k : 'build'; } catch (x) { return 'build'; } })(), me: '', d: null, status: 'loading', updated: null };
 
   componentDidMount() {
     this.onBeforePrint = () => this.sizePage();
@@ -1063,7 +1089,7 @@ class Component extends DCLogic {
     this.loadPlans();
     this.loadLibrary();
     this.loadMe();
-    this.onGoto = e => { const k = e && e.detail; if (['build', 'map', 'notes', 'athlete'].includes(k)) { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k, tab: 'prog' }); } };
+    this.onGoto = e => { const k = e && e.detail; if (['build', 'map', 'notes', 'athlete', 'app'].includes(k)) { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k, tab: 'prog' }); } };
     window.addEventListener('velou-goto', this.onGoto);
     this.onKey = e => { if (e.key === 'Escape' && this.state.modal) this.setState({ modal: null }); };
     window.addEventListener('keydown', this.onKey);
@@ -1558,10 +1584,11 @@ class Component extends DCLogic {
       screen,
       bodyTests, bodyJoints: Object.values(joints), screenSummary,
       ...this.calVals(),
-      isEval: tab !== 'pitch' && tab !== 'prog', isPitch: tab === 'pitch', isProg: tab === 'prog',
+      isEval: !APPMODE && tab !== 'pitch' && tab !== 'prog', isPitch: !APPMODE && tab === 'pitch', isProg: !APPMODE && tab === 'prog', appMode: APPMODE,
+      appUrl: (() => { const q = new URLSearchParams(); if (this.state.athleteId) q.set('id', this.state.athleteId); q.set('athlete', this.state.athlete || ''); q.set('app', '1'); return location.pathname + '?' + q.toString(); })(),
       libStatus: (this.state.libStatus || '') + (this.state.plansErr ? ' Saved plans are not syncing yet, so changes stay in this browser only.' : ''), hasLib: !!(this.state.libStatus || this.state.plansErr), plansReady: !!this.state.plansReady,
-      subTabs: [['build', 'Plan Build'], ['map', 'Training Map'], ['athlete', "Athlete's View"], ['notes', 'Notes']].map(([k, label]) => ({ label, onClick: () => { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k }); }, c: this.state.sub === k ? '#FFFFFF' : 'rgba(255,255,255,.62)', bd: this.state.sub === k ? '#56B7E6' : 'transparent' })),
-      subBuild: this.state.sub === 'build', subMap: this.state.sub === 'map', subNotes: this.state.sub === 'notes', subAthlete: this.state.sub === 'athlete',
+      subTabs: [['build', 'Plan Build'], ['map', 'Training Map'], ['athlete', "Athlete's View"], ['app', 'Athlete App'], ['notes', 'Notes']].map(([k, label]) => ({ label, onClick: () => { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k }); }, c: this.state.sub === k ? '#FFFFFF' : 'rgba(255,255,255,.62)', bd: this.state.sub === k ? '#56B7E6' : 'transparent' })),
+      subBuild: this.state.sub === 'build', subMap: this.state.sub === 'map', subNotes: this.state.sub === 'notes', subAthlete: this.state.sub === 'athlete', subApp: this.state.sub === 'app',
       ...this.planVals(d, prog, main, armScore, injury, tabFact, cmjFact, v, num),
       tabs: [tabBtn('eval', 'Dashboard'), tabBtn('prog', 'Programming'), tabBtn('pitch', 'Pitching Development')],
       rangeOpts,

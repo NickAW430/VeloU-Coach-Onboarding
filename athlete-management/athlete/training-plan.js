@@ -2956,7 +2956,8 @@ function renderAthlete(){
   const box=$('aview'); box.hidden=false; box.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); xlLoad(); avLoad();
   const today=ymd(new Date(new Date().setHours(12,0,0,0))); if(!AVN.dk) AVN.dk=today;
   const dt=day0(AVN.dk)||day0(today), st=day0(A.startDate), app=el('div','av'); box.append(app);
-  const who=el('div','avwho'); who.append(el('b',null,"Athlete’s view"),el('span',null,(host.dataset.athlete||cur)+' · the screen the athlete follows. Logs save in this browser.')); app.append(who);
+  const APPV=host.dataset.app==='1';   // the athlete's own screen: no coach tools, no coach wording
+  const who=el('div','avwho'); if(APPV) who.append(el('b',null,'VeloU'),el('span',null,host.dataset.athlete||cur)); else who.append(el('b',null,"Athlete’s view"),el('span',null,(host.dataset.athlete||cur)+' · the screen the athlete follows. Logs save in this browser.')); app.append(who);
   const nav=n=>{AVN.dk=ymd(addD(dt,n)); render()}, mkb=(t,l,fn,dis)=>{const b=el('button','avnb',t); b.type='button'; b.setAttribute('aria-label',l); b.disabled=!!dis; b.addEventListener('click',fn); return b};
   const dn=el('div','avdn'); dn.append(mkb('‹','Previous day',()=>nav(-1)),el('div','avdt',dt.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})),mkb('›','Next day',()=>nav(1)),mkb('Today','Back to today',()=>{AVN.dk=''; render()},AVN.dk===today)); app.append(dn);
   if(!st){ app.append(el('p','avmsg','Set a start date in Plan Build to see this athlete’s days.')); return }
@@ -2968,9 +2969,9 @@ function renderAthlete(){
   app.append(el('div','avsub','Week '+w.n+' · Day '+(off%7+1)+' · '+(w.off?(w.deload?'Deload':'Off week'):w.code+((w.uses&&w.focus)?' · '+w.focus:''))));
   const pr=el('div','avpr'), bar=el('div','avbar'), fill=el('i'); bar.append(fill); pr.append(bar,el('span','avprt')); app.append(pr);
   const pset=()=>{const t=avTotals(m); fill.style.width=(t.all?Math.round(t.done/t.all*100):0)+'%'; pr.querySelector('.avprt').textContent=t.all?t.done+' of '+t.all+' done':'Nothing planned'; pr.classList.toggle('alld',t.all>0&&t.done>=t.all)}; pset();
-  const ct=el('div','avcoach'); ct.append(el('span','note','Coach tools'));
-  const rv=el('button','btn sm','Check videos'); rv.type='button'; rv.addEventListener('click',()=>avReview(m));
-  const rd=el('button','btn sm','Clear this day’s log'); rd.type='button'; rd.addEventListener('click',()=>{ if(!AVS.logs[m.dk]) return; if(confirm('Clear everything logged for this day?')){ delete AVS.logs[m.dk]; avSave(); render() } }); ct.append(rv,rd); app.append(ct);
+  if(!APPV){ const ct=el('div','avcoach'); ct.append(el('span','note','Coach tools'));
+    const rv=el('button','btn sm','Check videos'); rv.type='button'; rv.addEventListener('click',()=>avReview(m));
+    const rd=el('button','btn sm','Clear this day’s log'); rd.type='button'; rd.addEventListener('click',()=>{ if(!AVS.logs[m.dk]) return; if(confirm('Clear everything logged for this day?')){ delete AVS.logs[m.dk]; avSave(); render() } }); ct.append(rv,rd); app.append(ct) }
   if(m.ac) app.append(avRules());
   if(!some){ app.append(el('p','avmsg','Rest day. Nothing planned for this date.')); return }
   for(const s of m.secs){ const sec=el('section','avl'); sec.dataset.lane=s.l; const hd=el('div','avlh'); hd.append(el('b',null,s.name),el('span',null,s.head)); sec.append(hd);
@@ -3046,7 +3047,7 @@ function avWatch(r,v){ const b=avSheet(exShow(r.eff?r.eff.name:r.name,r.lane),'v
   else if(v.kind==='mp4'){ const vd=document.createElement('video'); vd.src=v.embed; vd.controls=true; vd.setAttribute('playsinline',''); vd.className='avfr'; b.append(vd) }
   if(v.via&&v.q!=='fix'&&v.q!=='sheet') b.append(el('p','avcap','Closest video in the library: '+exShow(v.via,r.lane)));
   const a=el('a','avlink','Open the video in a new tab'); a.href=v.watch; a.target='_blank'; a.rel='noopener'; b.append(a); avFixBtn(b,r) }
-function avFixBtn(b,r){ const x=el('button','btn sm','Wrong or missing video? Choose another'); x.type='button'; x.addEventListener('click',()=>avPickVideo(r)); b.append(x) }
+function avFixBtn(b,r){ if(host.dataset.app==='1') return; const x=el('button','btn sm','Wrong or missing video? Choose another'); x.type='button'; x.addEventListener('click',()=>avPickVideo(r)); b.append(x) }
 // choose the right video for an exercise: search the library, pick one, and every athlete gets it
 function avPickVideo(r,back){ const nm=r.eff?r.eff.name:r.name, b=avSheet('Choose the video for '+exShow(nm,r.lane)), nk=xCore(nm)||exNorm(nm);
   const inp=el('input','avsrch'); inp.type='search'; inp.placeholder='Type an exercise name'; inp.setAttribute('aria-label','Search the exercise library'); const list=el('div','avres2'); b.append(inp,list);
