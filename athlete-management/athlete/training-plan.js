@@ -190,7 +190,7 @@ button.rr:hover{background:var(--sunk)}
 .lst span{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
 .lch{color:var(--muted);font-size:13px}
 .lsec .ldays{padding:2px 14px 14px}
-.lgrid{display:grid;grid-template-columns:repeat(3,minmax(250px,1fr));gap:8px;overflow-x:auto;align-items:stretch}
+.lgrid{display:grid;gap:8px;align-items:stretch}
 .ldcell{background:#101417;border:1px solid var(--line);border-top:3px solid #3a444a;padding:8px 10px;font:700 16px/1.2 var(--body);letter-spacing:.04em;color:#fff;text-align:center;user-select:none}
 .ldcell.today{border-top-color:var(--seam)}
 .ldcell.lediting{cursor:grab;touch-action:none}
@@ -410,6 +410,48 @@ button.rr:hover{background:var(--sunk)}
 .qlift.on{border-color:var(--seam);background:rgba(225,6,0,.12)}
 .qwhy{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:1.4;color:#dfe7ea}
 .nh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.ldcell{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.ldcell.pick{border-top-color:var(--heat);background:#14202a}
+.ldcell .ldt{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lgrid.lgn .ldcell{font-size:13.5px;letter-spacing:.02em;padding:7px 4px}
+.ldsc{font:700 12px/1 var(--mono);min-width:26px;text-align:center;padding:3px 6px;border:1px solid var(--heat);background:rgba(86,183,230,.16);color:#fff}
+.ldsc.hot{background:var(--seam);border-color:var(--seam)}
+.ldact{display:flex;flex-wrap:wrap;gap:2px 12px;justify-content:center}
+.ldb{background:none;border:0;padding:1px 0;color:var(--muted);font:600 10px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.ldb:hover{color:#fff}
+.lbox.lnarrow .lh2{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;line-height:1.2;min-height:2.4em}
+.lrow.lnar{display:grid;gap:4px;align-items:start;padding:3px 0}
+.lrow.lnar .lnb{min-width:0}
+.lrow.lnar .sl{padding-top:1px}
+.ldose{font:500 10.5px/1.3 var(--mono);color:var(--muted);overflow-wrap:anywhere}
+.mr .mc i.mdq{cursor:pointer}
+.mr .mc i.mdq:hover,.mr .mc i.mdon{outline:2px solid #fff;outline-offset:-2px}
+.mdp,.mdw{position:fixed;z-index:500;display:flex;flex-direction:column;background:#0b0d0e;border:1px solid #3a444a;border-top:3px solid var(--heat);box-shadow:0 20px 50px rgba(0,0,0,.85);min-height:0}
+.mdp{width:760px;max-width:calc(100vw - 16px)}
+.mdw{width:min(1900px,calc(100vw - 24px))}
+.mdk{position:fixed;inset:0;z-index:499;background:rgba(0,0,0,.62)}
+.mdh{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);flex:none}
+.mdt{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px}
+.mdt b{font:700 16px/1.2 var(--body);color:#fff}
+.mdt span{font:500 11.5px/1.3 var(--body);color:var(--muted);overflow-wrap:anywhere}
+.mdsc{flex:none;min-width:30px;text-align:center;font:700 14px/1 var(--mono);padding:7px 8px;border:1px solid var(--heat);background:rgba(86,183,230,.16);color:#fff}
+.mdsc.hot{background:var(--seam);border-color:var(--seam)}
+.mdx{flex:none;width:34px;height:34px;background:none;border:1px solid var(--line);color:var(--muted);font-size:14px;cursor:pointer}
+.mdx:hover{color:#fff;border-color:#4a5258}
+.mdb{flex:1 1 auto;min-height:0;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:14px;overscroll-behavior:contain}
+.mdb>.lgrid{flex:none}
+.mdf{flex:none;display:flex;gap:10px;justify-content:space-between;align-items:center;padding:6px 12px;border-top:1px solid var(--line);font:500 11px/1.3 var(--body);color:var(--muted)}
+.mdp .lgrid{gap:6px}
+.lgrid.lgm{display:block;column-gap:12px}
+.lgrid.lgm .lbox{break-inside:avoid;margin-bottom:8px}
+.mdgo{white-space:nowrap}
+.mdp .lbox{background:transparent}
+.mdp .ldh{display:flex;align-items:baseline;gap:8px;padding-bottom:0}
+.mdp .lh2{margin:0 0 6px;flex:1 1 auto;min-width:0}
+.mdtl{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 12px 0}
+.lbox.lcn .lr2{padding-left:0;gap:4px}
+.lbox.lcn .lr1{grid-template-columns:16px 24px minmax(0,1fr) auto;gap:4px}
+.mcde{margin-left:auto}
 .expop{position:fixed;z-index:9999;background:#0b0d0e;border:1px solid #56b7e6;box-shadow:0 14px 34px rgba(0,0,0,.75);overflow:auto;display:flex;flex-direction:column;max-width:calc(100vw - 16px)}
 .exph{position:sticky;top:0;padding:7px 10px;background:#0b0d0e;border-bottom:1px solid var(--line);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);z-index:1}
 .exi{display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;padding:7px 10px;border:0;border-bottom:1px solid #151a1d;background:transparent;color:#d4d9dc;font:500 13px/1.3 var(--body);text-align:left;cursor:pointer}
@@ -1434,9 +1476,9 @@ function dateFor(n,day){const d=day0(A.startDate); if(!d) return null; d.setDate
 function currentWeek(total){const d=day0(A.startDate); if(!d) return null; const n=Math.floor((new Date()-d)/6048e5)+1; return n>=1&&n<=total?n:null}
 function flagsOn(){const l=L(); return (l.arm!=null&&l.arm<85)||(l.injury&&!/^(none|—|-|n\/a)$/i.test(l.injury))}
 function render(){
-  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return renderAll(); if(BV) return renderBuild(); if(NV) return renderNotes();
+  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return QUIET?null:renderAll(); if(BV) return renderBuild(); if(NV) return renderNotes();
   const p=prog(), weeks=planWeeks(), tl=isTL(), l=L(), v=V(); TP=testPlan(weeks); if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); try{renderLanes()}catch(e){console.warn(e)}
-  for(const w of weeks){w.rows=weekRows(w); w.throws=w.rows.reduce((a,r)=>a+(r.plan?0:r.sets*r.reps),0); w.wv=w.rows.reduce((a,r)=>a+(r.wv||0),0); w.peak=w.rows.reduce((a,r)=>Math.max(a,r.rpe||0),0); w.hi=w.rows.reduce((a,r)=>a+(!r.plan&&r.rpe>=90?r.sets*r.reps:0),0)}
+  for(const w of weeks){w.rows=statRows(w); w.throws=w.rows.reduce((a,r)=>a+(r.plan?0:r.sets*r.reps),0); w.wv=w.rows.reduce((a,r)=>a+(r.wv||0),0); w.peak=w.rows.reduce((a,r)=>Math.max(a,r.rpe||0),0); w.hi=w.rows.reduce((a,r)=>a+(!r.plan&&r.rpe>=90?r.sets*r.reps:0),0)}
   {let prevB=null, prevD7=null, prevPD7=null, first=true;
    for(const w of weeks){
      w.ds=[1,2,3,4,5,6,7].map(d=>w.rows.reduce((a,x)=>a+(x.day===d?(x.wv||0):0),0)/12);
@@ -1478,6 +1520,7 @@ function render(){
   fl.hidden=!fs.length;
   renderTimeline(weeks,N,mound,cw);
   if(MV){mapBar(weeks); root.querySelector('.wrap').classList.toggle('cal',MAPV==='cal'); if(MAPV==='cal') renderMapCal(weeks); else $('mcal').hidden=true}
+  if(MV){try{mdRefresh(weeks,QUIET)}catch(e){console.warn(e)}}
   const cal=$('cal'); cal.textContent='';
   const today=new Date().toDateString(), hiOn=flagsOn();
   if(!weeks.length&&DV){dvBar(); cal.append(el('p','note','No throwing plan for this athlete yet. Open the Throwing tab under Programming to start one.'))} else if(!weeks.length){cal.append(el('p','note',tl?(N==null?'Open Coach tools and enter a start date and a competition date for a suggested offseason stack, or add blocks by hand.':'There are no weeks in this plan yet.'):'This program has no weeks.'))}
@@ -1638,7 +1681,7 @@ function renderTimeline(weeks,N,mound,cw){
     r.append(el('span','mw',String(w.n)),el('span','md',d1?fmt(d1)+' \u2013 '+fmt(d7):''));
     {const mp=el('span','mp'+(w.mound?' mound':''),w.phase+(w.off?'':' \u00b7 wk '+w.pw)); if(w.uses) mp.append(el('small',null,w.focus)); if(A.deload[w.n]) mp.append(el('small','dlon','Deload applied')); else if(w.sugDl) mp.append(el('small','dlsug','Suggested deload week')); r.append(mp)}
     const c=el('span','mc');
-    for(let d=1;d<=7;d++){const sc=w.rows.reduce((a,x)=>a+(x.day===d?(x.wv||0):0),0)/12, i=el('i',sc>=7?'hot':'',sc?String(Math.round(sc)):''); i.title=sc?'Day score '+sc.toFixed(2):''; i.style.setProperty('--h',Math.min(sc/12,1).toFixed(3)); c.append(i)}
+    for(let d=1;d<=7;d++){const sc=w.rows.reduce((a,x)=>a+(x.day===d?(x.wv||0):0),0)/12, i=el('i',sc>=7?'hot':'',sc?String(Math.round(sc)):''); {const dd=dateFor(w.n,d); if(dd){mdBind(i,dd); i.setAttribute('aria-label','Week '+w.n+' day '+d+(sc?', day score '+Math.round(sc):', no throwing')+', show this day')}} i.style.setProperty('--h',Math.min(sc/12,1).toFixed(3)); c.append(i)}
     r.append(c,el('span','mt2',w.base==null?'':String(Math.round(w.base))),el('span','mt2',String(w.throws)),el('span','mt2'+(w.roll<0?' neg':''),w.roll==null?'':String(Math.round(w.roll))),el('span','mt2',w.peak?w.peak+'%':''));
     r.setAttribute('aria-label','Open week '+w.n+', '+w.phase); r.title=(PDESC[w.code]||'')+(w.uses&&FDESC[w.focus]?'\n\n'+w.focus+': '+FDESC[w.focus]:'');
     r.addEventListener('click',()=>go(w));
@@ -1753,7 +1796,7 @@ $('dlgForm').addEventListener('submit',e=>{e.preventDefault(); $('dlgAll').click
 window.__vdv=window.__vdv||{}; const VS=(window.__vdv[host.dataset.lane||'']=window.__vdv[host.dataset.lane||'']||{off:0,edit:false,open:[]}); let dvOff=VS.off, dvEdit=VS.edit, edCtx=null;
 const tidyN=x=>String(x||'').replace(/\s*⊃\s*superset/g,'').replace(/\s*\[[^\]]*\]\s*$/,'').trim();
 const pdt=x=>{const d=new Date(String(x||'')); return isNaN(d)?null:d};
-function dvDates(){const o=[]; for(let i=0;i<3;i++){const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dvOff+i); o.push(d)} return o}
+function dvDates(){const o=[]; for(let i=0;i<DVN;i++){const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+dvOff+i); o.push(d)} return o}
 function dvTargets(weeks){const base=day0(A.startDate); return dvDates().map(dt=>{ if(!base) return {w:null,dt,msg:'Set a start date in the Programming tab.'}; const off=Math.round((dt-base)/864e5), w=off>=0?weeks[Math.floor(off/7)]:null; return w?{w,day:off%7+1,dt}:{w:null,dt,msg:off<0?'Plan starts '+fmt(base)+'.':'Past the end of this plan.'}})}
 function boardObj(){try{return JSON.parse(host.dataset.board||'{}')||{}}catch(e){return {}}}
 function dvBar(){
@@ -1761,7 +1804,7 @@ function dvBar(){
   const ds=dvDates(), t=el('div','dvt');
   t.append(el('b',null,'Training plan'), el('span',null,fmt(ds[0])+' to '+fmt(ds[ds.length-1])));
   const a=el('div','acts2'), mk=(txt,fn,cls,dis,lab)=>{const b=el('button','btn sm'+(cls?' '+cls:''),txt); b.type='button'; if(lab) b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',fn); return b};
-  a.append(mk('\u2190',()=>{dvOff-=1; VS.off=dvOff; render()},'',false,'Earlier days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; VS.off=0; render()},'',!dvOff,'Back to today'), mk('\u2192',()=>{dvOff+=1; VS.off=dvOff; render()},'',false,'Later days'));
+  a.append(mk('\u2190',()=>{dvOff-=DVN; VS.off=dvOff; render()},'',false,'Previous '+DVN+' days'), mk(dvOff?'Back to today':'Today',()=>{dvOff=0; VS.off=0; render()},'',!dvOff,'Back to today'), mk('\u2192',()=>{dvOff+=DVN; VS.off=dvOff; render()},'',false,'Next '+DVN+' days'));
   a.append(mk(dvEdit?'Done editing':'Edit program',()=>{dvEdit=!dvEdit; VS.edit=dvEdit; coachOpen=dvEdit; if(!dvEdit){liftOpen.clear(); VS.open=[]} render()},dvEdit?'primary':'',false));
   const st=el('span','note'); st.id='dvst'; st.textContent=$('status')?$('status').textContent:''; a.append(st); bar.append(t,a);
 }
@@ -1804,7 +1847,8 @@ function patEdX(pt,dt){ if(!pt||!dt) return pt; const o=((A.laneDays||{}).pat||{
   for(const r of rows){let b=by.find(x=>x.ch===r.blk); if(!b){b={ch:r.blk,label:r.blk,name:PATN[r.blk]||'Patterning',drills:[]}; by.push(b)} b.drills.push({name:r.name,dose:(r.sets?r.sets+' \u00d7 ':'')+(r.reps||''),video:''})}
   return Object.assign({},pt,{blocks:by})}
 // ---- Day lanes: prep, patterning, throwing, lifting, corrective (uniform boxes, drag, copy, delete) ----
-let liftOpen=new Set(VS.open), liftDrag=null;
+let liftOpen=new Set(VS.open), liftDrag=null, PENDF=null, QUIET=false, DVW=0;
+const DVN=6;   // days on the dashboard calendar
 const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const liftName=n=>String(n||'').replace(/^[^—]*\s—\s/,'').trim();
 const abbrFocus=t=>String(t||'').replace(/\s*\/\s*/g,'/').replace(/\[Vertical\]/g,'[V]').replace(/\[Horizontal\]/g,'[H]');
@@ -1851,6 +1895,7 @@ const LCFG={
   lift:{name:'Lifting',sub:bd=>bd.lift,none:'Rest day',fields:[['sets','Sets'],['reps','Reps'],['int','Intensity'],['tempo','Tempo']]},
   corr:{name:'Corrective',sub:bd=>[bd.ac,bd.mob].filter(Boolean).join(' · '),none:'No corrective',fields:[['sets','Sets'],['reps','Reps']]}
 };
+const LANES=['prep','pat','throw','lift','corr'];
 function lnHead(l,d){
   if(l==='lift'||l==='prep') return d.rest&&!d.title?LCFG[l].none:[d.fam,d.ph?'P'+d.ph:'',l==='lift'?abbrFocus(d.title):d.title].filter(Boolean).join(' • ')||'Custom day';
   if(l==='throw'||l==='pat') return [d.ph,d.lv?'L'+d.lv:'',d.title].filter(Boolean).join(' • ')||'Custom day';
@@ -1864,29 +1909,38 @@ function lnDay(l,dt){
 }
 const lnPack=d=>d?{fam:d.fam,ph:d.ph,lv:d.lv,title:d.title,rows:d.rows.map(r=>Object.assign({},r))}:{fam:'',ph:'',lv:'',title:'',rows:[]};
 function lnEnsure(l,dt){const S=LS(l), dk=ymd(dt); if(!S[dk]) S[dk]=lnPack(lnDay(l,dt)); return S[dk]}
-function lnEdit(l,dt,fn){fn(lnEnsure(l,dt)); changed()}
+// quiet: the page already shows the new value, so save without redrawing (a redraw would swallow the click that caused the edit). fn returns true when a redraw is needed after all.
+function lnEdit(l,dt,fn,quiet){const redo=fn(lnEnsure(l,dt)); changed(!!quiet&&!redo); if(quiet&&!redo) lnShowReset(l,ymd(dt))}
+function lnShowReset(l,dk){for(const b of root.querySelectorAll('.lbox[data-lane="'+l+'"][data-dk="'+dk+'"] .lreset[hidden], .ldcell[data-dk="'+dk+'"] .ldreset[hidden]')) b.hidden=false}
 function lnSwap(l,a,b){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa; changed()}
-function lnSwapAll(a,b){for(const l of ['prep','pat','throw','lift','corr']){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa} changed()}
+function lnSwapAll(a,b){for(const l of LANES){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa} changed()}
 function lnMove(l,from,to){
   const src=lnEnsure(l,from.dt), dst=lnEnsure(l,to.dt), row=src.rows.splice(from.i,1)[0]; if(!row) return;
   let at=to.i; if(src===dst&&from.i<at) at--; dst.rows.splice(Math.max(0,Math.min(at,dst.rows.length)),0,row); if(!dst.title||/^(Rest day|No )/.test(dst.title)) dst.title='Custom day'; changed()}
+// a rest day: nothing left in the lane (the corrective assignments from the Program Board stay)
+function lnClear(o,l){o.rows=o.rows.filter(r=>r.info); o.title=(l==='lift'||l==='prep')?'':LCFG[l].none}
+function lnRestDay(dt,lanes){for(const l of (lanes||LANES)){const d=lnDay(l,dt); if(!d||d.out||d.loading) continue; if(!d.rows.some(r=>!r.info)&&!d.custom) continue; lnClear(lnEnsure(l,dt),l)} changed()}
+function lnResetDay(dt,lanes){const dk=ymd(dt); for(const l of (lanes||LANES)) delete LS(l)[dk]; changed()}
+const lnCustom=(dt,lanes)=>(lanes||LANES).some(l=>LS(l)[ymd(dt)]);
 const SVGI={
   trash:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>',
   copy:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>',
   grip:'<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>'};
 function liftIcon(cls,svg,label,fn){const b=el('button',cls); b.type='button'; b.innerHTML=svg; b.setAttribute('aria-label',label); b.title=label; if(fn) b.addEventListener('click',fn); return b}
 function liftDrop(kind,info,t){
+  const ds=(info.ctx&&info.ctx.dates)||dvDates();
   if(kind==='col'){ if(t.box&&t.box._dt) lnSwapAll(info.dt,t.box._dt); return }
   if(kind==='day'){ if(t.box&&t.box._dt) lnSwap(info.lane,info.dt,t.box._dt); return }
   const from={dt:info.dt,i:info.i};
-  if(t.row){const dt=dvDates().find(d=>ymd(d)===t.row.dataset.dk); if(dt) lnMove(info.lane,from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
+  if(t.row){const dt=ds.find(d=>ymd(d)===t.row.dataset.dk); if(dt) lnMove(info.lane,from,{dt,i:(+t.row.dataset.i)+(t.after?1:0)})}
   else if(t.box&&t.box._dt){const d=lnDay(info.lane,t.box._dt); lnMove(info.lane,from,{dt:t.box._dt,i:d?d.rows.length:0})}
 }
 function liftDragStart(e,kind,info,srcEl){
-  if(!coachOpen||(e.button!=null&&e.button!==0)) return; e.preventDefault(); e.stopPropagation();
+  const cx=info.ctx||{edit:coachOpen,layer:$('cal'),scroller:null};
+  if(!cx.edit||(e.button!=null&&e.button!==0)) return; e.preventDefault(); e.stopPropagation();
   const h=e.currentTarget, rc=srcEl.getBoundingClientRect(), gh=srcEl.cloneNode(true), dx=e.clientX-rc.left, dy=e.clientY-rc.top;
-  gh.classList.add('lghost'); gh.style.cssText='position:fixed;pointer-events:none;z-index:200;opacity:.92;width:'+rc.width+'px;left:'+rc.left+'px;top:'+rc.top+'px;margin:0';
-  $('cal').append(gh); srcEl.classList.add('ldrag'); liftDrag={t:null};
+  gh.classList.add('lghost'); gh.style.cssText='position:fixed;pointer-events:none;z-index:9000;opacity:.92;width:'+rc.width+'px;left:'+rc.left+'px;top:'+rc.top+'px;margin:0';
+  cx.layer.append(gh); srcEl.classList.add('ldrag'); liftDrag={t:null};
   try{h.setPointerCapture(e.pointerId)}catch(_){}
   const clear=()=>root.querySelectorAll('.lover,.lbefore,.lafter').forEach(n=>n.classList.remove('lover','lbefore','lafter'));
   const mark=(x,y)=>{clear(); liftDrag.t=null; const els=root.elementsFromPoint(x,y), row=els.find(n=>n.classList&&n.classList.contains('lrow')&&n!==srcEl&&!n.classList.contains('lhead')&&!n.classList.contains('linfo')&&n.dataset.lane===info.lane), box=els.find(n=>n.classList&&n.classList.contains('lbox')&&(kind==='col'||n.dataset.lane===info.lane));
@@ -1894,7 +1948,10 @@ function liftDragStart(e,kind,info,srcEl){
     else if(kind==='day'){ if(box&&box!==srcEl){box.classList.add('lover'); liftDrag.t={box}} }
     else if(row){const r2=row.getBoundingClientRect(), after=y>r2.top+r2.height/2; row.classList.add(after?'lafter':'lbefore'); liftDrag.t={row,after}}
     else if(box){box.classList.add('lover'); liftDrag.t={box}}};
-  const move=ev=>{gh.style.left=(ev.clientX-dx)+'px'; gh.style.top=(ev.clientY-dy)+'px'; if(ev.clientY<70) window.scrollBy(0,-14); else if(ev.clientY>window.innerHeight-70) window.scrollBy(0,14); mark(ev.clientX,ev.clientY)};
+  const move=ev=>{gh.style.left=(ev.clientX-dx)+'px'; gh.style.top=(ev.clientY-dy)+'px';
+    const sc=cx.scroller; if(sc){const r=sc.getBoundingClientRect(); if(ev.clientY<r.top+50) sc.scrollTop-=14; else if(ev.clientY>r.bottom-50) sc.scrollTop+=14}
+    else if(ev.clientY<70) window.scrollBy(0,-14); else if(ev.clientY>window.innerHeight-70) window.scrollBy(0,14);
+    mark(ev.clientX,ev.clientY)};
   const end=ev=>{h.removeEventListener('pointermove',move); h.removeEventListener('pointerup',end); h.removeEventListener('pointercancel',end); try{h.releasePointerCapture(ev.pointerId)}catch(_){}
     const t=liftDrag&&liftDrag.t; gh.remove(); srcEl.classList.remove('ldrag'); clear(); liftDrag=null; if(ev.type==='pointercancel'||!t) return; liftDrop(kind,info,t)};
   h.addEventListener('pointermove',move); h.addEventListener('pointerup',end); h.addEventListener('pointercancel',end); mark(e.clientX,e.clientY);
@@ -1905,9 +1962,10 @@ const ABBR=[[/\s*\/\s*/g,'/'],[/\[Vertical\]/g,'[V]'],[/\[Horizontal\]/g,'[H]'],
   [/resisted speed\/heavy push/i,'Resisted/Heavy'],[/overhead\/throw/i,'OH/Throw'],[/Horizontal/gi,'Horiz'],[/Vertical/gi,'Vert'],[/Posterior/gi,'Post'],[/Lower prep/i,'Low Prep'],[/Upper prep/i,'Up Prep'],
   [/Upper/g,'Up'],[/Lower/g,'Low'],[/Resisted/gi,'Resist'],[/Dynamic/gi,'Dyn'],[/Sequencing/gi,'Seq'],[/Stability/gi,'Stab'],[/Overhead/gi,'OH'],[/\s-\s/g,' ']];
 function abbrTitle(t){let x=String(t||''); for(const [re,to] of ABBR){ if(x.length<=TMAX) break; x=x.replace(re,to)} return x.length>TMAX?x.slice(0,TMAX-1)+'…':x}
+const lnDose=r=>[[r.sets&&r.reps?r.sets+' × '+r.reps:(r.sets?r.sets+' sets':r.reps||''),r.int?'@ '+r.int:''].filter(Boolean).join(' '),r.tempo?'('+r.tempo+')':'',r.ball||''].filter(Boolean).join(' · ');
 function renderBox(l,dt,ix,ctx){
-  const cfg=LCFG[l], {days,hasInt,hasTmp,cols,needSt,st,today}=ctx, rowsOf=ctx.rowsOf;
-    const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); box._dt=dt; box.dataset.dk=dk; box.dataset.lane=l;
+  const cfg=LCFG[l], {days,hasInt,hasTmp,cols,needSt,st,today}=ctx, rowsOf=ctx.rowsOf, edit=ctx.edit;
+    const dk=ymd(dt), d=days[ix], box=el('article','lbox'+(dt.toDateString()===today?' today':'')+(edit?' lediting':'')+(ctx.narrow?' lnarrow':'')+(ctx.tight?' lcn':'')); box._dt=dt; box.dataset.dk=dk; box.dataset.lane=l;
     const hd=el('div','ldh'); hd.append(el('div','lh1',cfg.name)); hd.title=(cfg.sub(boardObj())||'');
     let t2, off=false;
     if(needSt&&!st) {t2='Set a start date in the Programming tab.'; off=true}
@@ -1916,48 +1974,73 @@ function renderBox(l,dt,ix,ctx){
     else if(d&&d.loading) {t2='Loading…'; off=true}
     else if(!d||d.out) {t2='Past the end of this plan.'; off=true}
     else {t2=lnHead(l,d); off=d.rest&&l!=='corr'}
-    t2=abbrTitle(t2);
-    const h2=el('div','lh2'+(off?' off':''),t2); hd.append(h2);
+    const t2full=t2; t2=abbrTitle(t2);
+    const h2=el('div','lh2'+(off?' off':''),t2); h2.title=t2full; hd.append(h2);
     const real=d&&!d.out&&!d.loading;
-    if(coachOpen&&real){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt,lane:l},box)})}
+    if(edit&&real){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt,lane:l,ctx},box)})}
     box.append(hd,el('div','lline'));
-    const open=coachOpen||liftOpen.has(l), rows=rowsOf(d);
-    if(!coachOpen&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(l):liftOpen.add(l); VS.open=[...liftOpen]; render()}); box.append(x)}
-    if(open&&(rows.length||(coachOpen&&real))){
+    const open=edit||ctx.all||liftOpen.has(l), rows=rowsOf(d);
+    if(!edit&&!ctx.all&&rows.length){const x=el('button','lexp'); x.type='button'; x.setAttribute('aria-expanded',String(open)); x.append(el('span',null,open?'Hide exercises':'Show exercises'),el('span',null,open?'▴':'▾')); x.addEventListener('click',()=>{open?liftOpen.delete(l):liftOpen.add(l); VS.open=[...liftOpen]; render()}); box.append(x)}
+    if(open&&(rows.length||(edit&&real))){
       const list=el('div','lrws'), hr=el('div','lrow lhead'); hr.style.gridTemplateColumns=cols;
       hr.append(el('span'),el('span',null,'Exercise'),el('span','n','Sets'),el('span','n','Reps')); if(hasInt) hr.append(el('span','n','Int')); if(hasTmp) hr.append(el('span','n','Tempo'));
-      if(rows.some(r=>!r.info)&&!coachOpen) list.append(hr);
+      if(rows.some(r=>!r.info)&&!edit&&!ctx.narrow) list.append(hr);
       rows.forEach((r,i)=>{
         if(r.info){const li=el('div','lrow linfo'); li.dataset.dk=dk; li.dataset.i=String(i); li.dataset.lane=l; li.append(el('span',null,r.name),el('b',null,r.info)); list.append(li); return}
-        const re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')+(coachOpen?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i); re.dataset.lane=l;
-        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); if(ph) x.placeholder=ph; if(f==='name') exPick(x,l,(nm,dose)=>{x._picked=1; lnEdit(l,dt,o=>{const r=o.rows[i]; r.name=nm; if(dose&&!r.sets&&!r.reps){r.sets=dose.sets; r.reps=dose.reps}})}); x.addEventListener('change',()=>{ if(x._picked) return; lnEdit(l,dt,o=>{o.rows[i][f]=x.value.trim()}) }); return x};
-        if(coachOpen){
-          const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i,lane:l},re));
+        const slotTxt=l==='throw'?String(i+1):(r.slot||''), re=el('div','lrow'+(i&&r.blk!==rows[i-1].blk?' newblk':'')+(edit?' ledit':'')); re.dataset.dk=dk; re.dataset.i=String(i); re.dataset.lane=l;
+        const inp=(v,f,cls,ph)=>{const x=el('input','lin'+(cls?' '+cls:'')); x.value=v||''; x.setAttribute('aria-label',f); x.dataset.fk=[l,dk,i,f].join('|'); if(ph) x.placeholder=ph;
+          if(f==='name') exPick(x,l,(nm,dose)=>{lnEdit(l,dt,o=>{const r=o.rows[i]; r.name=nm; if(dose&&!r.sets&&!r.reps){r.sets=dose.sets; r.reps=dose.reps; return true}},true)});
+          x.addEventListener('change',()=>{lnEdit(l,dt,o=>{o.rows[i][f]=x.value.trim()},true)}); return x};
+        if(edit){
+          const top=el('div','lr1'), bot=el('div','lr2'), gb=liftIcon('lg',SVGI.grip,'Hold and drag to move this exercise'); gb.addEventListener('pointerdown',e=>liftDragStart(e,'row',{dt,i,lane:l,ctx},re));
           const ac=el('span','lact'); ac.append(liftIcon('lib',SVGI.copy,'Duplicate this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i+1,0,Object.assign({},o.rows[i],{id:rid()}))})), liftIcon('lib del',SVGI.trash,'Delete this exercise',()=>lnEdit(l,dt,o=>{o.rows.splice(i,1)})));
-          const ni=inp(r.name,'name','nmi','Exercise'); {const fg=exFlags(l,r.name); if(fg.length){ni.title=fg.join('; '); re.classList.add('lflag')}} top.append(gb,el('span','sl',r.slot||''),ni,ac); for(const [f,ph] of cfg.fields) bot.append(inp(r[f],f,'',ph)); bot.style.gridTemplateColumns='repeat('+cfg.fields.length+',minmax(0,1fr))'; re.append(top,bot)}
+          const ni=inp(r.name,'name','nmi','Exercise'); {const fg=exFlags(l,r.name); ni.title=[r.name].concat(fg.length?[fg.join('; ')]:[]).join(' \u2014 '); if(fg.length) re.classList.add('lflag')} top.append(gb,el('span','sl',slotTxt),ni,ac); for(const [f,ph] of cfg.fields) bot.append(inp(r[f],f,'',ph)); bot.style.gridTemplateColumns='repeat('+cfg.fields.length+',minmax(0,1fr))'; re.append(top,bot)}
+        else if(ctx.narrow){
+          re.classList.add('lnar'); re.style.gridTemplateColumns='22px minmax(0,1fr)'; const nb=el('div','lnb'), nm=el('span','nm2',r.name);
+          {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' ⚠')); nm.title=fg.join('; '); re.classList.add('lflag')}}
+          nb.append(nm); const ds=lnDose(r); if(ds) nb.append(el('div','ldose',ds)); re.append(el('span','sl',slotTxt),nb)}
         else{
-          re.style.gridTemplateColumns=cols; const nm=el('span','nm2',r.name); if(r.ball) nm.append(el('div','lsub',r.ball)); {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' \u26a0')); nm.title=fg.join('; '); re.classList.add('lflag')}}
-          re.append(el('span','sl',r.slot||''),nm,el('span','n',r.sets),el('span','n',r.reps)); if(hasInt) re.append(el('span','n',r.int)); if(hasTmp) re.append(el('span','n',r.tempo))}
+          re.style.gridTemplateColumns=cols; const nm=el('span','nm2',r.name); if(r.ball) nm.append(el('div','lsub',r.ball)); {const fg=exFlags(l,r.name); if(fg.length){nm.append(el('span','lwarn',' ⚠')); nm.title=fg.join('; '); re.classList.add('lflag')}}
+          re.append(el('span','sl',slotTxt),nm,el('span','n',r.sets),el('span','n',r.reps)); if(hasInt) re.append(el('span','n',r.int)); if(hasTmp) re.append(el('span','n',r.tempo))}
         list.append(re)});
-      if(coachOpen&&real){const bar=el('div','lbar'), ad=el('button','btn sm','+ Add exercise'); ad.type='button'; ad.addEventListener('click',()=>lnEdit(l,dt,o=>{o.rows.push({id:rid(),slot:'',blk:'+',name:'New exercise',sets:'',reps:'',int:'',tempo:'',ball:''}); if(!o.title||/^(Rest day|No )/.test(o.title)) o.title='Custom day'})); bar.append(ad);
-        if(d.custom){const rs=el('button','btn sm','Reset to program'); rs.type='button'; rs.addEventListener('click',()=>{delete LS(l)[dk]; changed()}); bar.append(rs)} list.append(bar)}
+      if(edit&&real){const bar=el('div','lbar'), ad=el('button','btn sm','+ Add exercise'); ad.type='button'; ad.addEventListener('click',()=>{PENDF=[l,dk,d.rows.length,'name'].join('|'); lnEdit(l,dt,o=>{o.rows.push({id:rid(),slot:'',blk:'+',name:'New exercise',sets:'',reps:'',int:'',tempo:'',ball:''}); if(!o.title||/^(Rest day|No )/.test(o.title)) o.title='Custom day'})}); bar.append(ad);
+        const rs=el('button','btn sm lreset','Reset to program'); rs.type='button'; rs.hidden=!d.custom; rs.addEventListener('click',()=>{delete LS(l)[dk]; changed()}); bar.append(rs); list.append(bar)}
       box.append(list)}
     return box}
+// one block of day columns: a header cell per day, then a box per day for each of the five lanes
+function buildGrid(host2,dts,o){
+  const st=day0(A.startDate), today=new Date().toDateString(), rowsOf=d=>d&&!d.out&&!d.loading?d.rows:[], gap=8, n=dts.length, edit=!!o.edit;
+  const lanes=o.lanes||LANES, W=Math.max(220,o.width||host2.clientWidth||960), minW=edit?250:(n>3?150:250);
+  let per=Math.max(1,Math.min(n,Math.floor((W+gap)/(minW+gap)))); const nb=Math.ceil(n/per); per=Math.ceil(n/nb);
+  const lm=n===1&&o.lanesCols>1, colW=lm?(W-gap)/o.lanesCols:(W-(per-1)*gap)/per, narrow=!edit&&(!!o.compact||colW<300), tight=edit&&colW<300, LC={};
+  for(const l of lanes){const needSt=l!=='corr', days=dts.map(dt=>(st||!needSt)?lnDay(l,dt):null);
+    const hasInt=days.some(d=>rowsOf(d).some(r=>r.int)), hasTmp=days.some(d=>rowsOf(d).some(r=>r.tempo));
+    LC[l]={days,needSt,hasInt,hasTmp,cols:['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ')}}
+  for(let b=0;b<nb;b++){
+    const grid=el('div','lgrid'+(narrow?' lgn':'')+(lm?' lgm':'')), idx=[]; for(let k=b*per;k<Math.min(n,(b+1)*per);k++) idx.push(k);
+    if(!lm) grid.style.gridTemplateColumns='repeat('+per+',minmax(0,1fr))'; else grid.style.columnCount=String(o.lanesCols);
+    const cx={edit,all:!!o.all,narrow,tight,layer:o.layer,scroller:o.scroller||null,dates:dts,st,today,rowsOf};
+    if(!o.noHead) idx.forEach((k,j)=>{const dt=dts[k], dk=ymd(dt), h=el('div','ldcell'+(dt.toDateString()===today?' today':'')+(edit?' lediting':'')+(o.focusDk===dk?' pick':'')); h._dt=dt; h.dataset.col='1'; h.dataset.dk=dk; if(j===0) h.style.gridColumnStart='1';
+      h.append(el('span','ldt',dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+' • '+(dt.getMonth()+1)+'/'+dt.getDate()));
+      if(o.chip){const c=o.chip(dt); if(c){c.classList.add('ldchip'); h.append(c)}}
+      if(edit){h.title='Hold and drag onto another day to swap the whole day'; h.addEventListener('pointerdown',e=>{if(e.target.closest('button')) return; liftDragStart(e,'col',{dt,ctx:cx},h)});
+        const ac=el('div','ldact'), rest=el('button','ldb','Make rest day'), rs=el('button','ldb ldreset','Reset day'); rest.type=rs.type='button'; rs.hidden=!lnCustom(dt,lanes); rest.hidden=!lanes.some(l=>{const d=LC[l].days[k]; return d&&!d.out&&!d.loading&&d.rows.some(r=>!r.info)});
+        rest.addEventListener('click',()=>lnRestDay(dt,lanes)); rs.addEventListener('click',()=>lnResetDay(dt,lanes)); ac.append(rest,rs); h.append(ac)}
+      grid.append(h)});
+    for(const l of lanes) idx.forEach((k,j)=>{const bx=renderBox(l,dts[k],k,Object.assign({},cx,LC[l])); if(j===0) bx.style.gridColumnStart='1'; grid.append(bx)});
+    host2.append(grid)}
+}
+// after adding an exercise the new name box takes the cursor, which opens the exercise search
+function lnFocusPending(host2){ if(!PENDF) return false; const f=PENDF; PENDF=null; const x=[...host2.querySelectorAll('input[data-fk]')].find(i=>i.dataset.fk===f); if(x){x.focus(); try{x.select()}catch(_){} return true} return false }
 function renderAll(){
   const cal=$('cal'); cal.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); dvBar();
-  const dts=dvDates(), st=day0(A.startDate), today=new Date().toDateString(), grid=el('div','lgrid'), rowsOf=d=>d&&!d.out&&!d.loading?d.rows:[];
-  dts.forEach(dt=>{
-    const h=el('div','ldcell'+(dt.toDateString()===today?' today':'')+(coachOpen?' lediting':'')); h._dt=dt; h.dataset.col='1';
-    h.append(el('span',null,dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+' • '+(dt.getMonth()+1)+'/'+dt.getDate()));
-    if(coachOpen){h.title='Hold and drag onto another day to swap the whole day'; h.addEventListener('pointerdown',e=>liftDragStart(e,'col',{dt},h))}
-    grid.append(h)});
-  for(const l of ['prep','pat','throw','lift','corr']){
-    const needSt=l!=='corr', days=dts.map(dt=>(st||!needSt)?lnDay(l,dt):null);
-    const hasInt=days.some(d=>rowsOf(d).some(r=>r.int)), hasTmp=days.some(d=>rowsOf(d).some(r=>r.tempo));
-    const cols=['28px','minmax(0,1fr)','34px','58px'].concat(hasInt?['54px']:[],hasTmp?['78px']:[]).join(' ');
-    const ctx={days,hasInt,hasTmp,cols,needSt,st,today,rowsOf};
-    dts.forEach((dt,ix)=>grid.append(renderBox(l,dt,ix,ctx)))}
-  const giant=el('div','lgiant'); giant.append(grid); cal.append(giant)}
+  const giant=el('div','lgiant'); cal.append(giant); const cs=getComputedStyle(giant);
+  buildGrid(giant,dvDates(),{edit:coachOpen,layer:cal,width:giant.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)});
+  lnFocusPending(giant); DVW=giant.clientWidth; dvWire()}
+// the day columns regroup when the window width changes enough to change how many fit on a line
+function dvWire(){ if(dvWire.on) return; dvWire.on=true;
+  const rz=()=>{ if(!host.isConnected){window.removeEventListener('resize',rz); return} clearTimeout(rz.t); rz.t=setTimeout(()=>{const c=$('cal'), g=c&&c.firstChild, a=root.activeElement; if(g&&Math.abs(g.clientWidth-DVW)>24&&!(a&&a.tagName==='INPUT')) render()},220)};
+  window.addEventListener('resize',rz) }
 
 // ================= Plan Build, Training Map and Notes =================
 const FOCI=['Global','Vertical Force','Linear Force','Lateral Force','Lower Rotation','Upper Rotation','Upper Deceleration','Lower Deceleration'];
@@ -2382,6 +2465,7 @@ function mapDetail(d){
   if(info.test) hd.append(el('span','mcdc tst','Retest week'));
   if(A.deload[w.n]) hd.append(el('span','mcdc dl','Deload applied')); else if(w.sugDl) hd.append(el('span','mcdc dls','Suggested deload'));
   if(info.comp) hd.append(el('span','mcdc comp','Competition'));
+  {const eb=el('button','btn sm mcde','Edit day'); eb.type='button'; eb.addEventListener('click',()=>mdEditDay(d)); hd.append(eb)}
   box.append(hd);
   const g=el('div','mcdg'), row=(a,b)=>{g.append(el('span','mcdk',a),el('span','mcdv',b))};
   row('Phase',(w.off?(w.deload?'Deload (patterning only)':'Off week'):w.phase+' · week '+w.pw)+((w.uses&&w.focus)?' · '+w.focus+' focus':''));
@@ -2437,7 +2521,7 @@ function renderMapCal(weeks){
       if(showL&&(info.focus||info.sets>0)){const s=el('span','mcsc lf',info.focus?mapFocus(info.focus):'Lifting'); s.title='Lifting: '+(info.focus||'custom day')+(info.sets?' \u00b7 '+info.sets+' working sets':''); bt.append(s)}
       c.append(bt)
     } else if(A.compDate===k){ const bt=el('span','mcb'); bt.append(el('span','mcfl comp','Comp')); c.append(bt) }
-    c.addEventListener('click',()=>{MCS.sel=k; if(om) MCS.month=ymd(new Date(d.getFullYear(),d.getMonth(),1,12)); redraw()});
+    mdBind(c,d,true); c.addEventListener('click',()=>{MCS.sel=k; if(om) MCS.month=ymd(new Date(d.getFullYear(),d.getMonth(),1,12)); redraw()});
     grid.append(c)}
   box.append(grid);
   const lg=el('div','mcl'), li=[]; if(showT) li.push(['build','Build phase'],['mound','Mound phase'],['off','Deload or off'],['sc','Day score (stronger blue = harder)'],['hot','Day score 7 or more']);
@@ -2522,11 +2606,122 @@ function exPick(input,lane,commit){
     else if(e.key==='Enter'){ if(act>=0&&items[act]&&typed){ e.preventDefault(); choose(items[act]) } else { exClose(); input.blur() } }
     else if(e.key==='Tab'){ exClose() } })}
 
+// ================= Training Map: hover a day to see it, edit the day, then edit the whole week =================
+const MD=(window.__vmd=window.__vmd||{open:false,mode:'peek',dk:'',pin:false,cur:'',t:0,lane:'all'});   // kept while the page redraws
+let MDP=null, MDK=null, MDWK=[], MDSH=0, MDHD=0;   // the floating card, the dim layer behind the week panel, the weeks drawn last, show and hide timers
+const mdAt=dt=>{const st=day0(A.startDate); if(!st||!MDWK.length) return null; const off=Math.round((dt-st)/864e5); if(off<0||off>=MDWK.length*7) return null; return {w:MDWK[Math.floor(off/7)],day:off%7+1,off}};
+const mdScore=(w,day)=>(w.rows||[]).reduce((a,x)=>a+(x.day===day?(x.wv||0):0),0)/12;
+const mdWeekDates=w=>{const o=[]; for(let d=1;d<=7;d++){const x=dateFor(w.n,d); if(x) o.push(x)} return o};
+function mdTear(){ if(MDP){MDP.remove(); MDP=null} if(MDK){MDK.remove(); MDK=null} for(const n of root.querySelectorAll('.mdon')) n.classList.remove('mdon') }
+function mdClose(){ clearTimeout(MDSH); clearTimeout(MDHD); MD.open=false; MD.mode='peek'; MD.pin=false; MD.pos=null; exClose(); mdTear() }
+// a day square or cell: resting the pointer on it shows the day, a click holds the card open
+function mdBind(n,dt,noHover){
+  mdWire(); n.dataset.dk=ymd(dt); n.classList.add('mdq'); if(MD.open&&MD.dk===n.dataset.dk) n.classList.add('mdon');
+  if(noHover) return;
+  n.addEventListener('pointerenter',e=>{ if(e.pointerType!=='touch') mdHover(dt) });
+  n.addEventListener('pointerleave',e=>{ if(e.pointerType!=='touch') mdLeave() });
+  n.addEventListener('click',()=>mdPick(dt)) }
+function mdHover(dt){
+  clearTimeout(MDHD); clearTimeout(MDSH); if(MD.open&&(MD.pin||MD.mode!=='peek')) return; if(MD.open&&MD.dk===ymd(dt)) return;
+  MDSH=setTimeout(()=>{ MD.open=true; MD.mode='peek'; MD.pin=false; MD.dk=ymd(dt); MD.pos=null; mdRender() },MD.open?260:150) }
+function mdLeave(){ clearTimeout(MDSH); if(MD.open&&!MD.pin&&MD.mode==='peek'){ clearTimeout(MDHD); MDHD=setTimeout(mdClose,280) } }
+function mdPick(dt){
+  clearTimeout(MDSH); clearTimeout(MDHD); const dk=ymd(dt);
+  if(MD.open&&MD.mode==='week') return;
+  if(MD.open&&MD.mode==='peek'&&MD.pin&&MD.dk===dk){ mdClose(); return }
+  MD.open=true; MD.pin=true; MD.dk=dk; MD.pos=null; if(MD.mode!=='day') MD.mode='peek'; mdRender() }
+// open the editor for a date straight away (the calendar view's day details use this)
+function mdEditDay(dt){ clearTimeout(MDSH); clearTimeout(MDHD); MD.open=true; MD.pin=true; MD.mode='day'; MD.dk=ymd(dt); MD.pos=null; mdRender() }
+function mdShell(cls){
+  if(MDP&&MDP._cls===cls) return MDP;
+  mdTear(); const p=el('div',cls); p._cls=cls; p.setAttribute('role','dialog'); p.setAttribute('aria-label',cls==='mdw'?'Edit the week':'Day plan');
+  p.addEventListener('pointerenter',()=>clearTimeout(MDHD)); p.addEventListener('pointerleave',()=>{ if(!MD.pin&&MD.mode==='peek'){ clearTimeout(MDHD); MDHD=setTimeout(mdClose,280) } });
+  root.append(p); MDP=p; return p }
+// keep the scroll position and the cursor when the card is redrawn after an edit
+function mdKeep(p){const b=p.querySelector('.mdb'), a=root.activeElement; return {top:b?b.scrollTop:0,left:b?b.scrollLeft:0,fk:a&&a.dataset&&a.dataset.fk,s:a&&a.selectionStart,e:a&&a.selectionEnd}}
+function mdBack(p,k,moved){const b=p.querySelector('.mdb'); if(b&&!moved){b.scrollTop=k.top; b.scrollLeft=k.left} if(k.fk&&!moved){const x=[...p.querySelectorAll('input[data-fk]')].find(i=>i.dataset.fk===k.fk); if(x){x.focus({preventScroll:true}); try{x.setSelectionRange(k.s,k.e)}catch(_){}}}}
+function mdPlace(){
+  const p=MDP; if(!p) return; const vw=window.innerWidth, vh=window.innerHeight;
+  if(p._cls==='mdw'){ const w=Math.min(1900,vw-24); p.style.width=w+'px'; p.style.left=Math.max(12,Math.round((vw-w)/2))+'px'; p.style.top=Math.round(vh*.03)+'px'; p.style.bottom='auto'; p.style.maxHeight=Math.round(vh*.94)+'px'; return }
+  const w=Math.min(MD.mode==='peek'||MD.mode==='day'?760:430,vw-16); p.style.width=w+'px'; let pos=MD.pos;
+  if(!pos){
+    let r=null; for(const n of root.querySelectorAll('.mdq[data-dk="'+MD.dk+'"]')){const b=n.getBoundingClientRect(); if(b.width&&b.height){r=b; break}}
+    if(r&&(r.bottom<24||r.top>vh-24)) r=null;   // the day is scrolled out of sight: place the card in the middle of the screen
+    if(r) MD.r={l:r.left,t:r.top,w:r.width,h:r.height}; else if(MD.r&&!(MD.r.t+MD.r.h<24||MD.r.t>vh-24)) r={left:MD.r.l,top:MD.r.t,width:MD.r.w,height:MD.r.h,bottom:MD.r.t+MD.r.h}; else r={left:vw/2-10,top:vh/3,width:20,height:20,bottom:vh/3+20};
+    const h=Math.max(p.scrollHeight,240), below=vh-r.bottom-12, above=r.top-12, side=(below>=Math.min(h,380)||below>=above)?'below':'above';
+    pos={left:Math.min(Math.max(8,r.left+r.width/2-w/2),vw-w-8),side,y:side==='below'?r.bottom+6:vh-r.top+6,room:side==='below'?below:above};
+    if(MD.mode!=='peek') MD.pos=pos }   // an open editor keeps its place while it is redrawn
+  p.style.left=pos.left+'px'; p.style.maxHeight=Math.max(240,Math.min(pos.room,Math.round(vh*.88)))+'px';
+  if(pos.side==='below'){p.style.top=pos.y+'px'; p.style.bottom='auto'} else {p.style.bottom=pos.y+'px'; p.style.top='auto'} }
+// the title, the day score and the week figures, updated in place so the buttons under the pointer are never replaced
+function mdHeadFill(dt,at){
+  const p=MDP; if(!p||!p._h) return; const w=at.w, h=p._h, N=MDWK.length;
+  if(p._cls==='mdw'){
+    const ds=mdWeekDates(w); h.t1.textContent='Week '+w.n+' of '+N+(ds.length?' · '+fmt(ds[0])+' – '+fmt(ds[ds.length-1]):'');
+    h.t2.textContent=mapPhase(w)+' · '+w.throws+' throws · rolling '+(w.roll==null?'—':Math.round(w.roll))+' · peak '+(w.peak?w.peak+'%':'—');
+    if(p._chips) for(const [dk,c] of p._chips){const d=day0(dk), a=d&&mdAt(d), s=a?mdScore(a.w,a.day):0; c.textContent=s?String(Math.round(s)):'–'; c.classList.toggle('hot',s>=7); c.title=s?'Day score '+s.toFixed(2):'No throwing'}
+  } else {
+    h.t1.textContent=dt.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+    h.t2.textContent='Week '+w.n+' of '+N+' · Day '+at.day+' · '+mapPhase(w);
+    const s=mdScore(w,at.day); h.sc.textContent=s?String(Math.round(s)):'–'; h.sc.classList.toggle('hot',s>=7); h.sc.title=s?'Day score '+s.toFixed(2):'No throwing'
+  } }
+function mdHead(){ if(!MDP||!MD.open) return; const dt=day0(MD.dk), at=dt&&mdAt(dt); if(at) mdHeadFill(dt,at) }
+function mdDayView(dt,at){
+  const edit=MD.mode==='day', p=mdShell('mdp'), keep=mdKeep(p);
+  p.textContent=''; const hd=el('div','mdh'), tt=el('div','mdt'), t1=el('b'), t2=el('span'), sc=el('span','mdsc'); tt.append(t1,t2); p._h={t1,t2,sc};
+  const go=el('button','btn sm primary mdgo',edit?'Edit the week':'Edit day'); go.type='button';
+  go.addEventListener('click',()=>{ MD.pin=true; MD.pos=edit?null:MD.pos; MD.mode=edit?'week':'day'; mdRender() });
+  const x=el('button','mdx','✕'); x.type='button'; x.setAttribute('aria-label','Close'); x.addEventListener('click',mdClose);
+  hd.append(tt,sc,go,x); const body=el('div','mdb'); p.append(hd,body);
+  if(edit){const f=el('div','mdf'), st=el('span','note'); st.id='mdst'; f.append(el('span',null,'Changes save to the plan as you make them.'),st); p.append(f)}
+  mdHeadFill(dt,at); mdPlace();
+  {const W=body.clientWidth-24; buildGrid(body,[dt],{edit,all:true,noHead:true,compact:!edit,layer:root,scroller:body,width:W,lanesCols:W>=640?2:1})}
+  mdPlace(); mdBack(p,keep,lnFocusPending(body)) }
+function mdWeekView(dt,at){
+  const w=at.w, p=mdShell('mdw'), keep=mdKeep(p), ds=mdWeekDates(w);
+  if(!MDK){ MDK=el('div','mdk'); MDK.addEventListener('click',mdClose); MDK.addEventListener('wheel',e=>e.preventDefault(),{passive:false}); root.insertBefore(MDK,p) }
+  p.textContent=''; const hd=el('div','mdh'), tt=el('div','mdt'), t1=el('b'), t2=el('span'); tt.append(t1,t2); p._h={t1,t2}; p._chips=new Map();
+  const nav=(txt,lab,dn)=>{const b=el('button','btn sm',txt); b.type='button'; b.setAttribute('aria-label',lab); b.disabled=!MDWK[w.n-1+dn]; b.addEventListener('click',()=>{const d=dateFor(w.n+dn,at.day); if(d){MD.dk=ymd(d); mdRender()}}); return b};
+  const done=el('button','btn sm primary mdgo','Done'); done.type='button'; done.addEventListener('click',mdClose);
+  hd.append(tt,nav('←','Previous week',-1),nav('→','Next week',1),done);
+  const tl=el('div','mdtl'), sg=el('div','seg sm'); sg.setAttribute('role','group'); sg.setAttribute('aria-label','Lanes shown'); tl.append(el('span','note','Show'),sg);
+  for(const [v,t] of [['all','All'],...LANES.map(l=>[l,LCFG[l].name])]){const b=el('button','segb'+(MD.lane===v?' on':''),t); b.type='button'; b.setAttribute('aria-pressed',String(MD.lane===v)); b.addEventListener('click',()=>{ if(MD.lane===v) return; MD.lane=v; mdRender() }); sg.append(b)}
+  const body=el('div','mdb'), f=el('div','mdf'), st=el('span','note'); st.id='mdst'; f.append(el('span',null,'Hold a day heading to swap whole days, hold an exercise to move it. Changes save to the plan as you make them.'),st); p.append(hd,tl,body,f);
+  mdHeadFill(dt,at); mdPlace();
+  buildGrid(body,ds,{edit:true,all:true,layer:root,scroller:body,width:body.clientWidth-24,focusDk:MD.dk,lanes:MD.lane==='all'?null:[MD.lane],chip:d=>{const c=el('span','ldsc'); p._chips.set(ymd(d),c); return c}});
+  mdHeadFill(dt,at); mdPlace(); mdBack(p,keep,lnFocusPending(body)) }
+function mdRender(){
+  if(!MD.open||!MV){ mdTear(); return }
+  const dt=day0(MD.dk), at=dt&&mdAt(dt); if(!at){ mdClose(); return }
+  MD.t=Date.now(); MD.cur=cur;
+  if(MD.mode==='week') mdWeekView(dt,at); else mdDayView(dt,at);
+  for(const n of root.querySelectorAll('.mdq')) n.classList.toggle('mdon',n.dataset.dk===MD.dk) }
+// the page was redrawn: keep the card in step (a field edit only needs the figures refreshed)
+function mdRefresh(weeks,quiet){
+  MDWK=weeks; if(!MD.open) return;
+  if((MD.cur&&MD.cur!==cur)||(!MDP&&Date.now()-MD.t>4000)){ MD.open=false; MD.mode='peek'; MD.pin=false; return }
+  if(quiet&&MDP) mdHead(); else mdRender() }
+function mdWire(){ if(mdWire.on) return; mdWire.on=true;
+  const esc=e=>{ if(!host.isConnected){window.removeEventListener('keydown',esc); return} if(e.key==='Escape'&&MD.open&&!EXPO) mdClose() };
+  const away=e=>{ if(!host.isConnected){document.removeEventListener('pointerdown',away,true); return} if(!MD.open||MD.mode!=='peek'||!MD.pin||EXPO) return; const pth=e.composedPath(); if((MDP&&pth.includes(MDP))||pth.some(n=>n&&n.classList&&n.classList.contains('mdq'))) return; mdClose() };
+  const rz=()=>{ if(!host.isConnected){window.removeEventListener('resize',rz); return} if(!MD.open) return; clearTimeout(rz.t); rz.t=setTimeout(()=>{ const a=root.activeElement; if(MD.open&&!(a&&a.tagName==='INPUT')){MD.pos=null; mdRender()} },200) };
+  window.addEventListener('keydown',esc); document.addEventListener('pointerdown',away,true); window.addEventListener('resize',rz) }
+// the program's throwing rows, with every day the coach edited swapped for the edited drills, so day scores, throws and the rolling score follow the edits
+function statRows(w){
+  const rows=weekRows(w), T=(A.laneDays||{}).throw; if(!T||w.off) return rows;
+  const ed={}; for(let d=1;d<=7;d++){const dt=dateFor(w.n,d), o=dt&&T[ymd(dt)]; if(o&&Array.isArray(o.rows)) ed[d]=o}
+  if(!Object.keys(ed).length) return rows;
+  const out=rows.filter(r=>!ed[r.day]||r.plan);
+  for(const d in ed) for(const r of ed[d].rows){ if(r.info) continue;
+    const reps=parseFloat(r.reps)||0, sets=Number(r.sets)||(reps?1:0), rpe=parseFloat(r.int)||0, nm=String(r.name||'');
+    out.push({day:+d,slot:'e'+r.id,label:'',base:nm,name:nm,weight:r.ball||'',weight0:r.ball||'',reps0:reps,rpe0:rpe,ed:{},dl:false,sets,reps,rpe,wv:sets*reps*mult(rpe),k:'ed:'+r.id,target:'',swapped:false,edited:true}) }
+  return out}
+
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
 const key=()=>'velou.plan.'+cur;
-function status(t,warn){const s=$('status'); s.textContent=t; s.className='note'+(warn?' warn':''); const d=$('dvst'); if(d){d.textContent=t; d.className='note'+(warn?' warn':'')}}
-function changed(){if(A.shareCode&&A.pubAt) A.pubDirty=true; A.updated=Date.now(); setTimeout(()=>schedulePush(),0); try{setTimeout(()=>window.dispatchEvent(new CustomEvent('velou-plan-change',{detail:{src:host}})),0)}catch(e){} render(); try{localStorage.setItem(key(),JSON.stringify(A)); saved=true; status(connected()?'Saving to the team sheet\u2026':'Saved in this browser for '+cur+'.')}catch(e){status('Could not save in this browser.',true)} if(coachOpen&&!DV) renderCoach(weeksAvail(),planWeeks().length)}
+function status(t,warn){const s=$('status'); s.textContent=t; s.className='note'+(warn?' warn':''); const d=$('dvst'); if(d){d.textContent=t; d.className='note'+(warn?' warn':'')} const m=$('mdst'); if(m){m.textContent=t; m.className='note'+(warn?' warn':'')}}
+function changed(quiet){if(A.shareCode&&A.pubAt) A.pubDirty=true; A.updated=Date.now(); setTimeout(()=>schedulePush(),0); try{setTimeout(()=>window.dispatchEvent(new CustomEvent('velou-plan-change',{detail:{src:host}})),0)}catch(e){} QUIET=!!quiet; try{render()}finally{QUIET=false} try{localStorage.setItem(key(),JSON.stringify(A)); saved=true; status(connected()?'Saving to the team sheet\u2026':'Saved in this browser for '+cur+'.')}catch(e){status('Could not save in this browser.',true)} if(coachOpen&&!DV) renderCoach(weeksAvail(),planWeeks().length)}
 function reload(){
   if(RV){renderRoster(); return}
   const name=L().athlete; if(name===cur&&cur) {if(!HV&&archiveIfDone()) status('Program completed and saved to Program History.'); if(!saved&&!A.fromBoard){const sd=boardSeed(); if(sd){A=Object.assign(blank(),sd.S); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; BOARD_ISS=sd.iss; viewWeek=currentWeek(planWeeks().length)||1; status('Draft loaded from the Program Board. Review it; your first change saves it.'+(BOARD_ISS.length?' Check: '+BOARD_ISS.join('; ')+'.':''),BOARD_ISS.length>0)}} draw();return}
