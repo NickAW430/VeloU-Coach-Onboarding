@@ -580,9 +580,44 @@ button.rr:hover{background:var(--sunk)}
 .aa-hero{position:relative;padding:18px 0 6px}
 .aa-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font:600 12px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--aa-mut)}
 .aa-meta b{padding:3px 8px;border:1px solid var(--aa-blue);color:var(--aa-blue);font-weight:700}
-.aa-title{margin:8px 0 0;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;font:400 46px/1 'Anton',var(--body);letter-spacing:.01em;text-transform:uppercase;color:#fff}
+.aa-trow{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:8px}
+.aa-title{margin:0;min-width:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 12px;font:400 42px/1 'Anton',var(--body);letter-spacing:.01em;text-transform:uppercase;color:#fff}
 .aa-title em{font-style:normal;font-size:22px;letter-spacing:.05em;color:var(--aa-blue)}
-.aa-today{position:absolute;right:0;top:16px;min-height:34px;padding:0 14px;background:none;border:1px solid var(--aa-blue);border-radius:17px;color:var(--aa-blue);font:600 13px var(--body);cursor:pointer}
+.aa-vw{flex:none;display:flex;margin-bottom:4px;padding:2px;border:1px solid var(--aa-line2);border-radius:18px;background:var(--aa-card)}
+.aa-vw button{min-width:50px;height:30px;padding:0 12px;border:0;border-radius:15px;background:none;color:var(--aa-sub);font:700 12.5px var(--body);letter-spacing:.04em;cursor:pointer}
+.aa-vw button.on{background:#fff;color:#000}
+.aa-mvb{display:flex;flex-wrap:wrap;align-items:center;gap:10px 8px;margin:14px 0 0;padding:12px;border:1px solid var(--aa-blue);border-radius:10px;background:rgba(86,183,230,.08)}
+.aa-mvb .t{flex:1 1 100%;display:flex;flex-direction:column;gap:2px}
+.aa-mvb .t b{font:700 15px var(--body);color:#fff}
+.aa-mvb .t span{font:500 13px/1.35 var(--body);color:var(--aa-sub)}
+.aa-mvb button{min-height:38px;padding:0 16px;border:1px solid var(--aa-blue);border-radius:19px;background:none;color:var(--aa-blue);font:700 13px var(--body);cursor:pointer}
+.aa-mvb button.y{background:var(--aa-blue);color:#000}
+.aa-mvd{display:flex;align-items:center;gap:10px;margin:12px 0 0;font:500 13px/1.35 var(--body);color:var(--aa-sub)}
+.aa-mvd button{padding:4px 2px;background:none;border:0;color:var(--aa-blue);font:600 13px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.aa-wnav{display:flex;justify-content:space-between;margin:12px 0 0}
+.aa-wnav button{min-height:36px;padding:0 2px;background:none;border:0;color:var(--aa-sub);font:600 13.5px var(--body);cursor:pointer}
+.aa-wnav button:disabled{opacity:.3;cursor:default}
+.aa-wlist{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.aa-wr{display:flex;align-items:stretch;background:var(--aa-card);border:1px solid var(--aa-line);border-radius:8px;overflow:hidden}
+.aa-wr.today{border-color:var(--aa-blue)}
+.aa-wr.mv{border-color:#fff;background:#10171b}
+.aa-wm{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:10px 6px 10px 12px;background:none;border:0;color:#fff;text-align:left;font-family:inherit;cursor:pointer}
+.aa-wm .wd{flex:none;width:38px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.aa-wm .wd small{font:600 10px/1 var(--body);letter-spacing:.1em;color:var(--aa-mut);text-transform:uppercase}
+.aa-wm .wd b{font:400 24px/1 'Anton',var(--body)}
+.aa-wm .wt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.aa-wm .wt b{font:600 15px/1.25 var(--body);overflow-wrap:anywhere}
+.aa-wm .wt span{font:500 12.5px/1.3 var(--body);color:var(--aa-mut);overflow-wrap:anywhere}
+.aa-wm .wt em{font:600 12px/1.3 var(--body);font-style:normal;color:#9ed4f0}
+.aa-wm .ws{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:3px;font:600 12.5px var(--body);color:var(--aa-sub)}
+.aa-wm .ws i{font-style:normal}
+.aa-wm .ws .tg{padding:1px 7px;border:1px solid var(--aa-blue);border-radius:9px;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--aa-blue)}
+.aa-wm .ws .ok{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--aa-teal);color:#000;font:700 13px/1 var(--body)}
+.aa-wm .ws .sw{color:#fff}
+.aa-wr.rest .wt b{font-weight:500;color:var(--aa-mut)}
+.aa-wsw{flex:none;display:flex;align-items:center;justify-content:center;width:46px;background:none;border:0;border-left:1px solid var(--aa-line);color:var(--aa-sub);cursor:pointer}
+.aa-wsw svg{width:20px;height:20px}
+.aa-wr.mv .aa-wsw{color:#fff}
 .aa-pr{display:flex;align-items:center;gap:12px;margin-top:16px}
 .aa-track{flex:1;height:8px;border-radius:4px;background:#182026;overflow:hidden}
 .aa-track i{display:block;height:100%;width:0;background:var(--aa-blue);border-radius:4px;transition:width .25s}
@@ -592,14 +627,6 @@ button.rr:hover{background:var(--sunk)}
 .aa-note b{font:400 24px/1.1 'Anton',var(--body);letter-spacing:.02em;text-transform:uppercase;color:#fff}
 .aa-note span{font:500 15px/1.4 var(--body);color:var(--aa-sub)}
 .aa-note .aa-ahead{margin-top:6px;color:var(--aa-blue);font-weight:600}
-.aa-next{display:flex;align-items:center;gap:12px;width:100%;margin:14px 0 0;padding:12px 14px;background:var(--aa-card);border:1px solid var(--aa-line2);border-left:4px solid var(--aa-blue);border-radius:8px;color:#fff;text-align:left;cursor:pointer}
-.aa-next .t{flex:1;min-width:0}
-.aa-next small{display:block;font:700 11px var(--body);letter-spacing:.14em;color:var(--aa-blue);text-transform:uppercase}
-.aa-next b{display:block;margin-top:3px;font:600 17px/1.25 var(--body);overflow-wrap:anywhere}
-.aa-next span{display:block;margin-top:2px;font:500 13px var(--body);color:var(--aa-sub)}
-.aa-go{flex:none;font:400 30px/1 var(--body);font-style:normal;color:var(--aa-blue)}
-.aa-next.alld{border-left-color:var(--aa-teal)}
-.aa-next.alld small,.aa-next.alld .aa-go{color:var(--aa-teal)}
 .aa-ac{display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 0;padding:10px 12px;border:1px solid #6b2a28;border-radius:8px;background:rgba(225,6,0,.09);color:#fff;text-align:left;cursor:pointer}
 .aa-ac svg{flex:none;width:20px;height:20px;color:var(--aa-red)}
 .aa-ac span{flex:1;font:500 13.5px/1.35 var(--body);color:#f1d6d4}
@@ -644,37 +671,47 @@ div.aa-exh{cursor:default}
 .aa-info{display:flex;align-items:center;gap:12px;padding:10px 12px}
 .aa-info .avck{flex:none}
 .aa-vid{margin:12px 0 0}
-.aa-vbtn{display:flex;align-items:center;gap:12px;width:100%;padding:6px;background:#05080a;border:1px solid var(--aa-line);border-radius:8px;color:#fff;text-align:left;cursor:pointer}
-.aa-vth{position:relative;flex:none;display:flex;align-items:center;justify-content:center;width:112px;aspect-ratio:16/9;border-radius:5px;overflow:hidden;background:linear-gradient(135deg,#0f171c,#05080a)}
-.aa-vth img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
-.aa-pi{position:relative;z-index:1;display:block;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.62);border:2px solid #fff}
-.aa-pi::after{content:'';position:absolute;left:11px;top:7px;border-left:10px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent}
-.aa-vtx b{display:block;font:600 15px var(--body)}
-.aa-vtx small{display:block;margin-top:2px;font:500 12.5px var(--body);color:var(--aa-mut)}
+.aa-vbtn{position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;background:linear-gradient(135deg,#0f171c,#05080a);border:1px solid var(--aa-line);border-radius:8px;overflow:hidden;cursor:pointer}
+.aa-vbtn img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88}
+.aa-pi{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(0,0,0,.6);border:2px solid #fff}
+.aa-pi::after{content:'';position:absolute;left:19px;top:13px;border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent}
 .aa-vid.on{position:relative;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#000;border:1px solid var(--aa-line)}
 .aa-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
-.aa-exb .avrx{margin-top:12px}
-.aa-exb .avcue{margin-top:10px;font-size:14px;line-height:1.45;color:#cfd7db}
-.aa-sh{display:flex;align-items:center;gap:8px;margin:16px 0 4px;font:700 10.5px var(--body);letter-spacing:.12em;color:var(--aa-mut)}
-.aa-sh span{flex:1 1 0;min-width:0;text-align:center}
-.aa-sh .n{flex:none;width:26px}
-.aa-sh .c{flex:none;width:48px}
-.avapp .avsets{gap:8px;margin-top:10px}
-.avapp .aa-sh+.avsets{margin-top:0}
-.avapp .avset{gap:8px;align-items:center}
-.avapp .avsn{flex:none;width:26px;font:700 15px var(--body);color:var(--aa-mut)}
-.avapp .avin{flex:1 1 0;min-width:0;height:50px;border-radius:6px;background:#05080a;border:1px solid var(--aa-line2);font:600 20px var(--body)}
-.avapp .avin:focus{border-color:var(--aa-blue)}
-.avapp .avck{order:5;flex:none;width:48px;height:48px}
-.avapp .avsp{order:9;flex:1 1 100%;gap:8px}
-.avapp .avres{min-height:46px;border-radius:6px;font:700 14px var(--body)}
-.avapp .avlock{order:10;flex:1 1 100%}
-.avapp .avsets.inl{gap:10px}
-.avapp .avsets.inl .avck{width:52px;height:52px;font:700 18px var(--body)}
+.aa-ins{margin:10px 0 0;border:1px solid var(--aa-line);border-radius:8px;background:#05080a}
+.aa-insh{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:42px;padding:0 12px;background:none;border:0;color:#fff;font-family:inherit;cursor:pointer}
+.aa-insh b{font:700 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--aa-sub)}
+.aa-insb{display:none;margin:0;padding:0 12px 12px;font:500 14px/1.5 var(--body);color:#cfd7db}
+.aa-ins.open .aa-insb{display:block}
+.aa-ins.open .aa-chev{transform:rotate(-135deg)}
+.aa-sets{display:flex;flex-direction:column;margin-top:14px}
+.aa-sg{display:grid;align-items:center;gap:6px}
+.aa-sg.h{padding:0 0 6px;font:700 10px/1.15 var(--body);letter-spacing:.08em;color:var(--aa-mut);text-align:center}
+.aa-sr{padding:5px 0;border-top:1px solid var(--aa-line)}
+.aa-sr.bonus{border-top:1px dashed #3a444a}
+.aa-sr.locked{opacity:.45}
+.aa-sq{width:40px;height:40px;padding:0;border:2px solid #4d5b63;border-radius:8px;background:none;color:#fff;font:400 20px/1 'Anton',var(--body);cursor:pointer}
+.aa-sq.on{background:var(--aa-teal);border-color:var(--aa-teal);color:#000;font:700 20px/1 var(--body)}
+.aa-c{min-width:0;text-align:center;font:600 16px/1.2 var(--body);color:#fff;overflow-wrap:anywhere}
+.aa-c small{display:block;margin-top:1px;font:500 10.5px var(--body);color:var(--aa-mut)}
+.aa-c.sp{font-size:14.5px}
+.aa-in{width:100%;min-width:0;height:42px;padding:0 4px;text-align:center;background:#05080a;border:1px solid var(--aa-line2);border-radius:6px;color:#fff;font:600 18px var(--body)}
+.aa-in::placeholder{color:#6f7d86;opacity:1}
+.aa-in:focus{outline:none;border-color:var(--aa-blue)}
+.aa-in.need,.aa-sres.need .aa-rb{border-color:var(--aa-red)}
+.aa-in.need,.aa-sres.need{animation:avshake .3s}
+.aa-sr.ok .aa-in{border-color:#24473d}
+.aa-sres{display:flex;gap:6px;margin:6px 0 2px 46px}
+.aa-sres .aa-in.spd{flex:0 0 82px;height:38px;font-size:16px}
+.aa-rb{flex:1;min-height:38px;border:1px solid var(--aa-line2);border-radius:6px;background:none;color:var(--aa-mut);font:700 13px var(--body);cursor:pointer}
+.aa-rb.on{background:rgba(136,224,198,.16);border-color:var(--aa-teal);color:var(--aa-teal)}
+.aa-rb.low.on{background:rgba(225,6,0,.16);border-color:var(--aa-red);color:#ff8a85}
+.aa-lock{display:block;margin:4px 0 0 46px;font:600 12px var(--body);color:#ffb347}
+.aa-ln{margin:8px 0 0;font:500 12.5px/1.4 var(--body);color:var(--aa-mut)}
+.aa-skipn{margin:12px 0 0;font:500 14px var(--body);color:var(--aa-mut)}
 .aa-last{margin:10px 0 0;font:500 13px/1.4 var(--body);color:var(--aa-mut)}
 .aa-last b{font-weight:600;color:var(--aa-sub)}
-.aa-act{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
-.aa-act button{min-height:44px;background:none;border:1px solid var(--aa-line2);border-radius:6px;color:#fff;font:600 14px var(--body);cursor:pointer}
+.aa-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.aa-act button{min-height:32px;padding:0 15px;background:none;border:1px solid var(--aa-line2);border-radius:16px;color:var(--aa-sub);font:600 12.5px var(--body);cursor:pointer}
 .aa-back{display:block;margin:10px auto 0;padding:6px;background:none;border:0;color:var(--aa-mut);font:500 13px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .aa-exb .avnote{margin-top:10px}
 .aa-fin{display:block;width:100%;min-height:60px;margin:28px 0 0;border:0;border-radius:8px;background:var(--aa-red);color:#fff;font:400 22px 'Anton',var(--body);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
@@ -1584,6 +1621,14 @@ function strAutoOf(rec0,lv0){const rec=String(rec0||''), lv=String(lv0||''), t=r
   return {fam:fam||'TL',ph:ph||'1',src:src||'no Energy Production level found',lvl:n||null,branch:br}}
 function strPick(){const a=strAuto(); return {fam:A.str.fam||a.fam,ph:A.str.ph||a.ph,auto:a}}
 function strProg(code){return SDATA&&SDATA.p[code]}
+// two rows can share a slot (A1 in weeks 1-2 and A1 in weeks 3-4): a row named "... (W1-2)" is in the program during those weeks only
+const WKMARK=/\s*\(W(\d+)(?:\s*[-–]\s*(\d+))?\)/i;
+function strRows(list,col){ const wk=col+1, o=[];
+  for(const r of list){ let name=SDATA.ex[r[1]]; const m=WKMARK.exec(name);
+    if(m){ const a=+m[1], b=m[2]?+m[2]:a; if(wk<a||wk>b) continue; name=name.replace(WKMARK,'') }
+    const dose=r[3][col]||r[3][r[3].length-1]||''; if(!dose||dose==='—'||dose==='-') continue;
+    o.push({code:r[0],name,method:SDATA.me[r[2]],dose,tier:r[4]}) }
+  return o }
 function strFor(fam,ph,sk){for(const k of SFALL[sk]){const s=SSPLIT[k]; const lift=fam==='ML'?(SDATA&&strProg('ML\u2022Axial\u2022P'+ph+'\u20226D')?'ML\u2022Axial\u2022P'+ph+'\u20226D':null):fam+'\u2022'+s.lift+'\u2022P'+ph+'\u2022'+s.n+'D'; if(lift&&strProg(lift)) return {k,lift,prep:fam==='ML'?null:(strProg(fam+'\u2022'+s.prep+'\u2022P'+ph+'\u2022'+s.n+'D')?fam+'\u2022'+s.prep+'\u2022P'+ph+'\u2022'+s.n+'D':null),split:fam==='ML'?SSPLIT.a6:s,sk:k}} return null}
 const SDAYIX={MON:1,TUE:2,WED:3,THU:4,FRI:5,SAT:6,SUN:7};
 function strWeek(w,weeks){
@@ -1592,7 +1637,7 @@ function strWeek(w,weeks){
   const blk=weeks.filter(x=>!x.off&&x.bi===w.bi), idx=Math.max(0,blk.indexOf(blk.find(x=>x.n===w.n))), len=blk.length||1;
   const pick=code=>{const p=strProg(code); if(!p) return null; const ds=Object.keys(p.d).map(Number).sort((a,b)=>a-b); const dur=ds.includes(len)?len:(ds.find(d=>d>=len)||ds[ds.length-1]); return {p,dur,col:Math.min(idx,dur-1)}};
   const L_=pick(f.lift), P_=f.prep?pick(f.prep):null, perm=permOf(w.n), days={};
-  const put=(src,kind)=>{if(!src) return; for(const d of src.p.d[src.dur].days){let k=SDAYIX[d[0]]||Number(String(d[0]).replace(/\D/g,''))||0; if(!k) continue; const pos=perm.indexOf(k)+1||k; const o=days[pos]=days[pos]||{prep:null,lift:null}; o[kind]={title:d[1],min:d[2],rows:d[3].map(r=>({code:r[0],name:SDATA.ex[r[1]],method:SDATA.me[r[2]],dose:r[3][src.col]||r[3][r[3].length-1]||'',tier:r[4]})).filter(r=>r.dose&&r.dose!=='\u2014'&&r.dose!=='-')}}};
+  const put=(src,kind)=>{if(!src) return; for(const d of src.p.d[src.dur].days){let k=SDAYIX[d[0]]||Number(String(d[0]).replace(/\D/g,''))||0; if(!k) continue; const pos=perm.indexOf(k)+1||k; const o=days[pos]=days[pos]||{prep:null,lift:null}; o[kind]={title:d[1],min:d[2],rows:strRows(d[3],src.col)}}};
   put(L_,'lift'); put(P_,'prep');
   return {fam:pk.fam,ph:pk.ph,split:f.split,lift:f.lift,prep:f.prep,name:(L_&&L_.p.n)||SFAM[pk.fam],when:L_&&L_.p.w,wk:(L_?L_.col+1:1),dur:L_?L_.dur:0,days,fell:f.sk!==sk}}
 const PAT_ID='';
@@ -1637,7 +1682,7 @@ function patDayInd(dt){const hit=laneAt(A.patBlocks,dt); if(!hit||!PAT) return n
 function strDayInd(dt){const hit=laneAt(strList(),dt); if(!hit||!SDATA||false) return null; const b=hit.b, pk0=strPick(), fam=b.fam||pk0.fam, ph=b.ph||pk0.ph, tw=thrAt(dt), sk=b.split||SPLITOF(tw&&!tw.off?tw.code:'REVO',A.days), f=strFor(fam,ph,sk); if(!f) return null;
   const len=Number(b.weeks)||1, pick=code=>{const p=strProg(code); if(!p) return null; const ds=Object.keys(p.d).map(Number).sort((a,c)=>a-c); const dur=ds.includes(len)?len:(ds.find(d=>d>=len)||ds[ds.length-1]); return {p,dur,col:Math.min(hit.wi-1,dur-1)}};
   const Lp=pick(f.lift), Pp=f.prep?pick(f.prep):null, o={prep:null,lift:null};
-  const put=(src,kind)=>{if(!src) return; const d=src.p.d[src.dur].days.find(x=>(SDAYIX[x[0]]||Number(String(x[0]).replace(/\D/g,''))||0)===hit.dd); if(!d) return; o[kind]={title:d[1],min:d[2],rows:d[3].map(r=>({code:r[0],name:SDATA.ex[r[1]],method:SDATA.me[r[2]],dose:r[3][src.col]||r[3][r[3].length-1]||'',tier:r[4]})).filter(r=>r.dose&&r.dose!=='\u2014'&&r.dose!=='-')}};
+  const put=(src,kind)=>{if(!src) return; const d=src.p.d[src.dur].days.find(x=>(SDAYIX[x[0]]||Number(String(x[0]).replace(/\D/g,''))||0)===hit.dd); if(!d) return; o[kind]={title:d[1],min:d[2],rows:strRows(d[3],src.col)}};
   put(Lp,'lift'); put(Pp,'prep');
   return {fam,ph,split:f.split,lift:f.lift,prep:f.prep,name:(Lp&&Lp.p.n)||SFAM[fam],when:Lp&&Lp.p.w,wk:Lp?Lp.col+1:1,dur:Lp?Lp.dur:0,fell:f.sk!==sk,b,day:(o.prep||o.lift)?o:null}}
 function laneRows(){const out=[], c1=A.coach1||'', c2=A.coach2||'', fd=d=>d?(d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear():'', tl=Math.max(1,Math.min(3,Number(lvl())||1)), U=s=>String(s||'').toUpperCase(), tb=thrBlocks();
@@ -2168,12 +2213,15 @@ const PATN={A:'Positional Control',B:'Dynamic Stability',C:'Dynamic Sequencing',
 const dayNo=dt=>{const st=day0(A.startDate); if(!st) return null; const off=Math.round((dt-st)/864e5); return off>=0?off%7+1:null};
 function liftParse(dose){
   let t=String(dose||'').trim(), tempo='', speed='', inten='', cl='';
-  // [0.68-0.77 m/s] is a speed band, [3x2] is a cluster (clusters of reps inside a set)
-  t=t.replace(/\[([^\]]*)\]/,(m,a)=>{a=a.trim(); if(/^\d+\s*x\s*\d+$/i.test(a)){cl=a.replace(/\s+/g,''); return '{CL}'} speed=a; return ''}).replace(/\((\d+:\d+:\d+:\d+)\)/,(m,a)=>{tempo=a; return ''}).trim();
-  t=t.replace(/@\s*([\d.]+\s*[%a-z]*)\s*$/i,(m,a)=>{inten=a.replace(/\s+/g,''); return ''}).trim();
+  // [0.68-0.77 m/s] is a speed band, [3x2] and (2x2)clstr are clusters (clusters of reps inside a set), (3:1:1:0) and @ 4-0-4-0 are a tempo
+  t=t.replace(/\[([^\]]*)\]/,(m,a)=>{a=a.trim(); if(/^\d+\s*x\s*\d+$/i.test(a)){cl=a.replace(/\s+/g,''); return '{CL}'} speed=a; return ''})
+    .replace(/\(((?:\d+|X|PA):(?:\d+|X|PA):(?:\d+|X|PA):(?:\d+|X|PA))\)/i,(m,a)=>{tempo=a.toUpperCase(); return ''})
+    .replace(/\(\s*(\d+)\s*[x×]\s*(\d+)\s*\)\s*clstr/i,(m,a,b)=>{cl=a+'x'+b; return '{CL}'}).trim();
+  t=t.replace(/@\s*(\d+(?:-\d+){3})(?![\d%])/,(m,a)=>{tempo=a.replace(/-/g,':'); return ''}).trim();
+  t=t.replace(/@\s*(.+?)\s*$/,(m,a)=>{inten=/^[\d.]/.test(a)?a.replace(/\s+/g,''):a.trim(); return ''}).trim();
   if(cl){const c=t.match(/^([\d+]+)\s*[x×]\s*\{CL\}/i); if(c) return {sets:c[1],reps:'['+cl+']',int:inten,tempo:tempo||speed}}
   const m=t.match(/^([\d+]+)\s*[x×]\s*(.+)$/i);
-  return {sets:m?m[1]:'',reps:m?m[2].trim():t,int:inten,tempo:tempo||speed};
+  return {sets:m?m[1]:'',reps:(m?m[2]:t).replace(/\s+/g,' ').trim(),int:inten,tempo:tempo||speed};
 }
 function stSlot(dt){const st=day0(A.startDate); if(!st||!SDATA) return null; const off=Math.round((dt-st)/864e5); if(off<0) return null; const n=Math.floor(off/7)+1, d=off%7+1, sd=svDays(n), e=sd.days[d-1]; return {d,x:e&&e.x,meta:sd.meta}}
 // what the program says for a date, per lane
@@ -3101,7 +3149,7 @@ function avKind(row,eff){
 window.__vav=window.__vav||{}; const AVN=(window.__vav[host.dataset.athlete||'']=window.__vav[host.dataset.athlete||'']||{dk:''});
 let AVS=null, AVO=null, AVT=0, AVW=false;
 const AVK=()=>'velou.athlete.'+cur;
-function avLoad(){ if(AVS&&AVS._for===cur) return AVS; let o=null; try{o=JSON.parse(localStorage.getItem(AVK())||'null')}catch(e){} AVS=Object.assign({logs:{},prefs:{}},o||{}); AVS.prefs=Object.assign({sub:{},adj:{}},AVS.prefs||{}); AVS.prefs.sub=AVS.prefs.sub||{}; AVS.prefs.adj=AVS.prefs.adj||{}; AVS._for=cur; return AVS }
+function avLoad(){ if(AVS&&AVS._for===cur) return AVS; let o=null; try{o=JSON.parse(localStorage.getItem(AVK())||'null')}catch(e){} AVS=Object.assign({logs:{},prefs:{}},o||{}); AVS.prefs=Object.assign({sub:{},adj:{},days:{}},AVS.prefs||{}); AVS.prefs.sub=AVS.prefs.sub||{}; AVS.prefs.adj=AVS.prefs.adj||{}; AVS.prefs.days=AVS.prefs.days||{}; AVS._for=cur; return AVS }
 function avSave(){ clearTimeout(AVT); AVT=setTimeout(()=>{ try{const o=Object.assign({},AVS); delete o._for; localStorage.setItem(AVK(),JSON.stringify(o))}catch(e){console.warn(e)} },250) }
 // an exercise's log is only stored once something is entered, so looking at a day leaves nothing behind
 const avGet=(dk,ek)=>((avLoad().logs[dk]||{})[ek])||null;
@@ -3110,14 +3158,23 @@ const avN=v=>{const n=parseFloat(String(v==null?'':v).replace(/[^\d.]/g,'')); re
 // "4+1" is four working sets and a bonus set; no sets written means one
 function avSetN(s,reps){ const p=String(s==null?'':s).split('+').map(x=>parseInt(x,10)).filter(x=>x>0); if(!p.length) return {n:reps?1:0,bonus:0}; const n=p.reduce((a,b)=>a+b,0); return {n,bonus:p.length>1?p[p.length-1]:0} }
 const avBand=t=>{const m=/(\d*\.?\d+)\s*[-–]\s*(\d*\.?\d+)\s*m\/s/i.exec(String(t||'')); return m?{lo:+m[1],hi:+m[2],txt:m[1]+'–'+m[2]+' m/s'}:null};
-const avTempo=t=>{const m=/(\d+):(\d+):(\d+):(\d+)/.exec(String(t||'')); return m?m[0]:''};
+const avTempo=t=>{const m=/(?:\d+|X|PA):(?:\d+|X|PA):(?:\d+|X|PA):(?:\d+|X|PA)/i.exec(String(t||'')); return m?m[0].toUpperCase():''};
 const avRepN=r=>{const m=/\d+/.exec(String(r||'')); return m?m[0]:''};
+
+// the program day a date shows. The athlete can swap two days; the swap is kept in this browser and the coach's plan is left alone
+function avSrc(dt){ avLoad(); const k=AVS.prefs.days[ymd(dt)]; return k?(day0(k)||dt):dt }
+// a day with sets logged keeps the training it has, so it cannot be swapped
+function avLogged(dt){ const L=(avLoad().logs[ymd(dt)])||{}; if(L._fin) return true; for(const ek in L){ if(ek.charAt(0)==='_') continue; const X=L[ek]; if(X&&(X.done||(X.sets||[]).some(s=>s&&s.ok))) return true } return false }
+// swap what two dates show (swapping them again puts them back)
+function avSwapDays(a,b){ avLoad(); if(avLogged(a)||avLogged(b)) return false; const D=AVS.prefs.days, ka=ymd(a), kb=ymd(b), sa=D[ka]||ka, sb=D[kb]||kb; D[ka]=sb; D[kb]=sa; for(const k of [ka,kb]) if(D[k]===k) delete D[k]; avSave(); return true }
+// the date that shows this date's own training now (it is this date itself unless the day was moved)
+function avHolder(dt){ avLoad(); const k=ymd(dt); for(const x in AVS.prefs.days) if(AVS.prefs.days[x]===k) return day0(x)||dt; return dt }
 
 // the day: each lane's rows, with the athlete's saved swaps and changes applied
 function avModel(dt){
-  const dk=ymd(dt); avLoad(); const secs=[]; let ac=false;
+  const dk=ymd(dt), sdt=avSrc(dt); avLoad(); const secs=[]; let ac=false;
   for(const l of LANES){
-    const d=lnDay(l,dt); if(!d||d.loading||d.out) continue;
+    const d=lnDay(l,sdt); if(!d||d.loading||d.out) continue;
     const rows=[], seen=new Map(), fam=d.fam||'';
     (d.rows||[]).forEach((r,i)=>{
       if(r.info){ rows.push({lane:l,i,info:true,name:r.name,prog:r.info,key:l+'|info|'+exNorm(r.name)}); return }
@@ -3131,7 +3188,7 @@ function avModel(dt){
       rows.push(row)});
     if(rows.length) secs.push({l,name:LCFG[l].name,head:d.rest&&!d.title?LCFG[l].none:lnHead(l,d),rows,fam});
     if(fam==='AC'&&(l==='lift'||l==='prep')) ac=true }
-  return {dt,dk,secs,ac} }
+  return {dt,dk,sdt,secs,ac} }
 // rows that sit in the same lettered slot (A1, A2) are a superset
 function avGroups(rows){ const g=[]; for(const r of rows){ const sl=String(r.slot||''), L=r.info?'':sl.replace(/\d+$/,''), last=g[g.length-1]; if(last&&L&&last.L===L&&/\d$/.test(sl)) last.rows.push(r); else g.push({L,rows:[r]}) } for(const x of g) x.ss=x.rows.length>1&&!!x.L&&x.rows.every(r=>/\d$/.test(String(r.slot||''))); return g }
 function avTotals(m){ let done=0,all=0; for(const s of m.secs) for(const r of s.rows){ const X=avGet(m.dk,r.key)||{sets:[]}; if(r.info){ all++; if(X.done) done++; continue } if(r.eff.skip) continue; const nSet=avSetN(r.eff.sets,r.eff.reps), n=avReq(X,nSet,nSet.n||1); all+=n; for(let i=0;i<n;i++) if(X.sets[i]&&X.sets[i].ok) done++ } return {done,all} }
@@ -3296,6 +3353,72 @@ const aaMark=(b,sx)=>{ for(const c of ['rest','part','done']) b.classList.remove
 const aaName=r=>exShow(r.eff?r.eff.name:r.name,r.lane);
 // what the last time looked like: the day, and the sets that were done
 function aaLast(nk,dk){ avLoad(); for(const d of Object.keys(AVS.logs).sort().reverse()){ if(d>=dk) continue; const L=AVS.logs[d]; for(const ek in L){ if(ek.charAt(0)==='_'||ek.replace(/#\d+$/,'').split('|')[1]!==nk) continue; const ss=((L[ek]&&L[ek].sets)||[]).filter(x=>x&&x.ok); if(ss.length) return {d,ss} } } return null }
+// ---- loads and speeds ----
+// the 1RM calculator's "3%" column: reps -> the share of a one-rep max (1 rep is 100%, every rep after takes off 3%, 40 reps is 10%)
+const aaPct=n=>{ n=Math.round(n); if(!(n>=1)||n>40) return 0; return n<=30?100-3*(n-1):13-0.3*(n-30) };
+// an exercise's intensity as a number: "77.5%" is 77.5, "70-75%" is 72.5, anything else is 0
+const aaIntPct=t=>{ const m=/(\d+(?:\.\d+)?)(?:\s*[-–]\s*(\d+(?:\.\d+)?))?\s*%/.exec(String(t||'')); return m?(+m[1]+(m[2]?+m[2]:+m[1]))/2:0 };
+const aaRound=w=>w>=50?Math.round(w/5)*5:Math.round(w/2.5)*2.5;
+// the athlete's estimated one-rep max for an exercise, from the sets they logged: the weight over the share of a max their reps stand for.
+// The best estimate from their last three sessions with that exercise, using sets of up to 12 reps
+function aaE1RM(nk,dk){ avLoad(); let best=null, n=0;
+  for(const d of Object.keys(AVS.logs).sort().reverse()){ if(d>=dk) continue; const L=AVS.logs[d]; let used=false;
+    for(const ek in L){ if(ek.charAt(0)==='_'||ek.replace(/#\d+$/,'').split('|')[1]!==nk) continue;
+      for(const x of ((L[ek]&&L[ek].sets)||[])){ if(!x||!x.ok) continue; const w=avN(x.w), rp=avN(x.r), p=rp>=1&&rp<=12?aaPct(rp):0; if(!w||!p) continue; used=true; const est=w/(p/100); if(!best||est>best.e) best={e:est,d,w,r:rp} } }
+    if(used&&++n>=3) break }
+  return best }
+// the VeloU velocity chart (VBT poster): bar speed in m/s, a low and a high, at 1RM, 95, 90, 85, 80, 75, 70, 65 and 60% of a max
+const AAVBTP=[100,95,90,85,80,75,70,65,60];
+const AAVBT={
+  'BB Bench Press':[.15,.25,.2,.3,.25,.35,.3,.4,.35,.45,.45,.55,.55,.65,.6,.7,.7,.8],
+  'BB Incline Bench Press':[.1,.2,.15,.25,.2,.3,.25,.35,.3,.4,.4,.5,.45,.55,.55,.65,.6,.7],
+  'DB Bench Press':[.25,.35,.3,.4,.35,.45,.4,.5,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95],
+  'DB Incline Bench Press':[.15,.25,.2,.3,.25,.35,.3,.4,.35,.45,.45,.55,.55,.65,.65,.75,.75,.85],
+  'Machine / Cable Press':[.25,.35,.3,.4,.35,.45,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95,.9,1],
+  'BB Strict Press':[.1,.2,.2,.3,.25,.35,.3,.4,.4,.5,.45,.55,.55,.65,.6,.7,.7,.8],
+  'DB Strict Press':[.25,.35,.3,.4,.35,.45,.4,.5,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95],
+  'Dips':[.1,.2,.15,.25,.2,.3,.25,.35,.3,.4,.4,.5,.45,.55,.55,.65,.6,.7],
+  'T-Bar Row / Pendlay Row':[.25,.35,.3,.4,.35,.45,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95,.9,1],
+  'Lat Pulldown':[.35,.45,.45,.55,.5,.6,.6,.7,.7,.8,.75,.85,.85,.95,.9,1,1,1.1],
+  'Pendlay Row':[.4,.5,.5,.6,.55,.65,.65,.75,.7,.8,.75,.85,.85,.95,.9,1,1,1.1],
+  'T-Bar Row':[.25,.35,.3,.4,.35,.45,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95,.9,1],
+  'Seated Cable Row':[.3,.4,.4,.5,.45,.55,.55,.65,.6,.7,.7,.8,.75,.85,.85,.95,.9,1],
+  'Pull-up':[.15,.25,.2,.3,.25,.35,.35,.45,.45,.55,.5,.6,.6,.7,.65,.75,.75,.85],
+  'Lat Pushdown':[.4,.5,.5,.6,.55,.65,.65,.75,.7,.8,.75,.85,.85,.95,.9,1,1,1.1],
+  'BB Deadlift':[.05,.1,.1,.2,.2,.3,.3,.4,.35,.45,.45,.55,.55,.65,.6,.7,.7,.8],
+  'Hex Bar Deadlift':[.15,.25,.2,.3,.25,.35,.35,.45,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95],
+  'BB RDL':[.25,.35,.3,.4,.35,.45,.4,.5,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95],
+  'BB Back Squat':[.25,.35,.3,.4,.4,.5,.5,.6,.6,.7,.75,.85,.85,.95,.9,1,1,1.1],
+  'Split Squat':[.2,.3,.25,.35,.35,.45,.45,.55,.55,.65,.6,.7,.65,.75,.75,.85,.85,.95],
+  'Bulgarian Lunge':[.25,.35,.3,.4,.35,.45,.45,.55,.55,.65,.65,.75,.75,.85,.85,.95,.9,1],
+  'Jefferson Lunge':[.35,.45,.45,.55,.5,.6,.6,.7,.7,.8,.75,.85,.85,.95,.9,1,1,1.1],
+  'Hip Thruster':[.15,.25,.2,.3,.25,.35,.3,.4,.4,.5,.45,.55,.5,.6,.55,.65,.65,.75],
+  'Leg Press':[.1,.2,.2,.3,.3,.4,.35,.45,.45,.55,.5,.6,.55,.65,.65,.75,.75,.85],
+  'Power Squat':[.25,.35,.3,.4,.4,.5,.5,.6,.6,.7,.75,.85,.85,.95,.9,1,1,1.1],
+  'Hack Squat':[.2,.3,.25,.35,.35,.45,.45,.55,.55,.65,.6,.7,.65,.75,.75,.85,.85,.95],
+  'Pendulum Squat':[.1,.2,.2,.3,.3,.4,.35,.45,.45,.55,.5,.6,.55,.65,.65,.75,.75,.85],
+  'Prone Leg Curl':[.3,.4,.4,.5,.45,.55,.55,.65,.6,.7,.7,.8,.75,.85,.85,.95,.9,1],
+  'Seated Leg Curl':[.4,.5,.5,.6,.55,.65,.65,.75,.7,.8,.75,.85,.85,.95,.9,1,1,1.1],
+  'Seated Leg Extension':[.4,.5,.5,.6,.55,.65,.65,.75,.7,.8,.75,.85,.85,.95,.9,1,1,1.1]};
+// the chart's row for an exercise, read from the words in its name (null when it is not one of the chart's movements)
+function aaVbtMove(name){ const n=String(name||'').toLowerCase().replace(/\([^)]*\)/g,' '), has=re=>re.test(n), mach=has(/\b(?:machine|cable)\b/), db=has(/\b(?:db|dumbbell)\b/);
+  if(has(/\bincline\b/)&&has(/bench|press/)) return db?'DB Incline Bench Press':'BB Incline Bench Press';
+  if(has(/bench press|chest press|floor press/)) return mach?'Machine / Cable Press':db?'DB Bench Press':'BB Bench Press';
+  if(has(/(?:strict|overhead|oh|shoulder|military|behind the neck|vertical) press/)) return mach?'Machine / Cable Press':db?'DB Strict Press':'BB Strict Press';
+  if(has(/\bdips?\b/)) return 'Dips';
+  if(has(/pendlay/)) return 'Pendlay Row'; if(has(/t-?bar/)) return 'T-Bar Row'; if(has(/seated (?:cable )?row|cable row/)) return 'Seated Cable Row';
+  if(has(/pulldown/)) return 'Lat Pulldown'; if(has(/pull-?ups?|chin-?ups?/)) return 'Pull-up'; if(has(/lat pushdown|straight[- ]arm pushdown/)) return 'Lat Pushdown';
+  if(has(/trap bar|hex bar/)&&has(/deadlift|rack pull/)) return 'Hex Bar Deadlift';
+  if(has(/\brdl\b|romanian/)) return 'BB RDL'; if(has(/deadlift|rack pull/)) return 'BB Deadlift';
+  if(has(/bulgarian/)) return 'Bulgarian Lunge'; if(has(/jefferson/)) return 'Jefferson Lunge'; if(has(/split squat|lunge/)) return 'Split Squat';
+  if(has(/hip thrust/)) return 'Hip Thruster'; if(has(/leg press/)) return 'Leg Press'; if(has(/power squat/)) return 'Power Squat'; if(has(/hack squat/)) return 'Hack Squat'; if(has(/pendulum/)) return 'Pendulum Squat';
+  if(has(/prone leg curl/)) return 'Prone Leg Curl'; if(has(/leg curl/)) return 'Seated Leg Curl'; if(has(/leg extension/)) return 'Seated Leg Extension';
+  if(has(/squat/)) return 'BB Back Squat';
+  return null }
+// the chart's speed band for an exercise at an intensity (60 to 100% of a max), read between the chart's columns
+function aaVbtBand(name,pct){ const mv=aaVbtMove(name), t=mv&&AAVBT[mv]; if(!t||!(pct>=60)||pct>100) return null;
+  let i=0; while(i<7&&pct<AAVBTP[i+1]) i++; const a=AAVBTP[i], b=AAVBTP[i+1], f=(a-pct)/(a-b), v=k=>t[2*i+k]+(t[2*i+2+k]-t[2*i+k])*f, lo=v(0), hi=v(1);
+  return {lo,hi,txt:lo.toFixed(2)+'–'+hi.toFixed(2)+' m/s',mv} }
 const aaRules=()=>{ const b=avSheet('Acceleration rules','aarules'); const u=el('ul','aa-rl'); for(const t of AV_RULES) u.append(el('li',null,t)); b.append(u) };
 
 // the athlete: the dashboard's profile block (photo, name, position, team, level, age, height, weight, residence) comes from the page
@@ -3320,40 +3443,93 @@ function aaWeek(st,weeks,wi,dt,today){
 // the first training day after a rest day
 function aaAhead(dt,st,weeks){ for(let k=1;k<=14;k++){ const d=addD(dt,k); if(Math.round((d-st)/864e5)>=weeks.length*7) return null; const m=avModel(d); if(m.secs.some(s=>s.rows.length)) return {d,lanes:m.secs.map(s=>s.name)} } return null }
 
-// the video plays inside the exercise: a compact row with a picture (YouTube has one) that opens into the player
+// the video is a picture with a play button in a 16:9 block, and it plays right where it is
 function aaVideo(r){ const v=avVid(r); if(!v) return null;   // a missing video is the coach's to fix, not something to show the athlete
-  const w=el('div','aa-vid'), b=el('button','aa-vbtn'), th=el('span','aa-vth'), tx=el('span','aa-vtx'); b.type='button'; b.setAttribute('aria-label','Play the video');
-  if(v.kind==='youtube'){ const im=el('img'); im.src='https://i.ytimg.com/vi/'+v.code.slice(2)+'/hqdefault.jpg'; im.alt=''; im.loading='lazy'; th.append(im) }
-  th.append(el('i','aa-pi')); tx.append(el('b',null,'Watch the video'),el('small',null,v.kind==='link'?'Opens in a new tab':'Plays right here')); b.append(th,tx); w.append(b);
+  const w=el('div','aa-vid'), b=el('button','aa-vbtn'); b.type='button'; b.setAttribute('aria-label','Play the video');
+  if(v.kind==='youtube'){ const im=el('img'); im.src='https://i.ytimg.com/vi/'+v.code.slice(2)+'/hqdefault.jpg'; im.alt=''; im.loading='lazy'; b.append(im) }
+  b.append(el('i','aa-pi')); w.append(b);
   b.addEventListener('click',()=>{ if(v.kind==='link'){ window.open(v.watch,'_blank','noopener'); return } w.textContent=''; w.classList.add('on');
     if(v.kind==='mp4'){ const vd=document.createElement('video'); vd.src=v.embed; vd.controls=true; vd.autoplay=true; vd.setAttribute('playsinline',''); vd.className='aa-frame'; w.append(vd) }
     else { const f=document.createElement('iframe'); f.src=v.embed+(v.embed.indexOf('?')<0?'?':'&')+'autoplay=1'; f.setAttribute('allow','autoplay; encrypted-media; picture-in-picture; fullscreen'); f.setAttribute('allowfullscreen',''); f.className='aa-frame'; w.append(f) } });
   return w }
-
-// the line under an exercise's name: sets x reps @ intensity, and the speed band
-function aaDose(r,e,nSet,N){ const f=document.createDocumentFragment(); if(r.info){ f.append(r.prog||''); return f }
-  const sets=nSet.bonus?(N-nSet.bonus)+'+'+nSet.bonus:String(N); f.append(sets+' × '+(e.reps||'—')+(e.int?' @ '+e.int:''));
-  if(r.band){ f.append(' · '); f.append(el('em',null,r.band.txt)) } else if(r.target){ f.append(' · '); f.append(el('em',null,'target '+r.target)) } else if(r.ball){ f.append(' · '+r.ball) }
-  return f }
+// the coach's instructions for the exercise, folded away until the athlete wants them
+function aaIns(r,S){ const t=String(r.method||'').trim(); if(!t) return null;
+  const open=!!(S.ins&&S.ins[r.key]), w=el('div','aa-ins'+(open?' open':'')), h=el('button','aa-insh'); h.type='button'; h.setAttribute('aria-expanded',String(open)); h.append(el('b',null,'Instructions'),el('i','aa-chev')); w.append(h,el('p','aa-insb',t));
+  h.addEventListener('click',()=>{ const o=!w.classList.contains('open'); w.classList.toggle('open',o); h.setAttribute('aria-expanded',String(o)); (S.ins=S.ins||{})[r.key]=o }); return w }
 // the corrective rows (arm care, mobility) are a single check
 function aaInfoRow(m,r,pset){ const wrap=el('div','aa-ex aa-info'), X0=avGet(m.dk,r.key), ck=el('button','avck'+(X0&&X0.done?' on':''),'✓'); ck.type='button'; ck.setAttribute('aria-label','Mark '+r.name+' done');
   const nm=el('div','aa-exn'); nm.append(el('b',null,r.name),el('small',null,r.prog||'')); wrap.append(ck,nm);
   ck.addEventListener('click',()=>{ const Y=avGet(m.dk,r.key)||{sets:[]}; Y.done=!Y.done; avPut(m.dk,r.key,Y); avSave(); pset() });
   return {wrap,paint:s=>{ ck.classList.toggle('on',!!s.done); wrap.classList.toggle('done',!!s.done) }} }
-// the open exercise: video, markers, the coach's cue, the sets, last time, and the ways to change it
-function aaBody(m,r,pset){
+// the reps column as the program wrote it: a cluster [3x2] reads "3×2"
+const aaReps=t=>{ const s=String(t==null?'':t).trim(), c=/^\[(\d+)x(\d+)\]$/i.exec(s); return c?c[1]+'×'+c[2]:(s||'—') };
+// the sets as a table. The first column is the set number: tap it to complete the set, which needs everything the exercise asks for (a load, a time, how the speed went).
+// Then what the program asks for in each set, and last what the athlete enters. The load is a grey suggestion until they type or tap it: for the first set from their estimated
+// 1RM (the 3% rep chart) when the exercise has a % intensity, otherwise what they lifted last time; for the later sets from the set before.
+function aaSets(m,r,X,attach,kind,N,nSet,band,pset,card){
+  const e=r.eff, repsDef=avRepN(e.reps), ru=/\b(ea|each|alt)\b\.?|\/\s*side|per side/i.exec(String(e.reps||'')), exact=/^\d+$/.test(String(e.reps||'').replace(/\b(?:ea|each|alt)\b\.?|\/\s*side|per side/ig,'').trim()), cluster=/^\[\d+x\d+\]$/i.test(String(e.reps||'').trim()), tempo=r.tempoCode||'', pcn=aaIntPct(e.int);
+  let spTxt=band?band.txt:'', vbMv='';   // the speed to aim for: the program's band or, for an acceleration lift without one, the chart's band at this intensity
+  if(!spTxt&&r.fam==='AC'&&r.lane==='lift'&&pcn){ const vb=aaVbtBand(e.name,pcn); if(vb){ spTxt=vb.txt; vbMv=vb.mv } }
+  const hasInt=!!e.int, hasSp=!!(spTxt||tempo), hasBall=!!r.ball, hasTgt=!!r.target, ent=kind.w?'w':kind.t?'t':'';
+  const cols=['40px','minmax(0,.85fr)']; if(hasInt) cols.push('minmax(0,1fr)'); if(hasSp) cols.push('minmax(0,1.35fr)'); if(hasBall) cols.push('minmax(0,1fr)'); if(hasTgt) cols.push('minmax(0,1.2fr)'); if(ent) cols.push('minmax(0,1.3fr)');
+  const tpl=cols.join(' '), box=el('div','aa-sets'), rows=[], cell=(n,cls)=>{ const c=el('span','aa-c'+(cls?' '+cls:'')); c.append(n); return c };
+  X.sets=X.sets||[];
+  const hd=el('div','aa-sg h'); hd.style.gridTemplateColumns=tpl;
+  for(const t of ['SET','REPS'+(ru&&ent==='w'&&!kind.hold&&!cluster?(/alt/i.test(ru[0])?' (ALT)':' (EACH)'):''),hasInt?'INTENSITY':'',hasSp?'TEMPO/SPEED':'',hasBall?'BALL':'',hasTgt?'TARGET':'',ent==='w'?'LOAD (LB)':ent==='t'?'TIME (S)':'']) if(t) hd.append(el('span',null,t));
+  box.append(hd);
+  const lastW=kind.w?avLast(r.nk,m.dk):'', one=kind.w&&pcn?aaE1RM(r.nk,m.dk):null, base=one?aaRound(one.e*pcn/100):(lastW?avN(lastW):0);
+  const sugOf=i=>{ if(i>0&&rows[i-1]){ const p=String(rows[i-1].S.w||'').trim(); if(p) return p } return base?String(base):'' };
+  const refresh=()=>{ rows.forEach((x,i)=>{ if(x.wi&&!String(x.S.w||'').trim()) x.wi.placeholder=sugOf(i)||'lb' }) };
+  const need=n=>{ n.classList.add('need'); setTimeout(()=>n.classList.remove('need'),900) };
+  for(let i=0;i<N;i++){
+    const S=X.sets[i]||{}, bonus=nSet.bonus&&i>=N-nSet.bonus, sr=el('div','aa-sr'+(bonus?' bonus':'')), g=el('div','aa-sg'), touch=()=>{ X.sets[i]=S; attach() };
+    g.style.gridTemplateColumns=tpl; sr.append(g);
+    const sq=el('button','aa-sq'+(S.ok?' on':''),S.ok?'✓':(bonus?'+1':String(i+1))); sq.type='button'; sq.setAttribute('aria-label','Set '+(i+1)+' done'); g.append(sq);
+    let wi=null, ri=null, ti=null, sp=null, spIn=null;
+    // reps: a number to change when the exercise is loaded, otherwise the program's own words
+    if(ent==='w'&&!kind.hold&&!cluster){ ri=el('input','aa-in rep'); ri.inputMode='numeric'; ri.setAttribute('aria-label','Reps, set '+(i+1)); ri.placeholder=String(e.reps||'reps');
+      ri.value=S.r!=null&&String(S.r)!==''?S.r:(S.res==='low'?'':(exact?repsDef:'')); ri.addEventListener('input',()=>{ S.r=ri.value; S.rEd=true; touch(); avSave() }); g.append(cell(ri)) }
+    else g.append(cell(aaReps(e.reps),'rep'));
+    if(hasInt) g.append(cell(e.int,'int'));
+    if(hasSp){ const c=el('span','aa-c sp'); if(spTxt){ c.append(spTxt.replace(/\s*m\/s$/i,''),el('small',null,'m/s')) } else c.append(tempo); g.append(c) }
+    if(hasBall) g.append(cell(r.ball)); if(hasTgt) g.append(cell(r.target));
+    // what the athlete enters
+    if(ent==='w'){ wi=el('input','aa-in ld'); wi.inputMode='decimal'; wi.placeholder=sugOf(i)||'lb'; wi.setAttribute('aria-label','Load in pounds, set '+(i+1)); wi.value=S.w||'';
+      wi.addEventListener('focus',()=>{ const sg=sugOf(i); if(!wi.value&&sg){ wi.value=sg; S.w=sg; touch(); avSave(); refresh(); try{ wi.select() }catch(x){} } });   // tapping the grey suggestion takes it
+      wi.addEventListener('input',()=>{ S.w=wi.value; touch(); avSave(); refresh() }); g.append(cell(wi)) }
+    if(ent==='t'){ ti=el('input','aa-in ld'); ti.inputMode='decimal'; ti.placeholder='sec'; ti.setAttribute('aria-label','Time in seconds, set '+(i+1)); ti.value=S.t||''; ti.addEventListener('input',()=>{ S.t=ti.value; touch(); avSave() }); g.append(cell(ti)) }
+    // the acceleration rule: how the speed went
+    if(r.ac){ sp=el('div','aa-sres');
+      if(band){ spIn=el('input','aa-in spd'); spIn.inputMode='decimal'; spIn.placeholder='m/s'; spIn.setAttribute('aria-label','Bar speed, set '+(i+1)); spIn.value=S.sp||'';
+        spIn.addEventListener('input',()=>{ S.sp=spIn.value; const v=parseFloat(spIn.value); if(!isNaN(v)) S.res=v>=band.lo?'in':'low'; touch(); avSave(); showRes() }); sp.append(spIn) }
+      const bi=el('button','aa-rb',band?'In band':'Held'), bl=el('button','aa-rb low',band?'Below':'Dropped'); bi.type=bl.type='button';
+      bi.addEventListener('click',()=>{ S.res=S.res==='in'?'':'in'; touch(); avSave(); showRes() }); bl.addEventListener('click',()=>{ S.res=S.res==='low'?'':'low'; touch(); avSave(); showRes() }); sp.append(bi,bl); sr.append(sp) }
+    const showRes=()=>{ if(sp){ const bs=sp.querySelectorAll('.aa-rb'); bs[0].classList.toggle('on',S.res==='in'); bs[1].classList.toggle('on',S.res==='low') } sr.classList.toggle('lowspd',S.res==='low');
+      if(ri&&!S.rEd){ if(S.res==='low'){ ri.value=''; S.r='' } else if(!ri.value&&exact) ri.value=repsDef }   // when the speed dropped, the athlete says how many reps they got
+      bonusRule() };
+    sq.addEventListener('click',()=>{
+      if(sr.classList.contains('locked')) return;
+      if(!S.ok){
+        if(kind.w&&!String(S.w||'').trim()){ wi.focus(); need(wi); return }
+        if(r.ac&&!S.res){ need(sp); return }
+        if(kind.w&&ri&&S.res==='low'&&!String(S.r||'').trim()){ ri.focus(); need(ri); return }   // speed dropped: say how many reps were completed
+        if(kind.t&&!avN(S.t)){ ti.focus(); need(ti); return }
+        if(kind.w&&ri&&!String(S.r||'').trim()&&exact){ S.r=repsDef; ri.value=repsDef } }
+      S.ok=!S.ok; touch(); sq.classList.toggle('on',S.ok); sq.textContent=S.ok?'✓':(bonus?'+1':String(i+1)); sr.classList.toggle('ok',S.ok); avSave(); pset(); card._dn&&card._dn() });
+    sr.classList.toggle('ok',!!S.ok); sr.classList.toggle('lowspd',S.res==='low'); box.append(sr); rows[i]={sr,wi,S,bonus} }
+  // the bonus set is earned: every working set held the speed band
+  function bonusRule(){ if(!(r.ac&&nSet.bonus)) return; const work=rows.filter(x=>!x.bonus), lowed=work.some(x=>x.S.res==='low'); for(const x of rows) if(x.bonus){ x.sr.classList.toggle('locked',lowed); let n=x.sr.querySelector('.aa-lock'); if(lowed&&!n){ n=el('span','aa-lock','Skip: speed dropped'); x.sr.append(n) } else if(!lowed&&n) n.remove() } }
+  bonusRule();
+  if(one&&base&&pcn) box.append(el('p','aa-ln','Suggested loads come from your estimated 1RM of '+aaRound(one.e)+' lb ('+one.w+' lb × '+one.r+', '+fmt(day0(one.d))+').'));
+  if(vbMv) box.append(el('p','aa-ln','Speed target from the VeloU velocity chart: '+vbMv+'.'));
+  return box }
+// the open exercise: the video, the instructions, the sets, last time, and the ways to change it
+function aaBody(m,r,pset,S){
   const e=r.eff, X=avGet(m.dk,r.key)||{sets:[]}, kind=avKind(r,e), nSet=avSetN(e.sets,e.reps), N=nSet.n||1, band=r.band, b=el('div','aa-exb'), attach=()=>avPut(m.dk,r.key,X);
   { const vv=aaVideo(r); if(vv) b.append(vv) }
-  const rx=el('div','avrx'), chip=(t,cls)=>rx.append(el('span','avchip'+(cls?' '+cls:''),t));
-  chip(N+(nSet.bonus?' ('+(N-nSet.bonus)+' + '+nSet.bonus+' bonus)':'')+' × '+(e.reps||'—'),'main'); if(e.int) chip('@ '+e.int);
-  if(band) chip('SPEED '+band.txt,'speed'); if(r.tempoCode) chip('TEMPO '+r.tempoCode,'tempo'); if(r.target) chip('TARGET '+r.target,'speed'); if(r.ball) chip('BALL '+r.ball);
-  if(/max(?:imal)?[- ]intent/i.test(String(r.method||''))) chip('MAX INTENT','speed'); if(/VBT/i.test(String(r.method||''))&&!band) chip('VBT','speed'); if(r.ac) chip('ACCELERATION RULES','ac');
-  if(r.adjusted) chip('Adjusted','adj'); if(e.skip) chip('Skipped','adj'); b.append(rx);
-  if(r.method) b.append(el('p','avcue',r.method));
-  if(!e.skip){
-    const inline=!kind.w&&!kind.t&&!r.ac, cols=[]; if(kind.w){ cols.push('LB'); if(!kind.hold) cols.push('REPS') } if(kind.t) cols.push('SEC'); if(r.ac&&band) cols.push('M/S');
-    if(!inline&&cols.length){ const h=el('div','aa-sh'); h.append(el('span','n')); for(const c of cols) h.append(el('span',null,c)); h.append(el('span','c')); b.append(h) }
-    b.append(avSets(m,r,X,attach,kind,N,nSet,band,pset,{}));
+  { const ii=aaIns(r,S); if(ii) b.append(ii) }
+  if(e.skip) b.append(el('p','aa-skipn','You skipped this exercise.'));
+  else{ b.append(aaSets(m,r,X,attach,kind,N,nSet,band,pset,{}));
     const last=kind.w?aaLast(r.nk,m.dk):null; if(last){ const p=el('p','aa-last'); p.append('Last time ('+fmt(day0(last.d))+'): '); p.append(el('b',null,last.ss.map(s=>(s.w?s.w:'')+(s.r?(s.w?' × ':'')+s.r:'')).filter(Boolean).join('  ·  '))); b.append(p) } }
   const act=el('div','aa-act'), btn=(t,fn)=>{const x=el('button',null,t); x.type='button'; x.addEventListener('click',fn); act.append(x)};
   btn('Swap',()=>avSwap(m,r)); btn('Adjust',()=>avAdjust(m,r)); btn(X.note?'Note ✓':'Note',()=>avNote(m,r)); b.append(act);
@@ -3371,21 +3547,78 @@ function aaFinish(m){
   const row=el('div','avbtns'), ok=el('button','btn primary','Save workout'), no=el('button','btn',all?'Close':'Keep going'); ok.type=no.type='button'; no.addEventListener('click',avClose);
   ok.addEventListener('click',()=>{ L._fin=Date.now(); L._rpe=feel; L._note=ta.value.trim(); avSave(); avClose(); render() }); row.append(ok,no); b.append(row) }
 
-// Today's training: the week strip, the day, the next set, the blocks, the rest timer and the finish summary
+// ---- moving days: the athlete can swap what two days show (kept in this browser; the coach's plan is left alone) ----
+function aaSwapGo(a,b,then){
+  const x=avLogged(a)?a:avLogged(b)?b:null;
+  if(x){ avPrompt('That day is already started',aaDay(x,{weekday:'long'})+' has sets logged, so its training cannot be moved. Finish it, or clear its log first.',[['OK',()=>{}]]); return }
+  avSwapDays(a,b); if(then) then() }
+// "Make this day today?": the viewed day's training comes to today, and today's goes to that day
+function aaMakeToday(dt,today){ const t=day0(today), n=aaDay(dt,{weekday:'long'});
+  avPrompt('Make '+n+' today?',n+'’s training comes to today, and today’s training moves to '+n+'.',[['Make it today',()=>aaSwapGo(t,dt,()=>{ AVN.dk=today; render() }),'primary'],['Cancel',()=>{}]]) }
+function aaPutBack(dt){ const h=avHolder(dt); if(ymd(h)!==ymd(dt)) aaSwapGo(dt,h,()=>render()) }
+// the heading: where the day is in the program, the title (the date, or the week), and the Day / Week switch to its right
+function aaHead(S,meta,title,em){
+  const hero=el('section','aa-hero'), mt=el('div','aa-meta'), row=el('div','aa-trow'), ttl=el('h1','aa-title'), vw=el('div','aa-vw');
+  for(const x of meta) mt.append(x);
+  ttl.append(el('span',null,title),el('em',null,em)); vw.setAttribute('role','group'); vw.setAttribute('aria-label','Day or week');
+  for(const [k,t] of [['day','Day'],['week','Week']]){ const b=el('button',S.view===k?'on':'',t); b.type='button'; b.setAttribute('aria-pressed',String(S.view===k)); b.addEventListener('click',()=>{ if(S.view===k) return; S.view=k; S.mv=''; render() }); vw.append(b) }
+  row.append(ttl,vw); hero.append(mt,row); return hero }
+// a day for the week list: what is planned (its blocks and the lift's focus) and how far along it is
+function aaDaySum(d,st,weeks){ const sx=aaStat(d,st,weeks); if(!sx) return null; if(sx.rest) return {sx,title:'Rest day',sub:''};
+  const m=avModel(d), pick=['lift','throw','pat','prep','corr'].map(l=>m.secs.find(s=>s.l===l)).find(Boolean);
+  return {sx,title:m.secs.map(s=>s.name).join(' · '),sub:pick?pick.head:''} }
+const AASWAP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v14M7 4 3.5 7.5M7 4l3.5 3.5M17 20V6M17 20l-3.5-3.5M17 20l3.5-3.5"/></svg>';
+// the week: every day of the program week in a list, and a way to swap one day with another
+function aaWeekView(app,S,st,weeks,wi,dt,today){
+  const w=weeks[wi], base=addD(st,wi*7), end=addD(base,6), ph=w.off?(w.deload?'Deload':'Off week'):w.code, meta=[el('span',null,'Program week '+w.n)];
+  if(ph) meta.push(el('b',null,ph)); if(!w.off&&w.uses&&w.focus) meta.push(el('span',null,w.focus));
+  app.append(aaHead(S,meta,'Week '+w.n,aaDay(base,{month:'short',day:'numeric'})+' – '+aaDay(end,{month:'short',day:'numeric'})));
+  if((A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading)){ app.append(aaNote('Loading your program…')); S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected) render() },700); return }
+  S.wait=0;
+  const go=n=>{ AVN.dk=ymd(addD(dt,n)); S.mv=''; render() }, nav=el('div','aa-wnav');
+  for(const [t,n,dis] of [['‹  Previous week',-7,wi<=0],['Next week  ›',7,wi>=weeks.length-1]]){ const b=el('button',null,t); b.type='button'; b.disabled=!!dis; b.addEventListener('click',()=>go(n)); nav.append(b) }
+  app.append(nav);
+  const mv=S.mv||'';
+  if(mv){ const bn=el('section','aa-mvb'), t=el('div','t'), cn=el('button','n','Cancel'); cn.type='button'; cn.addEventListener('click',()=>{ S.mv=''; render() });
+    t.append(el('b',null,'Swap '+aaDay(day0(mv),{weekday:'long'})+'’s training'),el('span',null,'Tap the day to swap it with.')); bn.append(t,cn); app.append(bn) }
+  const list=el('div','aa-wlist'); let moved=false;
+  for(let k=0;k<7;k++){ const d=addD(base,k); if(Math.round((d-st)/864e5)>=weeks.length*7) break; const dk=ymd(d), sm=aaDaySum(d,st,weeks); if(!sm) continue; const sx=sm.sx;
+    const row=el('div','aa-wr'+(dk===today?' today':'')+(sx.rest?' rest':'')+(mv===dk?' mv':'')+(mv&&mv!==dk?' tgt':'')), main=el('button','aa-wm'), dd=el('span','wd'), tx=el('span','wt'), stt=el('span','ws');
+    main.type='button'; main.setAttribute('aria-label',aaDay(d,{weekday:'long',month:'long',day:'numeric'}));
+    dd.append(el('small',null,aaDay(d,{weekday:'short'})),el('b',null,String(d.getDate()))); tx.append(el('b',null,sm.title)); if(sm.sub) tx.append(el('span',null,sm.sub));
+    { const sd=avSrc(d); if(ymd(sd)!==dk){ moved=true; tx.append(el('em',null,'Moved from '+aaDay(sd,{weekday:'long'}))) } }
+    if(dk===today) stt.append(el('i','tg','Today'));
+    if(mv&&mv!==dk) stt.append(el('i','sw','Swap here')); else if(sx.rest) stt.append(el('span',null,'Rest')); else if(sx.fin||(sx.all&&sx.done>=sx.all)) stt.append(el('i','ok','✓')); else if(sx.done) stt.append(el('span',null,sx.done+'/'+sx.all));
+    main.append(dd,tx,stt);
+    main.addEventListener('click',()=>{ if(mv&&mv!==dk){ aaSwapGo(day0(mv),d,()=>{ S.mv=''; render() }); return } AVN.dk=dk; S.view='day'; S.mv=''; render() });
+    row.append(main);
+    if(!mv||mv===dk){ const sw=el('button','aa-wsw'); sw.type='button'; sw.innerHTML=AASWAP; sw.setAttribute('aria-label',mv===dk?'Cancel the swap':'Swap '+aaDay(d,{weekday:'long'})+' with another day');
+      sw.addEventListener('click',()=>{ S.mv=mv===dk?'':dk; render() }); row.append(sw) }
+    list.append(row) }
+  app.append(list);
+  if(moved){ const rs=el('button','aa-back','Put every moved day back'); rs.type='button';
+    rs.addEventListener('click',()=>{ const ds=Object.keys(AVS.prefs.days); if(ds.some(k=>avLogged(day0(k)))){ avPrompt('A moved day is already started','Days with sets logged cannot be moved back. Finish them, or clear their logs first.',[['OK',()=>{}]]); return } AVS.prefs.days={}; avSave(); render() }); app.append(rs) } }
+
+// Today's training: the week strip, the day, the blocks, the rest timer and the finish summary
 function aaToday(app,S){
-  const today=ymd(new Date(new Date().setHours(12,0,0,0))); if(!AVN.dk) AVN.dk=today;
+  const today=ymd(new Date(new Date().setHours(12,0,0,0))); if(!AVN.dk) AVN.dk=today; if(!S.view) S.view='day';
   const dt=day0(AVN.dk)||day0(today), st=day0(A.startDate);
   if(!st){ app.append(aaNote('Your program has no start date yet','Your coach will set it up.')); return }
   const weeks=planWeeks(); if(!weeks.length){ app.append(aaNote('Your program is not ready yet','Check back soon.')); return }
   const off=Math.round((dt-st)/864e5), wi=Math.max(0,Math.min(weeks.length-1,Math.floor(off/7)));
+  if(S.view==='week') return aaWeekView(app,S,st,weeks,wi,dt,today);
   app.append(aaWeek(st,weeks,wi,dt,today));
   if(off<0){ app.append(aaNote('Your program starts '+aaDay(st,{weekday:'long',month:'long',day:'numeric'}),'Tap a day above to look ahead.')); return }
   if(off>=weeks.length*7){ app.append(aaNote('That is the end of your program','Nice work. Your coach will set the next one.')); return }
-  const w=weeks[wi], m=avModel(dt), some=m.secs.some(s=>s.rows.length), busy=(A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading);
-  const hero=el('section','aa-hero'), meta=el('div','aa-meta'); meta.append(el('span',null,'Week '+w.n+' · Day '+(off%7+1)));
-  { const ph=w.off?(w.deload?'Deload':'Off week'):w.code; if(ph) meta.append(el('b',null,ph)); if(!w.off&&w.uses&&w.focus) meta.append(el('span',null,w.focus)) }
-  const ttl=el('h1','aa-title'); ttl.append(el('span',null,aaDay(dt,{weekday:'long'})),el('em',null,aaDay(dt,{month:'short',day:'numeric'}))); hero.append(meta,ttl);
-  if(AVN.dk!==today){ const tb=el('button','aa-today','Today'); tb.type='button'; tb.addEventListener('click',()=>{AVN.dk=''; render()}); hero.append(tb) }
+  const sdt=avSrc(dt), soff=Math.round((sdt-st)/864e5), w=weeks[Math.floor(soff/7)]||weeks[wi], m=avModel(dt), some=m.secs.some(s=>s.rows.length), busy=(A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading);
+  const meta=[el('span',null,'Week '+w.n+' · Day '+(soff%7+1))];
+  { const ph=w.off?(w.deload?'Deload':'Off week'):w.code; if(ph) meta.push(el('b',null,ph)); if(!w.off&&w.uses&&w.focus) meta.push(el('span',null,w.focus)) }
+  const hero=aaHead(S,meta,aaDay(dt,{weekday:'long'}),aaDay(dt,{month:'short',day:'numeric'}));
+  // a day that is not today: offer to make it today. A day that was moved says where its training came from
+  if(AVN.dk!==today){ const bn=el('div','aa-mvb'), t=el('div','t'), yes=el('button','y','Make it today'), no=el('button','n','Back to today'); yes.type=no.type='button';
+    t.append(el('b',null,'Make this day today?'),el('span',null,aaDay(dt,{weekday:'long'})+'’s training would come to today, and today’s would move to '+aaDay(dt,{weekday:'long'})+'.'));
+    yes.addEventListener('click',()=>aaMakeToday(dt,today)); no.addEventListener('click',()=>{AVN.dk=''; render()}); bn.append(t,yes,no); hero.append(bn) }
+  if(ymd(sdt)!==ymd(dt)){ const mb=el('div','aa-mvd'); mb.append(el('span',null,'This is '+aaDay(sdt,{weekday:'long'})+'’s training, moved here.')); const pb=el('button',null,'Put it back'); pb.type='button'; pb.addEventListener('click',()=>aaPutBack(dt)); mb.append(pb); hero.append(mb) }
   app.append(hero);
   if(busy){ app.append(aaNote('Loading your program…')); S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected) render() },700); return }   // the lanes arrive one library at a time: wait for all of them
   S.wait=0;
@@ -3396,25 +3629,20 @@ function aaToday(app,S){
   // the day, as units: one exercise, or a superset (an A1 and an A2 done in turns)
   const blocks=[], units=[];
   for(const s of m.secs){ const bl={s,units:[]}; for(const g of avGroups(s.rows)){ if(g.ss) bl.units.push({id:'g:'+s.l+':'+g.L,ss:true,L:g.L,rows:g.rows,lane:s.l}); else for(const r of g.rows) bl.units.push({id:r.key,ss:false,rows:[r],lane:s.l}) } blocks.push(bl); units.push(...bl.units) }
-  if(S.dk!==m.dk){ S.dk=m.dk; S.open={}; S.blk={}; S.init=false }
+  if(S.dk!==m.dk){ S.dk=m.dk; S.open={}; S.blk={}; S.ins={}; S.init=false }
   if(!S.init){ S.init=true; const nx=aaNext(m,units); if(nx) S.open[nx.u.id]=true;
     for(const bl of blocks) if(bl.units.every(u=>u.rows.every(r=>aaExStat(m,r).done))) S.blk[bl.s.l]=true }
   const REG={last:avTotals(m).done};
 
   if(miss) app.append(aaNote('Part of your program did not load','Reload the page to try again.'));
-  // progress and what is next
+  // progress
   const pr=el('div','aa-pr'), track=el('div','aa-track'), fill=el('i'), ptx=el('span','aa-prt'); track.append(fill); pr.append(track,ptx); hero.append(pr);
-  const nextB=el('button','aa-next'); nextB.type='button';
-  app.append(nextB);
   if(m.ac){ const ab=el('button','aa-ac'); ab.type='button'; ab.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 2 5 13.5h5.5L9.5 22 19 9.5h-5.7z"/></svg>'; const t=el('span'); t.append(el('b',null,'Acceleration day'),'Every rep is max intent. Stop the set the moment speed drops below the band.'); ab.append(t,el('u',null,'Rules')); ab.addEventListener('click',aaRules); app.append(ab) }
 
   const go=u=>{ S.open[u.id]=true; u.setOpen(true); if(u.bl&&S.blk[u.bl.s.l]) u.bl.setOpen(true); setTimeout(()=>aaScroll(u.el),60) };
   const aaScroll=e=>{ try{ e.scrollIntoView({behavior:'smooth',block:'start'}) }catch(x){ e.scrollIntoView() } };
   const paint=()=>{ const t=avTotals(m); fill.style.width=(t.all?Math.round(t.done/t.all*100):0)+'%'; ptx.textContent=t.all?t.done+' of '+t.all+' sets':'Nothing planned'; pr.classList.toggle('alld',t.all>0&&t.done>=t.all);
     for(const bl of blocks){ let ok=0,n=0,alld=true; for(const u of bl.units){ const c=u.paint(); ok+=c.ok; n+=c.n; if(!c.done) alld=false } bl.ct.textContent=alld?'Done':ok+' / '+n; bl.hd.classList.toggle('done',alld) }
-    const nx=aaNext(m,units); nextB.classList.toggle('alld',!nx); nextB.textContent='';
-    if(nx){ const c=el('div','t'); c.append(el('small',null,t.done?'Next up':'Start here'),el('b',null,aaName(nx.r)),el('span',null,[LCFG[nx.u.lane].name,nx.r.slot&&nx.r.lane!=='throw'?nx.r.slot:'',nx.of>1?'set '+nx.set+' of '+nx.of:''].filter(Boolean).join(' · '))); nextB.append(c,el('i','aa-go','›')); nextB.onclick=()=>go(nx.u) }
-    else { const c=el('div','t'); c.append(el('small',null,'All done'),el('b',null,'Every set is logged'),el('span',null,'Finish the workout to save it.')); nextB.append(c,el('i','aa-go','›')); nextB.onclick=()=>aaFinish(m) }
     const sel=app.querySelector('.aa-day.sel'); if(sel) aaMark(sel,{done:t.done,all:t.all,fin:!!((AVS.logs[m.dk]||{})._fin)});
     restPaint() };
   const advance=()=>{ let closed=false; for(const u of units){ const c=u.stat(); if(c.done&&!u.was){ u.was=true; if(S.open[u.id]){ delete S.open[u.id]; u.setOpen(false); closed=true } } else if(!c.done) u.was=false }
@@ -3434,13 +3662,13 @@ function aaToday(app,S){
       let sh=null; if(u.ss){ sh=el('button','aa-ssh'); sh.type='button'; const t2=el('div','t'); t2.append(el('b',null,'Superset '+u.L),el('span',null,u.rows.map(r=>r.slot).join(' → ')+' · alternate, rest after each pair')); u.rc=el('span','ct'); sh.append(t2,u.rc,el('i','aa-chev')); card.append(sh) }
       u.info=u.rows.every(r=>r.info); if(u.info) card.classList.add('aa-uinfo');
       for(const r of u.rows){ if(r.info){ const ir=aaInfoRow(m,r,pset); card.append(ir.wrap); u.exs.push({r,paint:ir.paint}); continue }
-        const ex={r}, e=r.eff, nSet=avSetN(e.sets,e.reps), N=nSet.n||1;
+        const ex={r}, e=r.eff;
         const wrap=el('div','aa-ex'), hdr=el(u.ss?'div':'button','aa-exh'); if(!u.ss) hdr.type='button';
         if(r.slot&&r.lane!=='throw') hdr.append(el('span','aa-slot',r.slot));
-        const nm=el('div','aa-exn'); nm.append(el('b',null,aaName(r))); const sub=el('small'); sub.append(aaDose(r,e,nSet,N)); nm.append(sub);
+        const nm=el('div','aa-exn'); nm.append(el('b',null,aaName(r)));
         if(r.swapped){ nm.append(el('small','aa-tag',(r.saved?'Your usual swap for ':'Swapped for ')+exShow(r.orig,r.lane))) } else if(r.adjusted){ nm.append(el('small','aa-tag','Adjusted')) }
         ex.st=el('span','aa-exs'); hdr.append(nm,ex.st); if(!u.ss) hdr.append(el('i','aa-chev')); wrap.append(hdr);
-        wrap.append(aaBody(m,r,pset));
+        wrap.append(aaBody(m,r,pset,S));
         ex.paint=s=>{ ex.st.textContent=''; if(s.skip){ ex.st.append(el('span','aa-sk','Skipped')) } else if(s.done){ ex.st.append(el('i','aa-ok','✓')) } else if(s.n<=6){ for(let i=0;i<s.n;i++) ex.st.append(el('i','d'+(i<s.ok?' on':''))) } else ex.st.append(el('span','aa-cnt',s.ok+'/'+s.n)); wrap.classList.toggle('done',!!s.done&&!s.skip) };
         u.exs.push(ex); card.append(wrap) }
       u.stat=()=>{ let ok=0,n=0,done=true; for(const x of u.exs){ const s=aaExStat(m,x.r); ok+=s.ok; n+=s.n; if(!s.done) done=false } return {ok,n,done} };
@@ -3458,7 +3686,7 @@ function aaToday(app,S){
 const AASCR=['today','week','dash','chat'];
 const aaScreen=()=>{ const h=String(location.hash||'').replace('#',''); return AASCR.includes(h)?h:'home' };
 const aaTell=scr=>{ try{ window.dispatchEvent(new CustomEvent('velou-app-screen',{detail:scr==='home'?'':scr})) }catch(e){} };
-function aaGo(screen){ const S=AAS(); S.screen=screen; try{ history.pushState({aa:1},'',location.pathname+location.search+(screen==='home'?'':'#'+screen)) }catch(e){} aaTell(screen); window.scrollTo(0,0); render() }
+function aaGo(screen){ const S=AAS(); S.screen=screen; if(screen==='today'){ S.view='day'; S.mv='' } try{ history.pushState({aa:1},'',location.pathname+location.search+(screen==='home'?'':'#'+screen)) }catch(e){} aaTell(screen); window.scrollTo(0,0); render() }
 function aaBack(){ if(history.state&&history.state.aa) history.back(); else aaGo('home') }
 const aaReady=()=>!((A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading));
 const AAICON={
@@ -3485,7 +3713,7 @@ function aaHome(app,S){
   if(st&&weeks.length){
     if(!aaReady()){ S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected&&AAS().screen==='home') render() },700) }
     else { S.wait=0; const td=day0(ymd(new Date(new Date().setHours(12,0,0,0)))), off=Math.round((td-st)/864e5);
-      if(off>=0&&off<weeks.length*7){ const dl=lnDay('lift',td), rows=dl&&!dl.out&&!dl.loading?(dl.rows||[]).filter(r=>!r.info):[];
+      if(off>=0&&off<weeks.length*7){ const dl=lnDay('lift',avSrc(td)), rows=dl&&!dl.out&&!dl.loading?(dl.rows||[]).filter(r=>!r.info):[];
         if(rows.length){ todayEb='Lift'; todayPill=abbrFocus(dl.title||'')||'Lift day' } else { const sx=aaStat(td,st,weeks); todayPill=sx&&sx.rest?'Rest day':'No lift today' } } } }
   const tiles=el('nav','aa-tiles');
   for(const [id,eyebrow,name,desc,cta,col,stat] of [['dash','Progress','Athlete Dashboard','Your energy profile and scores','Open Dashboard →','#E10600',''],['today',todayEb,'Today’s Training','Today’s workout, step by step','Open Today →','#56B7E6',todayPill],['week','Calendar','Training for the Week','Your week at a glance','Open Week →','#88E0C6',''],['chat','Messages','Chat with Your Coach','Message and share video','Open Chat →','#FFFFFF','']]){
