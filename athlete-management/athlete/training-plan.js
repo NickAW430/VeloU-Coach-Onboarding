@@ -525,9 +525,36 @@ button.rr:hover{background:var(--sunk)}
 .avapp{--aa-card:#0b0f12;--aa-line:#1d262b;--aa-line2:#2b373e;--aa-sub:#b6c0c6;--aa-mut:#86939b;--aa-blue:#56B7E6;--aa-teal:#88E0C6;--aa-red:#E10600;max-width:520px;margin:0 auto;padding:0 0 150px;display:block;gap:0}
 .avapp button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .avapp .aa-chev{flex:none;width:9px;height:9px;margin:0 4px 3px 4px;border-right:2px solid var(--aa-mut);border-bottom:2px solid var(--aa-mut);transform:rotate(45deg);transition:transform .15s}
-.aa-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;height:56px;margin:0 -14px;padding:0 14px;background:rgba(0,0,0,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--aa-line)}
+.aa-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;height:56px;margin:0 -14px;padding:0 14px 0 6px;background:rgba(0,0,0,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--aa-line)}
+.aa-bk{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;background:none;border:0;color:#fff;cursor:pointer}
+.aa-bk svg{width:24px;height:24px}
+.aa-bt{flex:1;min-width:0;text-align:center;font:400 19px/1 'Anton',var(--body);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .aa-logo{display:block;height:24px;width:auto}
-.aa-me{width:34px;height:34px;border-radius:50%;border:1px solid var(--aa-line2);display:flex;align-items:center;justify-content:center;background:#10161a;color:#fff;font:600 14px var(--body)}
+.aa-me{flex:none;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--aa-line2);background:#10161a center/cover no-repeat;color:#fff;font:600 13px var(--body);overflow:hidden}
+.aa-me.ph{border-color:#E10600}
+.aa-logorow{display:flex;justify-content:center;padding:26px 0 22px}
+.aa-logorow .aa-logo{height:22px}
+.aa-prof{display:flex;align-items:center;gap:16px;min-width:0}
+.aa-ring{flex:none;width:92px;height:92px;padding:3px;border-radius:50%;background:#E10600}
+.aa-photo{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;border:3px solid #000;background:#10161a center 30%/cover no-repeat;color:#fff;font:400 30px/1 'Anton',var(--body);letter-spacing:.03em;filter:saturate(.85)}
+.aa-photo.none{filter:none}
+.aa-pt{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.aa-pt h1{margin:0;font:600 32px/.98 var(--body);letter-spacing:-.03em;color:#fff;overflow-wrap:anywhere}
+.aa-pl{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;font:500 14px/1.35 var(--body);color:rgba(255,255,255,.82)}
+.aa-pl i{font-style:normal;color:#5B6770}
+.aa-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:28px}
+.aa-tile{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:10px;aspect-ratio:1/1;padding:18px 14px 14px;border:0;border-radius:8px;overflow:hidden;text-align:left;color:#fff;cursor:pointer;background:linear-gradient(165deg,#151c21 0%,#0a0e11 100%);box-shadow:inset 0 0 0 1px #1d262b;transition:transform .12s}
+.aa-tile::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--tc)}
+.aa-tile:active{transform:scale(.975)}
+.aa-tile svg{flex:none;width:30px;height:30px;color:var(--tc)}
+.aa-tile .tx b{display:block;font:400 18px/1.08 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
+.aa-tile .tx span{display:block;margin-top:5px;font:500 12.5px/1.3 var(--body);color:var(--aa-sub)}
+.aa-tile em{position:absolute;right:10px;top:16px;padding:3px 8px;border:1px solid var(--tc);border-radius:10px;font:600 11px/1.2 var(--body);font-style:normal;letter-spacing:.03em;color:var(--tc);background:rgba(0,0,0,.35)}
+.aa-soon{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:24px 0;padding:22px 18px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:10px}
+.aa-soon svg{width:34px;height:34px;color:var(--aa-blue)}
+.aa-soon b{font:400 26px/1.1 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
+.aa-soon span{font:500 15px/1.45 var(--body);color:var(--aa-sub)}
+.aa-soon em{font:700 11px var(--body);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--aa-mut)}
 .aa-week{display:flex;align-items:center;gap:2px;margin:14px 0 2px}
 .aa-days{flex:1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .aa-wk{flex:none;width:26px;height:52px;background:none;border:0;color:var(--aa-sub);font:400 26px/1 var(--body);cursor:pointer;padding:0}
@@ -3241,7 +3268,7 @@ function avNote(m,r){ const b=avSheet('Note for '+exShow(r.eff.name,r.lane),'adj
 // The day as one screen: a week strip, what is next, the day's blocks (prep, patterning, throwing, lifting, corrective), a rest timer and a finish summary.
 // The set logging (avSets), the sheets (swap, adjust, note) and the day's data (avModel) are the same code the coach-facing Athlete's View runs.
 window.__vaa=window.__vaa||{};
-const AAS=()=>{const k=host.dataset.athlete||cur||''; return window.__vaa[k]=window.__vaa[k]||{dk:'',open:{},blk:{},rest:null,tick:0,init:false}};   // what survives a redraw
+const AAS=()=>{const k=host.dataset.athlete||cur||''; return window.__vaa[k]=window.__vaa[k]||{dk:'',open:{},blk:{},rest:null,tick:0,init:false,screen:''}};   // what survives a redraw
 const aaDay=(d,o)=>d.toLocaleDateString(undefined,o);
 const aaClock=ms=>{const s=Math.max(0,Math.floor(ms/1000)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const AALANE={prep:'#88E0C6',pat:'#56B7E6',throw:'#E10600',lift:'#FFFFFF',corr:'#8b98a0'};
@@ -3263,7 +3290,12 @@ const aaName=r=>exShow(r.eff?r.eff.name:r.name,r.lane);
 function aaLast(nk,dk){ avLoad(); for(const d of Object.keys(AVS.logs).sort().reverse()){ if(d>=dk) continue; const L=AVS.logs[d]; for(const ek in L){ if(ek.charAt(0)==='_'||ek.replace(/#\d+$/,'').split('|')[1]!==nk) continue; const ss=((L[ek]&&L[ek].sets)||[]).filter(x=>x&&x.ok); if(ss.length) return {d,ss} } } return null }
 const aaRules=()=>{ const b=avSheet('Acceleration rules','aarules'); const u=el('ul','aa-rl'); for(const t of AV_RULES) u.append(el('li',null,t)); b.append(u) };
 
-function aaBar(){ const b=el('header','aa-bar'), img=el('img','aa-logo'); img.src='/assets/velou-wordmark.png'; img.alt='VeloU'; const nm=String(host.dataset.athlete||cur||'').trim(), me=el('span','aa-me',(nm.charAt(0)||'?').toUpperCase()); me.title=nm; b.append(img,me); return b }
+// the athlete: the dashboard's profile block (photo, name, position, team, level, age, height, weight, residence) comes from the page
+function aaProf(){ let p={}; try{ p=JSON.parse(host.dataset.profile||'{}')||{} }catch(e){} const nm=String(p.name||host.dataset.athlete||cur||'').trim(); return Object.assign({name:nm,photo:'',position:'',team:'',level:'',age:'',height:'',bw:'',residence:''},p,{name:nm}) }
+const aaInit=nm=>{ const w=String(nm||'').trim().split(/\s+/).filter(Boolean); return ((w[0]||'').charAt(0)+(w.length>1?w[w.length-1].charAt(0):'')).toUpperCase()||'?' };
+function aaAvatar(size){ const p=aaProf(), a=el('span','aa-me'); a.style.width=a.style.height=size+'px'; a.title=p.name; if(p.photo){ a.style.backgroundImage='url("'+p.photo+'")'; a.classList.add('ph') } else a.textContent=aaInit(p.name); return a }
+const AATITLE={today:'Today’s training',week:'Training for the week',dash:'Athlete dashboard',chat:'Chat with your coach'};
+function aaBar(title){ const b=el('header','aa-bar'), back=el('button','aa-bk'); back.type='button'; back.setAttribute('aria-label','Back to home'); back.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>'; back.addEventListener('click',aaBack); b.append(back,el('b','aa-bt',title||''),aaAvatar(34)); return b }
 function aaNote(h,p){ const n=el('section','aa-note'); n.append(el('b',null,h)); if(p) n.append(el('span',null,p)); return n }
 function aaWeek(st,weeks,wi,dt,today){
   const nav=el('nav','aa-week'), go=n=>{AVN.dk=ymd(addD(dt,n)); render()}, row=el('div','aa-days'), base=addD(st,wi*7);
@@ -3326,11 +3358,10 @@ function aaFinish(m){
   const row=el('div','avbtns'), ok=el('button','btn primary','Save workout'), no=el('button','btn',all?'Close':'Keep going'); ok.type=no.type='button'; no.addEventListener('click',avClose);
   ok.addEventListener('click',()=>{ L._fin=Date.now(); L._rpe=feel; L._note=ta.value.trim(); avSave(); avClose(); render() }); row.append(ok,no); b.append(row) }
 
-function aaRender(){
-  const box=$('aview'); box.hidden=false; box.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); xlLoad(); avLoad();
-  const S=AAS(); clearInterval(S.tick); S.tick=0;
+// Today's training: the week strip, the day, the next set, the blocks, the rest timer and the finish summary
+function aaToday(app,S){
   const today=ymd(new Date(new Date().setHours(12,0,0,0))); if(!AVN.dk) AVN.dk=today;
-  const dt=day0(AVN.dk)||day0(today), st=day0(A.startDate), app=el('div','av avapp'); box.append(app); app.append(aaBar());
+  const dt=day0(AVN.dk)||day0(today), st=day0(A.startDate);
   if(!st){ app.append(aaNote('Your program has no start date yet','Your coach will set it up.')); return }
   const weeks=planWeeks(); if(!weeks.length){ app.append(aaNote('Your program is not ready yet','Check back soon.')); return }
   const off=Math.round((dt-st)/864e5), wi=Math.max(0,Math.min(weeks.length-1,Math.floor(off/7)));
@@ -3409,6 +3440,50 @@ function aaRender(){
   const fin=el('button','aa-fin'); fin.type='button'; const done=!!((AVS.logs[m.dk]||{})._fin); fin.textContent=done?'Workout saved ✓':'Finish workout'; fin.classList.toggle('on',done); fin.addEventListener('click',()=>aaFinish(m)); app.append(fin);
   app.append(rest); paint();
   S.tick=setInterval(()=>{ if(!host.isConnected){ clearInterval(S.tick); return } restPaint() },1000) }
+
+// ---- the app: an opening page, and the screens behind its four squares ----
+const AASCR=['today','week','dash','chat'];
+const aaScreen=()=>{ const h=String(location.hash||'').replace('#',''); return AASCR.includes(h)?h:'home' };
+function aaGo(screen){ const S=AAS(); S.screen=screen; try{ history.pushState({aa:1},'',location.pathname+location.search+(screen==='home'?'':'#'+screen)) }catch(e){} window.scrollTo(0,0); render() }
+function aaBack(){ if(history.state&&history.state.aa) history.back(); else aaGo('home') }
+const aaReady=()=>!((A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading));
+const AAICON={
+  dash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="M12 8.5l4 2.3v4.4l-4 2.3-4-2.3v-4.4l4-2.3Z"/></svg>',
+  today:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>',
+  week:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.01M8 17.5h2M12 17.5h2"/></svg>',
+  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1h-8l-4.5 3.5V17H4a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1Z"/></svg>'};
+// the opening page: the VeloU mark, the athlete (the dashboard's left-hand block), and four squares
+function aaHome(app,S){
+  const p=aaProf(), logo=el('div','aa-logorow'), img=el('img','aa-logo'); img.src='/assets/velou-wordmark.png'; img.alt='VeloU'; logo.append(img); app.append(logo);
+  const pf=el('section','aa-prof'), ring=el('div','aa-ring'), ph=el('div','aa-photo'); if(p.photo) ph.style.backgroundImage='url("'+p.photo+'")'; else { ph.classList.add('none'); ph.textContent=aaInit(p.name) } ring.append(ph);
+  const tx=el('div','aa-pt'); tx.append(el('h1',null,p.name));
+  const ok=t=>t&&t!=='—', line=a=>{ const x=a.filter(ok); if(!x.length) return null; const d=el('div','aa-pl'); x.forEach((t,i)=>{ if(i) d.append(el('i',null,'·')); d.append(el('span',null,t)) }); return d };
+  const l1=line([p.position,p.team,p.level]), l2=line([ok(p.age)?'Age '+p.age:'',p.height,p.bw,p.residence]); if(l1) tx.append(l1); if(l2) tx.append(l2);
+  pf.append(ring,tx); app.append(pf);
+  // what the squares say: today's sets, and the days done this week
+  let todayStat='', weekStat=''; const st=day0(A.startDate), weeks=planWeeks();
+  if(st&&weeks.length){
+    if(!aaReady()){ S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected&&AAS().screen==='home') render() },700) }
+    else { S.wait=0; const td=day0(ymd(new Date(new Date().setHours(12,0,0,0)))), off=Math.round((td-st)/864e5);
+      if(off>=0&&off<weeks.length*7){ const sx=aaStat(td,st,weeks); todayStat=sx.rest?'Rest day':(sx.fin||(sx.all&&sx.done>=sx.all))?'Done ✓':sx.done+' of '+sx.all+' sets';
+        let n=0,dn=0; const base=addD(st,Math.floor(off/7)*7); for(let k=0;k<7;k++){ const d=addD(base,k); if(Math.round((d-st)/864e5)>=weeks.length*7) break; const x=aaStat(d,st,weeks); if(x&&!x.rest){ n++; if(x.fin||(x.all&&x.done>=x.all)) dn++ } } weekStat=n?dn+' of '+n+' days':'' } } }
+  const tiles=el('nav','aa-tiles');
+  for(const [id,name,desc,col,stat] of [['dash','Athlete dashboard','Your energy profile and scores','#E10600',''],['today','Today’s training','Today’s workout, step by step','#56B7E6',todayStat],['week','Training for the week','Your week at a glance','#88E0C6',weekStat],['chat','Chat with your coach','Message and share video','#FFFFFF','']]){
+    const b=el('button','aa-tile'); b.type='button'; b.style.setProperty('--tc',col); b.setAttribute('aria-label',name); b.innerHTML=AAICON[id]; const t=el('div','tx'); t.append(el('b',null,name),el('span',null,desc)); b.append(t); if(stat) b.append(el('em',null,stat)); b.addEventListener('click',()=>aaGo(id)); tiles.append(b) }
+  app.append(tiles) }
+// the screens that are not built yet say what will live there
+const AASOON={dash:['Your athlete dashboard','Your energy profile, scores and progress, laid out for your phone.'],week:['Your week at a glance','Every day of your week in a calendar: what is planned and what is done.'],chat:['Message your coach','Chat with your coach and share videos. If you both have a phone number on file, messages also reach iMessage; otherwise they stay in the app.']};
+function aaSoon(app,scr){ const [h,t]=AASOON[scr]||['','']; const n=el('section','aa-soon'); n.innerHTML=AAICON[scr]||''; n.append(el('b',null,h),el('span',null,t),el('em',null,'This screen is next')); app.append(n) }
+function aaRender(){
+  const box=$('aview'); box.hidden=false; box.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); xlLoad(); avLoad();
+  const S=AAS(); clearInterval(S.tick); S.tick=0;
+  window.__aaPop=()=>{ S.screen=aaScreen(); if(host.isConnected) render() }; if(!window.__aaPopOn){ window.__aaPopOn=true; window.addEventListener('popstate',()=>{ if(window.__aaPop) window.__aaPop() }) }
+  if(!S.screen) S.screen=aaScreen();
+  const scr=S.screen, app=el('div','av avapp'+(scr==='home'?' aa-home':'')); box.append(app);
+  if(scr==='home') return aaHome(app,S);
+  app.append(aaBar(AATITLE[scr]));
+  if(scr==='today') return aaToday(app,S);
+  aaSoon(app,scr) }
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
