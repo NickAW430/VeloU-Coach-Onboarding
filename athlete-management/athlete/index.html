@@ -586,7 +586,7 @@ html[data-app] .vroot>*:not(.vappwrap){display:none !important}
     </sc-if>
     <sc-if value="{{ subApp }}" hint-placeholder-val="{{ false }}">
       <div class="vphone" data-noprint="1">
-        <div class="vphonebar"><span>Exactly what the athlete sees, at phone width. What you log, swap or adjust here is saved in this browser. This tab is temporary.</span><a href="{{ appUrl }}" target="_blank" rel="noopener">Open full screen</a></div>
+        <div class="vphonebar"><span title="What you log, swap or adjust here is saved in this browser">Exactly what the athlete sees, at phone width. Temporary tab.</span><a href="{{ appUrl }}" target="_blank" rel="noopener">Open full screen</a></div>
         <div class="vphoneframe"><iframe src="{{ appUrl }}" title="Athlete app preview"></iframe></div>
       </div>
     </sc-if>
