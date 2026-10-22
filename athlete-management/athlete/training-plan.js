@@ -3463,11 +3463,13 @@ function aaInfoRow(m,r,pset){ const wrap=el('div','aa-ex aa-info'), X0=avGet(m.d
   return {wrap,paint:s=>{ ck.classList.toggle('on',!!s.done); wrap.classList.toggle('done',!!s.done) }} }
 // the reps column as the program wrote it: a cluster [3x2] reads "3×2"
 const aaReps=t=>{ const s=String(t==null?'':t).trim(), c=/^\[(\d+)x(\d+)\]$/i.exec(s); return c?c[1]+'×'+c[2]:(s||'—') };
+// "1 (Record & Test — 10 Yard Sprint)": the reps, and the words in brackets that go under the table
+const aaRepsNote=t=>{ const s=String(t==null?'':t).trim(), m=/^(.*?)\s*\(([^)]*)\)\s*$/.exec(s); return m&&m[1]?{main:m[1],note:m[2]}:{main:s,note:''} };
 // the sets as a table. The first column is the set number: tap it to complete the set, which needs everything the exercise asks for (a load, a time, how the speed went).
 // Then what the program asks for in each set, and last what the athlete enters. The load is a grey suggestion until they type or tap it: for the first set from their estimated
 // 1RM (the 3% rep chart) when the exercise has a % intensity, otherwise what they lifted last time; for the later sets from the set before.
 function aaSets(m,r,X,attach,kind,N,nSet,band,pset,card){
-  const e=r.eff, repsDef=avRepN(e.reps), ru=/\b(ea|each|alt)\b\.?|\/\s*side|per side/i.exec(String(e.reps||'')), exact=/^\d+$/.test(String(e.reps||'').replace(/\b(?:ea|each|alt)\b\.?|\/\s*side|per side/ig,'').trim()), cluster=/^\[\d+x\d+\]$/i.test(String(e.reps||'').trim()), tempo=r.tempoCode||'', pcn=aaIntPct(e.int);
+  const e=r.eff, rn=aaRepsNote(e.reps), repsDef=avRepN(rn.main), ru=/\b(ea|each|alt)\b\.?|\/\s*side|per side/i.exec(rn.main), exact=/^\d+$/.test(rn.main.replace(/\b(?:ea|each|alt)\b\.?|\/\s*side|per side/ig,'').trim()), cluster=/^\[\d+x\d+\]$/i.test(rn.main), tempo=r.tempoCode||'', pcn=aaIntPct(e.int);
   let spTxt=band?band.txt:'', vbMv='';   // the speed to aim for: the program's band or, for an acceleration lift without one, the chart's band at this intensity
   if(!spTxt&&r.fam==='AC'&&r.lane==='lift'&&pcn){ const vb=aaVbtBand(e.name,pcn); if(vb){ spTxt=vb.txt; vbMv=vb.mv } }
   const hasInt=!!e.int, hasSp=!!(spTxt||tempo), hasBall=!!r.ball, hasTgt=!!r.target, ent=kind.w?'w':kind.t?'t':'';
@@ -3487,9 +3489,9 @@ function aaSets(m,r,X,attach,kind,N,nSet,band,pset,card){
     const sq=el('button','aa-sq'+(S.ok?' on':''),S.ok?'✓':(bonus?'+1':String(i+1))); sq.type='button'; sq.setAttribute('aria-label','Set '+(i+1)+' done'); g.append(sq);
     let wi=null, ri=null, ti=null, sp=null, spIn=null;
     // reps: a number to change when the exercise is loaded, otherwise the program's own words
-    if(ent==='w'&&!kind.hold&&!cluster){ ri=el('input','aa-in rep'); ri.inputMode='numeric'; ri.setAttribute('aria-label','Reps, set '+(i+1)); ri.placeholder=String(e.reps||'reps');
+    if(ent==='w'&&!kind.hold&&!cluster){ ri=el('input','aa-in rep'); ri.inputMode='numeric'; ri.setAttribute('aria-label','Reps, set '+(i+1)); ri.placeholder=String(rn.main||'reps');
       ri.value=S.r!=null&&String(S.r)!==''?S.r:(S.res==='low'?'':(exact?repsDef:'')); ri.addEventListener('input',()=>{ S.r=ri.value; S.rEd=true; touch(); avSave() }); g.append(cell(ri)) }
-    else g.append(cell(aaReps(e.reps),'rep'));
+    else g.append(cell(aaReps(rn.main),'rep'));
     if(hasInt) g.append(cell(e.int,'int'));
     if(hasSp){ const c=el('span','aa-c sp'); if(spTxt){ c.append(spTxt.replace(/\s*m\/s$/i,''),el('small',null,'m/s')) } else c.append(tempo); g.append(c) }
     if(hasBall) g.append(cell(r.ball)); if(hasTgt) g.append(cell(r.target));
@@ -3521,6 +3523,7 @@ function aaSets(m,r,X,attach,kind,N,nSet,band,pset,card){
   function bonusRule(){ if(!(r.ac&&nSet.bonus)) return; const work=rows.filter(x=>!x.bonus), lowed=work.some(x=>x.S.res==='low'); for(const x of rows) if(x.bonus){ x.sr.classList.toggle('locked',lowed); let n=x.sr.querySelector('.aa-lock'); if(lowed&&!n){ n=el('span','aa-lock','Skip: speed dropped'); x.sr.append(n) } else if(!lowed&&n) n.remove() } }
   bonusRule();
   if(one&&base&&pcn) box.append(el('p','aa-ln','Suggested loads come from your estimated 1RM of '+aaRound(one.e)+' lb ('+one.w+' lb × '+one.r+', '+fmt(day0(one.d))+').'));
+  if(rn.note) box.append(el('p','aa-ln',rn.note));
   if(vbMv) box.append(el('p','aa-ln','Speed target from the VeloU velocity chart: '+vbMv+'.'));
   return box }
 // the open exercise: the video, the instructions, the sets, last time, and the ways to change it
