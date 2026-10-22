@@ -522,7 +522,7 @@ button.rr:hover{background:var(--sunk)}
 .avsets.inl .avset{gap:0}
 .avsets.inl .avck{width:48px;height:48px;font:700 17px var(--mono);color:#e6eaed}
 .avsets.inl .avck.on{color:#000}
-.avapp{--aa-card:#0b0f12;--aa-line:#1d262b;--aa-line2:#2b373e;--aa-sub:#b6c0c6;--aa-mut:#86939b;--aa-blue:#56B7E6;--aa-teal:#88E0C6;--aa-red:#E10600;max-width:520px;margin:0 auto;padding:0 0 150px;display:block;gap:0}
+.avapp{width:100%;--aa-card:#0b0f12;--aa-line:#1d262b;--aa-line2:#2b373e;--aa-sub:#b6c0c6;--aa-mut:#86939b;--aa-blue:#56B7E6;--aa-teal:#88E0C6;--aa-red:#E10600;max-width:520px;margin:0 auto;padding:0 0 150px;display:block;gap:0}
 .avapp button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .avapp .aa-chev{flex:none;width:9px;height:9px;margin:0 4px 3px 4px;border-right:2px solid var(--aa-mut);border-bottom:2px solid var(--aa-mut);transform:rotate(45deg);transition:transform .15s}
 .aa-bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;height:56px;margin:0 -14px;padding:0 14px 0 6px;background:rgba(0,0,0,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--aa-line)}
@@ -705,6 +705,8 @@ div.aa-exh{cursor:default}
 .aa-sheet .btn{min-height:48px;border-radius:8px;font:600 15px var(--body)}
 .aa-sheet .btn.primary{background:#E10600;border-color:#E10600;color:#fff}
 .aa-sheet .avmsg{margin:0;font:500 14.5px/1.45 var(--body);color:#b6c0c6}
+.avapp.aa-dash{padding-bottom:0}
+.wrap.aa-wdash{padding-bottom:0}
 .ldcell{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
 .ldcell.pick{border-top-color:var(--heat);background:#14202a}
 .ldcell .ldt{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -3455,7 +3457,8 @@ function aaToday(app,S){
 // ---- the app: an opening page, and the screens behind its four squares ----
 const AASCR=['today','week','dash','chat'];
 const aaScreen=()=>{ const h=String(location.hash||'').replace('#',''); return AASCR.includes(h)?h:'home' };
-function aaGo(screen){ const S=AAS(); S.screen=screen; try{ history.pushState({aa:1},'',location.pathname+location.search+(screen==='home'?'':'#'+screen)) }catch(e){} window.scrollTo(0,0); render() }
+const aaTell=scr=>{ try{ window.dispatchEvent(new CustomEvent('velou-app-screen',{detail:scr==='home'?'':scr})) }catch(e){} };
+function aaGo(screen){ const S=AAS(); S.screen=screen; try{ history.pushState({aa:1},'',location.pathname+location.search+(screen==='home'?'':'#'+screen)) }catch(e){} aaTell(screen); window.scrollTo(0,0); render() }
 function aaBack(){ if(history.state&&history.state.aa) history.back(); else aaGo('home') }
 const aaReady=()=>!((A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading));
 const AAICON={
@@ -3496,12 +3499,14 @@ function aaSoon(app,scr){ const [h,t]=AASOON[scr]||['','']; const n=el('section'
 function aaRender(){
   const box=$('aview'); box.hidden=false; box.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); xlLoad(); avLoad();
   const S=AAS(); clearInterval(S.tick); S.tick=0;
-  window.__aaPop=()=>{ S.screen=aaScreen(); if(host.isConnected) render() }; if(!window.__aaPopOn){ window.__aaPopOn=true; window.addEventListener('popstate',()=>{ if(window.__aaPop) window.__aaPop() }) }
+  window.__aaPop=()=>{ S.screen=aaScreen(); aaTell(S.screen); if(host.isConnected) render() }; if(!window.__aaPopOn){ window.__aaPopOn=true; window.addEventListener('popstate',()=>{ if(window.__aaPop) window.__aaPop() }) }
   if(!S.screen) S.screen=aaScreen();
-  const scr=S.screen, app=el('div','av avapp'+(scr==='home'?' aa-home':'')); box.append(app);
+  const scr=S.screen, app=el('div','av avapp'+(scr==='home'?' aa-home':scr==='dash'?' aa-dash':'')); box.append(app); aaTell(scr);
+  { const wr=root.querySelector('.wrap'); if(wr) wr.classList.toggle('aa-wdash',scr==='dash') }   // on the dashboard screen the component is only the bar, so it needs no room below
   if(scr==='home') return aaHome(app,S);
   app.append(aaBar(AATITLE[scr]));
   if(scr==='today') return aaToday(app,S);
+  if(scr==='dash') return;   // the page shows the dashboard's own contents under this bar
   aaSoon(app,scr) }
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
