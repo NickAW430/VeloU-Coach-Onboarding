@@ -2609,8 +2609,8 @@ function exPick(input,lane,commit){
     if(EXPO&&EXPO.input===input) return; exClose();
     pop=el('div','expop'); pop.setAttribute('role','listbox'); root.append(pop); input.setAttribute('aria-expanded','true');
     const outside=e=>{const p=e.composedPath(); if(!p.includes(pop)&&!p.includes(input)) exClose()};
-    window.addEventListener('scroll',place,true); window.addEventListener('resize',place); document.addEventListener('pointerdown',outside,true);
-    offs=[()=>window.removeEventListener('scroll',place,true),()=>window.removeEventListener('resize',place),()=>document.removeEventListener('pointerdown',outside,true)];
+    const vv=window.visualViewport; window.addEventListener('scroll',place,true); window.addEventListener('resize',place); document.addEventListener('pointerdown',outside,true); if(vv){vv.addEventListener('resize',place); vv.addEventListener('scroll',place)}
+    offs=[()=>window.removeEventListener('scroll',place,true),()=>window.removeEventListener('resize',place),()=>document.removeEventListener('pointerdown',outside,true),()=>{if(vv){vv.removeEventListener('resize',place); vv.removeEventListener('scroll',place)}}];
     EXPO={input,off:()=>{offs.forEach(f=>f()); offs=[]; if(pop){pop.remove(); pop=null} input.setAttribute('aria-expanded','false')}};
     draw()};
   input.addEventListener('focus',()=>{input.select(); open()}); input.addEventListener('click',open);
@@ -2723,8 +2723,9 @@ function mdRefresh(weeks,quiet){
 function mdWire(){ if(mdWire.on) return; mdWire.on=true;
   const esc=e=>{ if(!host.isConnected){window.removeEventListener('keydown',esc); return} if(e.key==='Escape'&&MD.open&&!EXPO) mdClose() };
   const away=e=>{ if(!host.isConnected){document.removeEventListener('pointerdown',away,true); return} if(!MD.open||MD.mode!=='peek'||!MD.pin||EXPO) return; const pth=e.composedPath(); if((MDP&&pth.includes(MDP))||pth.some(n=>n&&n.classList&&n.classList.contains('mdq'))) return; mdClose() };
-  const rz=()=>{ if(!host.isConnected){window.removeEventListener('resize',rz); return} if(!MD.open) return; clearTimeout(rz.t); rz.t=setTimeout(()=>{ const a=root.activeElement; if(MD.open&&!(a&&a.tagName==='INPUT')){MD.pos=null; mdRender()} },200) };
-  window.addEventListener('keydown',esc); document.addEventListener('pointerdown',away,true); window.addEventListener('resize',rz) }
+  // the window or the visible area changed (a phone keyboard opened or closed): while a box is being typed in only the card's size follows, otherwise it is laid out again
+  const rz=()=>{ if(!host.isConnected){window.removeEventListener('resize',rz); if(window.visualViewport) window.visualViewport.removeEventListener('resize',rz); return} if(!MD.open) return; clearTimeout(rz.t); rz.t=setTimeout(()=>{ if(!MD.open) return; const a=root.activeElement; if(a&&a.tagName==='INPUT'){ mdPlace(); return } MD.pos=null; mdRender() },200) };
+  window.addEventListener('keydown',esc); document.addEventListener('pointerdown',away,true); window.addEventListener('resize',rz); if(window.visualViewport) window.visualViewport.addEventListener('resize',rz) }
 // the program's throwing rows, with every day the coach edited swapped for the edited drills, so day scores, throws and the rolling score follow the edits
 function statRows(w){
   const rows=weekRows(w), T=(A.laneDays||{}).throw; if(!T||w.off) return rows;
