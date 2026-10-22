@@ -2640,7 +2640,7 @@ function mdShell(cls){
 // keep the scroll position and the cursor when the card is redrawn after an edit
 function mdKeep(p){const b=p.querySelector('.mdb'), a=root.activeElement; return {top:b?b.scrollTop:0,left:b?b.scrollLeft:0,fk:a&&a.dataset&&a.dataset.fk,s:a&&a.selectionStart,e:a&&a.selectionEnd}}
 function mdBack(p,k,moved){const b=p.querySelector('.mdb'); if(b&&!moved){b.scrollTop=k.top; b.scrollLeft=k.left} if(k.fk&&!moved){const x=[...p.querySelectorAll('input[data-fk]')].find(i=>i.dataset.fk===k.fk); if(x){x.focus({preventScroll:true}); try{x.setSelectionRange(k.s,k.e)}catch(_){}}}}
-function mdPlace(){
+function mdPlace(final){
   const p=MDP; if(!p) return; const vw=window.innerWidth, vh=window.innerHeight;
   if(p._cls==='mdw'){ const w=Math.min(1900,vw-24); p.style.width=w+'px'; p.style.left=Math.max(12,Math.round((vw-w)/2))+'px'; p.style.top=Math.round(vh*.03)+'px'; p.style.bottom='auto'; p.style.maxHeight=Math.round(vh*.94)+'px'; return }
   const w=Math.min(MD.mode==='peek'||MD.mode==='day'?760:430,vw-16); p.style.width=w+'px'; let pos=MD.pos;
@@ -2650,7 +2650,7 @@ function mdPlace(){
     if(r) MD.r={l:r.left,t:r.top,w:r.width,h:r.height}; else if(MD.r&&!(MD.r.t+MD.r.h<24||MD.r.t>vh-24)) r={left:MD.r.l,top:MD.r.t,width:MD.r.w,height:MD.r.h,bottom:MD.r.t+MD.r.h}; else r={left:vw/2-10,top:vh/3,width:20,height:20,bottom:vh/3+20};
     const h=Math.max(p.scrollHeight,240), below=vh-r.bottom-12, above=r.top-12, side=(below>=Math.min(h,380)||below>=above)?'below':'above';
     pos={left:Math.min(Math.max(8,r.left+r.width/2-w/2),vw-w-8),side,y:side==='below'?r.bottom+6:vh-r.top+6,room:side==='below'?below:above};
-    if(MD.mode!=='peek') MD.pos=pos }   // an open editor keeps its place while it is redrawn
+    if(final&&MD.mode!=='peek') MD.pos=pos }   // an open editor keeps the place it got once its content was in, while it is redrawn
   p.style.left=pos.left+'px'; p.style.maxHeight=Math.max(240,Math.min(pos.room,Math.round(vh*.88)))+'px';
   if(pos.side==='below'){p.style.top=pos.y+'px'; p.style.bottom='auto'} else {p.style.bottom=pos.y+'px'; p.style.top='auto'} }
 // the title, the day score and the week figures, updated in place so the buttons under the pointer are never replaced
@@ -2676,7 +2676,7 @@ function mdDayView(dt,at){
   if(edit){const f=el('div','mdf'), st=el('span','note'); st.id='mdst'; f.append(el('span',null,'Changes save to the plan as you make them.'),st); p.append(f)}
   mdHeadFill(dt,at); mdPlace();
   {const W=body.clientWidth-24; buildGrid(body,[dt],{edit,all:true,noHead:true,compact:!edit,layer:root,scroller:body,width:W,lanesCols:W>=640?2:1})}
-  mdPlace(); mdBack(p,keep,lnFocusPending(body)) }
+  mdPlace(true); mdBack(p,keep,lnFocusPending(body)) }
 function mdWeekView(dt,at){
   const w=at.w, p=mdShell('mdw'), keep=mdKeep(p), ds=mdWeekDates(w);
   if(!MDK){ MDK=el('div','mdk'); MDK.addEventListener('click',mdClose); MDK.addEventListener('wheel',e=>e.preventDefault(),{passive:false}); root.insertBefore(MDK,p) }
