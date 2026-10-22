@@ -419,7 +419,7 @@ button.rr:hover{background:var(--sunk)}
 .ldact{display:flex;flex-wrap:wrap;gap:2px 12px;justify-content:center}
 .ldb{background:none;border:0;padding:1px 0;color:var(--muted);font:600 10px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .ldb:hover{color:#fff}
-.lbox.lnarrow .lh2{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:13px;line-height:1.2;min-height:2.4em}
+.lbox.lnarrow .lh2{white-space:normal;display:block;max-height:calc(2.4em + 2px);overflow:hidden;font-size:13px;line-height:1.2;min-height:2.4em}
 .lrow.lnar{display:grid;gap:4px;align-items:start;padding:3px 0}
 .lrow.lnar .lnb{min-width:0}
 .lrow.lnar .sl{padding-top:1px}
@@ -445,13 +445,19 @@ button.rr:hover{background:var(--sunk)}
 .lgrid.lgm{display:block;column-gap:12px}
 .lgrid.lgm .lbox{break-inside:avoid;margin-bottom:8px}
 .mdgo{white-space:nowrap}
+.mdh .btn{flex:none}
 .mdp .lbox{background:transparent}
 .mdp .ldh{display:flex;align-items:baseline;gap:8px;padding-bottom:0}
 .mdp .lh2{margin:0 0 6px;flex:1 1 auto;min-width:0}
-.mdtl{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 12px 0}
+.mdtl{flex:none;display:flex;flex-wrap:nowrap;align-items:center;gap:6px;padding:8px 12px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.mdtl .seg,.mdtl .note{flex:none}
 .lbox.lcn .lr2{padding-left:0;gap:4px}
 .lbox.lcn .lr1{grid-template-columns:16px 24px minmax(0,1fr) auto;gap:4px}
 .mcde{margin-left:auto}
+.ldv{display:inline-block;margin-left:5px;padding:0 5px;font:700 11px/1.2 var(--mono);color:#fff;border:1px solid var(--heat);background:rgba(86,183,230,.16);white-space:nowrap}
+.ldv.hot{background:var(--seam);border-color:var(--seam)}
+@media (pointer:coarse){.lin,.lin.nmi,.lbox .lr2 .lin{font-size:16px}.mr .mc i.mdq{height:28px;line-height:28px}}
+.mdk{touch-action:none}
 .expop{position:fixed;z-index:9999;background:#0b0d0e;border:1px solid #56b7e6;box-shadow:0 14px 34px rgba(0,0,0,.75);overflow:auto;display:flex;flex-direction:column;max-width:calc(100vw - 16px)}
 .exph{position:sticky;top:0;padding:7px 10px;background:#0b0d0e;border-bottom:1px solid var(--line);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);z-index:1}
 .exi{display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;padding:7px 10px;border:0;border-bottom:1px solid #151a1d;background:transparent;color:#d4d9dc;font:500 13px/1.3 var(--body);text-align:left;cursor:pointer}
@@ -1910,7 +1916,18 @@ function lnDay(l,dt){
 const lnPack=d=>d?{fam:d.fam,ph:d.ph,lv:d.lv,title:d.title,rows:d.rows.map(r=>Object.assign({},r))}:{fam:'',ph:'',lv:'',title:'',rows:[]};
 function lnEnsure(l,dt){const S=LS(l), dk=ymd(dt); if(!S[dk]) S[dk]=lnPack(lnDay(l,dt)); return S[dk]}
 // quiet: the page already shows the new value, so save without redrawing (a redraw would swallow the click that caused the edit). fn returns true when a redraw is needed after all.
-function lnEdit(l,dt,fn,quiet){const redo=fn(lnEnsure(l,dt)); changed(!!quiet&&!redo); if(quiet&&!redo) lnShowReset(l,ymd(dt))}
+function lnEdit(l,dt,fn,quiet){const redo=fn(lnEnsure(l,dt)); changed(!!quiet&&!redo); if(quiet&&!redo){ lnShowReset(l,ymd(dt)); if(l==='throw') lnRefreshScore(dt) }}
+// the day's throwing score (volume x intensity / 12): the number the Training Map shows on its day squares, edits included
+function lnScore(dt){
+  const st=day0(A.startDate); if(!st) return 0; const off=Math.round((dt-st)/864e5); if(off<0) return 0;
+  const w=planWeeks()[Math.floor(off/7)]; if(!w||w.off) return 0; const day=off%7+1;
+  return statRows(w).reduce((a,r)=>a+(r.day===day&&!r.plan?(r.wv||0):0),0)/12 }
+function lnScoreChip(h2,dt,s){
+  if(s==null) s=lnScore(dt); let c=h2.querySelector('.ldv');
+  if(!(s>0)){ if(c) c.remove(); return }
+  if(!c){ c=el('span','ldv'); h2.append(' ',c) }
+  c.textContent=String(Math.round(s)); c.classList.toggle('hot',s>=7); c.title='Day score '+s.toFixed(2)+' (volume \u00d7 intensity)' }
+function lnRefreshScore(dt){ for(const b of root.querySelectorAll('.lbox[data-lane="throw"][data-dk="'+ymd(dt)+'"][data-sc="1"]')){ const h=b.querySelector('.lh2'); if(h) lnScoreChip(h,dt) } }
 function lnShowReset(l,dk){for(const b of root.querySelectorAll('.lbox[data-lane="'+l+'"][data-dk="'+dk+'"] .lreset[hidden], .ldcell[data-dk="'+dk+'"] .ldreset[hidden]')) b.hidden=false}
 function lnSwap(l,a,b){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa; changed()}
 function lnSwapAll(a,b,lanes){for(const l of (lanes||LANES)){const S=LS(l), pa=lnPack(lnDay(l,a)), pb=lnPack(lnDay(l,b)); S[ymd(a)]=pb; S[ymd(b)]=pa} changed()}
@@ -1961,7 +1978,7 @@ const TMAX=32;
 const ABBR=[[/\s*\/\s*/g,'/'],[/\[Vertical\]/g,'[V]'],[/\[Horizontal\]/g,'[H]'],[/Deceleration/gi,'Decel'],[/Acceleration/gi,'Accel'],[/Rotation/gi,'Rot'],[/\(second exposure\)/i,'(2nd)'],
   [/resisted speed\/heavy push/i,'Resisted/Heavy'],[/overhead\/throw/i,'OH/Throw'],[/Horizontal/gi,'Horiz'],[/Vertical/gi,'Vert'],[/Posterior/gi,'Post'],[/Lower prep/i,'Low Prep'],[/Upper prep/i,'Up Prep'],
   [/Upper/g,'Up'],[/Lower/g,'Low'],[/Resisted/gi,'Resist'],[/Dynamic/gi,'Dyn'],[/Sequencing/gi,'Seq'],[/Stability/gi,'Stab'],[/Overhead/gi,'OH'],[/\s-\s/g,' ']];
-function abbrTitle(t){let x=String(t||''); for(const [re,to] of ABBR){ if(x.length<=TMAX) break; x=x.replace(re,to)} return x.length>TMAX?x.slice(0,TMAX-1)+'…':x}
+function abbrTitle(t,max){const M=max||TMAX; let x=String(t||''); for(const [re,to] of ABBR){ if(x.length<=M) break; x=x.replace(re,to)} return x.length>M?x.slice(0,M-1)+'…':x}
 const lnDose=r=>[[r.sets&&r.reps?r.sets+' × '+r.reps:(r.sets?r.sets+' sets':r.reps||''),r.int?'@ '+r.int:''].filter(Boolean).join(' '),r.tempo?'('+r.tempo+')':'',r.ball||''].filter(Boolean).join(' · ');
 function renderBox(l,dt,ix,ctx){
   const cfg=LCFG[l], {days,hasInt,hasTmp,cols,needSt,st,today}=ctx, rowsOf=ctx.rowsOf, edit=ctx.edit;
@@ -1974,9 +1991,8 @@ function renderBox(l,dt,ix,ctx){
     else if(d&&d.loading) {t2='Loading…'; off=true}
     else if(!d||d.out) {t2='Past the end of this plan.'; off=true}
     else {t2=lnHead(l,d); off=d.rest&&l!=='corr'}
-    const t2full=t2; t2=abbrTitle(t2);
-    const h2=el('div','lh2'+(off?' off':''),t2); h2.title=t2full; hd.append(h2);
-    const real=d&&!d.out&&!d.loading;
+    const real=d&&!d.out&&!d.loading, sc=(l==='throw'&&ctx.score&&real&&!off)?lnScore(dt):0, t2full=t2; t2=abbrTitle(t2,sc>0?TMAX-4:TMAX);
+    const h2=el('div','lh2'+(off?' off':''),t2); h2.title=t2full; hd.append(h2); if(l==='throw'&&ctx.score){ box.dataset.sc='1'; lnScoreChip(h2,dt,sc) }
     if(edit&&real){hd.title='Hold and drag onto another day to swap them'; hd.addEventListener('pointerdown',e=>{if(e.target.closest('button,input')) return; liftDragStart(e,'day',{dt,lane:l,ctx},box)})}
     box.append(hd,el('div','lline'));
     const open=edit||ctx.all||liftOpen.has(l), rows=rowsOf(d);
@@ -2019,7 +2035,7 @@ function buildGrid(host2,dts,o){
   for(let b=0;b<nb;b++){
     const grid=el('div','lgrid'+(narrow?' lgn':'')+(lm?' lgm':'')), idx=[]; for(let k=b*per;k<Math.min(n,(b+1)*per);k++) idx.push(k);
     if(!lm) grid.style.gridTemplateColumns='repeat('+per+',minmax(0,1fr))'; else grid.style.columnCount=String(o.lanesCols);
-    const cx={edit,all:!!o.all,narrow,tight,lanes,layer:o.layer,scroller:o.scroller||null,dates:dts,st,today,rowsOf};
+    const cx={edit,all:!!o.all,narrow,tight,lanes,score:!o.chip&&!o.noHead,layer:o.layer,scroller:o.scroller||null,dates:dts,st,today,rowsOf};
     if(!o.noHead) idx.forEach((k,j)=>{const dt=dts[k], dk=ymd(dt), h=el('div','ldcell'+(dt.toDateString()===today?' today':'')+(edit?' lediting':'')+(o.focusDk===dk?' pick':'')); h._dt=dt; h.dataset.col='1'; h.dataset.dk=dk; if(j===0) h.style.gridColumnStart='1';
       h.append(el('span','ldt',dt.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+' • '+(dt.getMonth()+1)+'/'+dt.getDate()));
       if(o.chip){const c=o.chip(dt); if(c){c.classList.add('ldchip'); h.append(c)}}
@@ -2572,8 +2588,8 @@ function exMark(text,toks){
 function exPick(input,lane,commit){
   input.autocomplete='off'; input.setAttribute('role','combobox'); input.setAttribute('aria-autocomplete','list'); input.setAttribute('aria-expanded','false');
   const orig=input.value; let typed=false, act=-1, items=[], pop=null, offs=[];
-  const place=()=>{ if(!pop) return; const r=input.getBoundingClientRect(), vw=window.innerWidth, vh=window.innerHeight, w=Math.min(460,vw-16), left=Math.min(Math.max(8,r.left),vw-w-8);
-    pop.style.width=w+'px'; pop.style.left=left+'px'; const below=vh-r.bottom-8, above=r.top-8, h=Math.min(pop.scrollHeight,340);
+  const place=()=>{ if(!pop) return; const r=input.getBoundingClientRect(), vw=window.innerWidth, vh=window.innerHeight, vv=window.visualViewport, vt=vv?vv.offsetTop:0, vb=vv?Math.min(vh,vt+vv.height):vh, w=Math.min(460,vw-16), left=Math.min(Math.max(8,r.left),vw-w-8);
+    pop.style.width=w+'px'; pop.style.left=left+'px'; const below=vb-r.bottom-8, above=r.top-vt-8, h=Math.min(pop.scrollHeight,340);
     if(below<Math.min(h,220)&&above>below){pop.style.top='auto'; pop.style.bottom=(vh-r.top+4)+'px'; pop.style.maxHeight=Math.min(340,above)+'px'} else {pop.style.bottom='auto'; pop.style.top=(r.bottom+4)+'px'; pop.style.maxHeight=Math.min(340,Math.max(160,below))+'px'} };
   const choose=it=>{ if(it.use){ exClose(); input.blur(); return } exClose(); input.value=it.name; const d=(lane==='pat'&&PAT&&PAT.dose)?PAT.dose[it.k]:''; let dose=null; if(d){const m=String(d).match(/^(\d+)\s*[x×]\s*(.+)$/i); if(m) dose={sets:m[1],reps:m[2].trim()}} commit(it.name,dose) };
   const draw=()=>{
@@ -2641,18 +2657,21 @@ function mdShell(cls){
 function mdKeep(p){const b=p.querySelector('.mdb'), a=root.activeElement; return {top:b?b.scrollTop:0,left:b?b.scrollLeft:0,fk:a&&a.dataset&&a.dataset.fk,s:a&&a.selectionStart,e:a&&a.selectionEnd}}
 function mdBack(p,k,moved){const b=p.querySelector('.mdb'); if(b&&!moved){b.scrollTop=k.top; b.scrollLeft=k.left} if(k.fk&&!moved){const x=[...p.querySelectorAll('input[data-fk]')].find(i=>i.dataset.fk===k.fk); if(x){x.focus({preventScroll:true}); try{x.setSelectionRange(k.s,k.e)}catch(_){}}}}
 function mdPlace(final){
-  const p=MDP; if(!p) return; const vw=window.innerWidth, vh=window.innerHeight;
-  if(p._cls==='mdw'){ const w=Math.min(1900,vw-24); p.style.width=w+'px'; p.style.left=Math.max(12,Math.round((vw-w)/2))+'px'; p.style.top=Math.round(vh*.03)+'px'; p.style.bottom='auto'; p.style.maxHeight=Math.round(vh*.94)+'px'; return }
+  const p=MDP; if(!p) return; const vw=window.innerWidth, ih=window.innerHeight, vv=window.visualViewport, vt=vv?vv.offsetTop:0, vh=vv?Math.min(ih,vv.height):ih, vb=vt+vh;   // vh: what is really visible (a phone keyboard covers part of the page)
+  if(p._cls==='mdw'){ const w=Math.min(1900,vw-24); p.style.width=w+'px'; p.style.left=Math.max(12,Math.round((vw-w)/2))+'px'; p.style.top=Math.round(vt+vh*.03)+'px'; p.style.bottom='auto'; p.style.maxHeight=Math.round(vh*.94)+'px'; return }
   const w=Math.min(MD.mode==='peek'||MD.mode==='day'?760:430,vw-16); p.style.width=w+'px'; let pos=MD.pos;
   if(!pos){
+    p.style.maxHeight='none';   // measure the card at its natural height, not the height it was last squeezed to
     let r=null; for(const n of root.querySelectorAll('.mdq[data-dk="'+MD.dk+'"]')){const b=n.getBoundingClientRect(); if(b.width&&b.height){r=b; break}}
-    if(r&&(r.bottom<24||r.top>vh-24)) r=null;   // the day is scrolled out of sight: place the card in the middle of the screen
-    if(r) MD.r={l:r.left,t:r.top,w:r.width,h:r.height}; else if(MD.r&&!(MD.r.t+MD.r.h<24||MD.r.t>vh-24)) r={left:MD.r.l,top:MD.r.t,width:MD.r.w,height:MD.r.h,bottom:MD.r.t+MD.r.h}; else r={left:vw/2-10,top:vh/3,width:20,height:20,bottom:vh/3+20};
-    const h=Math.max(p.scrollHeight,240), below=vh-r.bottom-12, above=r.top-12, side=(below>=Math.min(h,380)||below>=above)?'below':'above';
-    pos={left:Math.min(Math.max(8,r.left+r.width/2-w/2),vw-w-8),side,y:side==='below'?r.bottom+6:vh-r.top+6,room:side==='below'?below:above};
+    if(r&&(r.bottom<vt+24||r.top>vb-24)) r=null;   // the day is scrolled out of sight: place the card in the middle of the screen
+    if(r) MD.r={l:r.left,t:r.top,w:r.width,h:r.height}; else if(MD.r&&!(MD.r.t+MD.r.h<vt+24||MD.r.t>vb-24)) r={left:MD.r.l,top:MD.r.t,width:MD.r.w,height:MD.r.h,bottom:MD.r.t+MD.r.h}; else r={left:vw/2-10,top:vt+vh/3,width:20,height:20,bottom:vt+vh/3+20};
+    const h=Math.max(p.offsetHeight,240), below=vb-r.bottom-12, above=r.top-vt-12, side=(below>=Math.min(h,380)||below>=above)?'below':'above', left=Math.min(Math.max(8,r.left+r.width/2-w/2),vw-w-8);
+    pos=((MD.mode!=='peek'||MD.pin)&&Math.max(below,above)<Math.min(h,520))
+      ? {left,side:'top',y:vt+12,room:vh-24}   // a short window (a phone): a card that is held open takes the whole height instead of a strip beside the day
+      : {left,side,y:side==='below'?r.bottom+6:ih-r.top+6,room:side==='below'?below:above};
     if(final&&MD.mode!=='peek') MD.pos=pos }   // an open editor keeps the place it got once its content was in, while it is redrawn
   p.style.left=pos.left+'px'; p.style.maxHeight=Math.max(240,Math.min(pos.room,Math.round(vh*.88)))+'px';
-  if(pos.side==='below'){p.style.top=pos.y+'px'; p.style.bottom='auto'} else {p.style.bottom=pos.y+'px'; p.style.top='auto'} }
+  if(pos.side==='above'){p.style.bottom=pos.y+'px'; p.style.top='auto'} else {p.style.top=pos.y+'px'; p.style.bottom='auto'} }
 // the title, the day score and the week figures, updated in place so the buttons under the pointer are never replaced
 function mdHeadFill(dt,at){
   const p=MDP; if(!p||!p._h) return; const w=at.w, h=p._h, N=MDWK.length;
