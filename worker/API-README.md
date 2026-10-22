@@ -40,6 +40,9 @@ It is separate from `sheets-proxy.js`, which keeps feeding the Player Report fro
 | GET | `/api/v1/athletes/:id` | Athlete plus their assessments |
 | PATCH | `/api/v1/athletes/:id` | Update an athlete |
 | GET | `/api/v1/athletes/:id/measurements?metric=` | A metric over time, for charts |
+| GET | `/api/v1/athletes/:id/scores` | The athlete's Energy Scores over time, oldest first, for the dashboard's progress chart: `{ scores: [{ on, potential, production, transference, interference, total, source }] }` |
+| POST | `/api/v1/admin/sync` | Read the sheets now (the same job also runs every 10 minutes) |
+| POST | `/api/v1/admin/scores/rebuild` | Delete the `rebuilt` score rows and build them again from the tests (snapshots stay) |
 | POST | `/api/v1/athletes/:id/files?kind=&assessment_id=&name=` | Upload a photo, video or report (raw file body, 100 MB max). `kind` is `headshot`, `shirtless`, `mechanics_video`, `trackman_report`, `trackman_video`, `mound_plate_report`, `mocap_report` or `report` |
 | GET | `/api/v1/files/:id` | Download a file (signed-in coaches only) |
 | POST | `/api/v1/assessments` | Save an assessment (draft or submitted) with its measurements |
@@ -50,6 +53,17 @@ An assessment is `type: "intake"` with a `level` (`basic`, `advanced`, `premier`
 `section` (`movement-screen`, `force-plates`, `athletic-testing`, `throwing`, `mound`, `body-comp`, `mental-skills`), or `type: "exam"` (a stand-alone exam, section `mental-skills` or `nutrition`).
 `data` holds the full answers as the form collected them. `measurements` is the list of numbers worth charting, each
 `{ metric, value, unit, side }` with `metric` in lowercase like `shoulder.er` or `body_fat`.
+
+## Energy Score history
+`score_history` (migration `migrations/003_score_history.sql`) holds one row per athlete per day with the four Energy Scores
+and the Total. The sheet sync fills it, read-only, from the dated tests in the Athlete Mainframe workbook: CMJ and IMTP
+(Vald), the Energy Transference tab (and its Old tab), and the ArmCare exams already stored in `arm_scores`. For every day a
+test was taken it repeats the Mainframe's own formulas on the tests that existed that day, so the past can be charted as
+well as the future. Those rows are `source = 'rebuilt'` and are refreshed when the tests change. When the Mainframe's own
+Total Energy Score is more than 2 points away from the newest rebuilt point (someone changed the formulas, or typed over a
+score), its numbers are saved as a `snapshot` for that day, and snapshots are never overwritten.
+The scoring constants live in `velou-api.js` next to `energySeries()`; if the Mainframe's formulas change, change them there
+and run `POST /api/v1/admin/scores/rebuild`.
 
 ## Notes
 - Writes only work from https://coachesvelou.com (the Worker checks the `Origin`), so another website cannot post with a coach's login.

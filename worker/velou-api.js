@@ -19,6 +19,8 @@
 //   GET   /api/v1/athletes/:id                       athlete + their assessments
 //   PATCH /api/v1/athletes/:id
 //   GET   /api/v1/athletes/:id/measurements?metric=  time series for charts
+//   GET   /api/v1/athletes/:id/scores                the Energy Scores over time (rebuilt from the tests, plus snapshots)
+//   POST  /api/v1/admin/scores/rebuild               build the rebuilt scores again from the tests
 //   POST  /api/v1/athletes/:id/files?kind=&assessment_id=&name=   raw file body (photo, video, report) into R2
 //   GET   /api/v1/files/:id                          the file itself
 //   POST  /api/v1/assessments
@@ -861,6 +863,194 @@ async function runBatches(env, stmts, size = 90) {
   for (let i = 0; i < stmts.length; i += size) await env.DB.batch(stmts.slice(i, i + size));
 }
 
+// ---- Energy score history -----------------------------------------------------------------------
+// The Athlete Mainframe scores an athlete from their latest tests. The functions below repeat that scoring for every
+// date a test was taken, so an athlete's Total Energy Score can be charted over time. The numbers are the Mainframe's
+// own: Energy Potential (column Q), Energy Production (U) and Total Energy Score (AG) on the Athlete Mainframe tab,
+// the per-exam score on the Energy Interference tab, and the estimated velocities on the Energy Transference tab.
+
+const ET_SCALE = [2.194, 1.871, 1.2162195, 1 / 0.9]; // 2 lb ball, 1 lb ball, kneeling and split-stance throws -> estimated mph
+const SNAPSHOT_GAP = 2; // save the Mainframe's own numbers when ours are further than this from its Total Energy Score
+
+const round2 = n => Math.round(n * 100) / 100;
+
+function clockSecs(v) {
+  const m = String(v || '').trim().match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([AaPp][Mm])?$/);
+  if (!m) return 0;
+  const h = m[4] ? (+m[1] % 12) + (/p/i.test(m[4]) ? 12 : 0) : +m[1];
+  return h * 3600 + +m[2] * 60 + +(m[3] || 0);
+}
+
+function energyPotential(height, bw) {
+  const ratio = bw / height;
+  return 2.45478 + 1.081613 * height + 0.050937 * bw - 7.388152 * (ratio - 2.85) ** 2;
+}
+
+const energyProduction = (pp, ci, pfv) => 45.29562052 + 0.06711046 * pp + 0.11689371 * ci + 0.30463901 * pfv;
+
+// one ArmCare exam: the Energy Interference tab's formula (strengths in pounds, arm score from ArmCare)
+function energyInterference(e) {
+  const ir = e.ir || 0, er = e.er || 0, scap = e.scap || 0, grip = e.grip || 0, arm = e.arm || 0, total = e.total || 0;
+  return ((ir * 0.18 + er * 0.48 + scap * 0.22 + grip * 0.12 + arm * 0.15 - Math.abs(er - ir * 0.8) * 0.3 + 18.5) + total / 2) / 2;
+}
+
+function energyTotal(q, u, z, af, catcher) {
+  const t = -3.553169 + 0.256066 * q + 0.179293 * u + 0.593479 * z + 0.019408 * af - 0.01 * (q - u) ** 2 - 0.01 * (u - z) ** 2;
+  return catcher ? t * 0.95 : t;
+}
+
+// Energy Transference tab: the athlete's best of each throw so far (0 when never thrown), mean of the four estimates
+function transferPeak(rows) {
+  const best = [0, 0, 0, 0];
+  for (const r of rows) r.v.forEach((x, i) => { if (x > best[i]) best[i] = x; });
+  return best.reduce((s, b, i) => s + b * ET_SCALE[i], 0) / 4;
+}
+
+// Energy Transference Old tab: the row listed first scores itself, over the throws it has
+function transferFirst(rows) {
+  let first = rows[0];
+  for (const r of rows) if (r.i < first.i) first = r;
+  const est = first.v.map((x, i) => (x > 0 ? x * ET_SCALE[i] : null)).filter(x => x !== null);
+  return est.length ? est.reduce((s, x) => s + x, 0) / est.length : null;
+}
+
+const lastOn = (list, on) => { for (let i = list.length - 1; i >= 0; i--) if (list[i].on <= on) return list[i]; return null; };
+
+// Every date an athlete tested, with the scores as the Mainframe would have shown them that day (oldest first).
+// `a` holds the athlete's height and position, their CMJ / IMTP tests (`on`, `t` time of day, `i` row in the tab),
+// the Energy Transference rows (`on`, `i`, `v` the four throws) and ArmCare exams. A date with a missing test is skipped.
+function energySeries(a) {
+  if (!(a.height > 0)) return [];
+  // oldest first; of two tests in the same minute, the one listed first in the sheet counts as the later one
+  const older = (x, y) => (x.on < y.on ? -1 : x.on > y.on ? 1 : x.t - y.t || y.i - x.i);
+  const cmj = [...a.cmj].sort(older), imtp = [...a.imtp].sort(older);
+  const exams = [...a.exams].sort((x, y) => (x.on < y.on ? -1 : x.on > y.on ? 1 : 0));
+  const dates = new Set();
+  for (const list of [cmj, imtp, a.etNew, a.etOld, exams]) for (const r of list) dates.add(r.on);
+  const out = [];
+  for (const on of [...dates].sort()) {
+    const c = lastOn(cmj, on);
+    if (!c || !(c.bw > 0) || c.pp == null || c.ci == null) continue;
+    let pfv = 0; // an athlete with no IMTP at all is scored with none, as the Mainframe does
+    if (imtp.length) { const m = lastOn(imtp, on); if (!m || !(m.pfv > 0)) continue; pfv = m.pfv; }
+    const nw = a.etNew.filter(r => r.on <= on);
+    let z = null;
+    if (nw.length) z = transferPeak(nw);
+    else { const od = a.etOld.filter(r => r.on <= on); if (od.length) z = transferFirst(od); }
+    if (z === null) continue;
+    const q = energyPotential(a.height, c.bw), u = energyProduction(c.pp, c.ci, pfv);
+    const e = lastOn(exams, on);
+    const af = e ? energyInterference(e) : exams.length ? 0 : a.fallback || 0;
+    const total = energyTotal(q, u, z, af, a.catcher);
+    if (![q, u, z, af, total].every(Number.isFinite)) continue;
+    out.push({ on, potential: round2(q), production: round2(u), transference: round2(z), interference: round2(af), total: round2(total) });
+  }
+  return out;
+}
+
+// Reads the tests from the Mainframe workbook, rebuilds every athlete's series and saves what is new. Rows built from
+// the tests are marked 'rebuilt' and are refreshed when the tests change. When the Mainframe's own Total Energy Score
+// is more than SNAPSHOT_GAP away from the newest point we hold (the formulas were changed, or a score was typed over
+// by hand), its numbers are saved as a 'snapshot' for today, which is never overwritten.
+async function syncScoreHistory(env, mainframe, hA, byKey, stats, now) {
+  const columns = async (tab, names) => {
+    const head = headerIndex(await fetchTab(env.SHEET_MAINFRAME, tab, 'select * limit 1'));
+    for (const n of names) if (head[n] === undefined) throw new Error(`the ${tab} tab has no "${n}" column`);
+    return (await fetchTab(env.SHEET_MAINFRAME, tab, 'select ' + names.map(n => colLetter(head[n])).join(','))).slice(1);
+  };
+  const [cmjRows, imtpRows, etNewRows, etOldRows] = await Promise.all([
+    columns('CMJ', ['Athlete Name', 'Date', 'Time', 'Bodyweight in Pounds [lbs]', 'Peak Power / BM [W/kg]', 'Concentric Impulse [N s]']),
+    columns('IMTP', ['Athlete Name', 'Date', 'Time', 'Peak Vertical Force / BM [N/kg]']),
+    columns('Energy Transference', ['Athlete Name', '2 LB Medball Throw Velocity (MPH)', '1 LB Medball Throw Velocity (MPH)',
+      'Half Kneeling Baseball Throw Velocity (MPH)', 'Split Stance Baseball Throw Velocity (MPH)', 'Submitted At']),
+    columns('Energy Transference Old', ['Athlete Name', '2lb Medball Velocity (MPH)', '1lb Medball Velocity (MPH)',
+      'Half Kneeling Baseball Throw Velocity (MPH)', 'Split Stance Rounded', 'Submitted At']),
+  ]);
+  const group = (rows, make) => {
+    const m = new Map();
+    rows.forEach((r, i) => {
+      const t = make(r, i), k = normName(r[0]);
+      if (!t || !k) return;
+      if (!m.has(k)) m.set(k, []);
+      m.get(k).push(t);
+    });
+    return m;
+  };
+  const cmj = group(cmjRows, (r, i) => { const on = isoDate(r[1]); return on && { on, t: clockSecs(r[2]), i, bw: numOrNull(r[3]), pp: numOrNull(r[4]), ci: numOrNull(r[5]) }; });
+  const imtp = group(imtpRows, (r, i) => { const on = isoDate(r[1]); return on && { on, t: clockSecs(r[2]), i, pfv: numOrNull(r[3]) }; });
+  const throws = (r, i) => { const on = isoDate(r[5]); return on && { on, i, v: [numOrNull(r[1]), numOrNull(r[2]), numOrNull(r[3]), numOrNull(r[4])] }; };
+  const etNew = group(etNewRows, throws), etOld = group(etOldRows, throws);
+
+  const { results: examRows } = await env.DB.prepare(
+    'SELECT athlete_id, exam_on, ir, er, scap, grip, total_strength, arm_score FROM arm_scores ORDER BY athlete_id, exam_on').all();
+  const exams = new Map();
+  for (const r of examRows) {
+    if (!exams.has(r.athlete_id)) exams.set(r.athlete_id, []);
+    exams.get(r.athlete_id).push({ on: r.exam_on, ir: r.ir, er: r.er, scap: r.scap, grip: r.grip, total: r.total_strength, arm: r.arm_score });
+  }
+  const { results: haveRows } = await env.DB.prepare(
+    'SELECT athlete_id, as_of, potential, production, transference, interference, total, source FROM score_history').all();
+  const stored = new Map();
+  for (const r of haveRows) {
+    if (!stored.has(r.athlete_id)) stored.set(r.athlete_id, new Map());
+    stored.get(r.athlete_id).set(r.as_of, r);
+  }
+
+  const cols = 'athlete_id, as_of, potential, production, transference, interference, total, source, created_at';
+  const rebuild = env.DB.prepare(`INSERT INTO score_history (${cols}) VALUES (?, ?, ?, ?, ?, ?, ?, 'rebuilt', ?)
+    ON CONFLICT (athlete_id, as_of) DO UPDATE SET potential = excluded.potential, production = excluded.production,
+      transference = excluded.transference, interference = excluded.interference, total = excluded.total
+    WHERE score_history.source = 'rebuilt'`);
+  const snapshot = env.DB.prepare(`INSERT INTO score_history (${cols}) VALUES (?, ?, ?, ?, ?, ?, ?, 'snapshot', ?)
+    ON CONFLICT (athlete_id, as_of) DO UPDATE SET potential = excluded.potential, production = excluded.production,
+      transference = excluded.transference, interference = excluded.interference, total = excluded.total, source = 'snapshot'`);
+  const differs = (x, y) => ['potential', 'production', 'transference', 'interference', 'total'].some(f => Math.abs((x[f] ?? 0) - (y[f] ?? 0)) > 0.004);
+  const stmts = [], seen = new Set();
+  const added = { built: 0, updated: 0, snapshots: 0 };
+  const day = now.slice(0, 10);
+  for (const r of mainframe.slice(1)) {
+    const name = cleanText(r[hA['Athlete Name']]), k = normName(name);
+    const a = name && !seen.has(k) ? byKey.get(k) : null;
+    if (!a || a.source === 'app') continue;
+    seen.add(k);
+    const series = energySeries({
+      height: numOrNull(r[hA['Height (Inches)']]), catcher: cleanText(r[hA['Position']]).toLowerCase() === 'catcher',
+      cmj: cmj.get(k) || [], imtp: imtp.get(k) || [], etNew: etNew.get(k) || [], etOld: etOld.get(k) || [],
+      exams: exams.get(a.id) || [], fallback: (numOrNull(r[hA['Total Shoulder Strength']]) || 0) / 2,
+    });
+    const mine = new Map(stored.get(a.id) || []);
+    for (const p of series) {
+      const have = mine.get(p.on);
+      if (have && (have.source !== 'rebuilt' || !differs(have, p))) continue;
+      stmts.push(rebuild.bind(a.id, p.on, p.potential, p.production, p.transference, p.interference, p.total, now));
+      mine.set(p.on, Object.assign({ source: 'rebuilt' }, p));
+      if (have) added.updated++; else added.built++;
+    }
+    const total = numOrNull(r[hA['Total Energy Score']]);
+    let newest = null;
+    for (const [on, p] of mine) if (!newest || on > newest.on) newest = { on, total: p.total };
+    if (total !== null && (!newest || Math.abs(newest.total - total) > SNAPSHOT_GAP)) {
+      const n = f => numOrNull(r[hA[f]]);
+      stmts.push(snapshot.bind(a.id, day, n('Energy Potential Score'), n('Energy Production Score'), n('Energy Transference Score'),
+        n('Energy Interference Score'), total, now));
+      added.snapshots++;
+    }
+  }
+  await runBatches(env, stmts);
+  stats.score_points_added = added.built;
+  stats.score_points_updated = added.updated;
+  stats.score_snapshots = added.snapshots;
+}
+
+async function athleteScores(env, athleteId) {
+  await getAthlete(env, athleteId);
+  const { results } = await env.DB.prepare(
+    'SELECT as_of, potential, production, transference, interference, total, source FROM score_history WHERE athlete_id = ? ORDER BY as_of').bind(athleteId).all();
+  return { scores: results.map(r => ({ on: r.as_of, potential: r.potential, production: r.production, transference: r.transference,
+    interference: r.interference, total: r.total, source: r.source })) };
+}
+// ---- end of energy score history -------------------------------------------------------------------
+
 async function runSync(env) {
   if (!env.SHEET_MAINFRAME || !env.SHEET_PROGRAMLIB) throw new Error('sheet ids are not configured');
   const stats = { athletes_created: 0, athletes_updated: 0, programs_updated: 0, arm_scores_added: 0, arm_scores_unmatched: 0 };
@@ -1024,6 +1214,10 @@ async function runSync(env) {
   stats.arm_scores_added = armStmts.length;
   stats.arm_scores_unmatched = unmatched.size;
 
+  // score history: a problem here is reported in the run's stats and never stops the rest of the sync
+  try { await syncScoreHistory(env, mainframe, hA, byKey, stats, now); }
+  catch (e) { stats.score_history_error = String(e.message || e).slice(0, 200); }
+
   await env.DB.prepare('INSERT INTO sync_runs (started_at, finished_at, ok, stats, error) VALUES (?, ?, 1, ?, NULL)').bind(now, nowIso(), JSON.stringify(stats)).run();
   return stats;
 }
@@ -1056,6 +1250,10 @@ async function route(request, env, coach, url) {
 
   if (a === 'overview' && !b && method === 'GET') return [200, await overview(env, url)];
   if (a === 'admin' && b === 'sync' && !c && method === 'POST') return [200, await runSyncLogged(env)];
+  if (a === 'admin' && b === 'scores' && c === 'rebuild' && method === 'POST') {
+    await env.DB.prepare("DELETE FROM score_history WHERE source = 'rebuilt'").run(); // snapshots stay; the sync builds the rest again
+    return [200, await runSyncLogged(env)];
+  }
   if (a === 'library' && b === 'tab' && method === 'GET') return [200, await libraryTab(env, url), true];
   if (a === 'plans' && !b) {
     if (method === 'GET') return [200, await listPlans(env, url)];
@@ -1081,6 +1279,8 @@ async function route(request, env, coach, url) {
       return [200, await athleteCalendar(env, b, url)];
     } else if (c === 'measurements' && method === 'GET') {
       return [200, await athleteMeasurements(env, b, url)];
+    } else if (c === 'scores' && method === 'GET') {
+      return [200, await athleteScores(env, b)];
     } else if (c === 'files' && method === 'POST') {
       return [201, await uploadFile(env, request, b, url, coach)];
     }
