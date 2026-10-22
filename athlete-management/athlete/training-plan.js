@@ -1970,9 +1970,13 @@ let liftOpen=new Set(VS.open), liftDrag=null, PENDF=null, QUIET=false, DVW=0;
 const DVN=6;   // days on the dashboard calendar
 const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const liftName=n=>String(n||'').replace(/^[^—]*\s—\s/,'').trim();
-// the heading before the first dash ("Rotational Flow - Dive Roll Flow (...)") is the exercise's category, not part of its name: show the exercise alone.
-// Names that are a movement plus a variant ("Bunt Play - First", "Water Bag ... + CVB - Random Tension") keep their dash. The stored name is never changed (flags and video matching still read it).
-const exShow=(n,l)=>{const s=String(n||''), m=l==='throw'?null:/^(.+?)\s[-–—]\s+(\S.*)$/.exec(s); if(!m) return s; const h=m[1], r=m[2].trim(); return h.split(/\s+/).filter(w=>/[a-z0-9]/i.test(w)).length>4||/[+(]/.test(h)||/^(?:first|second|third|fourth|fifth)$/i.test(r)?s:r};
+// the heading before the dash ("Rotational Flow - Dive Roll Flow (...)") is the exercise's category, not part of its name: show the exercise alone.
+// Names such as "Lower - Light Reactive Touch - Pendulum Squat" carry two headings, so it repeats (up to three times, the later ones only when two or more words are left).
+// Names that are a movement plus a variant ("Bunt Play - First", "Water Bag ... + CVB - Random Tension") keep their dash. Throwing drills have no headings. The stored name is never changed (flags and video matching still read it).
+const exShow=(n,l)=>{let s=String(n||''); if(l==='throw') return s;
+  for(let k=0;k<3;k++){ const m=/^(.+?)\s[-–—]\s+(\S.*)$/.exec(s); if(!m) break; const h=m[1], r=m[2].trim();
+    if(h.split(/\s+/).filter(w=>/[a-z0-9]/i.test(w)).length>4||/[+(]/.test(h)||/^(?:first|second|third|fourth|fifth)$/i.test(r)||(k&&r.split(/\s+/).length<2)) break; s=r }
+  return s};
 const exTip=(n,fg,l)=>[exShow(n,l)!==n?n:'',fg&&fg.length?fg.join('; '):''].filter(Boolean).join(' — ');   // hover text: the full stored name, then any flags
 const abbrFocus=t=>String(t||'').replace(/\s*\/\s*/g,'/').replace(/\[Vertical\]/g,'[V]').replace(/\[Horizontal\]/g,'[H]');
 const PATN={A:'Positional Control',B:'Dynamic Stability',C:'Dynamic Sequencing',D:'Dynamic Power'};
