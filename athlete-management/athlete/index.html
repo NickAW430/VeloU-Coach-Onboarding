@@ -180,7 +180,7 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
       <h2 style="margin:0;font-size:26px;font-weight:600">Next 6 Days <span style="color:rgba(255,255,255,.62);font-weight:400">· Training Calendar</span></h2>
     </div>
     <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
-      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022l" data-view="days" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,900px"></x-import>
+      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022m" data-view="days" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,900px"></x-import>
     </sc-if>
     <sc-if value="{{ plansLoading }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:rgba(255,255,255,.62)">Loading the plan…</span></sc-if>
   </section>
@@ -561,13 +561,16 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
     <sc-if value="{{ hasLib }}" hint-placeholder-val="{{ false }}"><div data-noprint="1" style="font:400 11px 'Barlow',sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.62)">{{ libStatus }}</div></sc-if>
     <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
       <sc-if value="{{ subBuild }}" hint-placeholder-val="{{ true }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022l" data-view="build" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,900px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022m" data-view="build" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,900px"></x-import>
       </sc-if>
       <sc-if value="{{ subMap }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022l" data-view="map" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,640px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022m" data-view="map" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,640px"></x-import>
       </sc-if>
       <sc-if value="{{ subNotes }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022l" data-view="notes" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022m" data-view="notes" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+      </sc-if>
+      <sc-if value="{{ subAthlete }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022m" data-view="athlete" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
       </sc-if>
     </sc-if>
   </section>
@@ -807,134 +810,6 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
   </section>
   </sc-if>
 
-  <sc-if value="{{ isData }}" hint-placeholder-val="{{ false }}">
-  <section id="in-season" data-screen-label="In-Season" style="display:flex;flex-direction:column;gap:22px">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <h2 style="margin:0;font-size:26px;font-weight:600">{{ xTitle }} <span style="color:rgba(255,255,255,.62);font-weight:400">· Game Data</span></h2>
-        <span style="font:400 12px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ xMeta }}</span>
-      </div>
-      <div style="display:flex;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
-        <sc-for list="{{ xRangeOpts }}" as="r" hint-placeholder-count="5">
-          <button onClick="{{ r.onClick }}" style="border:0;background:{{ r.bg }};color:{{ r.c }};font:500 12px 'Barlow',sans-serif;padding:8px 12px;cursor:pointer;white-space:nowrap">{{ r.label }}</button>
-        </sc-for>
-      </div>
-    </div>
-    <sc-if value="{{ xEmpty }}" hint-placeholder-val="{{ false }}">
-      <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:18px;font-size:14px;color:rgba(255,255,255,.82)">{{ xEmptyMsg }}</div>
-    </sc-if>
-    <sc-if value="{{ xHas }}" hint-placeholder-val="{{ true }}">
-      <div style="display:flex;flex-direction:column;gap:22px">
-        <sc-for list="{{ xSplits }}" as="sp" hint-placeholder-count="1">
-          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font:500 11px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ sp.title }}</span><div data-noprint="true" style="display:flex;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)"><sc-for list="{{ xSideOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="border:0;background:{{ o.bg }};color:{{ o.c }};font:500 12px 'Barlow',sans-serif;padding:6px 12px;cursor:pointer;white-space:nowrap">{{ o.label }}</button></sc-for></div></div><div style="overflow-x:auto;margin:0 -2px"><div style="min-width:820px">
-            <div style="display:grid;grid-template-columns:1.4fr repeat(9,minmax(0,1fr));gap:10px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">PITCH TYPE</span><span>USAGE</span><span>MAX VELO</span><span>AVG VELO</span><span>STRIKE %</span><span>SL %</span><span>WHIFF %</span><span>CSW %</span><span>xISO</span><span>xwOBA</span></div>
-            <sc-for list="{{ sp.rows }}" as="p" hint-placeholder-count="5">
-              <div style="display:grid;grid-template-columns:1.4fr repeat(9,minmax(0,1fr));gap:10px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);text-align:right;align-items:center;font:400 13px 'Barlow',sans-serif"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.usage }}</span><span>{{ p.max }}</span><span>{{ p.avg }}</span><span>{{ p.str }}</span><span>{{ p.sl }}</span><span>{{ p.wh }}</span><span>{{ p.csw }}</span><span>{{ p.xi }}</span><span>{{ p.xw }}</span></div>
-            </sc-for>
-            <div style="display:grid;grid-template-columns:1.4fr repeat(9,minmax(0,1fr));gap:10px;padding:10px 0;text-align:right;align-items:center;font:600 13px 'Barlow',sans-serif;color:#FFFFFF"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px">Total</span><span>{{ sp.total.usage }}</span><span>{{ sp.total.max }}</span><span>{{ sp.total.avg }}</span><span>{{ sp.total.str }}</span><span>{{ sp.total.sl }}</span><span>{{ sp.total.wh }}</span><span>{{ sp.total.csw }}</span><span>{{ sp.total.xi }}</span><span>{{ sp.total.xw }}</span></div>
-          </div></div></div>
-        </sc-for>
-        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span style="font:500 11px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ xCountTitle }}</span>
-            <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ xTypes }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
-          </div>
-          <div style="overflow-x:auto;margin:0 -2px"><div style="min-width:820px">
-            <div style="display:grid;grid-template-columns:130px minmax(0,1fr) repeat(4,72px);gap:14px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">COUNT</span><span style="text-align:left">PITCH MIX</span><span>STRIKE %</span><span>WHIFF %</span><span>CSW %</span><span>xwOBA</span></div>
-            <sc-for list="{{ xCounts }}" as="cr" hint-placeholder-count="7">
-              <div style="display:grid;grid-template-columns:130px minmax(0,1fr) repeat(4,72px);gap:14px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);align-items:center;text-align:right;font:400 13px 'Barlow',sans-serif;color:#FFFFFF">
-                <div style="text-align:left;display:flex;flex-direction:column;gap:2px"><span style="font:600 14px 'Barlow',sans-serif">{{ cr.label }}</span><span style="font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ cr.n }}</span></div>
-                <div style="display:flex;height:26px;gap:2px;min-width:0">
-                  <sc-for list="{{ cr.segs }}" as="g"><div title="{{ g.tip }}" style="flex:0 0 {{ g.w }};background:{{ g.c }};display:flex;align-items:center;justify-content:center;overflow:hidden;font:600 11px 'Barlow',sans-serif;color:#000000;min-width:0">{{ g.lbl }}</div></sc-for>
-                </div>
-                <span>{{ cr.str }}</span><span>{{ cr.wh }}</span><span>{{ cr.csw }}</span><span>{{ cr.xw }}</span>
-              </div>
-            </sc-for>
-          </div></div>
-        </div>
-        <sc-for list="{{ xVelo }}" as="c" hint-placeholder-count="2">
-          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0">
-            <span style="font:500 11px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ c.title }}</span>
-            <div style="display:flex;gap:6px 16px;flex-wrap:wrap">
-              <sc-for list="{{ c.series }}" as="s"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:14px;height:3px;background:{{ s.color }}"></span>{{ s.name }}</span></sc-for>
-            </div>
-            <div style="position:relative;height:260px;margin:16px 6px 4px 40px">
-              <div style="position:absolute;left:0;right:0;top:0;border-top:1px dashed rgba(91,103,112,.32)"></div>
-              <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed rgba(91,103,112,.32)"></div>
-              <div style="position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(91,103,112,.55)"></div>
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
-                <sc-for list="{{ c.series }}" as="s"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline><path d="{{ s.dotPath }}" fill="none" stroke="{{ s.color }}" stroke-width="6" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
-              </svg>
-              <sc-for list="{{ c.dots }}" as="p"><span style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:{{ p.tf }};font:600 10px 'Barlow',sans-serif;color:{{ p.c }};white-space:nowrap;pointer-events:none;text-shadow:0 0 3px #000000,0 0 3px #000000">{{ p.label }}</span></sc-for>
-              <span style="position:absolute;left:-4px;top:0;transform:translate(-100%,-50%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ c.yHi }}</span>
-              <span style="position:absolute;left:-4px;bottom:0;transform:translate(-100%,50%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ c.yLo }}</span>
-            </div>
-            <div style="position:relative;height:14px;margin:0 6px 0 40px">
-              <sc-for list="{{ c.ticks }}" as="k"><span style="position:absolute;left:{{ k.l }};transform:{{ k.tf }};font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62);white-space:nowrap">{{ k.label }}</span></sc-for>
-            </div>
-          </div>
-        </sc-for>
-        <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><span style="font:500 11px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.06em">AVERAGE PITCH MOVEMENT AND ANGLES</span><div style="overflow-x:auto;margin:0 -2px"><div style="min-width:760px">
-          <div style="display:grid;grid-template-columns:1.4fr repeat(8,minmax(0,1fr));gap:10px;padding:8px 0 10px;border-bottom:1px solid rgba(91,103,112,.55);text-align:right;font:500 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.03em"><span style="text-align:left">PITCH TYPE</span><span>AVG SPIN</span><span>SPIN DIR</span><span>AVG IVB</span><span>AVG HB</span><span>AVG VAA</span><span>AVG HAA</span><span>AVG VRA</span><span>AVG HRA</span></div>
-          <sc-for list="{{ xTypes }}" as="p" hint-placeholder-count="5">
-            <div style="display:grid;grid-template-columns:1.4fr repeat(8,minmax(0,1fr));gap:10px;padding:10px 0;border-bottom:1px solid rgba(91,103,112,.32);text-align:right;align-items:center;font:400 13px 'Barlow',sans-serif"><span style="text-align:left;font-family:'Barlow',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ p.c }};flex:none"></span>{{ p.name }}</span><span>{{ p.spin }}</span><span>{{ p.sd }}</span><span>{{ p.ivb }}</span><span>{{ p.hb }}</span><span>{{ p.vaa }}</span><span>{{ p.haa }}</span><span>{{ p.vra }}</span><span>{{ p.hra }}</span></div>
-          </sc-for>
-        </div></div></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:20px">
-          <sc-for list="{{ xScatters }}" as="sc" hint-placeholder-count="4">
-            <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="font:500 11px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ sc.title }}</span><span style="font:400 11px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ sc.unit }}</span></div>
-              <div style="display:flex;gap:6px 14px;flex-wrap:wrap"><sc-for list="{{ xTypes }}" as="p"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.82)"><span style="width:9px;height:9px;border-radius:50%;background:{{ p.c }}"></span>{{ p.name }}</span></sc-for></div>
-              <div style="padding:0 0 18px 34px">
-                <div style="position:relative;aspect-ratio:1;width:100%;border:1px solid rgba(91,103,112,.55);background:rgba(91,103,112,.14)">
-                  <sc-for list="{{ sc.xt }}" as="k"><div style="position:absolute;left:{{ k.l }};top:0;bottom:0;border-left:1px {{ k.ls }} {{ k.lc }}"></div></sc-for>
-                  <sc-for list="{{ sc.yt }}" as="k"><div style="position:absolute;top:{{ k.t }};left:0;right:0;border-top:1px {{ k.ls }} {{ k.lc }}"></div></sc-for>
-                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
-                    <sc-for list="{{ sc.pts }}" as="p"><path d="{{ p.path }}" fill="none" stroke="{{ p.c }}" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
-                  </svg>
-                  <sc-for list="{{ sc.pts }}" as="p"><div style="position:absolute;left:{{ p.mx }};top:{{ p.my }};width:{{ p.sz }};height:{{ p.sz }};margin:{{ p.mg }};border-radius:50%;background:{{ p.c }};border:2px solid #FFFFFF;box-shadow:0 0 0 2px #000000"></div></sc-for>
-                  <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none"><sc-for list="{{ sc.pts }}" as="p"><path d="{{ p.lead }}" fill="none" stroke="{{ p.c }}" stroke-width="1.25" vector-effect="non-scaling-stroke"></path></sc-for></svg>
-                  <sc-for list="{{ sc.pts }}" as="p"><sc-if value="{{ p.lbl }}"><span style="position:absolute;left:{{ p.ll }};top:{{ p.lt2 }};transform:{{ p.lt }};font:600 11px 'Barlow',sans-serif;color:#FFFFFF;background:#000000;padding:2px 6px;border:1px solid {{ p.c }};border-left-width:3px;box-shadow:0 1px 4px rgba(0,0,0,.6);white-space:nowrap;pointer-events:none;z-index:2">{{ p.lbl }}</span></sc-if></sc-for>
-                  <sc-for list="{{ sc.xt }}" as="k"><span style="position:absolute;left:{{ k.l }};bottom:-16px;transform:translateX(-50%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ k.label }}</span></sc-for>
-                  <sc-for list="{{ sc.yt }}" as="k"><span style="position:absolute;top:{{ k.t }};left:-6px;transform:translate(-100%,-50%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ k.label }}</span></sc-for>
-                </div>
-              </div>
-            </div>
-          </sc-for>
-        </div>
-        <sc-for list="{{ xZones }}" as="z" hint-placeholder-count="3">
-          <div style="background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55);padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ z.c }}"></span>{{ z.name }}</span><span style="font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ z.n }}</span></div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px">
-              <sc-for list="{{ z.panels }}" as="g">
-                <div style="display:flex;flex-direction:column;gap:8px">
-                  <div style="display:flex;justify-content:space-between;gap:8px"><span style="font:500 11px 'Barlow',sans-serif;color:rgba(255,255,255,.62);letter-spacing:.06em">{{ g.title }}</span><span style="font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">{{ g.n }}</span></div>
-                  <div style="padding:0 0 16px 18px">
-                    <div style="position:relative;aspect-ratio:5/6;background:rgba(91,103,112,.14);border:1px solid rgba(91,103,112,.55)">
-                      <svg viewBox="0 0 100 120" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
-                        <sc-for list="{{ g.heat }}" as="hc"><rect x="{{ hc.x }}" y="{{ hc.y }}" width="{{ hc.w }}" height="{{ hc.h }}" stroke="#000000" stroke-width=".4" fill="{{ hc.c }}" fill-opacity="{{ hc.o }}"></rect></sc-for>
-                        <sc-for list="{{ g.dots }}" as="s"><path d="{{ s.path }}" fill="none" stroke="{{ s.c }}" stroke-opacity=".9" stroke-width="4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></sc-for>
-                      </svg>
-                      <div style="position:absolute;left:{{ xZoneBox.l }};width:{{ xZoneBox.w }};top:{{ xZoneBox.t }};height:{{ xZoneBox.h }};border:1.5px solid #FFFFFF"></div>
-                      <span style="position:absolute;left:0;bottom:-15px;font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">-2.5</span>
-                      <span style="position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">0</span>
-                      <span style="position:absolute;right:0;bottom:-15px;font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">2.5</span>
-                      <span style="position:absolute;top:0;left:-5px;transform:translateX(-100%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">3</span>
-                      <span style="position:absolute;top:50%;left:-5px;transform:translate(-100%,-50%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">0</span>
-                      <span style="position:absolute;bottom:0;left:-5px;transform:translateX(-100%);font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">-3</span>
-                    </div>
-                  </div>
-                  <div style="display:flex;flex-direction:column;gap:4px">
-                    <sc-for list="{{ g.legend }}" as="lg"><span style="display:flex;align-items:center;gap:6px;font:400 10px 'Barlow',sans-serif;color:rgba(255,255,255,.62)"><span style="width:8px;height:8px;border-radius:50%;background:{{ lg.c }};flex:none"></span>{{ lg.label }}</span></sc-for>
-                  </div>
-                </div>
-              </sc-for>
-            </div>
-          </div>
-        </sc-for>
-        </div>
-    </sc-if>
-  </section>
-  </sc-if>
-
   <footer style="border-top:3px solid #E10600;padding-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font:400 12px 'Barlow',sans-serif;color:rgba(255,255,255,.62)">
     <span>VeloU · {{ name }}</span>
   </footer>
@@ -942,7 +817,6 @@ html[data-measuring] .vm-sec{display:flex !important;border-top:1px solid rgba(9
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;showNarrative&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;highlightFlags&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;refreshMinutes&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[0,1,5,15],&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;dataTabLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;In-Season&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data tab&quot;}}">
 const SHEET_ID = 'athletes';
-const EXTRA_ID = 'inseason';
 const nKey = s => String(s ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
 let SEQ = 0;
 const C = { ink: '#FFFFFF', muted: 'rgba(255,255,255,.62)', indigo: '#E10600', green: '#88E0C6', orange: '#FFFFFF', flag: '#FFFFFF', blue: '#56B7E6', teal: '#56B7E6', yellow: '#56B7E6', lightblue: '#56B7E6' };
@@ -1179,7 +1053,7 @@ function installPlanSync() {
 }
 
 class Component extends DCLogic {
-  state = { tab: (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], modal: null, plansReady: false, sub: (() => { try { const k = localStorage.getItem('velou.ad.sub'); return ['build', 'map', 'notes'].includes(k) ? k : 'build'; } catch (x) { return 'build'; } })(), me: '', d: null, status: 'loading', updated: null };
+  state = { tab: (typeof localStorage !== 'undefined' && ['eval', 'prog', 'pitch'].includes(localStorage.getItem('velou.ad.tab')) && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], modal: null, plansReady: false, sub: (() => { try { const k = localStorage.getItem('velou.ad.sub'); return ['build', 'map', 'notes', 'athlete'].includes(k) ? k : 'build'; } catch (x) { return 'build'; } })(), me: '', d: null, status: 'loading', updated: null };
 
   componentDidMount() {
     this.onBeforePrint = () => this.sizePage();
@@ -1189,7 +1063,7 @@ class Component extends DCLogic {
     this.loadPlans();
     this.loadLibrary();
     this.loadMe();
-    this.onGoto = e => { const k = e && e.detail; if (['build', 'map', 'notes'].includes(k)) { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k, tab: 'prog' }); } };
+    this.onGoto = e => { const k = e && e.detail; if (['build', 'map', 'notes', 'athlete'].includes(k)) { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k, tab: 'prog' }); } };
     window.addEventListener('velou-goto', this.onGoto);
     this.onKey = e => { if (e.key === 'Escape' && this.state.modal) this.setState({ modal: null }); };
     window.addEventListener('keydown', this.onKey);
@@ -1362,8 +1236,6 @@ class Component extends DCLogic {
       this.q(null, `select A,C,J,M,P,W,X,Y,Z,AB,BN,BP,BR,BS,AC,N,O where ${nmWhere}`, TRACKMAN_ID, 90000),
       this.q(null, `select Q,S,T,U where ${nmWhere}`, TRACKMAN_ID, 90000).catch(() => null)
     ]).then(([a, b]) => a ? a.map((r, i) => r.concat(b && b[i] ? b[i] : [null, null, null, null])) : null).catch(() => null);
-    this.setState({ xLoading: true });
-    this.q(null, `select * where ${nmWhere}`, EXTRA_ID, 90000).then(x => { if (name === this.state.athlete) this.setState({ x, xLoading: false, xErr: false }); }).catch(() => { if (name === this.state.athlete) this.setState({ xLoading: false, xErr: true }); });
     const res = await Promise.all(TABS.map(([, t]) => this.q(t, where).catch(() => null)));
     if (name !== this.state.athlete) return;
     if (res.every(r => r == null)) { this.setState({ status: 'error' }); return; }
@@ -1375,126 +1247,6 @@ class Component extends DCLogic {
     this.setState(s => ({ d: { ...s.d, tm: tm || [] }, tmLoading: false }));
   }
 
-  extraVals() {
-    const label = this.props.dataTabLabel ?? 'In-Season';
-    const xr = this.state.xRange || 'All';
-    const xc0 = this.state.x && this.state.x.cols ? this.state.x.cols.findIndex(l => /^gamedate$/i.test(String(l || '').trim())) : -1;
-    const years = xc0 < 0 ? [] : [...new Set(this.state.x.map(r => { const d = pD(r[xc0]); return d ? String(d.getFullYear()) : null; }).filter(Boolean))].sort((a, b) => b - a);
-    const xRangeOpts = ['All', ...years, '30 days', 'Last session'].map(r => ({ label: r === 'Last session' ? 'Last game' : r === 'All' ? 'All seasons' : r, onClick: () => this.setState({ xRange: r }), bg: xr === r ? '#E10600' : 'transparent', c: xr === r ? '#FFFFFF' : 'rgba(255,255,255,.82)' }));
-    const base = { xTitle: label, xRangeOpts, xHas: false, xEmpty: true, xSplits: [], xSideOpts: [], xCounts: [], xCountTitle: '', xVelo: [], xTypes: [], xScatters: [], xZones: [], xZoneBox: { l: '33%', w: '33%', t: '33%', h: '33%' }, xMeta: '' };
-    const x = this.state.x;
-    if (!x) return { ...base, xMeta: this.state.xLoading ? 'Loading game data…' : '', xEmptyMsg: this.state.xErr ? 'Could not load the in-season sheet. Make sure it is shared as "Anyone with the link can view".' : 'Loading game data…' };
-    const k = (x.cols || []).map(l => String(l || '').trim().toLowerCase());
-    const I = n => k.indexOf(n.toLowerCase());
-    const c = { d: I('gameDate'), t: I('pitchTypeFull'), bh: I('batterHand'), v: I('releaseVelocity'), v2: I('Vel'), sp: I('Spin'), sd: I('SpinDir'), ivb: I('IndVertBrk'), hb: I('HorzBrk'), vaa: I('VertApprAngle'), haa: I('HorzApprAngle'), vra: I('VertRelAngle'), hra: I('HorzRelAngle'), ext: I('Extension'), rh: I('RelHt'), x: I('x'), y: I('y'), st: I('Strike Count'), sl: I('Strike Looking Count'), sw: I('Swing Count'), wh: I('Whiff Count'), iz: I('IZ'), xw: I('xWOBA'), xi: I('xISO'), cs: I('Count Situation'), gid: I('gameId'), ev: I('exitVelocity'), ev2: I('ExitVel'), res: I('pitchResult'), cnt: I('count') };
-    const g = (r, i) => i < 0 ? null : num(r[i]);
-    let all = x.map(r => ({ d: pD(r[c.d]), t: String(r[c.t] ?? '').trim(), bh: String(r[c.bh] ?? '').trim().toUpperCase(), v: g(r, c.v) ?? g(r, c.v2), sp: g(r, c.sp), sd: g(r, c.sd), ivb: g(r, c.ivb), hb: g(r, c.hb), vaa: g(r, c.vaa), haa: g(r, c.haa), vra: g(r, c.vra), hra: g(r, c.hra), ext: g(r, c.ext), rh: g(r, c.rh), x: g(r, c.x), y: g(r, c.y), st: g(r, c.st) || 0, sl: g(r, c.sl) || 0, sw: g(r, c.sw) || 0, wh: g(r, c.wh) || 0, iz: g(r, c.iz), xw: g(r, c.xw), xi: g(r, c.xi), cs: String(r[c.cs] ?? '').trim().toLowerCase(), gid: r[c.gid], ev: g(r, c.ev) ?? g(r, c.ev2), res: String(r[c.res] ?? ''), cnt: String(r[c.cnt] ?? '').trim() }));
-    if (!all.length) return { ...base, xEmptyMsg: 'No in-season game data found for this athlete.' };
-    const ds = all.map(r => r.d).filter(Boolean);
-    if (/^\d{4}$/.test(xr)) all = all.filter(r => r.d && r.d.getFullYear() === +xr);
-    else if (ds.length && xr !== 'All') { const mx = new Date(Math.max(...ds)); const mn = xr === 'Season' ? new Date(mx.getFullYear(), 0, 1) : xr === '90 days' ? new Date(+mx - 90 * 864e5) : xr === '30 days' ? new Date(+mx - 30 * 864e5) : new Date(mx.getFullYear(), mx.getMonth(), mx.getDate()); all = all.filter(r => r.d && r.d >= mn); }
-    const rows = all.filter(r => r.t && !/^(null|undefined|other|unknown)$/i.test(r.t));
-    if (!rows.length) return { ...base, xEmptyMsg: 'No pitches in this date range.' };
-    const COL = { 'Four Seamer': '#E10600', 'Two Seamer': '#FF8A85', Sinker: '#FF8A85', Cutter: '#FFFFFF', Slider: '#56B7E6', Sweeper: '#A9DBF3', Curveball: '#88E0C6', 'Knuckle Curve': '#88E0C6', Slurve: '#3E8FB8', Changeup: '#C3F0E3', Splitter: '#B8C0C6', Knuckleball: '#5B6770' };
-    const cnt = {}; rows.forEach(r => cnt[r.t] = (cnt[r.t] || 0) + 1);
-    let ei = 0; const types = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).map(t => ({ name: t, c: COL[t] || EXTRA_COLORS[ei++ % EXTRA_COLORS.length] }));
-    const colOf = Object.fromEntries(types.map(t => [t.name, t.c]));
-    const avg = (rs, f) => { const xs = rs.map(f).filter(v => v != null); return xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null; };
-    const f = (v, dp, suf = '') => v == null ? '—' : (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString('en-US') : v.toFixed(dp)) + suf;
-    const f3 = v => v == null ? '—' : v.toFixed(3).replace(/^0/, '').replace(/^-0/, '-');
-    const pc = (a, b) => b ? f(a / b * 100, 1, '%') : '—';
-    const stat = (rs, total) => { const n = rs.length, vs = rs.map(r => r.v).filter(v => v != null); const sum = key => rs.reduce((a, r) => a + r[key], 0);
-      return { usage: pc(n, total), max: vs.length ? Math.max(...vs).toFixed(1) : '—', avg: f(avg(rs, r => r.v), 1), str: pc(sum('st'), n), sl: pc(sum('sl'), n), wh: pc(sum('wh'), sum('sw')), csw: pc(sum('sl') + sum('wh'), n), xi: f3(avg(rs, r => r.xi)), xw: f3(avg(rs, r => r.xw)) }; };
-    const split = (title, rs) => ({ title, rows: types.filter(t => rs.some(r => r.t === t.name)).map(t => ({ name: t.name, c: t.c, ...stat(rs.filter(r => r.t === t.name), rs.length) })).sort((a, b) => parseFloat(b.usage) - parseFloat(a.usage)), total: stat(rs, rs.length), n: rs.length });
-    const side = this.state.xSide || 'All';
-    const xSideOpts = [['All', 'All hitters'], ['R', 'vs RHH'], ['L', 'vs LHH']].map(([k2, l]) => ({ label: l, onClick: () => this.setState({ xSide: k2 }), bg: side === k2 ? '#E10600' : 'transparent', c: side === k2 ? '#FFFFFF' : 'rgba(255,255,255,.82)' }));
-    const xSplits = [split('USAGE & OUTCOMES · ' + (side === 'R' ? 'VS RIGHT-HANDED HITTERS' : side === 'L' ? 'VS LEFT-HANDED HITTERS' : 'ALL HITTERS'), side === 'All' ? rows : rows.filter(r => r.bh.startsWith(side)))];
-    const sideRows = side === 'All' ? rows : rows.filter(r => r.bh.startsWith(side));
-    const xCountTitle = 'PITCH MIX & OUTCOMES BY COUNT · ' + (side === 'R' ? 'VS RHH' : side === 'L' ? 'VS LHH' : 'ALL HITTERS');
-    const xCounts = [['All Counts', () => true], ['First Pitch', r => r.cnt === '0-0'], ['Ahead', r => r.cs === 'ahead'], ['Even', r => r.cs === 'even'], ['Behind', r => r.cs === 'behind'], ['Two Strikes', r => /-2$/.test(r.cnt)], ['Full', r => r.cs === 'full' || r.cnt === '3-2']]
-      .map(([label, fn]) => [label, sideRows.filter(fn)]).filter(([, rs]) => rs.length).map(([label, rs]) => { const st = stat(rs, rs.length);
-        return { label, n: rs.length.toLocaleString('en-US') + ' pitches', str: st.str, wh: st.wh, csw: st.csw, xw: st.xw,
-          segs: types.map(t => ({ t, v: rs.filter(r => r.t === t.name).length })).filter(o => o.v).map(o => { const p = o.v / rs.length * 100; return { c: o.t.c, w: 'calc(' + p.toFixed(2) + '% - 2px)', lbl: p >= 7 ? Math.round(p) + '%' : '', tip: o.t.name + ' ' + p.toFixed(1) + '%' }; }) }; });
-    const byDay = (rs, agg) => { const m = new Map(); rs.forEach(r => { if (!r.d || r.v == null) return; const kk = +new Date(r.d.getFullYear(), r.d.getMonth(), r.d.getDate()); (m.get(kk) || m.set(kk, []).get(kk)).push(r.v); }); return [...m.entries()].sort((a, b) => a[0] - b[0]).map(([kk, vs]) => ({ d: new Date(kk), v: agg(vs) })); };
-    const vdefs = agg => types.map(t => ({ name: t.name, color: t.c, data: byDay(rows.filter(r => r.t === t.name), agg) })).filter(s => s.data.length);
-    const xVelo = [chart('AVERAGE PITCH VELOCITY BY GAME', vdefs(vs => vs.reduce((a, b) => a + b, 0) / vs.length), v => v.toFixed(1), ' mph', false, true), chart('MAX PITCH VELOCITY BY GAME', vdefs(vs => Math.max(...vs)), v => v.toFixed(1), ' mph', false, true)];
-    const xTypes = types.map(t => { const rs = rows.filter(r => r.t === t.name); return { ...t, spin: f(avg(rs, r => r.sp), 0), sd: f(avg(rs, r => r.sd), 1), ivb: f(avg(rs, r => r.ivb), 1), hb: f(avg(rs, r => r.hb), 1), vaa: f(avg(rs, r => r.vaa), 2), haa: f(avg(rs, r => r.haa), 2), vra: f(avg(rs, r => r.vra), 2), hra: f(avg(rs, r => r.hra), 2) }; });
-    const pctl = (xs, p) => { const s = xs.slice().sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.max(0, Math.round(p * (s.length - 1))))] : null; };
-    const nice = (lo, hi) => { const st = [0.05, 0.1, 0.25, 0.5, 1, 2, 2.5, 5, 10].find(s => (hi - lo) / s <= 5) || 10; return { lo: Math.floor(lo / st) * st, hi: Math.ceil(hi / st) * st, st }; };
-    const scatter = (title, unit, fx, fy, rng, filt = () => true, avgOnly = false) => {
-      const rs = rows.filter(filt).filter(r => fx(r) != null && fy(r) != null);
-      let [xl, xh, yl, yh] = rng || [];
-      if (avgOnly) { const ms = types.map(t => { const tr = rs.filter(r => r.t === t.name); return tr.length ? [avg(tr, fx), avg(tr, fy)] : null; }).filter(Boolean); const mxs = ms.map(m => m[0]), mys = ms.map(m => m[1]); const px = (Math.max(...mxs) - Math.min(...mxs)) * 0.25 || 0.1, py = (Math.max(...mys) - Math.min(...mys)) * 0.25 || 0.1; const a = nice(Math.min(...mxs) - px, Math.max(...mxs) + px), b = nice(Math.min(...mys) - py, Math.max(...mys) + py); [xl, xh, yl, yh] = [a.lo, a.hi, b.lo, b.hi]; }
-      else if (!rng) { const xs = rs.map(fx), ys = rs.map(fy); const a = nice(pctl(xs, .02) ?? 0, pctl(xs, .98) ?? 1), b = nice(pctl(ys, .02) ?? 0, pctl(ys, .98) ?? 1); [xl, xh, yl, yh] = [a.lo, a.hi === a.lo ? a.lo + a.st : a.hi, b.lo, b.hi === b.lo ? b.lo + b.st : b.hi]; }
-      const X = v => clamp((v - xl) / (xh - xl) * 100), Y = v => clamp(100 - (v - yl) / (yh - yl) * 100);
-      const tk = (lo, hi) => { const st = nice(lo, hi).st; const out = []; for (let v = Math.ceil(lo / st) * st; v <= hi + 1e-9; v += st) out.push(Math.round(v * 1000) / 1000); return out; };
-      const fl = v => String(Math.round(v * 100) / 100);
-      return { title, unit,
-        xt: tk(xl, xh).map(v => ({ l: X(v) + '%', label: fl(v), ls: v === 0 ? 'solid' : 'dashed', lc: v === 0 ? 'rgba(91,103,112,.55)' : 'rgba(91,103,112,.32)' })),
-        yt: tk(yl, yh).map(v => ({ t: Y(v) + '%', label: fl(v), ls: v === 0 ? 'solid' : 'dashed', lc: v === 0 ? 'rgba(91,103,112,.55)' : 'rgba(91,103,112,.32)' })),
-        pts: (() => {
-          const W = 460, base = types.map(t => { const tr = rs.filter(r => r.t === t.name); if (!tr.length) return null; const ax = avg(tr, fx), ay = avg(tr, fy); return { t, tr, ax, ay, px: X(ax), py: Y(ay) }; }).filter(Boolean);
-          const boxes = base.map(p => ({ x: p.px * W / 100 - 11, y: p.py * W / 100 - 11, w: 22, h: 22 }));
-          const hit = (r, list) => list.some(q => r.x < q.x + q.w + 3 && r.x + r.w + 3 > q.x && r.y < q.y + q.h + 3 && r.y + r.h + 3 > q.y);
-          const placed = [];
-          return base.map(p => {
-            const lbl = avgOnly ? p.ax.toFixed(2) + ', ' + p.ay.toFixed(2) : p.ax.toFixed(1) + ', ' + p.ay.toFixed(1);
-            const w = lbl.length * 7 + 16, hh = 22, cx = p.px * W / 100, cy = p.py * W / 100;
-            let best = null;
-            for (const d of [16, 32, 52, 76, 104]) {
-              for (const [ux, uy] of [[1, 0], [-1, 0], [0, -1], [0, 1], [1, -1], [-1, -1], [1, 1], [-1, 1]]) {
-                const lx = cx + ux * (d + w / 2) - w / 2 + (ux === 0 ? 0 : 0), ly = cy + uy * (d + hh / 2) - hh / 2;
-                const r = { x: ux === 0 ? cx - w / 2 : ux > 0 ? cx + d : cx - d - w, y: uy === 0 ? cy - hh / 2 : uy > 0 ? cy + d : cy - d - hh, w, h: hh };
-                if (r.x < 0 || r.y < 0 || r.x + r.w > W || r.y + r.h > W) continue;
-                if (!hit(r, placed) && !hit(r, boxes)) { best = r; break; }
-              }
-              if (best) break;
-            }
-            if (!best) best = { x: Math.min(W - w, Math.max(0, cx + 16)), y: Math.min(W - hh, Math.max(0, cy - hh / 2)), w, h: hh };
-            placed.push(best);
-            const lcx = best.x + w / 2, lcy = best.y + hh / 2;
-            const ex = Math.max(best.x, Math.min(cx, best.x + w)), ey = Math.max(best.y, Math.min(cy, best.y + hh));
-            return { c: p.t.c, path: avgOnly ? '' : dotPath(p.tr, r => X(fx(r)), r => Y(fy(r))), mx: p.px + '%', my: p.py + '%', sz: avgOnly ? '20px' : '14px', mg: avgOnly ? '-10px 0 0 -10px' : '-7px 0 0 -7px', lbl,
-              ll: (lcx / W * 100) + '%', lt2: (lcy / W * 100) + '%', lt: 'translate(-50%,-50%)',
-              lead: Math.hypot(ex - cx, ey - cy) > 20 ? 'M' + p.px.toFixed(2) + ' ' + p.py.toFixed(2) + 'L' + (ex / W * 100).toFixed(2) + ' ' + (ey / W * 100).toFixed(2) : '' };
-          });
-        })() };
-    };
-    const xScatters = [
-      scatter('MOVEMENT PROFILE BY PITCH TYPE', 'HB, IVB (in)', r => r.hb, r => r.ivb, [-25, 25, -25, 25]),
-      scatter('APPROACH ANGLE BY PITCH TYPE (STRIKES)', 'HAA, VAA (°)', r => r.haa, r => r.vaa, [-5, 5, -12, -2], r => r.st > 0),
-      scatter('AVG RELEASE CHARACTERISTICS BY PITCH TYPE', 'Extension, Release Height (ft)', r => r.ext, r => r.rh, null, undefined, true),
-      scatter('AVG RELEASE ANGLES BY PITCH TYPE (STRIKES)', 'HRA, VRA (°)', r => r.hra, r => r.vra, null, r => r.st > 0, true)
-    ];
-    const ZX = v => clamp((v + 2.5) / 5 * 100), ZY = v => clamp((3 - v) / 6 * 120, 0, 120);
-    const izr = rows.filter(r => r.iz === 1 && r.x != null && r.y != null);
-    let zb = [-0.83, 0.83, -1, 1];
-    if (izr.length > 30) zb = [pctl(izr.map(r => r.x), .01), pctl(izr.map(r => r.x), .99), pctl(izr.map(r => r.y), .01), pctl(izr.map(r => r.y), .99)];
-    const G = (() => { const cw = (zb[1] - zb[0]) / 3, ch = (zb[3] - zb[2]) / 3; const x0 = zb[0] - Math.ceil((zb[0] + 2.5) / cw - 1e-9) * cw, y0 = zb[3] + Math.ceil((3 - zb[3]) / ch - 1e-9) * ch; return { cw, ch, x0, y0, nc: Math.ceil((2.5 - x0) / cw - 1e-9), nr: Math.ceil((y0 + 3) / ch - 1e-9) }; })();
-    const cellRect = i => { const ci = i % G.nc, cj = Math.floor(i / G.nc); const lx = Math.max(-2.5, G.x0 + ci * G.cw), rx = Math.min(2.5, G.x0 + (ci + 1) * G.cw), ty = Math.min(3, G.y0 - cj * G.ch), by = Math.max(-3, G.y0 - (cj + 1) * G.ch); return { x: ZX(lx).toFixed(2), y: ZY(ty).toFixed(2), w: Math.max(0, ZX(rx) - ZX(lx)).toFixed(2), h: Math.max(0, ZY(by) - ZY(ty)).toFixed(2) }; };
-    const accum = (rs, val) => { const n = G.nc * G.nr, ws = new Array(n).fill(0), vs = new Array(n).fill(0);
-      rs.forEach(r => { if (r.x == null || r.y == null) return; const cx = Math.floor((r.x - G.x0) / G.cw), cy = Math.floor((G.y0 - r.y) / G.ch);
-        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) { const gx = cx + dx, gy = cy + dy; if (gx < 0 || gy < 0 || gx >= G.nc || gy >= G.nr) continue; const w = (dx === 0 && dy === 0) ? 1 : (dx && dy ? 0.25 : 0.5); ws[gy * G.nc + gx] += w; vs[gy * G.nc + gx] += w * (val ? val(r) : 1); } });
-      return { ws, vs }; };
-    const heat = rs => { const { ws } = accum(rs); const mx = Math.max(...ws) || 1;
-      return ws.map((v, i) => v ? { ...cellRect(i), o: (0.1 + 0.8 * v / mx).toFixed(2), c: v / mx > 0.66 ? '#E10600' : v / mx > 0.33 ? '#F5342B' : '#FF8A85' } : null).filter(Boolean); };
-    const dmgHeat = rs => { const { ws, vs } = accum(rs, r => r.xw); const wmax = Math.max(...ws) || 1;
-      return ws.map((w, i) => { if (w < 1) return null; const v = vs[i] / w; return { ...cellRect(i), o: (0.25 + 0.6 * Math.min(1, w / wmax * 2)).toFixed(2), c: v >= 0.5 ? '#E10600' : v >= 0.4 ? '#F5342B' : v >= 0.3 ? '#FF8A85' : '#56B7E6' }; }).filter(Boolean); };
-    const xZoneBox = { l: ZX(zb[0]) + '%', w: (ZX(zb[1]) - ZX(zb[0])) + '%', t: (ZY(zb[3]) / 1.2) + '%', h: ((ZY(zb[2]) - ZY(zb[3])) / 1.2) + '%' };
-    const dots = (rs, cfn) => { const grp = {}; rs.forEach(r => { const cc = cfn(r); (grp[cc] = grp[cc] || []).push(r); }); return Object.entries(grp).map(([cc, g2]) => ({ c: cc, path: dotPath(g2, r => r.x == null ? null : ZX(r.x), r => r.y == null ? null : ZY(r.y)) })); };
-    const HEAT_LEG = w => [{ c: '#FF8A85', label: 'Few ' + w }, { c: '#F5342B', label: 'Some' }, { c: '#E10600', label: 'Most ' + w }];
-    const xZones = types.map(t => { const rs = rows.filter(r => r.t === t.name && r.x != null && r.y != null); if (!rs.length) return null;
-      const wh = rs.filter(r => r.wh > 0), bip = rs.filter(r => r.xw != null && (r.ev != null || /in ?play/i.test(r.res)));
-      return { name: t.name, c: t.c, n: rs.length.toLocaleString('en-US') + ' pitches', panels: [
-        { title: 'LOCATION', n: rs.length.toLocaleString('en-US'), heat: heat(rs), dots: [], legend: HEAT_LEG('pitches') },
-        { title: 'WHIFFS', n: wh.length.toLocaleString('en-US'), heat: heat(wh), dots: dots(wh, () => t.c), legend: [{ c: t.c, label: 'Swing and miss' }, ...HEAT_LEG('whiffs')] },
-        { title: 'DAMAGE', n: bip.length.toLocaleString('en-US') + ' in play', heat: dmgHeat(bip), dots: dots(bip, r => r.xw >= 0.5 ? '#E10600' : r.xw >= 0.35 ? '#FF8A85' : 'rgba(255,255,255,.82)'), legend: [{ c: '#E10600', label: 'Dot: hard contact (xwOBA .500+)' }, { c: '#FF8A85', label: 'Dot: average (.350–.499)' }, { c: 'rgba(255,255,255,.82)', label: 'Dot: weak contact (under .350)' }, { c: '#E10600', label: 'Zone avg xwOBA .500+' }, { c: '#F5342B', label: 'Zone avg .400–.499' }, { c: '#FF8A85', label: 'Zone avg .300–.399' }, { c: '#56B7E6', label: 'Zone avg under .300' }] }
-      ] }; }).filter(Boolean);
-    const dd = rows.map(r => r.d).filter(Boolean).sort((a, b) => a - b);
-    const games = new Set(rows.map(r => r.gid ?? (r.d && r.d.toDateString()))).size;
-    return { ...base, xHas: true, xEmpty: false, xSplits, xSideOpts, xCounts, xCountTitle, xVelo, xTypes, xScatters, xZones, xZoneBox,
-      xMeta: rows.length.toLocaleString('en-US') + ' pitches · ' + games + (games === 1 ? ' game' : ' games') + (dd.length ? ' · ' + fD(dd[0]) + ' – ' + fD(dd[dd.length - 1]) : '') };
-  }
 
   renderVals() {
     const narrative = this.props.showNarrative ?? true;
@@ -1711,7 +1463,7 @@ class Component extends DCLogic {
       refresh: () => this.load(),
       printPdf: () => {
         const prev = document.title;
-        document.title = 'Athlete Dashboard - ' + this.state.athlete + (this.state.tab === 'pitch' ? ' - Pitching' : this.state.tab === 'data' ? ' - In-Season' : '');
+        document.title = 'Athlete Dashboard - ' + this.state.athlete + (this.state.tab === 'pitch' ? ' - Pitching' : '');
         this.sizePage();
         window.print();
         setTimeout(() => { document.title = prev; }, 500);
@@ -1806,13 +1558,12 @@ class Component extends DCLogic {
       screen,
       bodyTests, bodyJoints: Object.values(joints), screenSummary,
       ...this.calVals(),
-      isEval: tab !== 'pitch' && tab !== 'data' && tab !== 'prog', isPitch: tab === 'pitch', isData: tab === 'data', isProg: tab === 'prog',
+      isEval: tab !== 'pitch' && tab !== 'prog', isPitch: tab === 'pitch', isProg: tab === 'prog',
       libStatus: (this.state.libStatus || '') + (this.state.plansErr ? ' Saved plans are not syncing yet, so changes stay in this browser only.' : ''), hasLib: !!(this.state.libStatus || this.state.plansErr), plansReady: !!this.state.plansReady,
-      subTabs: [['build', 'Plan Build'], ['map', 'Training Map'], ['notes', 'Notes']].map(([k, label]) => ({ label, onClick: () => { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k }); }, c: this.state.sub === k ? '#FFFFFF' : 'rgba(255,255,255,.62)', bd: this.state.sub === k ? '#56B7E6' : 'transparent' })),
-      subBuild: this.state.sub === 'build', subMap: this.state.sub === 'map', subNotes: this.state.sub === 'notes',
+      subTabs: [['build', 'Plan Build'], ['map', 'Training Map'], ['athlete', "Athlete's View"], ['notes', 'Notes']].map(([k, label]) => ({ label, onClick: () => { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k }); }, c: this.state.sub === k ? '#FFFFFF' : 'rgba(255,255,255,.62)', bd: this.state.sub === k ? '#56B7E6' : 'transparent' })),
+      subBuild: this.state.sub === 'build', subMap: this.state.sub === 'map', subNotes: this.state.sub === 'notes', subAthlete: this.state.sub === 'athlete',
       ...this.planVals(d, prog, main, armScore, injury, tabFact, cmjFact, v, num),
-      tabs: [tabBtn('eval', 'Dashboard'), tabBtn('prog', 'Programming'), tabBtn('pitch', 'Pitching Development'), tabBtn('data', this.props.dataTabLabel ?? 'In-Season')],
-      ...this.extraVals(),
+      tabs: [tabBtn('eval', 'Dashboard'), tabBtn('prog', 'Programming'), tabBtn('pitch', 'Pitching Development')],
       rangeOpts,
       hasArsenal: pitches.length > 0, noArsenal: this.state.d != null && !this.state.tmLoading && pitches.length === 0,
       tmLoading: !!this.state.tmLoading, pitches, veloChart, ...tunnel, locGroups: ars.locGroups,
