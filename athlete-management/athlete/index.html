@@ -228,9 +228,11 @@ html[data-app] .vdet>.vdetx+div,html[data-app] .vdet>button:not(.vdetx){order:1}
       </sc-for>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><polyline points="{{ trend.line }}" fill="none" stroke="#56B7E6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="filter:drop-shadow(0 0 4px rgba(86,183,230,.6))"></polyline></svg>
       <sc-for list="{{ trend.dots }}" as="p">
-        <span class="vtdot" style="position:absolute;left:{{ p.l }};top:{{ p.t }};background:{{ p.fill }}"></span>
-        <span class="vtlab" style="position:absolute;left:{{ p.l }};top:{{ p.t }};transform:translate(-50%,-175%)">{{ p.label }}</span>
-        <span class="vtx" style="position:absolute;left:{{ p.l }};top:100%;transform:translateX(-50%);margin-top:10px">{{ p.name }}</span>
+        <span class="vtdot" style="position:absolute;display:{{ p.dd }};width:{{ p.sz }};height:{{ p.sz }};left:{{ p.l }};top:{{ p.t }};background:{{ p.fill }}"></span>
+        <span class="vtlab" style="position:absolute;display:{{ p.ld }};left:{{ p.l }};top:{{ p.t }};transform:translate(-50%,-175%)">{{ p.label }}</span>
+      </sc-for>
+      <sc-for list="{{ trend.xt }}" as="k">
+        <span class="vtx" style="position:absolute;left:{{ k.l }};top:100%;transform:translateX(-50%);margin-top:10px">{{ k.label }}</span>
       </sc-for>
     </div>
   </section>
@@ -1105,6 +1107,45 @@ function buildArsenal(rows) {
 const SCREEN = [[14, 'Right Ankle Dorsiflexion'], [15, 'Left Ankle Dorsiflexion'], [16, 'Right Hip External Rotation'], [17, 'Right Hip Internal Rotation'], [18, 'Left Hip External Rotation'], [19, 'Left Hip Internal Rotation'], [20, 'General Hip Bias'], [21, 'Shoulder Flexion'], [22, 'Shoulder External Rotation'], [23, 'Shoulder Internal Rotation'], [24, 'Cervical Rotation'], [25, 'Bodyweight Squat'], [26, 'Lunge & Reach'], [27, 'Lunge & Rotate'], [28, 'Back Bridge']];
 const TABS = [['main', 'Athlete Mainframe'], ['cmp', 'Athlete Score Comparison'], ['prog', 'Program Board'], ['evalr', 'VeloU On-Site Athlete Evaluation'], ['cmj', 'CMJ'], ['imtp', 'IMTP'], ['sj', 'Squat Jump'], ['cmjr', 'CMJR'], ['ppu', 'Plyo Pushup'], ['ei', 'Energy Interference'], ['et', 'Energy Transference']];
 
+// The Total Energy progress chart in the athlete's app: the scores saved in the database over time (oldest first). The last dot
+// is always the number on the hexagons. With no saved history the chart is the first and latest score from the sheet.
+function buildTrend(rows, first, now, today, green) {
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const day = s => Date.parse(s + 'T00:00:00Z') / 864e5, at = t => new Date(t * 864e5);
+  let pts = (rows || []).filter(r => r && r.total != null && /^\d{4}-\d{2}-\d{2}/.test(String(r.on))).map(r => ({ t: day(String(r.on).slice(0, 10)), v: +r.total }))
+    .filter(p => isFinite(p.t) && isFinite(p.v)).sort((a, b) => a.t - b.t);
+  if (pts.length && now != null) {
+    const last = pts[pts.length - 1];
+    if (Math.abs(last.v - now) > 2) pts.push({ t: Math.max(day(today), last.t), v: now }); else last.v = now;
+  }
+  const dated = pts.length >= 2;
+  if (!dated) pts = [['First', first], ['Latest', now]].filter(p => p[1] != null).map((p, i) => ({ t: i, v: p[1], name: p[0] }));
+  if (!pts.length) return { show: false };
+  const n = pts.length, t0 = pts[0].t, span = pts[n - 1].t - t0, vals = pts.map(p => p.v);
+  let lo = Math.floor(Math.min(...vals) - 2), hi = Math.ceil(Math.max(...vals) + 2);
+  if (hi - lo < 6) { const m = (hi + lo) / 2; lo = Math.floor(m - 3); hi = Math.ceil(m + 3); }
+  const X = t => span > 0 ? 6 + 88 * (t - t0) / span : 50, Y = y => (1 - (y - lo) / (hi - lo)) * 100;
+  // the dates under the line: the first and last day for a short history, otherwise the start of a month (every 2, 3 or 6 months when it is long)
+  let xt;
+  if (!dated) xt = pts.map(p => ({ l: X(p.t).toFixed(2) + '%', label: p.name }));
+  else if (span < 120) xt = [t0, t0 + span].map(t => ({ l: X(t).toFixed(2) + '%', label: MON[at(t).getUTCMonth()] + ' ' + at(t).getUTCDate() }));
+  else {
+    const d0 = at(t0), months = [];
+    for (let m = d0.getUTCMonth() + 1; ; m++) { const t = Date.UTC(d0.getUTCFullYear() + Math.floor(m / 12), m % 12, 1) / 864e5; if (t > t0 + span) break; months.push(t); }
+    const step = [1, 2, 3, 4, 6, 12].find(s => Math.ceil(months.length / s) <= 5) || 12;
+    xt = months.filter((t, i) => i % step === 0).map((t, i) => ({ l: X(t).toFixed(2) + '%', label: MON[at(t).getUTCMonth()] + (i === 0 || at(t).getUTCMonth() === 0 ? " '" + String(at(t).getUTCFullYear()).slice(2) : '') }));
+  }
+  const dots = pts.map((p, i) => { const big = i === 0 || i === n - 1; return { l: X(p.t).toFixed(2) + '%', t: Y(p.v).toFixed(2) + '%', label: p.v.toFixed(1), ld: big ? 'block' : 'none', dd: big || n <= 24 ? 'block' : 'none', sz: big ? '11px' : '7px', fill: i === n - 1 ? '#56B7E6' : '#000000' }; });
+  const chg = n > 1 ? pts[n - 1].v - pts[0].v : null;
+  const since = dated ? MON[at(t0).getUTCMonth()] + " '" + String(at(t0).getUTCFullYear()).slice(2) : 'first';
+  return { show: true, now: pts[n - 1].v.toFixed(1),
+    sub: dated ? 'Since ' + LONG[at(t0).getUTCMonth()] + ' ' + at(t0).getUTCFullYear() : n > 1 ? 'Since your first evaluation' : 'Your score so far',
+    delta: chg == null ? '' : (chg >= 0 ? '▲ ' : '▼ ') + Math.abs(chg).toFixed(1) + ' since ' + since, dc: chg != null && chg < 0 ? '#E10600' : green,
+    line: pts.map(p => X(p.t).toFixed(2) + ',' + Y(p.v).toFixed(2)).join(' '), dots, xt,
+    ticks: [lo, (lo + hi) / 2, hi].map(y => ({ t: Y(y).toFixed(2) + '%', label: String(Math.round(y)) })) };
+}
+
 // Plan storage: the programming tool keeps its plan in localStorage; mirror those keys to the database.
 const APPMODE = (() => { try { return new URLSearchParams(location.search).get('app') === '1'; } catch (x) { return false; } })();
 const PLAN_SYNC = { id: null, name: null, timers: {}, installed: false, raw: { set: Storage.prototype.setItem, remove: Storage.prototype.removeItem } };
@@ -1140,6 +1181,7 @@ class Component extends DCLogic {
     this.loadAthletes();
     this.load();
     this.loadPlans();
+    this.loadScores();
     this.loadLibrary();
     this.loadMe();
     this.onGoto = e => { const k = e && e.detail; if (['build', 'map', 'notes', 'athlete', 'app'].includes(k)) { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k, tab: 'prog' }); } };
@@ -1251,6 +1293,17 @@ class Component extends DCLogic {
       for (const k of toPush) planChanged(k, ls.getItem(k));
       this.setState({ plansReady: true, plansErr: !j.store });
     } catch (e) { if (name === this.state.athlete) this.setState({ plansReady: true, plansErr: true }); }
+  }
+  // The athlete's Energy Scores over time (saved in the database) for the progress chart in the athlete's app.
+  async loadScores() {
+    if (!APPMODE) return;
+    const name = this.state.athlete;
+    this.setState({ scores: null });
+    try {
+      const id = await this.athleteIdFor(name);
+      const j = await fetch('/api/v1/athletes/' + encodeURIComponent(id) + '/scores', { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('network'); return r.json(); });
+      if (name === this.state.athlete) this.setState({ scores: j.scores || [] });
+    } catch (e) { if (name === this.state.athlete) this.setState({ scores: [] }); }
   }
   async loadLibrary() {
     const get = t => fetch('/api/v1/library/tab?name=' + encodeURIComponent(t), { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('library'); return r.json(); }).then(j => j.rows.slice(1));
@@ -1527,7 +1580,7 @@ class Component extends DCLogic {
       athleteSel: this.state.athlete,
       selKey: this.state.athlete + ':' + this.state.athletes.length,
       ...(() => {
-        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, plansReady: false, plansErr: false, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadPlans(); }); };
+        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, plansReady: false, plansErr: false, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadPlans(); this.loadScores(); }); };
         const q = (this.state.sq || '').trim().toLowerCase();
         const all = athletes.includes(this.state.athlete) ? athletes : [this.state.athlete, ...athletes];
         const res = (q ? all.filter(a => a.toLowerCase().includes(q)).sort((x, y) => (y.toLowerCase().startsWith(q) - x.toLowerCase().startsWith(q))) : all).slice(0, 60);
@@ -1647,18 +1700,7 @@ class Component extends DCLogic {
       screen,
       bodyTests, bodyJoints: Object.values(joints), screenSummary,
       ...this.calVals(),
-      isEval: APPMODE ? this.state.appScreen === 'dash' : (tab !== 'pitch' && tab !== 'prog'), isPitch: !APPMODE && tab === 'pitch', isProg: !APPMODE && tab === 'prog', appMode: APPMODE, notApp: !APPMODE, trend: (() => {
-        const pts = [['First', num(main[41])], ['Latest', num(main[32])]].filter(p => p[1] != null);
-        if (!pts.length) return { show: false };
-        const vals = pts.map(p => p[1]); let lo = Math.floor(Math.min(...vals) - 2), hi = Math.ceil(Math.max(...vals) + 2); if (hi - lo < 6) { const m = (hi + lo) / 2; lo = Math.floor(m - 3); hi = Math.ceil(m + 3); }
-        const X = i => pts.length === 1 ? 50 : 6 + i * (88 / (pts.length - 1)), Y = y => (1 - (y - lo) / (hi - lo)) * 100;
-        const chg = pts.length > 1 ? pts[pts.length - 1][1] - pts[0][1] : null;
-        return { show: true, now: pts[pts.length - 1][1].toFixed(1), sub: pts.length > 1 ? 'Since your first evaluation' : 'Your score so far',
-          delta: chg == null ? '' : (chg >= 0 ? '▲ ' : '▼ ') + Math.abs(chg).toFixed(1) + ' since first', dc: chg != null && chg < 0 ? '#E10600' : C.green,
-          line: pts.map((p, i) => X(i).toFixed(2) + ',' + Y(p[1]).toFixed(2)).join(' '),
-          dots: pts.map((p, i) => ({ l: X(i).toFixed(2) + '%', t: Y(p[1]).toFixed(2) + '%', label: p[1].toFixed(1), name: p[0], fill: i === pts.length - 1 ? '#56B7E6' : '#000000' })),
-          ticks: [lo, (lo + hi) / 2, hi].map(y => ({ t: Y(y).toFixed(2) + '%', label: String(Math.round(y)) })) };
-      })(),
+      isEval: APPMODE ? this.state.appScreen === 'dash' : (tab !== 'pitch' && tab !== 'prog'), isPitch: !APPMODE && tab === 'pitch', isProg: !APPMODE && tab === 'prog', appMode: APPMODE, notApp: !APPMODE, trend: buildTrend(this.state.scores, num(main[41]), num(main[32]), new Date().toISOString().slice(0, 10), C.green),
       hexHint: APPMODE ? 'Tap a score to see its breakdown' : 'Select a score to see its breakdown', detDisplay: APPMODE ? (this.state.detOpen ? 'flex' : 'none') : 'flex', closeDet: () => this.setState({ detOpen: false }),
       detMark: (() => { try { document.documentElement.setAttribute('data-det', APPMODE && this.state.detOpen ? 'open' : ''); } catch (x) {} return ''; })(),
       appUrl: (() => { const q = new URLSearchParams(); if (this.state.athleteId) q.set('id', this.state.athleteId); q.set('athlete', this.state.athlete || ''); q.set('app', '1'); return location.pathname + '?' + q.toString(); })(),
