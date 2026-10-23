@@ -45,6 +45,12 @@ It is separate from `sheets-proxy.js`, which keeps feeding the Player Report fro
 | POST | `/api/v1/admin/scores/rebuild` | Delete the `rebuilt` score rows and build them again from the tests (snapshots stay) |
 | POST | `/api/v1/athletes/:id/files?kind=&assessment_id=&name=` | Upload a photo, video or report (raw file body, 100 MB max). `kind` is `headshot`, `shirtless`, `mechanics_video`, `trackman_report`, `trackman_video`, `mound_plate_report`, `mocap_report` or `report` |
 | GET | `/api/v1/files/:id` | Download a file (signed-in coaches only) |
+| GET | `/api/v1/athletes/:id/messages?after=&limit=` | The athlete's message thread, oldest first (the last 200 on the first load, then only what is newer than `after`). The answer also carries `unread` and `seen`: `{ messages: [...], unread: { coach, athlete }, seen: { coach, athlete } }` |
+| POST | `/api/v1/athletes/:id/messages` | Write to the athlete: `{ body, att?: { key, type, size, name } }`. With `as: "athlete"` the Athlete App preview writes as the athlete; those messages are marked as tests and never count as unread for the coaches |
+| POST | `/api/v1/athletes/:id/messages/read` | The reader has looked at the thread: `{ reader: "coach" \| "athlete" }` marks what the other side wrote as read |
+| POST | `/api/v1/athletes/:id/messages/upload?name=` | A photo or video for a message (raw file body, 100 MB max, image or video types only); the answer is the `att` to send with the message |
+| DELETE | `/api/v1/athletes/:id/messages?test=1` | Remove the messages the preview sent as the athlete, with their attachments |
+| GET | `/api/v1/messages/:id/file` | The attachment of a message, with byte ranges so videos play and skip on phones (signed-in coaches only for now) |
 | POST | `/api/v1/assessments` | Save an assessment (draft or submitted) with its measurements |
 | GET | `/api/v1/assessments/:id` | One assessment with its measurements |
 | PUT | `/api/v1/assessments/:id` | Update it (measurements are replaced to match) |
@@ -64,6 +70,17 @@ Total Energy Score is more than 2 points away from the newest rebuilt point (som
 score), its numbers are saved as a `snapshot` for that day, and snapshots are never overwritten.
 The scoring constants live in `velou-api.js` next to `energySeries()`; if the Mainframe's formulas change, change them there
 and run `POST /api/v1/admin/scores/rebuild`.
+
+## Messages
+`messages` (migration `migrations/004_messages.sql`) is one thread for each athlete, between the athlete and their coaches: text,
+photos and videos. Attachments live in the R2 bucket under `messages/<athlete id>/`. Each row says who wrote it (`sender` is
+`athlete` or `coach`, with the coach's name), which `channel` carried it (`app` today; `imessage` and `sms` are reserved for the
+text-message bridge), and when each side read it. `GET /api/v1/overview` adds `unread_messages` for each athlete and in the
+counts, which the Athletes page shows as a chip.
+Until athletes sign in for themselves, the athlete's side is the Athlete App preview in a coach's browser. What it sends is saved
+with `is_test = 1`, shows as a test in the thread, never counts as unread for the coaches, and can be cleared from the Messages
+tab. The preview does not mark the coaches' messages as read, because no athlete has seen them. When athlete logins exist, their
+own routes will send and read as the athlete, and a text-message bridge will write rows with `channel = 'imessage'`.
 
 ## Notes
 - Writes only work from https://coachesvelou.com (the Worker checks the `Origin`), so another website cannot post with a coach's login.

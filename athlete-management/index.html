@@ -29,6 +29,7 @@
   <div class="ov-stat"><b id="n-athletes">0</b><span>Athletes</span></div>
   <div class="ov-stat"><b id="n-flagged">0</b><span>Arm score down 10%+</span></div>
   <div class="ov-stat"><b id="n-injured">0</b><span>Injured or rehabbing</span></div>
+  <div class="ov-stat"><b id="n-unread">0</b><span>Unread messages</span></div>
 </div>
 
 <div class="ov-filters">
@@ -91,6 +92,7 @@ function render(data) {
   $('n-athletes').textContent = data.counts.athletes;
   $('n-flagged').textContent = data.counts.flagged;
   $('n-injured').textContent = data.counts.injured;
+  $('n-unread').textContent = data.counts.unread_messages || 0;
   if (!coachesLoaded || $('f-coach').options.length - 1 !== data.coaches.length) {
     const cur = $('f-coach').value;
     $('f-coach').replaceChildren(new Option('All coaches', ''), ...data.coaches.map(c => new Option(c, c)));
@@ -134,6 +136,7 @@ function render(data) {
         if (a.arm_flag) f.title = 'Down ' + a.arm_drop_pct + '% from the previous test (' + a.arm_previous.toFixed(1) + ')';
         chips.append(f);
       }
+      if (a.unread_messages > 0) { const m = el('a', 'tag flag', '✉ ' + a.unread_messages + ' unread'); m.href = nameLink.href + '&tab=msg'; m.title = 'Open the messages'; m.style.textDecoration = 'none'; chips.append(m); }
       if (a.segment && a.segment !== 'on-site') chips.append(el('span', 'tag seg-' + a.segment, SEG_LABEL[a.segment] || a.segment));
       if (a.status !== 'active') chips.append(el('span', 'tag status', a.status));
       who.append(chips); tr.append(who);

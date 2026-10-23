@@ -21,6 +21,12 @@
 //   GET   /api/v1/athletes/:id/measurements?metric=  time series for charts
 //   GET   /api/v1/athletes/:id/scores                the Energy Scores over time (rebuilt from the tests, plus snapshots)
 //   POST  /api/v1/admin/scores/rebuild               build the rebuilt scores again from the tests
+//   GET   /api/v1/athletes/:id/messages?after=       the athlete's thread with their coaches (after = the last message id you have)
+//   POST  /api/v1/athletes/:id/messages              { body, att?, as?: 'athlete' } write to the thread (as athlete = a test from the preview)
+//   POST  /api/v1/athletes/:id/messages/read         { reader: 'coach' | 'athlete' } mark the other side's messages read
+//   POST  /api/v1/athletes/:id/messages/upload?name= raw photo or video body; the answer is the att to send with the message
+//   DELETE /api/v1/athletes/:id/messages?test=1      remove the test messages (and their files)
+//   GET   /api/v1/messages/:id/file                  a message's photo or video (byte ranges supported)
 //   POST  /api/v1/athletes/:id/files?kind=&assessment_id=&name=   raw file body (photo, video, report) into R2
 //   GET   /api/v1/files/:id                          the file itself
 //   POST  /api/v1/assessments
@@ -416,7 +422,12 @@ async function overview(env, url) {
     if (!byAthlete.has(p.athlete_id)) byAthlete.set(p.athlete_id, {});
     byAthlete.get(p.athlete_id)[p.category] = { program: p.program, starts_on: p.starts_on, ends_on: p.ends_on, days_left: daysLeft(p.ends_on) };
   }
+  const { results: unread } = await env.DB.prepare(
+    "SELECT athlete_id, COUNT(*) AS n FROM messages WHERE sender = 'athlete' AND is_test = 0 AND read_by_coach_at IS NULL GROUP BY athlete_id"
+  ).all().catch(() => ({ results: [] }));
+  const unreadBy = new Map(unread.map(r => [r.athlete_id, r.n]));
   for (const a of athletes) {
+    a.unread_messages = unreadBy.get(a.id) || 0;
     a.programs = byAthlete.get(a.id) || {};
     // flagged only when the latest test is 10% or more below the one before it
     a.arm_drop_pct = a.arm_score !== null && a.arm_previous ? Math.round(((a.arm_previous - a.arm_score) / a.arm_previous) * 1000) / 10 : null;
@@ -431,6 +442,7 @@ async function overview(env, url) {
       athletes: athletes.length,
       flagged: athletes.filter(a => a.arm_flag).length,
       injured: athletes.filter(a => a.injury_status === 'Currently Injured' || a.injury_status === 'Rehabbing Injury').length,
+      unread_messages: athletes.reduce((n, a) => n + a.unread_messages, 0),
     },
     arm_drop_flag_pct: ARM_DROP_FLAG * 100,
     last_sync: await env.DB.prepare('SELECT finished_at, ok, stats, error FROM sync_runs ORDER BY id DESC LIMIT 1').first().catch(() => null),
@@ -1231,6 +1243,136 @@ async function runSyncLogged(env) {
   }
 }
 
+// ---- Messages -----------------------------------------------------------------------------------
+// One thread for each athlete, between the athlete and their coaches: text, photos and videos. The photos and videos live in the
+// R2 bucket under messages/<athlete id>/. Until athletes sign in for themselves, the athlete's side is spoken for by the Athlete App
+// preview in a coach's browser; those messages are marked as tests and never count as unread for the coaches.
+
+const MESSAGE_TYPES = /^(image\/(jpeg|png|webp|heic|heif|gif)|video\/(mp4|quicktime|webm|x-m4v|3gpp))$/;
+const MAX_MESSAGE_TEXT = 4000;
+
+// "dr.nick" -> "Dr Nick": the name a coach's messages carry until a real name is saved for them
+const coachLabel = c => {
+  const n = String((c && (c.name || String(c.email || '').split('@')[0])) || 'Coach').trim();
+  return /[._-]/.test(n) && !/\s/.test(n) ? n.split(/[._-]+/).filter(Boolean).map(w => w[0].toUpperCase() + w.slice(1)).join(' ') : n;
+};
+
+function messageOut(r) {
+  return {
+    id: r.id, sender: r.sender, coach: r.coach_name || null, body: r.body, channel: r.channel, test: !!r.is_test, at: r.created_at,
+    seen_by_coach: r.read_by_coach_at || null, seen_by_athlete: r.read_by_athlete_at || null,
+    att: r.att_key ? { type: r.att_type, size: r.att_size, name: r.att_name, url: `/api/v1/messages/${r.id}/file` } : null,
+  };
+}
+
+// what is waiting to be read by each side, and how far each side has read (the newest message the other side has seen)
+async function messageState(env, athleteId) {
+  const row = await env.DB.prepare(
+    `SELECT SUM(CASE WHEN sender = 'athlete' AND is_test = 0 AND read_by_coach_at IS NULL THEN 1 ELSE 0 END) AS coach,
+            SUM(CASE WHEN sender = 'coach' AND read_by_athlete_at IS NULL THEN 1 ELSE 0 END) AS athlete,
+            MAX(CASE WHEN sender = 'coach' AND read_by_athlete_at IS NOT NULL THEN id END) AS coach_seen,
+            MAX(CASE WHEN sender = 'athlete' AND read_by_coach_at IS NOT NULL THEN id END) AS athlete_seen
+     FROM messages WHERE athlete_id = ?`).bind(athleteId).first();
+  return { unread: { coach: (row && row.coach) || 0, athlete: (row && row.athlete) || 0 }, seen: { coach: (row && row.coach_seen) || 0, athlete: (row && row.athlete_seen) || 0 } };
+}
+
+async function listMessages(env, athleteId, url) {
+  await getAthlete(env, athleteId);
+  const after = parseInt(url.searchParams.get('after') || '0', 10) || 0;
+  const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') || '200', 10) || 200, 1), 500);
+  const { results } = after
+    ? await env.DB.prepare('SELECT * FROM messages WHERE athlete_id = ? AND id > ? ORDER BY id LIMIT ?').bind(athleteId, after, limit).all()
+    : await env.DB.prepare('SELECT * FROM (SELECT * FROM messages WHERE athlete_id = ? ORDER BY id DESC LIMIT ?) ORDER BY id').bind(athleteId, limit).all();
+  return Object.assign({ messages: results.map(messageOut) }, await messageState(env, athleteId));
+}
+
+// a coach writes to the athlete; with as: 'athlete' the Athlete App preview writes as the athlete, as a test
+async function sendMessage(env, athleteId, body, coach) {
+  await getAthlete(env, athleteId);
+  if (!isObj(body)) throw new HttpError(400, 'body must be an object');
+  const text = str(body.body, 'body', { max: MAX_MESSAGE_TEXT }) || '';
+  let att = null;
+  if (body.att !== undefined && body.att !== null) {
+    if (!isObj(body.att)) throw new HttpError(400, 'att must be an object');
+    const key = str(body.att.key, 'att.key', { max: 300, required: true });
+    if (!key.startsWith(`messages/${athleteId}/`) || key.includes('..')) throw new HttpError(400, 'that attachment does not belong to this athlete');
+    const type = str(body.att.type, 'att.type', { max: 60, required: true }).toLowerCase();
+    if (!MESSAGE_TYPES.test(type)) throw new HttpError(400, 'attachment type not allowed');
+    const size = Math.round(Number(body.att.size));
+    att = { key, type, size: Number.isFinite(size) && size > 0 ? size : null, name: str(body.att.name, 'att.name', { max: 120 }) || 'attachment' };
+    if (env.FILES && !(await env.FILES.head(key))) throw new HttpError(400, 'the attachment was not uploaded');
+  }
+  if (!text && !att) throw new HttpError(400, 'write a message or attach a video or photo');
+  const asAthlete = body.as === 'athlete';
+  const res = await env.DB.prepare(
+    `INSERT INTO messages (athlete_id, sender, coach_id, coach_name, body, att_key, att_type, att_size, att_name, channel, is_test, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'app', ?, ?)`
+  ).bind(athleteId, asAthlete ? 'athlete' : 'coach', coach.id, asAthlete ? null : coachLabel(coach), text,
+    att ? att.key : null, att ? att.type : null, att ? att.size : null, att ? att.name : null, asAthlete ? 1 : 0, nowIso()).run();
+  const row = await env.DB.prepare('SELECT * FROM messages WHERE id = ?').bind(res.meta.last_row_id).first();
+  return { message: messageOut(row) };
+}
+
+// the reader has looked at the thread: what the other side wrote is marked read
+async function markMessagesRead(env, athleteId, body) {
+  await getAthlete(env, athleteId);
+  const reader = isObj(body) && body.reader === 'athlete' ? 'athlete' : 'coach';
+  const res = await env.DB.prepare(reader === 'coach'
+    ? "UPDATE messages SET read_by_coach_at = ? WHERE athlete_id = ? AND sender = 'athlete' AND read_by_coach_at IS NULL"
+    : "UPDATE messages SET read_by_athlete_at = ? WHERE athlete_id = ? AND sender = 'coach' AND read_by_athlete_at IS NULL"
+  ).bind(nowIso(), athleteId).run();
+  return Object.assign({ marked: (res.meta && res.meta.changes) || 0 }, await messageState(env, athleteId));
+}
+
+// a photo or video for a message: the raw file as the request body; the answer is what to attach to the message
+async function uploadMessageFile(env, request, athleteId, url) {
+  await getAthlete(env, athleteId);
+  if (!env.FILES) throw new HttpError(500, 'file storage is not connected');
+  const type = (request.headers.get('Content-Type') || '').split(';')[0].trim().toLowerCase();
+  if (!MESSAGE_TYPES.test(type)) throw new HttpError(415, 'send a video or a photo');
+  const size = parseInt(request.headers.get('Content-Length') || '', 10);
+  if (!Number.isFinite(size) || size <= 0) throw new HttpError(411, 'content length required');
+  if (size > MAX_FILE) throw new HttpError(413, 'file too large (100 MB max)');
+  const name = (str(url.searchParams.get('name'), 'name', { max: 120 }) || 'attachment').replace(/[^A-Za-z0-9._ -]/g, '_');
+  const key = `messages/${athleteId}/${crypto.randomUUID()}-${name.replace(/ /g, '_')}`;
+  await env.FILES.put(key, request.body, { httpMetadata: { contentType: type } });
+  return { att: { key, type, size, name } };
+}
+
+// the attachment itself, with byte ranges so that videos play and can be skipped through on phones
+async function serveMessageFile(env, request, id) {
+  const m = await env.DB.prepare('SELECT att_key, att_type, att_name, att_size FROM messages WHERE id = ?').bind(id).first();
+  if (!m || !m.att_key || !env.FILES) throw new HttpError(404, 'file not found');
+  const headers = {
+    'Content-Type': m.att_type, 'Accept-Ranges': 'bytes', 'Cache-Control': 'private, max-age=3600', 'X-Content-Type-Options': 'nosniff',
+    'Content-Disposition': `inline; filename="${String(m.att_name || 'attachment').replace(/"/g, '')}"`,
+  };
+  const want = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get('Range') || '');
+  if (want && m.att_size && (want[1] !== '' || want[2] !== '')) {
+    const size = m.att_size;
+    const start = want[1] === '' ? Math.max(0, size - Number(want[2])) : Number(want[1]);
+    const end = want[1] === '' || want[2] === '' ? size - 1 : Math.min(Number(want[2]), size - 1);
+    if (start > end || start >= size) return new Response(null, { status: 416, headers: Object.assign(headers, { 'Content-Range': `bytes */${size}` }) });
+    const obj = await env.FILES.get(m.att_key, { range: { offset: start, length: end - start + 1 } });
+    if (!obj) throw new HttpError(404, 'file not found');
+    return new Response(obj.body, { status: 206, headers: Object.assign(headers, { 'Content-Range': `bytes ${start}-${end}/${size}`, 'Content-Length': String(end - start + 1) }) });
+  }
+  const obj = await env.FILES.get(m.att_key);
+  if (!obj) throw new HttpError(404, 'file not found');
+  if (m.att_size) headers['Content-Length'] = String(m.att_size);
+  return new Response(obj.body, { status: 200, headers });
+}
+
+// the messages the preview sent as the athlete: remove them, and their attachments
+async function clearTestMessages(env, athleteId) {
+  await getAthlete(env, athleteId);
+  const { results } = await env.DB.prepare('SELECT att_key FROM messages WHERE athlete_id = ? AND is_test = 1 AND att_key IS NOT NULL').bind(athleteId).all();
+  if (env.FILES) for (const r of results) await env.FILES.delete(r.att_key).catch(() => {});
+  const res = await env.DB.prepare('DELETE FROM messages WHERE athlete_id = ? AND is_test = 1').bind(athleteId).run();
+  return { removed: (res.meta && res.meta.changes) || 0 };
+}
+// ---- end of messages --------------------------------------------------------------------------
+
 // ---- Router ---------------------------------------------------------------------------------
 
 async function readJson(request) {
@@ -1244,7 +1386,7 @@ async function readJson(request) {
 async function route(request, env, coach, url) {
   const parts = url.pathname.replace(/^\/api\/v1\/?/, '').split('/').filter(Boolean);
   const method = request.method;
-  const [a, b, c] = parts;
+  const [a, b, c, d] = parts;
 
   if (a === 'me' && !b && method === 'GET') return [200, coach];
 
@@ -1281,12 +1423,19 @@ async function route(request, env, coach, url) {
       return [200, await athleteMeasurements(env, b, url)];
     } else if (c === 'scores' && method === 'GET') {
       return [200, await athleteScores(env, b)];
+    } else if (c === 'messages') {
+      if (!d && method === 'GET') return [200, await listMessages(env, b, url)];
+      if (!d && method === 'POST') return [201, await sendMessage(env, b, await readJson(request), coach)];
+      if (!d && method === 'DELETE' && url.searchParams.get('test') === '1') return [200, await clearTestMessages(env, b)];
+      if (d === 'read' && method === 'POST') return [200, await markMessagesRead(env, b, await readJson(request))];
+      if (d === 'upload' && method === 'POST') return [201, await uploadMessageFile(env, request, b, url)];
     } else if (c === 'files' && method === 'POST') {
       return [201, await uploadFile(env, request, b, url, coach)];
     }
   }
 
   if (a === 'files' && b && !c && method === 'GET') return [200, await serveFile(env, b), true];
+  if (a === 'messages' && /^\d+$/.test(b || '') && c === 'file' && method === 'GET') return [200, await serveMessageFile(env, request, parseInt(b, 10)), true];
 
   if (a === 'assessments') {
     if (!b && method === 'POST') return [201, await createAssessment(env, await readJson(request), coach)];

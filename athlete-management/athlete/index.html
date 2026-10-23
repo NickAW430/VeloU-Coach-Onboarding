@@ -41,6 +41,7 @@ html[data-app] .vroot{max-width:none !important;padding:12px 14px 56px !importan
 html[data-app] .vroot>*:not(.vappwrap):not(.vdash):not([data-vm="host"]){display:none !important}
 html[data-app] .vroot>.vappwrap{order:-1}
 html[data-app][data-screen="dash"] .vroot>.vappwrap{position:sticky;top:0;z-index:40}
+html[data-app][data-screen="chat"] .vroot{padding-bottom:0 !important}
 html[data-app][data-screen="dash"] .vdash{margin:16px auto 0;width:100%;max-width:520px}
 /* the score card that sits to the right of the hexagons on a desktop pops up over them in the athlete's own screen */
 .vdetx{display:none}
@@ -245,7 +246,7 @@ html[data-app] .vdet>.vdetx+div,html[data-app] .vdet>button:not(.vdetx){order:1}
       <h2 style="margin:0;font-size:26px;font-weight:600">Next 6 Days <span style="color:rgba(255,255,255,.62);font-weight:400">· Training Calendar</span></h2>
     </div>
     <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
-      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zf" data-view="days" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,900px"></x-import>
+      <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zp" data-view="days" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" hint-size="100%,900px"></x-import>
     </sc-if>
     <sc-if value="{{ plansLoading }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:rgba(255,255,255,.62)">Loading the plan…</span></sc-if>
   </section>
@@ -627,16 +628,16 @@ html[data-app] .vdet>.vdetx+div,html[data-app] .vdet>button:not(.vdetx){order:1}
     <sc-if value="{{ hasLib }}" hint-placeholder-val="{{ false }}"><div data-noprint="1" style="font:400 11px 'Barlow',sans-serif;letter-spacing:.04em;color:rgba(255,255,255,.62)">{{ libStatus }}</div></sc-if>
     <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
       <sc-if value="{{ subBuild }}" hint-placeholder-val="{{ true }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zf" data-view="build" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,900px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zp" data-view="build" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,900px"></x-import>
       </sc-if>
       <sc-if value="{{ subMap }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zf" data-view="map" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,640px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zp" data-view="map" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,640px"></x-import>
       </sc-if>
       <sc-if value="{{ subNotes }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zf" data-view="notes" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zp" data-view="notes" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
       </sc-if>
       <sc-if value="{{ subAthlete }}" hint-placeholder-val="{{ false }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zf" data-view="athlete" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zp" data-view="athlete" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
       </sc-if>
     </sc-if>
     <sc-if value="{{ subApp }}" hint-placeholder-val="{{ false }}">
@@ -647,6 +648,12 @@ html[data-app] .vdet>.vdetx+div,html[data-app] .vdet>button:not(.vdetx){order:1}
     </sc-if>
   </section>
   </sc-if>
+
+<sc-if value="{{ isMsg }}" hint-placeholder-val="{{ false }}">
+  <section id="messages" data-screen-label="Messages" style="display:flex;flex-direction:column;gap:14px">
+    <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zp" data-view="chat" data-athlete="{{ planAthlete }}" data-athlete-id="{{ planAthleteId }}" hint-size="100%,560px"></x-import>
+  </section>
+</sc-if>
 
 <sc-if value="{{ isPitch }}" hint-placeholder-val="{{ false }}">
   <section id="pitching" data-screen-label="Pitching" style="display:flex;flex-direction:column;gap:22px">
@@ -885,7 +892,7 @@ html[data-app] .vdet>.vdetx+div,html[data-app] .vdet>button:not(.vdetx){order:1}
   <sc-if value="{{ appMode }}" hint-placeholder-val="{{ false }}">
     <div class="vappwrap">
       <sc-if value="{{ plansReady }}" hint-placeholder-val="{{ true }}">
-        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zf" data-view="athlete" data-app="1" data-profile="{{ appProfile }}" data-athlete="{{ planAthlete }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
+        <x-import component-from-global-scope="velou-training-plan" from="./training-plan.js?v=20261022zp" data-view="athlete" data-app="1" data-profile="{{ appProfile }}" data-athlete="{{ planAthlete }}" data-athlete-id="{{ planAthleteId }}" data-level="{{ planLevel }}" data-velo="{{ planVelo }}" data-kneel="{{ planKneel }}" data-lt="{{ planLt }}" data-armscore="{{ planArm }}" data-injury="{{ planInjury }}" data-focus="{{ planFocus }}" data-perf="{{ planPerf }}" data-board="{{ planBoard }}" data-strrec="{{ planRec }}" data-videos="{{ planVideos }}" data-xfer="{{ planXfer }}" data-prod="{{ planProd }}" data-ratio="{{ planRatio }}" data-pos="{{ planPos }}" data-playlevel="{{ planPlay }}" data-hand="{{ planHand }}" data-injstatus="{{ planInjStatus }}" data-injloc="{{ planInjLoc }}" data-injnote="{{ planInjNote }}" data-coach="{{ planCoach }}" hint-size="100%,420px"></x-import>
       </sc-if>
     </div>
   </sc-if>
@@ -1173,7 +1180,7 @@ function installPlanSync() {
 }
 
 class Component extends DCLogic {
-  state = { tab: (typeof localStorage !== 'undefined' && ['eval', 'prog', 'pitch'].includes(localStorage.getItem('velou.ad.tab')) && localStorage.getItem('velou.ad.tab')) || 'eval', range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], modal: null, plansReady: false, appScreen: (() => { try { return (location.hash || '').replace('#', ''); } catch (x) { return ''; } })(), detOpen: false, sub: (() => { try { const k = localStorage.getItem('velou.ad.sub'); return ['build', 'map', 'notes', 'athlete', 'app'].includes(k) ? k : 'build'; } catch (x) { return 'build'; } })(), me: '', d: null, status: 'loading', updated: null };
+  state = { msgUnread: 0, tab: (() => { try { if (new URLSearchParams(location.search).get('tab') === 'msg') return 'msg'; } catch (x) {} return (typeof localStorage !== 'undefined' && ['eval', 'prog', 'pitch', 'msg'].includes(localStorage.getItem('velou.ad.tab')) && localStorage.getItem('velou.ad.tab')) || 'eval'; })(), range: 'All', athlete: new URLSearchParams(location.search).get('athlete') || (typeof localStorage !== 'undefined' && localStorage.getItem('velou.ad.athlete')) || 'Aidan Curry', athleteId: new URLSearchParams(location.search).get('id'), athletes: [], modal: null, plansReady: false, appScreen: (() => { try { return (location.hash || '').replace('#', ''); } catch (x) { return ''; } })(), detOpen: false, sub: (() => { try { const k = localStorage.getItem('velou.ad.sub'); return ['build', 'map', 'notes', 'athlete', 'app'].includes(k) ? k : 'build'; } catch (x) { return 'build'; } })(), me: '', d: null, status: 'loading', updated: null };
 
   componentDidMount() {
     this.onBeforePrint = () => this.sizePage();
@@ -1182,6 +1189,10 @@ class Component extends DCLogic {
     this.load();
     this.loadPlans();
     this.loadScores();
+    this.loadUnread();
+    this.onChatRead = e => { const d = e && e.detail; if (d && d.id === this.state.athleteId) this.setState({ msgUnread: (d.unread && d.unread.coach) || 0 }); };
+    window.addEventListener('velou-chat-read', this.onChatRead);
+    if (!APPMODE) this.unreadTimer = setInterval(() => { if (!document.hidden) this.loadUnread(); }, 60000);
     this.loadLibrary();
     this.loadMe();
     this.onGoto = e => { const k = e && e.detail; if (['build', 'map', 'notes', 'athlete', 'app'].includes(k)) { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k, tab: 'prog' }); } };
@@ -1210,7 +1221,7 @@ class Component extends DCLogic {
     im.onerror = () => {};
     im.src = url;
   }
-  componentWillUnmount() { clearInterval(this.timer); window.removeEventListener('beforeprint', this.onBeforePrint); window.removeEventListener('keydown', this.onKey); window.removeEventListener('velou-goto', this.onGoto); window.removeEventListener('velou-app-screen', this.onAppScreen); if (this.onHexCap) { document.removeEventListener('click', this.onHexCap, true); document.removeEventListener('click', this.onDocClick); window.removeEventListener('keydown', this.onDetKey); } document.body.style.overflow = ''; }
+  componentWillUnmount() { clearInterval(this.timer); window.removeEventListener('beforeprint', this.onBeforePrint); window.removeEventListener('keydown', this.onKey); window.removeEventListener('velou-goto', this.onGoto); window.removeEventListener('velou-app-screen', this.onAppScreen); window.removeEventListener('velou-chat-read', this.onChatRead); clearInterval(this.unreadTimer); if (this.onHexCap) { document.removeEventListener('click', this.onHexCap, true); document.removeEventListener('click', this.onDocClick); window.removeEventListener('keydown', this.onDetKey); } document.body.style.overflow = ''; }
   calVals() {
     const modal = this.state.modal;
     const show = k => modal === k ? 'flex' : 'none';
@@ -1305,6 +1316,16 @@ class Component extends DCLogic {
       if (name === this.state.athlete) this.setState({ scores: j.scores || [] });
     } catch (e) { if (name === this.state.athlete) this.setState({ scores: [] }); }
   }
+  // how many messages from the athlete are waiting for the coaches (the badge on the Messages tab)
+  async loadUnread() {
+    if (APPMODE) return;
+    const name = this.state.athlete;
+    try {
+      const id = await this.athleteIdFor(name);
+      const j = await fetch('/api/v1/athletes/' + encodeURIComponent(id) + '/messages?after=2147483647&limit=1', { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('network'); return r.json(); });
+      if (name === this.state.athlete) this.setState({ msgUnread: (j.unread && j.unread.coach) || 0 });
+    } catch (e) { if (name === this.state.athlete) this.setState({ msgUnread: 0 }); }
+  }
   async loadLibrary() {
     const get = t => fetch('/api/v1/library/tab?name=' + encodeURIComponent(t), { credentials: 'same-origin', headers: { Accept: 'application/json' } }).then(r => { if (!r.ok) throw new Error('library'); return r.json(); }).then(j => j.rows.slice(1));
     try {
@@ -1352,7 +1373,7 @@ class Component extends DCLogic {
     const lvl = tabFact(d.et, [/throwing\s*level/i, /level\s*assignment/i, /^level$/i], 5) ?? prog[27];
     const g = i => prog[i] == null ? '' : String(prog[i]).trim();
     return {
-      planAthlete: this.state.athlete || '', planLevel: lvl == null ? '' : String(lvl),
+      planAthlete: this.state.athlete || '', planAthleteId: this.state.athleteId || '', planLevel: lvl == null ? '' : String(lvl),
       planVelo: top == null ? '' : top.toFixed(1),
       planKneel: pb(/kneel/i) || (num(main[23]) != null ? String(num(main[23])) : ''),
       planLt: pb(/long\s*toss|^lt\b/i),
@@ -1580,7 +1601,7 @@ class Component extends DCLogic {
       athleteSel: this.state.athlete,
       selKey: this.state.athlete + ':' + this.state.athletes.length,
       ...(() => {
-        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, plansReady: false, plansErr: false, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadPlans(); this.loadScores(); }); };
+        const pickA = a => { try { localStorage.setItem('velou.ad.athlete', a); history.replaceState(null, '', '?athlete=' + encodeURIComponent(a)); } catch (x) {} this.setState({ athlete: a, athleteId: null, plansReady: false, plansErr: false, d: null, sOpen: false, sq: '', sIdx: 0 }, () => { this.load(); this.loadPlans(); this.loadScores(); this.loadUnread(); }); };
         const q = (this.state.sq || '').trim().toLowerCase();
         const all = athletes.includes(this.state.athlete) ? athletes : [this.state.athlete, ...athletes];
         const res = (q ? all.filter(a => a.toLowerCase().includes(q)).sort((x, y) => (y.toLowerCase().startsWith(q) - x.toLowerCase().startsWith(q))) : all).slice(0, 60);
@@ -1700,7 +1721,7 @@ class Component extends DCLogic {
       screen,
       bodyTests, bodyJoints: Object.values(joints), screenSummary,
       ...this.calVals(),
-      isEval: APPMODE ? this.state.appScreen === 'dash' : (tab !== 'pitch' && tab !== 'prog'), isPitch: !APPMODE && tab === 'pitch', isProg: !APPMODE && tab === 'prog', appMode: APPMODE, notApp: !APPMODE, trend: buildTrend(this.state.scores, num(main[41]), num(main[32]), new Date().toISOString().slice(0, 10), C.green),
+      isEval: APPMODE ? this.state.appScreen === 'dash' : (tab !== 'pitch' && tab !== 'prog' && tab !== 'msg'), isMsg: !APPMODE && tab === 'msg', isPitch: !APPMODE && tab === 'pitch', isProg: !APPMODE && tab === 'prog', appMode: APPMODE, notApp: !APPMODE, trend: buildTrend(this.state.scores, num(main[41]), num(main[32]), new Date().toISOString().slice(0, 10), C.green),
       hexHint: APPMODE ? 'Tap a score to see its breakdown' : 'Select a score to see its breakdown', detDisplay: APPMODE ? (this.state.detOpen ? 'flex' : 'none') : 'flex', closeDet: () => this.setState({ detOpen: false }),
       detMark: (() => { try { document.documentElement.setAttribute('data-det', APPMODE && this.state.detOpen ? 'open' : ''); } catch (x) {} return ''; })(),
       appUrl: (() => { const q = new URLSearchParams(); if (this.state.athleteId) q.set('id', this.state.athleteId); q.set('athlete', this.state.athlete || ''); q.set('app', '1'); return location.pathname + '?' + q.toString(); })(),
@@ -1708,7 +1729,7 @@ class Component extends DCLogic {
       subTabs: [['build', 'Plan Build'], ['map', 'Training Map'], ['athlete', "Athlete's View"], ['app', 'Athlete App'], ['notes', 'Notes']].map(([k, label]) => ({ label, onClick: () => { try { localStorage.setItem('velou.ad.sub', k); } catch (x) {} this.setState({ sub: k }); }, c: this.state.sub === k ? '#FFFFFF' : 'rgba(255,255,255,.62)', bd: this.state.sub === k ? '#56B7E6' : 'transparent' })),
       subBuild: this.state.sub === 'build', subMap: this.state.sub === 'map', subNotes: this.state.sub === 'notes', subAthlete: this.state.sub === 'athlete', subApp: this.state.sub === 'app',
       ...this.planVals(d, prog, main, armScore, injury, tabFact, cmjFact, v, num),
-      tabs: [tabBtn('eval', 'Dashboard'), tabBtn('prog', 'Programming'), tabBtn('pitch', 'Pitching Development')],
+      tabs: [tabBtn('eval', 'Dashboard'), tabBtn('prog', 'Programming'), tabBtn('msg', 'Messages' + (this.state.msgUnread ? ' (' + this.state.msgUnread + ')' : '')), tabBtn('pitch', 'Pitching Development')],
       rangeOpts,
       hasArsenal: pitches.length > 0, noArsenal: this.state.d != null && !this.state.tmLoading && pitches.length === 0,
       tmLoading: !!this.state.tmLoading, pitches, veloChart, ...tunnel, locGroups: ars.locGroups,

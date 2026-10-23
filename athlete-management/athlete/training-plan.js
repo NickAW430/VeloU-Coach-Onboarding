@@ -552,6 +552,7 @@ button.rr:hover{background:var(--sunk)}
 @media (hover:hover){.aa-tile:hover::before{transform:scaleX(1)}.aa-tile:hover{transform:translateY(-3px);background:linear-gradient(180deg,#202020 0%,rgba(32,32,32,0) 100%)}}
 .aa-tile:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .aa-tile .eb{display:flex;align-items:center;justify-content:space-between;gap:6px;font:700 11px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.aa-tile .eb em.new{border-color:#E10600;background:#E10600;color:#fff}
 .aa-tile .eb em{flex:0 1 auto;min-width:0;max-width:100%;padding:2px 7px;border:1px solid var(--tc);border-radius:10px;font:600 10px/1.2 var(--body);font-style:normal;letter-spacing:.01em;text-transform:none;color:var(--tc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .aa-tile b{display:block;margin:0;font:400 22px/1.08 'Anton',var(--body);letter-spacing:.01em}
 .aa-tile .ds{display:block;font:400 13px/1.4 var(--body);color:#a8a8a8}
@@ -800,6 +801,61 @@ div.aa-exh{cursor:default}
 .aa-swi span{font:500 13px var(--body);color:var(--aa-mut)}
 .avapp.aa-dash{padding-bottom:0}
 .wrap.aa-wdash{padding-bottom:0}
+.ch{--c-card:#0b0f12;--c-line:#1d262b;--c-line2:#2b373e;--c-sub:#b6c0c6;--c-mut:#86939b;--c-blue:#56B7E6;--c-red:#E10600;display:flex;flex-direction:column;min-width:0;font-family:var(--body)}
+.ch-athlete{min-height:calc(100vh - 72px);min-height:calc(100dvh - 72px)}
+.wrap:has(.aa-chatpage){padding-bottom:0}
+.ch-coach{width:100%;max-width:760px;margin:0 auto}
+.avapp.aa-chatpage{padding-bottom:0}
+.ch-bn{display:flex;flex-direction:column;gap:2px;margin:12px 0 0;padding:10px 12px;border:1px solid var(--c-blue);border-radius:10px;background:rgba(86,183,230,.08)}
+.ch-bn b{font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--c-blue)}
+.ch-bn span{font:500 13px/1.4 var(--body);color:var(--c-sub)}
+.ch-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px}
+.ch-head .t b{display:block;font:400 28px/1.1 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase;color:#fff}
+.ch-head .t span{display:block;margin-top:3px;font:500 13px var(--body);color:var(--c-mut)}
+.ch-clear{padding:6px 2px;background:none;border:0;color:var(--c-mut);font:600 12.5px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.ch-stage{position:relative;flex:1;display:flex;flex-direction:column;min-height:0}
+.ch-th{display:flex;flex-direction:column;gap:3px;padding:10px 0 14px;flex:1}
+.ch-coach .ch-th{flex:none;min-height:320px;max-height:62vh;overflow-y:auto;padding:14px;background:#05080a;border:1px solid var(--c-line);border-radius:10px}
+.ch-note{margin:18px 0;text-align:center;font:500 14px/1.45 var(--body);color:var(--c-mut)}
+.ch-empty{margin:auto;padding:36px 18px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.ch-empty b{font:400 24px/1.1 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase;color:#fff}
+.ch-empty span{max-width:290px;font:500 14.5px/1.45 var(--body);color:var(--c-sub)}
+.ch-day{align-self:center;margin:12px 0 4px;padding:3px 11px;border-radius:11px;background:#10171b;color:var(--c-mut);font:600 11px var(--body);letter-spacing:.07em;text-transform:uppercase}
+.chm{display:flex;flex-direction:column;max-width:84%;gap:2px;min-width:0}
+.chm.me{align-self:flex-end;align-items:flex-end}
+.chm.them{align-self:flex-start;align-items:flex-start}
+.chm .chw{margin:8px 6px 0;font:600 11.5px var(--body);color:var(--c-mut)}
+.chb{max-width:100%;padding:9px 13px;border-radius:17px;border:1px solid var(--c-line2);background:#161d22;color:#fff;font:500 15px/1.4 var(--body);overflow-wrap:anywhere}
+.chb p{margin:0;white-space:pre-wrap}
+.chb a{color:inherit;text-decoration:underline}
+.chm.me .chb{background:var(--c-blue);border-color:var(--c-blue);color:#021018;border-bottom-right-radius:6px}
+.chm.them .chb{border-bottom-left-radius:6px}
+.chm.test .chb{border-style:dashed}
+.chb.att{width:min(300px,72vw);padding:0;overflow:hidden}
+.chb.att>p{padding:8px 13px 9px}
+.cha{overflow:hidden}
+.cha video,.cha img{display:block;width:100%;height:auto;max-height:min(56vh,400px);object-fit:contain;background:#000}
+.cha img{cursor:zoom-in}
+.cht,.ch-seen{margin:0 6px;font:500 11px var(--body);color:var(--c-mut)}
+.chm.pend{opacity:.55}
+.chm.fail .cht{color:#ff8a85;cursor:pointer}
+.chm.fail .chb{border-color:#ff8a85}
+.ch-new{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:3;padding:7px 14px;border:0;border-radius:16px;background:var(--c-blue);color:#000;font:700 12.5px var(--body);box-shadow:0 6px 18px rgba(0,0,0,.5);cursor:pointer}
+.ch-chip{display:flex;align-items:center;gap:10px;margin:0 0 8px;padding:8px 10px;border:1px solid var(--c-line2);border-radius:10px;background:#0b0f12;font:500 13px var(--body);color:var(--c-sub)}
+.ch-chip .n{flex:0 1 auto;min-width:0;max-width:44%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff;font-weight:600}
+.ch-chip .p{flex:1;min-width:0}
+.ch-chip button{flex:none;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:#161d22;color:var(--c-sub);cursor:pointer}
+.ch-chip.bad{border-color:#ff8a85;color:#ff8a85}
+.ch-comp{display:flex;align-items:flex-end;gap:8px;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px))}
+.ch-athlete .ch-comp{position:sticky;bottom:0;z-index:5;margin:0 -14px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--c-line)}
+.ch-coach .ch-comp{padding-bottom:0}
+.ch-att{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid var(--c-line2);border-radius:50%;background:none;color:var(--c-sub);cursor:pointer}
+.ch-att svg{width:22px;height:22px}
+.ch-ta{flex:1;min-width:0;min-height:44px;max-height:120px;padding:10px 15px;border:1px solid var(--c-line2);border-radius:22px;background:#05080a;color:#fff;font:500 16px/1.3 var(--body);resize:none;overflow-y:hidden;box-sizing:border-box}
+.ch-ta:focus{outline:none;border-color:var(--c-blue)}
+.ch-ta::placeholder{color:#6f7d86}
+.ch-send{flex:none;min-width:66px;height:44px;padding:0 16px;border:0;border-radius:22px;background:var(--c-blue);color:#000;font:700 15px var(--body);cursor:pointer}
+.ch-send:disabled{opacity:.3;cursor:default}
 .ldcell{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
 .ldcell.pick{border-top-color:var(--heat);background:#14202a}
 .ldcell .ldt{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1881,7 +1937,7 @@ function dateFor(n,day){const d=day0(A.startDate); if(!d) return null; d.setDate
 function currentWeek(total){const d=day0(A.startDate); if(!d) return null; const n=Math.floor((new Date()-d)/6048e5)+1; return n>=1&&n<=total?n:null}
 function flagsOn(){const l=L(); return (l.arm!=null&&l.arm<85)||(l.injury&&!/^(none|—|-|n\/a)$/i.test(l.injury))}
 function render(){
-  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return QUIET?null:renderAll(); if(BV) return renderBuild(); if(NV) return renderNotes(); if(AV) return renderAthlete();
+  if(host.dataset.view==='strength') return renderSV(); if(host.dataset.view==='history') return draw(); if(DV) return QUIET?null:renderAll(); if(BV) return renderBuild(); if(NV) return renderNotes(); if(AV) return renderAthlete(); if(CV) return renderChatView();
   const p=prog(), weeks=planWeeks(), tl=isTL(), l=L(), v=V(); TP=testPlan(weeks); if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); try{renderLanes()}catch(e){console.warn(e)}
   for(const w of weeks){w.rows=statRows(w); w.throws=w.rows.reduce((a,r)=>a+(r.plan?0:r.sets*r.reps),0); w.wv=w.rows.reduce((a,r)=>a+(r.wv||0),0); w.peak=w.rows.reduce((a,r)=>Math.max(a,r.rpe||0),0); w.hi=w.rows.reduce((a,r)=>a+(!r.plan&&r.rpe>=90?r.sets*r.reps:0),0)}
   {let prevB=null, prevD7=null, prevPD7=null, first=true;
@@ -3824,18 +3880,20 @@ function aaHome(app,S){
     else { S.wait=0; const td=day0(ymd(new Date(new Date().setHours(12,0,0,0)))), off=Math.round((td-st)/864e5);
       if(off>=0&&off<weeks.length*7){ const dl=lnDay('lift',avSrc(td)), rows=dl&&!dl.out&&!dl.loading?(dl.rows||[]).filter(r=>!r.info):[];
         if(rows.length){ todayEb='Lift'; todayPill=abbrFocus(dl.title||'')||'Lift day' } else { const sx=aaStat(td,st,weeks); todayPill=sx&&sx.rest?'Rest day':'No lift today' } } } }
-  const tiles=el('nav','aa-tiles');
-  for(const [id,eyebrow,name,desc,cta,col,stat] of [['dash','Progress','Athlete Dashboard','Your energy profile and scores','Open Dashboard →','#E10600',''],['today',todayEb,'Today’s Training','Today’s workout, step by step','Open Today →','#56B7E6',todayPill],['week','Calendar','Training for the Week','Your week at a glance','Open Week →','#88E0C6',''],['chat','Messages','Chat with Your Coach','Message and share video','Open Chat →','#FFFFFF','']]){
+  const tiles=el('nav','aa-tiles'), un=chState().peek||0;
+  for(const [id,eyebrow,name,desc,cta,col,stat] of [['dash','Progress','Athlete Dashboard','Your energy profile and scores','Open Dashboard →','#E10600',''],['today',todayEb,'Today’s Training','Today’s workout, step by step','Open Today →','#56B7E6',todayPill],['week','Calendar','Training for the Week','Your week at a glance','Open Week →','#88E0C6',''],['chat','Messages','Chat with Your Coach',un?un+' new message'+(un>1?'s':'')+' from your coach':'Message and share video','Open Chat →','#FFFFFF',un?un+' new':'']]){
     const b=el('button','aa-tile'); b.type='button'; b.style.setProperty('--tc',col); b.setAttribute('aria-label',name);
-    const eb=el('span','eb'); eb.append(el('span',null,eyebrow)); if(stat) eb.append(el('em',null,stat));
+    const eb=el('span','eb'); eb.append(el('span',null,eyebrow)); if(stat) eb.append(el('em',id==='chat'?'new':null,stat));
     b.append(eb,el('b',null,name),el('span','ds',desc),el('span','cta',cta)); b.addEventListener('click',()=>{ if(id==='today') AVN.dk=''; aaGo(id) }); tiles.append(b) }
-  app.append(tiles) }
+  app.append(tiles);
+  // while the home screen is open, look every half minute for what the coach has written
+  clearInterval(S.pk); chPeek(); S.pk=setInterval(()=>{ if(!host.isConnected||AAS().screen!=='home'){ clearInterval(S.pk); return } chPeek() },30000) }
 // the screens that are not built yet say what will live there
 const AASOON={dash:['Your athlete dashboard','Your energy profile, scores and progress, laid out for your phone.'],week:['Your week at a glance','Every day of your week in a calendar: what is planned and what is done.'],chat:['Message your coach','Chat with your coach and share videos. If you both have a phone number on file, messages also reach iMessage; otherwise they stay in the app.']};
 function aaSoon(app,scr){ const [h,t]=AASOON[scr]||['','']; const n=el('section','aa-soon'); n.innerHTML=AAICON[scr]||''; n.append(el('b',null,h),el('span',null,t),el('em',null,'This screen is next')); app.append(n) }
 function aaRender(){
   const box=$('aview'); box.hidden=false; box.textContent=''; if(A.str.on&&!SDATA) loadStrength(); if(A.pat.on&&!PAT) loadPattern(); xlLoad(); avLoad();
-  const S=AAS(); clearInterval(S.tick); S.tick=0;
+  const S=AAS(); clearInterval(S.tick); S.tick=0; clearInterval(S.pk);
   window.__aaPop=()=>{ S.screen=aaScreen(); aaTell(S.screen); if(host.isConnected) render() }; if(!window.__aaPopOn){ window.__aaPopOn=true; window.addEventListener('popstate',()=>{ if(window.__aaPop) window.__aaPop() }) }
   if(!S.screen) S.screen=aaScreen();
   const scr=S.screen, app=el('div','av avapp'+(scr==='home'?' aa-home':scr==='dash'?' aa-dash':'')); box.append(app); aaTell(scr);
@@ -3845,7 +3903,110 @@ function aaRender(){
   if(scr==='today') return aaToday(app,S);
   if(scr==='dash') return;   // the page shows the dashboard's own contents under this bar
   if(scr==='week') return aaCal(app,S);
+  if(scr==='chat') return aaChat(app,S);
   aaSoon(app,scr) }
+
+// ================= Messages: the chat between an athlete and their coaches =================
+// One thread for each athlete, kept in the database. The Athlete App's chat screen is the athlete's side and the coach's Messages tab is the other:
+// both draw this same thread. Text, photos and videos; new messages arrive by checking every few seconds while the thread is open.
+window.__vch=window.__vch||{};
+const CH_MAX=100*1024*1024, CH_POLL=8000;
+let chTimer=0, chOnMedia=null;
+const chId=()=>host.dataset.athleteId||'';
+function chState(){ const k=chId(); return window.__vch[k]=window.__vch[k]||{msgs:[],last:0,unread:{coach:0,athlete:0},seen:{coach:0,athlete:0},loaded:false,draft:''} }
+async function chApi(path,body,method){
+  const o={credentials:'same-origin',headers:{Accept:'application/json'}};
+  if(body!==undefined){ o.method=method||'POST'; o.headers['Content-Type']='application/json'; o.body=JSON.stringify(body) } else if(method) o.method=method;
+  let r; try{ r=await fetch('/api/v1/athletes/'+encodeURIComponent(chId())+path,o) }catch(e){ throw new Error('no connection') } let j=null; try{ j=await r.json() }catch(e){}
+  if(!r.ok) throw new Error((j&&j.error)||('Something went wrong ('+r.status+')')); return j }
+// the file goes up as it is; the answer says what to attach to the message
+function chUp(file,type,onProg){ return new Promise((ok,no)=>{ const x=new XMLHttpRequest(); x.open('POST','/api/v1/athletes/'+encodeURIComponent(chId())+'/messages/upload?name='+encodeURIComponent(file.name||'attachment')); x.withCredentials=true; x.setRequestHeader('Content-Type',type);
+  x.upload.onprogress=e=>{ if(e.lengthComputable) onProg(e.loaded/e.total) };
+  x.onload=()=>{ let j=null; try{ j=JSON.parse(x.responseText) }catch(e){} if(x.status>=200&&x.status<300&&j&&j.att) ok(j.att); else no(new Error((j&&j.error)||('The upload failed ('+x.status+')'))) };
+  x.onerror=()=>no(new Error('The upload was interrupted. Check the connection and try again.')); x.send(file) }) }
+const chType=f=>f.type||({mov:'video/quicktime',mp4:'video/mp4',m4v:'video/x-m4v',webm:'video/webm',heic:'image/heic',heif:'image/heif',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif'}[String(f.name||'').split('.').pop().toLowerCase()]||'');
+const chSize=n=>n>=1048576?(n/1048576).toFixed(n>=10485760?0:1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
+const chDay=iso=>{ const d=new Date(iso), same=(a,b)=>a.toDateString()===b.toDateString(); return same(d,new Date())?'Today':same(d,new Date(Date.now()-864e5))?'Yesterday':d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}) };
+const chTime=iso=>new Date(iso).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+// links in a message are clickable
+function chText(p,t){ const re=/https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"]/g; let i=0, m; while((m=re.exec(t))){ if(m.index>i) p.append(t.slice(i,m.index)); const a=el('a',null,m[0]); a.href=m[0]; a.target='_blank'; a.rel='noopener'; p.append(a); i=m.index+m[0].length } if(i<t.length) p.append(t.slice(i)) }
+function chAtt(a){ const w=el('div','cha'); const type=String(a.type||'');
+  if(type.startsWith('video/')){ const v=document.createElement('video'); v.controls=true; v.setAttribute('playsinline',''); v.preload='metadata'; v.addEventListener('loadedmetadata',()=>{ if(chOnMedia) chOnMedia() }); v.src=a.url; w.append(v) }
+  else if(type.startsWith('image/')){ const l=el('a'); l.href=a.url; l.target='_blank'; l.rel='noopener'; const im=document.createElement('img'); im.addEventListener('load',()=>{ if(chOnMedia) chOnMedia() }); im.src=a.url; im.alt=a.name||'Photo'; im.loading='lazy'; l.append(im); w.append(l) }
+  return w }
+function chBubble(m,role,cont){ const mine=m.sender===role, b=el('div','chm '+(mine?'me':'them')+(m.test?' test':'')+(cont?' cont':'')); b.dataset.id=m.id;
+  if(!mine&&!cont){ const who=m.sender==='coach'?(m.coach||'Coach'):(String(host.dataset.athlete||'').trim()||'Athlete'); b.append(el('small','chw',who)) }
+  const bub=el('div','chb'+(m.att?' att':'')); if(m.att) bub.append(chAtt(m.att)); if(m.body){ const p=el('p'); chText(p,m.body); bub.append(p) } b.append(bub);
+  b.append(el('small','cht',chTime(m.at)+(m.test?' · test':'')+(m.channel==='imessage'?' · iMessage':m.channel==='sms'?' · text message':''))); return b }
+
+// the chat itself. role is 'athlete' (the Athlete App) or 'coach' (the Messages tab on the athlete's page)
+function chBuild(box,role,opt){
+  opt=opt||{}; clearInterval(chTimer); box.textContent='';
+  const C=chState(), id=chId(), other=role==='coach'?'athlete':'coach', root=el('div','ch ch-'+role);
+  if(!id){ root.append(el('p','ch-note','Opening the thread…')); box.append(root); return }
+  if(role==='athlete'&&opt.preview){ const bn=el('div','ch-bn'); bn.append(el('b',null,'Preview'),el('span',null,'This is how the athlete sees the chat. What you send here is saved as a test in the thread and does not alert anyone.')); root.append(bn) }
+  const head=el('div','ch-head'), th=el('div','ch-th'), nodes=new Map(), pend=new Map(); let lastDay='', lastWho='', seq=0, empty=null, seenEl=null, shown=false;
+  if(role==='coach'){ const t=el('div','t'); t.append(el('b',null,'Messages'),el('span',null,(String(host.dataset.athlete||'').trim()||'The athlete')+' sees this thread in the Athlete App.')); head.append(t); root.append(head) }
+  const near=()=>role==='coach'?th.scrollHeight-th.scrollTop-th.clientHeight<140:document.documentElement.scrollHeight-window.scrollY-window.innerHeight<160;
+  let stick=true;
+  const bottom=()=>{ stick=true; if(role==='coach') th.scrollTop=th.scrollHeight; else window.scrollTo(0,document.documentElement.scrollHeight) };
+  const onScr=()=>{ if(!host.isConnected||!root.isConnected){ (role==='coach'?th:window).removeEventListener('scroll',onScr); return } stick=near() };
+  (role==='coach'?th:window).addEventListener('scroll',onScr,{passive:true});
+  chOnMedia=()=>{ if(stick&&!gone()) bottom() };
+  const pill=el('button','ch-new','New messages ↓'); pill.type='button'; pill.hidden=true; pill.addEventListener('click',()=>{ pill.hidden=true; bottom() });
+  const gone=()=>!host.isConnected||!root.isConnected;
+  const showEmpty=()=>{ if(empty||nodes.size||pend.size) return; empty=el('div','ch-empty'); empty.append(el('b',null,role==='coach'?'No messages yet':'Message your coach'),el('span',null,role==='coach'?'Write the first message below. Photos and videos work too.':'Ask a question, send a note, or share a video of a rep. Your coach will see it here.')); th.append(empty) };
+  const unempty=()=>{ if(empty){ empty.remove(); empty=null } };
+  const seen=()=>{ if(seenEl){ seenEl.remove(); seenEl=null } let last=null; for(let i=C.msgs.length-1;i>=0;i--) if(C.msgs[i].sender===role){ last=C.msgs[i]; break } if(!last||pend.size) return; const n=nodes.get(last.id); if(n&&C.seen[role]>=last.id){ seenEl=el('small','ch-seen','Seen'); n.append(seenEl) } };
+  const flags=()=>{ if(root.__clear) root.__clear.hidden=!C.msgs.some(m=>m.test) };
+  const redo=()=>{ th.textContent=''; nodes.clear(); pend.clear(); lastDay=''; lastWho=''; empty=null; seenEl=null; for(const m of C.msgs) add(m); if(!C.msgs.length&&C.loaded) showEmpty(); seen(); flags() };
+  const add=m=>{ if(nodes.has(m.id)) return; unempty(); const d=chDay(m.at); let cont=d===lastDay&&lastWho===m.sender+'|'+(m.coach||''); if(d!==lastDay){ th.append(el('div','ch-day',d)); lastDay=d } lastWho=m.sender+'|'+(m.coach||''); const n=chBubble(m,role,cont); nodes.set(m.id,n); th.append(n); return n };
+  /* the preview is a coach looking, not the athlete reading, so it never marks anything read */
+  const readNow=()=>{ if(opt.preview||!(C.unread[role]>0)||document.hidden) return; chApi('/messages/read',{reader:role}).then(j=>{ C.unread=j.unread; C.seen=j.seen; try{ window.dispatchEvent(new CustomEvent('velou-chat-read',{detail:{id,unread:C.unread}})) }catch(e){} }).catch(()=>{}) };
+  const refresh=()=>{ if(gone()||document.hidden) return; chApi('/messages'+(C.last?'?after='+C.last:'')).then(j=>{ if(gone()) return; const first=!shown, wasNear=near(), fresh=j.messages.filter(m=>!C.msgs.some(x=>x.id===m.id)); shown=true; C.loaded=true; C.unread=j.unread; C.seen=j.seen; th.querySelectorAll('.ch-note').forEach(n=>n.remove());
+      for(const m of fresh){ C.msgs.push(m); C.last=Math.max(C.last,m.id); add(m) } if(!C.msgs.length) showEmpty(); seen(); flags();
+      if(first||(fresh.length&&(wasNear||fresh.every(m=>m.sender===role)))) bottom(); else if(fresh.some(m=>m.sender===other)) pill.hidden=false;
+      if(fresh.some(m=>m.sender===other)||C.unread[role]>0) readNow() }).catch(e=>{ if(gone()) return; if(!C.loaded){ th.querySelectorAll('.ch-note').forEach(n=>n.remove()); th.prepend(el('p','ch-note',/not found/i.test(e.message)?'This athlete is not in the database yet, so messages cannot be saved.':'Could not load the messages ('+e.message+').')) } }) };
+  // the composer
+  const form=el('form','ch-comp'), file=document.createElement('input'), ab=el('button','ch-att'), ta=el('textarea','ch-ta'), sb=el('button','ch-send','Send'), chip=el('div','ch-chip'); chip.hidden=true;
+  file.type='file'; file.accept='video/*,image/*'; file.hidden=true; ab.type='button'; ab.setAttribute('aria-label','Attach a photo or video'); ab.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5 12.6 19.9a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg>';
+  ta.rows=1; ta.placeholder=role==='coach'?'Write to '+((String(host.dataset.athlete||'').trim().split(' ')[0])||'the athlete')+'…':'Message your coach…'; ta.setAttribute('aria-label','Message'); ta.value=C.draft||''; sb.type='submit'; sb.disabled=true;
+  let att=null, up=false;
+  const fit=()=>{ ta.style.height='auto'; const h=ta.scrollHeight+2; ta.style.height=Math.min(h,120)+'px'; ta.style.overflowY=h>120?'auto':'hidden' }, ready=()=>{ sb.disabled=up||!(ta.value.trim()||att) };
+  const noAtt=()=>{ att=null; up=false; chip.hidden=true; chip.textContent=''; file.value=''; ready() };
+  ta.addEventListener('input',()=>{ C.draft=ta.value; fit(); ready() });
+  ta.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches){ e.preventDefault(); if(!sb.disabled) sb.click() } });
+  ab.addEventListener('click',()=>file.click());
+  file.addEventListener('change',()=>{ const f=file.files&&file.files[0]; if(!f) return; const type=chType(f);
+    const bad=!/^(image|video)\//.test(type)?'Choose a photo or a video.':f.size>CH_MAX?'That file is '+chSize(f.size)+'. The limit is 100 MB, so trim the video or record a shorter clip.':'';
+    chip.hidden=false; chip.textContent='';
+    if(bad){ chip.classList.add('bad'); chip.append(el('span',null,bad)); const x=el('button',null,'✕'); x.type='button'; x.setAttribute('aria-label','Remove'); x.addEventListener('click',()=>{ chip.classList.remove('bad'); noAtt() }); chip.append(x); file.value=''; return }
+    chip.classList.remove('bad'); up=true; ready(); const nm=el('span','n',f.name||'Attachment'), pr=el('span','p','Uploading… 0%'), x=el('button',null,'✕'); x.type='button'; x.setAttribute('aria-label','Remove the attachment'); chip.append(nm,pr,x); let dead=false;
+    x.addEventListener('click',()=>{ dead=true; noAtt() });
+    chUp(f,type,p=>{ if(!dead) pr.textContent='Uploading… '+Math.round(p*100)+'%' }).then(a=>{ if(dead) return; att=Object.assign({},a,{local:URL.createObjectURL(f)}); up=false; pr.textContent=chSize(f.size)+' · ready'; ready() }).catch(e=>{ if(dead) return; up=false; att=null; chip.classList.add('bad'); pr.textContent=e.message; ready() }) });
+  const send=(text,a,node)=>{ const tmp={id:'t'+(++seq),sender:role,coach:null,body:text,at:new Date().toISOString(),test:role==='athlete',channel:'app',att:a?{type:a.type,name:a.name,size:a.size,url:a.local||''}:null};
+    if(!node){ unempty(); const d=chDay(tmp.at); if(d!==lastDay){ th.append(el('div','ch-day',d)); lastDay=d } lastWho=role+'|'; node=chBubble(tmp,role); node.classList.add('pend'); th.append(node); pend.set(tmp.id,node); bottom() } else { node.classList.remove('fail'); node.classList.add('pend'); const r=node.querySelector('.cht'); if(r) r.textContent='Sending…' }
+    const tid=node.dataset.id||tmp.id; node.dataset.id=tid;
+    chApi('/messages',{body:text,att:a?{key:a.key,type:a.type,size:a.size,name:a.name}:undefined,as:role==='athlete'?'athlete':undefined}).then(j=>{ const m=j.message; pend.delete(tid);
+      if(nodes.has(m.id)) node.remove(); else { const real=chBubble(m,role); node.replaceWith(real); nodes.set(m.id,real) }
+      if(!C.msgs.some(x=>x.id===m.id)) C.msgs.push(m); C.last=Math.max(C.last,m.id); seen(); flags(); bottom() })
+      .catch(e=>{ node.classList.remove('pend'); node.classList.add('fail'); const r=node.querySelector('.cht'); if(r){ r.textContent='Not sent: '+e.message+'. Tap to retry.' } node.onclick=()=>{ node.onclick=null; send(text,a,node) } }) };
+  form.addEventListener('submit',e=>{ e.preventDefault(); const text=ta.value.trim(); if(!text&&!att) return; send(text,att); ta.value=''; C.draft=''; fit(); noAtt() });
+  form.append(file,ab,ta,sb);
+  if(role==='coach'){ const cl=el('button','ch-clear','Clear the test messages'); cl.type='button'; cl.hidden=true; root.__clear=cl; head.append(cl);
+    cl.addEventListener('click',()=>{ if(!confirm('Remove the messages the preview sent as the athlete, with their photos and videos?')) return; chApi('/messages?test=1',undefined,'DELETE').then(()=>{ C.msgs=C.msgs.filter(m=>!m.test); C.last=C.msgs.reduce((n,m)=>Math.max(n,m.id),0); redo() }).catch(x=>alert('Could not remove them: '+x.message)) }) }
+  const stage=el('div','ch-stage'); stage.append(th,pill); root.append(stage,chip,form); box.append(root);
+  for(const m of C.msgs) add(m); if(!C.msgs.length&&C.loaded) showEmpty(); if(!C.loaded) th.append(el('p','ch-note','Loading the messages…'));
+  if(C.loaded){ th.querySelectorAll('.ch-note').forEach(n=>n.remove()); seen(); flags() }
+  refresh(); setTimeout(()=>{ if(C.loaded) bottom() },150);
+  chTimer=setInterval(()=>{ if(gone()){ clearInterval(chTimer); return } refresh() },CH_POLL);
+  fit(); ready() }
+// what is waiting for the athlete, asked for the home screen's chat tile
+async function chPeek(){ const id=chId(); if(!id) return; try{ const j=await chApi('/messages?after=2147483647&limit=1'), C=chState(), n=(j.unread&&j.unread.athlete)||0; if((C.peek||0)!==n){ C.peek=n; if(host.isConnected&&AAS().screen==='home') render() } }catch(e){} }
+// the coach's Messages tab
+function renderChatView(){ const box=$('aview'); box.hidden=false; chBuild(box,'coach',{}) }
+// the Athlete App's chat screen
+function aaChat(app,S){ app.classList.add('aa-chatpage'); const box=el('div'); app.append(box); chBuild(box,'athlete',{preview:true}) }
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
   A=Object.assign(blank(),o); for(const k of ['swaps','rowSwaps','removed','rowEdits','added','order','dayMove','baseline','deload','strEd','patEd']) A[k]=A[k]||{}; A.str=Object.assign({on:1,fam:'',ph:''},A.str||{}); A.str.on=1; A.str.fam=''; A.str.ph=''; A.pat=Object.assign({on:1,foc:''},A.pat||{}); A.patBlocks=A.patBlocks||[]; A.strBlocks=A.strBlocks||[]; saved=true; render()});
@@ -3973,8 +4134,8 @@ async function pullRemote(who,forcePush,adopt){if(!connected()||!who) return; le
   else if(saved&&(forcePush||!j.found||loc>j.updated)){if(!A.updated){A.updated=Date.now(); try{localStorage.setItem(key(),JSON.stringify(A))}catch(e){}} schedulePush()}
   else if(saved&&!RV) status('Plan is up to date with the team sheet.')}
 
-const HV=host.dataset.view==='history', SV=host.dataset.view==='strength', DV=host.dataset.view==='days', BV=host.dataset.view==='build', NV=host.dataset.view==='notes', MV=host.dataset.view==='map', AV=host.dataset.view==='athlete', LANE=host.dataset.lane||'', PREPL=SV&&LANE==='prep', LIFTL=SV&&LANE==='lift';
-root.querySelector('.wrap').classList.add(DV?'dv':BV?'bv':NV?'nv':MV?'mv':AV?'av':HV?'hv':SV?'sv':host.dataset.view==='roster'?'rv':'tv');
+const HV=host.dataset.view==='history', SV=host.dataset.view==='strength', DV=host.dataset.view==='days', BV=host.dataset.view==='build', NV=host.dataset.view==='notes', MV=host.dataset.view==='map', AV=host.dataset.view==='athlete', CV=host.dataset.view==='chat', LANE=host.dataset.lane||'', PREPL=SV&&LANE==='prep', LIFTL=SV&&LANE==='lift';
+root.querySelector('.wrap').classList.add(DV?'dv':BV?'bv':NV?'nv':MV?'mv':(AV||CV)?'av':HV?'hv':SV?'sv':host.dataset.view==='roster'?'rv':'tv');
 const HK=()=>'velou.history.'+cur;
 const loadHist=()=>{try{return JSON.parse(localStorage.getItem(HK())||'[]')||[]}catch(e){return []}};
 const saveHist=h=>{try{localStorage.setItem(HK(),JSON.stringify(h))}catch(e){} A.updated=Date.now(); try{if(saved) localStorage.setItem(key(),JSON.stringify(A))}catch(e){} setTimeout(()=>schedulePush(),0)};
@@ -4165,7 +4326,7 @@ window.VeloUPlan={setStrength,setLibrary,current(name,opt){
   return {phase:post?'Plan complete':(pre?'Starts '+fmt(st)+' \u00b7 '+w.phase:w.phase), focus:w.focus||fd.focus||o.focus||'',strength,sFam,sPh};
 }};
 class VeloUTrainingPlan extends HTMLElement{
-  static get observedAttributes(){return ['data-perf','data-strrec','data-names','data-athlete','data-level','data-velo','data-kneel','data-lt','data-armscore','data-injury','data-focus','data-videos','data-board','data-xfer','data-prod','data-ratio','data-pos','data-playlevel','data-injstatus','data-injloc','data-injnote','data-hand','data-coach','data-profile']}
+  static get observedAttributes(){return ['data-perf','data-strrec','data-names','data-athlete','data-level','data-velo','data-kneel','data-lt','data-armscore','data-injury','data-focus','data-videos','data-board','data-xfer','data-prod','data-ratio','data-pos','data-playlevel','data-injstatus','data-injloc','data-injnote','data-hand','data-coach','data-profile','data-athlete-id']}
   connectedCallback(){
     if(!this.shadowRoot){const r=this.attachShadow({mode:'open'}); r.innerHTML='<style>'+CSS+'</style>'+HTML; this.api=mount(this)}
     this.api.reload();
