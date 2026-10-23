@@ -864,61 +864,66 @@ div.aa-exh{cursor:default}
 .aa-brand{display:flex;align-items:center;justify-content:center;padding:8px 6px;background:none;border:0;cursor:pointer}
 .aa-brand img{display:block;height:19px;width:auto}
 .aa-hs{justify-self:end;padding:0;background:none;border:0;cursor:pointer}
-.aa-hs .aa-me{border-radius:8px}
+.aa-hs .aa-me,.aa-hs .aa-me.ph{border-radius:8px;border:1.5px solid #fff}
 .aa-dd{position:absolute;left:8px;top:54px;z-index:36;width:min(272px,calc(100% - 24px));padding:6px;background:#0e1114;border:1px solid rgba(255,255,255,.14);border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,.7)}
 .aa-dd[hidden]{display:none}
 .aa-di{display:flex;align-items:center;gap:14px;width:100%;min-height:50px;padding:0 12px;background:none;border:0;border-radius:7px;color:#fff;font:600 15.5px var(--body);text-align:left;cursor:pointer}
 .aa-di svg{flex:none;width:22px;height:22px;opacity:.85}
 .aa-di+.aa-di{border-top:1px solid rgba(255,255,255,.07)}
 .aa-di:active{background:rgba(255,255,255,.08)}
-/* the athlete's name, the quote of the day and the gradient line */
-.aa-who{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 0 0;text-align:center}
-.aa-wn{margin:0;color:#E10600;line-height:1.04;text-align:center;overflow-wrap:anywhere}
-.aa-wn .f{font:300 1em/1 var(--body);letter-spacing:.005em}
-.aa-wn .l{font:400 1em/1 'Anton',var(--body);letter-spacing:.025em}
-.aa-quote{margin:0;min-height:2.3em;max-width:330px;font:500 25px/1.12 'Caveat','Bradley Hand','Segoe Script',cursive;color:#d8dee2}
-.aa-gl{display:block;width:100%;height:3px;margin-top:10px;border-radius:2px;background:linear-gradient(90deg,rgba(225,6,0,0) 0%,#E10600 22%,#56B7E6 62%,#88E0C6 88%,rgba(136,224,198,0) 100%);box-shadow:0 0 14px rgba(86,183,230,.25)}
+/* the athlete's name (capitals: the first name thin and white, the last name heavy and red), the quote of the day and a hairline that fades out at both ends */
+.aa-who{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 0 0;text-align:center}
+.aa-wn{margin:0;color:#fff;line-height:1.05;text-align:center;text-transform:uppercase;overflow-wrap:anywhere}
+.aa-wn .f{font:300 1em/1 var(--body);letter-spacing:.16em;color:#fff}
+.aa-wn .l{font:400 1em/1 'Anton',var(--body);letter-spacing:.08em;color:#E10600}
+.aa-quote{display:flex;align-items:center;justify-content:center;min-height:2.3em;max-width:310px;margin:0;text-align:center;font:500 19px/1.15 'Caveat','Bradley Hand','Segoe Script',cursive;color:#d3cfc6}
+.aa-gl{display:block;width:100%;height:1px;margin-top:8px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.85) 50%,rgba(255,255,255,0) 100%)}
 /* the date, in Today's training style */
 .aa-dr{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 0 12px}
 .aa-dr .aa-title{font-size:40px}
 .aa-dm{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-bottom:5px;font:600 11px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--aa-mut)}
 .aa-dm b{padding:3px 8px;border:1px solid var(--aa-blue);color:var(--aa-blue);font-weight:700}
-/* today: a poster for the throwing and one for the lifting */
-.aa-tdy{display:flex;flex-direction:column;gap:10px;--aa-ph:clamp(168px,calc(100dvh - 500px),236px)}
-.aa-posters{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.aa-posters.one{grid-template-columns:1fr}
-.aa-poster{position:relative;display:flex;flex-direction:column;gap:4px;min-height:var(--aa-ph);padding:15px 12px 12px;border:1px solid color-mix(in srgb,var(--pc) 42%,#1d262b);border-radius:14px;overflow:hidden;text-align:left;color:#fff;cursor:pointer;background:linear-gradient(165deg,color-mix(in srgb,var(--pc) 30%,#0b0f12) 0%,#0b0f12 64%);transition:transform .15s ease}
-.aa-poster:active{transform:scale(.98)}
-.aa-poster::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--pc)}
-.aa-poster .art{position:absolute;right:-16px;bottom:30px;width:112px;height:112px;color:var(--pc);opacity:.16;pointer-events:none}
-.aa-poster .art svg{display:block;width:100%;height:100%}
-.aa-poster .lb{position:relative;font:700 11px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--pc) 55%,#fff)}
-.aa-poster .ttl{position:relative;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:4px;font:400 23px/1.05 'Anton',var(--body);letter-spacing:.015em;text-transform:uppercase;overflow-wrap:anywhere}
-.aa-poster .sub{position:relative;font:600 12px/1.3 var(--body);letter-spacing:.03em;color:color-mix(in srgb,var(--pc) 45%,#fff)}
-.aa-poster .mt{position:relative;margin-top:auto;padding-top:8px;font:500 12.5px/1.3 var(--body);color:#c3ccd1}
-.aa-poster .aa-pgr{position:relative;display:flex;align-items:center;gap:8px;margin-top:6px}
-.aa-poster .aa-pgr i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}
-.aa-poster .aa-pgr i b{display:block;height:100%;border-radius:3px;background:var(--pc)}
-.aa-poster .aa-pgr span{flex:none;font:700 12px var(--body);color:#fff}
-.aa-poster.done .aa-pgr i b{background:var(--aa-teal)}
-.aa-poster.done .aa-pgr span{color:var(--aa-teal)}
-.aa-poster.solo{min-height:calc(var(--aa-ph) * .8)}
-.aa-poster.solo .ttl{font-size:30px}
-.aa-poster.solo .art{width:150px;height:150px;bottom:14px;right:-10px}
+/* today: a band for the throwing and one for the lifting. A ring fills as the sets are done; the VeloU badge or a barbell sits in it; a segment per exercise runs along the bottom */
+.aa-tdy{display:flex;flex-direction:column;gap:10px}
+.aa-bands{display:flex;flex-direction:column;gap:10px}
+.aa-band{position:relative;display:flex;align-items:center;gap:14px;width:100%;min-height:104px;padding:14px 14px 14px 18px;border:1px solid color-mix(in srgb,var(--pc) 36%,#1b2328);border-radius:14px;overflow:hidden;text-align:left;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(100deg,color-mix(in srgb,var(--pc) 24%,#0a0e11) 0%,#0a0e11 64%);transition:transform .15s ease}
+.aa-band:active{transform:scale(.985)}
+.aa-band::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--pc)}
+.aa-band::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 12px);-webkit-mask-image:linear-gradient(90deg,transparent 38%,#000 100%);mask-image:linear-gradient(90deg,transparent 38%,#000 100%)}
+.aa-band .med{position:relative;flex:none;display:flex;align-items:center;justify-content:center;width:78px;height:78px}
+.aa-band .ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.aa-band .ring circle{fill:none;stroke-width:5}
+.aa-band .ring .tr{stroke:rgba(255,255,255,.14)}
+.aa-band .ring .pr{stroke:var(--pc);stroke-linecap:round}
+.aa-band .ico{position:relative;display:flex;align-items:center;justify-content:center;width:54px;height:54px}
+.aa-band .ico img{display:block;width:50px;height:auto}
+.aa-band .ico svg{display:block;width:46px;height:46px;color:#fff}
+.aa-band .tx{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.aa-band .lb{display:flex;align-items:baseline;gap:8px}
+.aa-band .lb b{font:700 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:color-mix(in srgb,var(--pc) 62%,#fff)}
+.aa-band .lb em{font:600 11px/1 var(--body);font-style:normal;letter-spacing:.06em;color:#8e9ba2}
+.aa-band .lb u{margin-left:auto;text-decoration:none;font:700 12px/1 var(--body);color:#fff}
+.aa-band .ttl{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px;font:400 23px/1.06 'Anton',var(--body);letter-spacing:.015em;text-transform:uppercase;overflow-wrap:anywhere}
+.aa-band .sub{font:600 12px/1.3 var(--body);letter-spacing:.04em;color:color-mix(in srgb,var(--pc) 38%,#cfd6da)}
+.aa-band .trk{display:flex;gap:3px;height:5px;margin-top:6px}
+.aa-band .trk i{flex:1 1 0;min-width:5px;border-radius:3px;background:rgba(255,255,255,.15);overflow:hidden}
+.aa-band .trk i b{display:block;height:100%;border-radius:3px;background:var(--pc)}
+.aa-band.done .ring .pr{stroke:var(--aa-teal)}
+.aa-band.done .trk i b{background:var(--aa-teal)}
+.aa-band.done .lb u{color:var(--aa-teal)}
+.aa-band.rest{cursor:default;background:linear-gradient(100deg,rgba(136,224,198,.16) 0%,#0a0e11 64%)}
+.aa-band.rest:active{transform:none}
+.aa-band.rest .ico svg{color:var(--aa-teal)}
+.aa-band.rest .ttl{font-size:26px}
 .aa-chips{display:flex;flex-wrap:wrap;gap:8px}
 .aa-chip{display:flex;align-items:center;gap:8px;min-height:36px;padding:0 12px 0 10px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:9px;color:#fff;font:600 13px var(--body);cursor:pointer}
 .aa-chip i{display:block;width:9px;height:9px;border-radius:3px;background:var(--lane)}
 .aa-chip em{font:700 11.5px var(--body);font-style:normal;color:var(--aa-mut)}
-.aa-cta{display:block;width:100%;min-height:54px;border:0;border-radius:10px;background:var(--aa-red);color:#fff;font:400 21px 'Anton',var(--body);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.aa-cta{display:block;width:100%;min-height:42px;padding:0 16px;border:0;border-radius:9px;background:var(--aa-red);color:#fff;font:400 15px 'Anton',var(--body);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
 .aa-cta.done{background:var(--aa-teal);color:#000}
-.aa-restc{position:relative;display:flex;flex-direction:column;gap:6px;min-height:150px;padding:18px 16px;border:1px solid var(--aa-line2);border-radius:14px;overflow:hidden;background:linear-gradient(165deg,rgba(136,224,198,.14) 0%,#0b0f12 64%)}
-.aa-restc .art{position:absolute;right:-6px;top:6px;width:120px;height:120px;color:var(--aa-teal);opacity:.22}
-.aa-restc .art svg{display:block;width:100%;height:100%}
-.aa-restc .lb{position:relative;font:700 11px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--aa-teal)}
-.aa-restc b{position:relative;font:400 32px/1.05 'Anton',var(--body);letter-spacing:.02em;text-transform:uppercase}
-.aa-restc .mt{position:relative;max-width:240px;font:500 14px/1.4 var(--body);color:var(--aa-sub)}
 /* the week */
 .aa-wsec{margin-top:26px;display:flex;flex-direction:column;gap:10px}
+.aa-wsec .aa-mvb{scroll-margin-top:72px}
 .aa-wsh{display:flex;align-items:center;gap:8px}
 .aa-wsh>button{flex:none;width:40px;height:40px;padding:0;background:none;border:1px solid var(--aa-line2);border-radius:9px;color:#fff;font:400 22px/1 var(--body);cursor:pointer}
 .aa-wsh>button:disabled{opacity:.25;cursor:default}
@@ -926,13 +931,14 @@ div.aa-exh{cursor:default}
 .aa-wsh .t b{display:block;font:400 25px/1.05 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
 .aa-wsh .t span{display:block;margin-top:3px;font:600 11.5px var(--body);letter-spacing:.1em;color:var(--aa-mut);text-transform:uppercase}
 .aa-wst{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-.aa-wd{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;background:var(--aa-card);border:1px solid var(--aa-line);border-radius:8px;color:#fff;cursor:pointer;min-width:0;font-family:inherit}
+.aa-wd{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;background:var(--aa-card);border:1px solid var(--aa-line);border-radius:8px;color:#fff;cursor:pointer;min-width:0;font-family:inherit;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:transform .12s ease,background .12s ease}
 .aa-wd small{font:600 10px/1 var(--body);letter-spacing:.1em;color:var(--aa-mut);text-transform:uppercase}
 .aa-wd b{font:400 21px/1 'Anton',var(--body)}
 .aa-wd .ic{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:2px;min-height:44px}
 .aa-wd .ic em{margin-top:14px;font:600 9.5px/1 var(--body);font-style:normal;letter-spacing:.1em;color:var(--aa-mut);text-transform:uppercase}
-.aa-wd .g{position:relative;display:flex;align-items:center;justify-content:center;width:20px;height:20px;font-style:normal}
+.aa-wd .g{position:relative;display:flex;align-items:center;justify-content:center;width:22px;height:20px;font-style:normal}
 .aa-wd .g svg{width:18px;height:18px}
+.aa-wd .g .bdg{width:22px;height:20px}
 .aa-wd .g.throw{color:#E10600}
 .aa-wd .g.lift{color:#56B7E6}
 .aa-wd .g.none{color:#2f3a41;font:700 14px/1 var(--body)}
@@ -950,9 +956,20 @@ div.aa-exh{cursor:default}
 .aa-wd.sel .g.done{color:#0a8a6a}
 .aa-wst.mv .aa-wd.tgt{border-color:var(--aa-blue);border-style:dashed;animation:aa-pulse 1.4s ease-in-out infinite}
 .aa-wst.mv .aa-wd.fr{background:#10171b;border-color:#fff;border-style:solid;color:#fff}
+.aa-wst.mv .aa-wd.lk{opacity:.4}
 .aa-wd.fr b,.aa-wd.fr small{color:#fff}
 .aa-wd s{position:absolute;top:-7px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--aa-blue);color:#000;font:700 12px/20px var(--body);text-align:center;text-decoration:none}
+.aa-wd .mvd{position:absolute;top:-6px;left:-4px;width:17px;height:17px;border-radius:50%;background:#fff;color:#000;font:700 11px/17px var(--body);font-style:normal;text-align:center;box-shadow:0 0 0 2px #000}
+.aa-wd.sel .mvd{background:#000;color:#fff;box-shadow:0 0 0 2px #fff}
 @keyframes aa-pulse{0%,100%{background:var(--aa-card)}50%{background:#10202a}}
+/* picking a day up to drop it on another */
+.aa-wst.drag{cursor:grabbing}
+.aa-wd.drg{opacity:.4;transform:scale(.93)}
+.aa-wd.over{border-color:var(--aa-blue);border-style:dashed;background:#10202a;transform:scale(1.07)}
+.aa-wd.over.sel{background:#dff1fb}
+.aa-wd.flash{animation:aa-flash 1.4s ease-out}
+@keyframes aa-flash{0%{box-shadow:0 0 0 0 rgba(136,224,198,.95)}55%{box-shadow:0 0 0 9px rgba(136,224,198,0)}100%{box-shadow:0 0 0 0 rgba(136,224,198,0)}}
+.aa-ghost{position:fixed;z-index:70;pointer-events:none;transform:translate(-50%,-150%);padding:7px 13px;border-radius:8px;background:#fff;color:#000;font:700 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;box-shadow:0 8px 22px rgba(0,0,0,.6)}
 .aa-wcard{padding:16px 14px 14px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:12px}
 .aa-wcard .h{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .aa-wcard h3{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 10px;font:400 30px/1 'Anton',var(--body);letter-spacing:.01em;text-transform:uppercase;color:#fff}
@@ -961,6 +978,7 @@ div.aa-exh{cursor:default}
 .aa-wl{display:flex;align-items:center;gap:10px;margin:12px 0 0;font:500 14.5px/1.3 var(--body);color:#fff}
 .aa-wl .g{flex:none;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;background:color-mix(in srgb,var(--pc) 22%,transparent);color:var(--pc)}
 .aa-wl .g svg{width:18px;height:18px}
+.aa-wl .g .bdg{width:21px;height:19px}
 .aa-wl b{flex:none;min-width:42px;font:700 11.5px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--pc)}
 .aa-wl span{flex:1;min-width:0;overflow-wrap:anywhere}
 .aa-wl.rest{color:var(--aa-sub)}
@@ -969,9 +987,12 @@ div.aa-exh{cursor:default}
 .aa-wa button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid var(--aa-line2);border-radius:10px;background:none;color:#fff;font:700 13.5px var(--body);cursor:pointer}
 .aa-wa button.y{flex:1 1 130px;background:var(--aa-blue);border-color:var(--aa-blue);color:#000}
 .aa-wa button.mv{flex:1 1 150px}
+.aa-wa button:disabled{opacity:.45;cursor:default}
 .aa-wa button svg{width:18px;height:18px}
 .aa-wt{display:block;margin:12px auto 0;padding:6px;background:none;border:0;color:var(--aa-mut);font:600 13px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .aa-wh{margin:0;text-align:center;font:500 12.5px/1.4 var(--body);color:var(--aa-mut)}
+/* the VeloU badge as a picture that takes the colour of the text around it */
+.bdg{display:block;width:100%;height:100%;background:currentColor;-webkit-mask:url(/assets/velou-badge.png) center/contain no-repeat;mask:url(/assets/velou-badge.png) center/contain no-repeat}
 /* the dashboard screen: the bar stays at the top while the page scrolls under it */
 .aa-dash .aa-bar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:min(548px,100%);margin:0;z-index:40}
 .aa-prof2{margin:20px 0 6px}
@@ -3994,7 +4015,7 @@ function aaRender(){
   if(scr!=='chat'){ if(!S.pkAt||Date.now()-S.pkAt>15000){ S.pkAt=Date.now(); chPeek() } S.pk=setInterval(()=>{ if(!host.isConnected||AAS().screen==='chat'){ clearInterval(S.pk); return } S.pkAt=Date.now(); chPeek() },30000) } }
 
 // ================= Athlete App: the opening page, and the bar at the bottom of every screen =================
-// The opening page: a header (menu, logo, headshot), the athlete's name and the quote of the day, the date, a poster for each part of today's training, and the week with a way to move a day.
+// The opening page: a header (menu, logo, headshot), the athlete's name and the quote of the day, the date, a band for each part of today's training, and the week with a way to move a day.
 // Every screen ends with the bar of four shortcuts: Dashboard, Training, Nutrition, Chat.
 const AASV='fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
 const AAIC={
@@ -4004,22 +4025,22 @@ const AAIC={
   chat:`<svg viewBox="0 0 24 24" ${AASV}><path d="M4 5h16a1.2 1.2 0 0 1 1.2 1.2v9.6A1.2 1.2 0 0 1 20 17h-8.2l-4.6 3.6V17H4a1.2 1.2 0 0 1-1.2-1.2V6.2A1.2 1.2 0 0 1 4 5Z"/><circle cx="8.2" cy="11" r=".6" fill="currentColor"/><circle cx="12" cy="11" r=".6" fill="currentColor"/><circle cx="15.8" cy="11" r=".6" fill="currentColor"/></svg>`,
   week:`<svg viewBox="0 0 24 24" ${AASV}><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.01M8 17.5h2M12 17.5h2"/></svg>`,
   menu:`<svg viewBox="0 0 24 24" ${AASV} stroke-width="2"><path d="M3.5 6.5h17"/><path d="M3.5 12h11.5"/><path d="M3.5 17.5h6.5"/></svg>`};
-// the pictures behind the day's posters
-const AAART={
-  throw:`<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="76" cy="62" r="34"/><path d="M58 33c9 10 9 48 0 58"/><path d="M94 33c-9 10-9 48 0 58"/><path d="M60 43l7 2M61.5 53l8 1.5M62 62h8M61.5 71l8-1.5M60 81l7-2M92 43l-7 2M90.5 53l-8 1.5M90 62h-8M90.5 71l-8-1.5M92 81l-7-2" stroke-width="2"/><path d="M4 46h24M0 62h27M8 78h22" stroke-width="2.8"/></svg>`,
-  lift:`<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 60h108"/><rect x="16" y="28" width="11" height="64" rx="2.5"/><rect x="29" y="36" width="9" height="48" rx="2.5"/><rect x="93" y="28" width="11" height="64" rx="2.5"/><rect x="82" y="36" width="9" height="48" rx="2.5"/></svg>`,
-  rest:`<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M84 18a44 44 0 1 0 24 74A38 38 0 0 1 84 18Z"/><path d="M28 24v10M23 29h10M52 12v7M48.5 15.5h7" stroke-width="2.2"/></svg>`};
-// the small pictures on the week's days
+// the pictures inside the rings of today's bands (the throwing band uses the VeloU badge itself)
+const AAMED={
+  lift:`<svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><rect x="2" y="29" width="60" height="6" rx="3"/><rect x="9" y="14" width="7" height="36" rx="2.5"/><rect x="18" y="19" width="6" height="26" rx="2.5"/><rect x="48" y="14" width="7" height="36" rx="2.5"/><rect x="40" y="19" width="6" height="26" rx="2.5"/></svg>`,
+  rest:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M44 8a26 26 0 1 0 14 44A22 22 0 0 1 44 8Z"/><path d="M14 12v7M10.5 15.5h7"/></svg>`};
+// the small pictures on the week's days: the VeloU badge for throwing (drawn in the colour of the text around it), a barbell for lifting
 const AAGLY={
-  throw:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M7.4 5.4c2.2 2.7 2.2 10.5 0 13.2"/><path d="M16.6 5.4c-2.2 2.7-2.2 10.5 0 13.2"/></svg>`,
+  throw:`<span class="bdg"></span>`,
   lift:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3.5 9.5v5M7 7v10M17 7v10M20.5 9.5v5M7 12h10"/></svg>`};
 const AAFAM={ML:'Movement Literacy',TL:'Tension Literacy',FC:'Force Control',AP:'Applied Power',AC:'Acceleration'};
-const AAPOS={throw:'#E10600',lift:'#56B7E6'};
+const AAPOS={throw:'#E10600',lift:'#56B7E6',rest:'#88E0C6'};
 
 // ---- the quote of the day: one from the list each day, in order (the list is quotes.json next to this page) ----
+const AAQBAN=['Leave the facility better than you found it.'];   // the coach does not want this one shown, ever
 let AAQ=null;
 function aaQuotes(){ if(AAQ!==null) return; AAQ=[];
-  fetch('/athlete-management/athlete/quotes.json?v=1',{credentials:'same-origin'}).then(r=>{ if(!r.ok) throw new Error('quotes '+r.status); return r.json() }).then(j=>{ AAQ=((j&&j.quotes)||[]).map(q=>String(q.text||'').trim()).filter(Boolean); if(AAQ.length&&host.isConnected&&AAS().screen==='home') render() }).catch(e=>console.warn(e)) }
+  fetch('/athlete-management/athlete/quotes.json?v=2',{credentials:'same-origin'}).then(r=>{ if(!r.ok) throw new Error('quotes '+r.status); return r.json() }).then(j=>{ AAQ=((j&&j.quotes)||[]).map(q=>String(q.text||'').trim()).filter(t=>t&&!AAQBAN.includes(t)); if(AAQ.length&&host.isConnected&&AAS().screen==='home') render() }).catch(e=>console.warn(e)) }
 function aaQuote(){ aaQuotes(); if(!AAQ.length) return ''; const n=new Date(), day=Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5); return AAQ[((day%AAQ.length)+AAQ.length)%AAQ.length] }
 
 // ---- the bar at the bottom of every screen, and the menu in the header ----
@@ -4051,12 +4072,12 @@ function aaToast(msg,label,fn){
   if(fn){ const b=el('button',null,label||'Undo'); b.type='button'; b.addEventListener('click',()=>{ t.remove(); fn() }); t.append(b) }
   root.append(t); setTimeout(()=>t.remove(),8000) }
 
-// ---- the athlete: the name (first name thin, last name heavy capitals, in red) ----
+// ---- the athlete: the name in capitals, the first name thin and white, the last name heavy and red ----
 function aaWho(name){
   const w=String(name||'').trim().split(/\s+/).filter(Boolean), h=el('h1','aa-wn');
   let k=w.length-1; if(w.length>2&&/^(jr|sr|ii|iii|iv|v)\.?$/i.test(w[k])) k--;
-  const first=w.length>1?w.slice(0,k).join(' '):'', last=(w.length>1?w.slice(k):w).join(' ').toUpperCase(), len=(first+' '+last).length;
-  h.style.fontSize=(len>26?22:len>20?27:len>15?32:38)+'px';
+  const first=w.length>1?w.slice(0,k).join(' '):'', last=(w.length>1?w.slice(k):w).join(' '), len=(first+' '+last).length;
+  h.style.fontSize=(len>26?16:len>20?19:len>15?22:26)+'px';
   if(first) h.append(el('span','f',first),' '); h.append(el('b','l',last)); return h }
 // the date, as on Today's training: the weekday large, the day and month beside it
 function aaDateRow(dt,meta){
@@ -4064,33 +4085,37 @@ function aaDateRow(dt,meta){
   ttl.append(el('span',null,aaDay(dt,{weekday:'long'})),el('em',null,aaDay(dt,{month:'short',day:'numeric'}))); for(const x of meta) m.append(x); sec.append(ttl,m); return sec }
 
 // ---- what a day holds, in words ----
-const aaPretty=t=>String(t||'').replace(/\s*\/\s*/g,' / ').replace(/\s*\[([^\]]+)\]/g,' ($1)').replace(/\s+/g,' ').trim();
+const aaPretty=t=>String(t||'').replace(/\s*\((?:primary|secondary)\)/ig,'').replace(/\s*\/\s*/g,' / ').replace(/\s*\[([^\]]+)\]/g,' ($1)').replace(/\s+/g,' ').trim();
 function aaLane(m,l){ const s=m.secs.find(x=>x.l===l&&x.rows.length); if(!s) return null; const d=lnDay(l,m.sdt)||{}, work=s.rows.filter(r=>!r.info); return {l,s,d,work,st:aaLaneStat(m,s)} }
-const aaSetsOf=rows=>rows.reduce((a,r)=>a+(r.eff&&r.eff.skip?0:(avSetN(r.eff.sets,r.eff.reps).n||1)),0);
 const aaSub=(l,d)=>l==='throw'?[d.ph,d.lv?'L'+d.lv:''].filter(Boolean).join(' · '):[AAFAM[d.fam]||d.fam,d.ph?'P'+d.ph:''].filter(Boolean).join(' · ');
 // open Today's training, on a day, at a part of it
-function aaOpen(S,dk,lane){ AVN.dk=dk||''; S.jump=lane||''; aaGo('today') }
-// one poster: a part of today's training as a picture, its focus, what is in it and how far along it is
-function aaPoster(S,kind,L,dk,solo){
-  const b=el('button','aa-poster '+kind+(solo?' solo':'')+(L.st.done?' done':'')); b.type='button'; b.style.setProperty('--pc',AAPOS[kind]); b.setAttribute('aria-label',(kind==='throw'?'Throwing':'Lifting')+': '+aaPretty(L.d.title));
-  const art=el('span','art'); art.innerHTML=AAART[kind];
-  const pct=L.st.n?Math.round(L.st.ok/L.st.n*100):0, pg=el('span','aa-pgr'), tr=el('i'), fl=el('b'); fl.style.width=pct+'%'; tr.append(fl);
-  pg.append(tr,el('span',null,L.st.done?'Done ✓':pct+'%'));
-  b.append(art,el('small','lb',kind==='throw'?'Throwing':'Lifting'),el('span','ttl',aaPretty(L.d.title)||(kind==='throw'?'Throwing':'Lifting')),el('span','sub',aaSub(kind,L.d)),
-    el('span','mt',L.work.length+' '+(kind==='throw'?'drill':'exercise')+(L.work.length===1?'':'s')+' · '+aaSetsOf(L.work)+' sets'),pg);
-  b.addEventListener('click',()=>aaOpen(S,dk,kind)); return b }
-// today: a poster for the throwing and one for the lifting, the other parts as small buttons, and one big button to begin
+function aaOpen(S,dk,lane){ AVN.dk=dk||''; S.jump=lane||''; S.hmv=''; aaGo('today') }
+// one band of today: a ring that fills as the sets are done with the VeloU badge (throwing) or a barbell (lifting) in it, the focus in large type, and a segment for every exercise
+function aaBand(S,kind,L,dk,m){
+  const nx=L.work.filter(r=>!(r.eff&&r.eff.skip)), pct=L.st.n?Math.round(L.st.ok/L.st.n*100):0, C=2*Math.PI*40;
+  const b=el('button','aa-band '+kind+(L.st.done?' done':'')); b.type='button'; b.style.setProperty('--pc',AAPOS[kind]); b.setAttribute('aria-label',(kind==='throw'?'Throwing':'Lifting')+': '+aaPretty(L.d.title)+', '+(L.st.done?'done':pct+' percent done'));
+  const med=el('span','med'); med.innerHTML='<svg class="ring" viewBox="0 0 88 88" aria-hidden="true"><circle class="tr" cx="44" cy="44" r="40"/>'+(pct>0?'<circle class="pr" cx="44" cy="44" r="40" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-pct/100)).toFixed(1)+'"/>':'')+'</svg>';
+  const ic=el('span','ico'); if(kind==='throw'){ const im=el('img'); im.src='/assets/velou-badge.png'; im.alt=''; im.decoding='async'; ic.append(im) } else ic.innerHTML=AAMED.lift; med.append(ic);
+  const tx=el('span','tx'), lb=el('span','lb'), sub=aaSub(kind,L.d), trk=el('span','trk');
+  lb.append(el('b',null,kind==='throw'?'Throw':'Lift'),el('em',null,nx.length+' '+(kind==='throw'?'drill':'exercise')+(nx.length===1?'':'s')),el('u',null,L.st.done?'Done ✓':pct+'%'));
+  for(const r of nx){ const x=aaExStat(m,r), i=el('i'), f=el('b'); i.style.flexGrow=String(Math.max(1,x.n)); f.style.width=(x.n?Math.round(Math.min(1,x.ok/x.n)*100):0)+'%'; i.append(f); trk.append(i) }
+  tx.append(lb,el('span','ttl',aaPretty(L.d.title)||(kind==='throw'?'Throwing':'Lifting'))); if(sub) tx.append(el('span','sub',sub)); tx.append(trk);
+  b.append(med,tx); b.addEventListener('click',()=>aaOpen(S,dk,kind)); return b }
+// a day with nothing planned
+function aaBandRest(nx){
+  const b=el('div','aa-band rest'), med=el('span','med'), ic=el('span','ico'), tx=el('span','tx'), lb=el('span','lb'); b.style.setProperty('--pc',AAPOS.rest);
+  med.innerHTML='<svg class="ring" viewBox="0 0 88 88" aria-hidden="true"><circle class="tr" cx="44" cy="44" r="40"/></svg>'; ic.innerHTML=AAMED.rest; med.append(ic);
+  lb.append(el('b',null,'Rest day'));
+  tx.append(lb,el('span','ttl','Recover well'),el('span','sub','Nothing planned today.'+(nx?' Next: '+aaDay(nx.d,{weekday:'long'})+' · '+nx.lanes.join(', ')+'.':'')));
+  b.append(med,tx); return b }
+// today: a band for the throwing and one for the lifting, the other parts as small buttons, and a slim button to begin
 function aaToday2(app,S,st,weeks,todayK){
   const sec=el('section','aa-tdy'), dt=day0(todayK), off=Math.round((dt-st)/864e5);
   if(off<0){ app.append(aaNote('Your program starts '+aaDay(st,{weekday:'long',month:'long',day:'numeric'}),'Tap the week below to look ahead.')); return }
   if(off>=weeks.length*7){ app.append(aaNote('That is the end of your program','Nice work. Your coach will set the next one.')); return }
   const m=avModel(dt), T=aaLane(m,'throw'), Lf=aaLane(m,'lift'), others=['prep','pat','corr'].map(l=>aaLane(m,l)).filter(Boolean);
-  if(!T&&!Lf&&!others.length){
-    const nx=aaAhead(dt,st,weeks), r=el('div','aa-restc'), a=el('span','art'); a.innerHTML=AAART.rest;
-    r.append(a,el('small','lb','Rest day'),el('b',null,'Recover well'),el('span','mt','Nothing planned today.'+(nx?' Next: '+aaDay(nx.d,{weekday:'long'})+' · '+nx.lanes.join(', ')+'.':'')));
-    sec.append(r); app.append(sec); return }
-  const ps=[T&&aaPoster(S,'throw',T,todayK,!Lf),Lf&&aaPoster(S,'lift',Lf,todayK,!T)].filter(Boolean);
-  if(ps.length){ const g=el('div','aa-posters'+(ps.length===1?' one':'')); for(const p of ps) g.append(p); sec.append(g) }
+  if(!T&&!Lf&&!others.length){ sec.append(aaBandRest(aaAhead(dt,st,weeks))); app.append(sec); return }
+  if(T||Lf){ const bands=el('div','aa-bands'); if(T) bands.append(aaBand(S,'throw',T,todayK,m)); if(Lf) bands.append(aaBand(S,'lift',Lf,todayK,m)); sec.append(bands) }
   if(others.length){ const row=el('div','aa-chips'); for(const L of others){ const c=el('button','aa-chip'); c.type='button'; c.style.setProperty('--lane',AALANE[L.l]||'#fff'); c.append(el('i'),el('span',null,L.s.name),el('em',null,String(L.work.length||L.s.rows.length)));
       c.setAttribute('aria-label',L.s.name+', '+L.s.head); c.addEventListener('click',()=>aaOpen(S,todayK,L.l)); row.append(c) } sec.append(row) }
   const t=avTotals(m), fin=!!((AVS.logs[m.dk]||{})._fin), all=fin||(t.all>0&&t.done>=t.all), go=el('button','aa-cta'+(all?' done':'')); go.type='button';
@@ -4098,31 +4123,53 @@ function aaToday2(app,S,st,weeks,todayK){
   sec.append(go); app.append(sec) }
 
 // ---- the week: seven days, each with its throwing and lifting, and a way to swap one day with another ----
-function aaMoveTo(S,a,b){ aaSwapGo(a,b,()=>{ S.hmv=''; S.hsel=ymd(b); render(); aaToast('Swapped '+aaDay(a,{weekday:'long'})+' and '+aaDay(b,{weekday:'long'}),'Undo',()=>{ avSwapDays(a,b); render() }) }) }
+function aaMoveTo(S,a,b){ aaSwapGo(a,b,()=>{ S.hmv=''; S.hsel=ymd(b); S.flash=[ymd(a),ymd(b)]; render(); aaToast('Swapped '+aaDay(a,{weekday:'long'})+' and '+aaDay(b,{weekday:'long'}),'Undo',()=>{ avSwapDays(a,b); S.flash=[ymd(a),ymd(b)]; render() }) }) }
+// press and hold a day (a mouse drags at once), then drag it onto another day to swap them; a plain tap still picks the day
+function aaDrag(strip,S){
+  let st=null, ghost=null, hold=0;
+  const at=(x,y)=>{ const e=root.elementFromPoint(x,y); return e&&e.closest?e.closest('.aa-wd'):null }, clear=()=>{ for(const c of strip.querySelectorAll('.over,.drg')) c.classList.remove('over','drg'); strip.classList.remove('drag') };
+  const begin=()=>{ if(!st||st.on) return; st.on=true; strip.classList.add('drag'); st.c.classList.add('drg'); ghost=el('div','aa-ghost',aaDay(day0(st.c.dataset.dk),{weekday:'long'})); root.append(ghost); ghost.style.left=st.x+'px'; ghost.style.top=st.y+'px'; try{ strip.setPointerCapture(st.id) }catch(e){} try{ if(navigator.vibrate) navigator.vibrate(10) }catch(e){} };
+  const ok=c=>c&&!c.classList.contains('off');
+  strip.addEventListener('pointerdown',e=>{ const c=e.target.closest&&e.target.closest('.aa-wd'); if(!ok(c)||c.classList.contains('lk')||(e.pointerType==='mouse'&&e.button!==0)) return;
+    st={c,x:e.clientX,y:e.clientY,id:e.pointerId,on:false,mouse:e.pointerType==='mouse'}; clearTimeout(hold); if(!st.mouse) hold=setTimeout(begin,260) });
+  strip.addEventListener('pointermove',e=>{ if(!st) return; const d=Math.hypot(e.clientX-st.x,e.clientY-st.y);
+    if(!st.on){ if(st.mouse&&d>6) begin(); else if(!st.mouse&&d>12){ clearTimeout(hold); st=null; return } else return }
+    e.preventDefault(); ghost.style.left=e.clientX+'px'; ghost.style.top=e.clientY+'px'; const t=at(e.clientX,e.clientY); for(const c of strip.querySelectorAll('.over')) c.classList.remove('over'); if(ok(t)&&t!==st.c&&!t.classList.contains('lk')) t.classList.add('over') });
+  strip.addEventListener('touchmove',e=>{ if(st&&st.on&&e.cancelable) e.preventDefault() },{passive:false});   // once a day is picked up, the page must not scroll under the finger
+  const end=(e,drop)=>{ clearTimeout(hold); if(!st) return; const was=st; st=null; if(ghost){ ghost.remove(); ghost=null } const t=was.on&&drop?at(e.clientX,e.clientY):null; clear();
+    if(!was.on) return; strip.dataset.dragged='1'; setTimeout(()=>{ delete strip.dataset.dragged },80);
+    if(!ok(t)||t===was.c) return; if(t.classList.contains('lk')){ aaToast(aaDay(day0(t.dataset.dk),{weekday:'long'})+' is already started, so its training stays put.'); return }
+    aaMoveTo(S,day0(was.c.dataset.dk),day0(t.dataset.dk)) };
+  strip.addEventListener('pointerup',e=>end(e,true)); strip.addEventListener('pointercancel',e=>end(e,false));
+  strip.addEventListener('click',e=>{ if(strip.dataset.dragged){ e.stopPropagation(); e.preventDefault() } },true);
+  strip.addEventListener('contextmenu',e=>{ if(st&&st.on) e.preventDefault() }) }
 function aaWeek2(app,S,st,weeks,todayK){
   const total=weeks.length*7, today=day0(todayK);
   let sel=day0(S.hsel)||today; { const o=Math.round((sel-st)/864e5); if(o<0) sel=st; else if(o>=total) sel=addD(st,total-1) }
-  const selk=ymd(sel), off=Math.round((sel-st)/864e5), wi=Math.floor(off/7), base=addD(st,wi*7), end=addD(base,6), w=weeks[wi], curWi=Math.floor(Math.round((today-st)/864e5)/7), mvk=S.hmv||'';
+  const selk=ymd(sel), off=Math.round((sel-st)/864e5), wi=Math.floor(off/7), base=addD(st,wi*7), end=addD(base,6), w=weeks[wi], curWi=Math.floor(Math.round((today-st)/864e5)/7), mvk=S.hmv||'', flash=S.flash||[]; S.flash=null;
   const sec=el('section','aa-wsec'), hd=el('div','aa-wsh'), tt=el('div','t'), ph=w.off?(w.deload?'Deload':'Off week'):w.code;
-  const go=n=>{ S.hsel=ymd(addD(sel,n)); S.hmv=''; render() }, arrow=(t,lab,n,dis)=>{ const b=el('button',null,t); b.type='button'; b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',()=>go(n)); return b };
+  const go=n=>{ S.hsel=ymd(addD(sel,n)); render() }, arrow=(t,lab,n,dis)=>{ const b=el('button',null,t); b.type='button'; b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',()=>go(n)); return b };   // a move that is under way stays on when the week changes
   tt.append(el('b',null,wi===curWi?'This week':'Week '+w.n+(wi<curWi?' · past':'')),el('span',null,aaDay(base,{month:'short',day:'numeric'})+' – '+aaDay(end,{month:'short',day:'numeric'})+(ph?' · '+ph:'')));
   hd.append(arrow('‹','Previous week',-7,wi<=0),tt,arrow('›','Next week',7,wi>=weeks.length-1)); sec.append(hd);
-  const days=[]; for(let k=0;k<7;k++){ const d=addD(base,k), inr=Math.round((d-st)/864e5)<total; days.push({d,dk:ymd(d),inr,m:inr?avModel(d):null}) }
-  if(mvk){ const bn=el('div','aa-mvb'), t=el('div','t'), cn=el('button','n','Cancel'); cn.type='button'; cn.addEventListener('click',()=>{ S.hmv=''; render() });
-    t.append(el('b',null,'Move '+aaDay(day0(mvk),{weekday:'long'})+'’s training'),el('span',null,'Tap the day to swap it with.')); bn.append(t,cn); sec.append(bn) }
+  const days=[]; for(let k=0;k<7;k++){ const d=addD(base,k), inr=Math.round((d-st)/864e5)<total; days.push({d,dk:ymd(d),inr,m:inr?avModel(d):null,lk:inr&&avLogged(d)}) }
+  if(mvk){ const bn=el('div','aa-mvb'), t=el('div','t'), cn=el('button','n','Cancel'), here=days.some(q=>q.dk===mvk); cn.type='button'; cn.addEventListener('click',()=>{ S.hmv=''; render() });
+    t.append(el('b',null,'Move '+aaDay(day0(mvk),{weekday:'long'})+'’s training'),el('span',null,here?'Tap the day to swap it with, or drag this day onto it.':'Tap the day to swap it with. Use ‹ › to change week.')); bn.append(t,cn); sec.append(bn) }
   const strip=el('div','aa-wst'+(mvk?' mv':''));
   for(const x of days){
-    const b=el('button','aa-wd'+(x.dk===selk?' sel':'')+(x.dk===todayK?' today':'')+(x.inr?'':' off')+(mvk&&x.dk===mvk?' fr':'')+(mvk&&x.inr&&x.dk!==mvk?' tgt':'')); b.type='button'; b.dataset.dk=x.dk;
+    const b=el('button','aa-wd'+(x.dk===selk?' sel':'')+(x.dk===todayK?' today':'')+(x.inr?'':' off')+(x.lk?' lk':'')+(mvk&&x.dk===mvk?' fr':'')+(mvk&&x.inr&&x.dk!==mvk&&!x.lk?' tgt':'')+(flash.includes(x.dk)?' flash':'')); b.type='button'; b.dataset.dk=x.dk;
     b.setAttribute('aria-label',aaDay(x.d,{weekday:'long',month:'long',day:'numeric'})+(x.dk===todayK?', today':''));
     b.append(el('small',null,aaDay(x.d,{weekday:'short'}).slice(0,3)),el('b',null,String(x.d.getDate())));
     const T=x.m&&aaLane(x.m,'throw'), Lf=x.m&&aaLane(x.m,'lift'), ic=el('span','ic');
     for(const [kind,L] of [['throw',T],['lift',Lf]]){ const g=el('i','g '+kind+(L?(L.st.done?' done':L.st.ok?' part':''):' none')); if(L){ g.innerHTML=AAGLY[kind]; if(L.st.done) g.append(el('u',null,'✓')) } else g.textContent='·'; ic.append(g) }
     if(x.m&&!T&&!Lf&&!x.m.secs.some(s=>s.rows.length)){ ic.textContent=''; ic.append(el('em',null,'Rest')) }
     b.append(ic);
-    if(mvk&&x.inr&&x.dk!==mvk) b.append(el('s',null,'⇄'));
-    b.addEventListener('click',()=>{ if(!x.inr) return; if(mvk&&x.dk!==mvk){ aaMoveTo(S,day0(mvk),x.d); return } if(mvk&&x.dk===mvk){ S.hmv=''; render(); return } S.hsel=x.dk; render() });
+    if(x.inr&&ymd(avSrc(x.d))!==x.dk){ const mv=el('em','mvd','⇄'); mv.title='Training moved here'; b.append(mv) }   // this day shows another day's training
+    if(mvk&&x.inr&&x.dk!==mvk&&!x.lk) b.append(el('s',null,'⇄'));
+    b.addEventListener('click',()=>{ if(!x.inr) return;
+      if(mvk&&x.dk!==mvk){ if(x.lk){ aaToast(aaDay(x.d,{weekday:'long'})+' is already started, so its training stays put.'); return } aaMoveTo(S,day0(mvk),x.d); return }
+      if(mvk&&x.dk===mvk){ S.hmv=''; render(); return } S.hsel=x.dk; render() });
     strip.append(b) }
-  sec.append(strip);
+  aaDrag(strip,S); sec.append(strip);
   // the day that is picked: what is in it, and what can be done with it
   const x=days.find(q=>q.dk===selk)||days[0], d=x.d, card=el('div','aa-wcard'), ch=el('div','h'), isToday=selk===todayK, sd=avSrc(d), moved=ymd(sd)!==selk;
   const h=el('h3'); h.append(el('span',null,aaDay(d,{weekday:'long'})),el('em',null,aaDay(d,{month:'short',day:'numeric'}))); ch.append(h); if(isToday) ch.append(el('i','tg','Today')); card.append(ch);
@@ -4134,11 +4181,14 @@ function aaWeek2(app,S,st,weeks,todayK){
   { const oth=x.m?['prep','pat','corr'].map(l=>aaLane(x.m,l)).filter(Boolean):[]; if(oth.length) card.append(el('p','aa-wo',oth.map(L=>L.s.name).join(' · '))) }
   if(moved){ const mb=el('div','aa-mvd'); mb.append(el('span',null,'This is '+aaDay(sd,{weekday:'long'})+'’s training, moved here.')); const pb=el('button',null,'Put it back'); pb.type='button'; pb.addEventListener('click',()=>aaPutBack(d)); mb.append(pb); card.append(mb) }
   const act=el('div','aa-wa'), op=el('button','y','Open this day'); op.type='button'; op.addEventListener('click',()=>aaOpen(S,selk,'')); act.append(op);
-  if(x.inr){ const mv=el('button','mv',null); mv.type='button'; mv.innerHTML=AASWAP+'<span>Move this day</span>'; mv.addEventListener('click',()=>{ S.hmv=selk; render() }); act.append(mv) }
+  if(x.inr){ const mv=el('button','mv'); mv.type='button';
+    if(x.lk){ mv.disabled=true; mv.innerHTML=AASWAP+'<span>Started, so it stays put</span>' }
+    else{ mv.innerHTML=AASWAP+'<span>Move this day</span>'; mv.addEventListener('click',()=>{ S.hmv=selk; render(); setTimeout(()=>{ const s=root.querySelector('.aa-mvb'); if(s) s.scrollIntoView({block:'nearest'}) },40) }) }
+    act.append(mv) }
   card.append(act);
   if(x.inr&&!isToday&&!mvk){ const mt=el('button','aa-wt','Make this day today'); mt.type='button'; mt.addEventListener('click',()=>aaMakeToday(d,todayK)); card.append(mt) }
   sec.append(card);
-  if(!mvk) sec.append(el('p','aa-wh','Tap a day to see it. Tap Move this day to swap it with another day.'));
+  if(!mvk) sec.append(el('p','aa-wh','Tap a day to see it. To swap two days, press and drag one onto the other, or tap Move this day.'));
   app.append(sec) }
 
 // ---- the athlete's profile block (photo, name, position, team, level, age, height, weight, residence): the top of the dashboard screen ----
@@ -4159,11 +4209,11 @@ function aaHome(app,S){
   const p=aaProf(), todayD=new Date(new Date().setHours(12,0,0,0)), todayK=ymd(todayD), st=day0(A.startDate), weeks=planWeeks();
   // the header: the menu, the logo, the headshot
   const top=el('header','aa-top'), [mb,dd]=aaMenu(), br=el('button','aa-brand'), im=el('img'), hs=el('button','aa-hs');
-  im.src='/assets/velou-university-logo.png'; im.alt='VeloUniversity'; br.type='button'; br.setAttribute('aria-label','VeloUniversity: back to the top'); br.append(im); br.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  im.src='/assets/velou-wordmark-white.png'; im.alt='VeloU'; br.type='button'; br.setAttribute('aria-label','VeloU: back to the top'); br.append(im); br.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
   hs.type='button'; hs.setAttribute('aria-label','Your dashboard'); hs.append(aaAvatar(36)); hs.addEventListener('click',()=>aaNav('dash'));
   top.append(mb,br,hs,dd); app.append(top);
   // the athlete, and a line to start the day with
-  const who=el('section','aa-who'); who.append(aaWho(p.name),el('p','aa-quote',aaQuote()),el('i','aa-gl')); app.append(who);
+  const q=aaQuote(), who=el('section','aa-who'); who.append(aaWho(p.name),el('p','aa-quote',q?'“'+q+'”':''),el('i','aa-gl')); app.append(who);
   // the date, with where the day is in the program on its right
   const meta=[]; let wk=null;
   if(st&&weeks.length){ const off=Math.round((day0(todayK)-st)/864e5), soff=Math.round((avSrc(day0(todayK))-st)/864e5); wk=weeks[Math.max(0,Math.min(weeks.length-1,Math.floor(soff/7)))];
