@@ -3963,7 +3963,7 @@ function chBuild(box,role,opt){
   const add=m=>{ if(nodes.has(m.id)) return; unempty(); const d=chDay(m.at); let cont=d===lastDay&&lastWho===m.sender+'|'+(m.coach||''); if(d!==lastDay){ th.append(el('div','ch-day',d)); lastDay=d } lastWho=m.sender+'|'+(m.coach||''); const n=chBubble(m,role,cont); nodes.set(m.id,n); th.append(n); return n };
   /* the preview is a coach looking, not the athlete reading, so it never marks anything read */
   const readNow=()=>{ if(opt.preview||!(C.unread[role]>0)||document.hidden) return; chApi('/messages/read',{reader:role}).then(j=>{ C.unread=j.unread; C.seen=j.seen; try{ window.dispatchEvent(new CustomEvent('velou-chat-read',{detail:{id,unread:C.unread}})) }catch(e){} }).catch(()=>{}) };
-  const refresh=()=>{ if(gone()||document.hidden) return; chApi('/messages'+(C.last?'?after='+C.last:'')).then(j=>{ if(gone()) return; const first=!shown, wasNear=near(), fresh=j.messages.filter(m=>!C.msgs.some(x=>x.id===m.id)); shown=true; C.loaded=true; C.unread=j.unread; C.seen=j.seen; th.querySelectorAll('.ch-note').forEach(n=>n.remove());
+  const refresh=force=>{ if(gone()||(document.hidden&&!force)) return; chApi('/messages'+(C.last?'?after='+C.last:'')).then(j=>{ if(gone()) return; const first=!shown, wasNear=near(), fresh=j.messages.filter(m=>!C.msgs.some(x=>x.id===m.id)); shown=true; C.loaded=true; C.unread=j.unread; C.seen=j.seen; th.querySelectorAll('.ch-note').forEach(n=>n.remove());
       for(const m of fresh){ C.msgs.push(m); C.last=Math.max(C.last,m.id); add(m) } if(!C.msgs.length) showEmpty(); seen(); flags();
       if(first||(fresh.length&&(wasNear||fresh.every(m=>m.sender===role)))) bottom(); else if(fresh.some(m=>m.sender===other)) pill.hidden=false;
       if(fresh.some(m=>m.sender===other)||C.unread[role]>0) readNow() }).catch(e=>{ if(gone()) return; if(!C.loaded){ th.querySelectorAll('.ch-note').forEach(n=>n.remove()); th.prepend(el('p','ch-note',/not found/i.test(e.message)?'This athlete is not in the database yet, so messages cannot be saved.':'Could not load the messages ('+e.message+').')) } }) };
@@ -3998,7 +3998,9 @@ function chBuild(box,role,opt){
   const stage=el('div','ch-stage'); stage.append(th,pill); root.append(stage,chip,form); box.append(root);
   for(const m of C.msgs) add(m); if(!C.msgs.length&&C.loaded) showEmpty(); if(!C.loaded) th.append(el('p','ch-note','Loading the messages…'));
   if(C.loaded){ th.querySelectorAll('.ch-note').forEach(n=>n.remove()); seen(); flags() }
-  refresh(); setTimeout(()=>{ if(C.loaded) bottom() },150);
+  refresh(true); setTimeout(()=>{ if(C.loaded) bottom() },150);
+  const onVis=()=>{ if(gone()){ document.removeEventListener('visibilitychange',onVis); return } if(!document.hidden) refresh() };
+  document.addEventListener('visibilitychange',onVis);
   chTimer=setInterval(()=>{ if(gone()){ clearInterval(chTimer); return } refresh() },CH_POLL);
   fit(); ready() }
 // what is waiting for the athlete, asked for the home screen's chat tile
