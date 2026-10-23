@@ -4064,7 +4064,7 @@ function aaDateRow(dt,meta){
   ttl.append(el('span',null,aaDay(dt,{weekday:'long'})),el('em',null,aaDay(dt,{month:'short',day:'numeric'}))); for(const x of meta) m.append(x); sec.append(ttl,m); return sec }
 
 // ---- what a day holds, in words ----
-const aaPretty=t=>String(t||'').replace(/\s*\/\s*/g,' / ').replace(/\s*\[([^\]]+)\]/g,' · $1').replace(/\s+/g,' ').trim();
+const aaPretty=t=>String(t||'').replace(/\s*\/\s*/g,' / ').replace(/\s*\[([^\]]+)\]/g,' ($1)').replace(/\s+/g,' ').trim();
 function aaLane(m,l){ const s=m.secs.find(x=>x.l===l&&x.rows.length); if(!s) return null; const d=lnDay(l,m.sdt)||{}, work=s.rows.filter(r=>!r.info); return {l,s,d,work,st:aaLaneStat(m,s)} }
 const aaSetsOf=rows=>rows.reduce((a,r)=>a+(r.eff&&r.eff.skip?0:(avSetN(r.eff.sets,r.eff.reps).n||1)),0);
 const aaSub=(l,d)=>l==='throw'?[d.ph,d.lv?'L'+d.lv:''].filter(Boolean).join(' · '):[AAFAM[d.fam]||d.fam,d.ph?'P'+d.ph:''].filter(Boolean).join(' · ');
