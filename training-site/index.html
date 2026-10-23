@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>VeloU Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/portal.css?v=9">
+<style>
+  body{display:grid;place-items:center;padding-block:40px}
+  .gate{width:min(460px,100%);text-align:center}
+  .gate img{display:block;width:min(300px,70%);height:auto;margin:0 auto 34px}
+  .gate .bar{height:3px;width:72px;margin:0 auto 22px;background:var(--red)}
+  .gate p{margin:0 auto;color:var(--muted)}
+  .gate .msg{color:var(--text)}
+  .gate button{margin-top:22px;padding:11px 22px;font:600 15px var(--body);color:#fff;background:transparent;border:1px solid var(--line);cursor:pointer}
+  .gate button:hover{border-color:var(--red)}
+</style>
+</head>
+<body>
+<main class="gate">
+  <img src="/assets/velou-wordmark-white.png" alt="VeloU">
+  <div class="bar" aria-hidden="true"></div>
+  <p class="msg" id="msg" aria-live="polite">Opening your page&hellip;</p>
+  <button id="retry" type="button" hidden>Try again</button>
+</main>
+<script>
+// Signed in through Cloudflare Access. Ask who this is, then send them where they belong:
+// a coach goes to the athlete dashboard (and picks an athlete there); an athlete goes straight to their own page.
+(async function () {
+  var msg = document.getElementById('msg'), retry = document.getElementById('retry');
+  retry.addEventListener('click', function () { location.reload(); });
+  function fail(text) { msg.textContent = text; retry.hidden = false; }
+  try {
+    var r = await fetch('/api/v1/me', { credentials: 'same-origin', headers: { Accept: 'application/json' } });
+    if (r.status === 403) return fail('This email is not set up for VeloU Training yet. Please ask your coach to add it.');
+    if (!r.ok) return fail('We could not open your page just now. Please try again in a moment.');
+    var me = await r.json();
+    if (me && me.role === 'athlete' && me.athlete_id) {
+      location.replace('/athlete-management/athlete/?id=' + encodeURIComponent(me.athlete_id) +
+        '&athlete=' + encodeURIComponent(me.athlete_name || '') + '&app=1');
+    } else {
+      location.replace('/athlete-management/');
+    }
+  } catch (e) { fail('We could not reach VeloU just now. Check your connection and try again.'); }
+})();
+</script>
+</body>
+</html>
