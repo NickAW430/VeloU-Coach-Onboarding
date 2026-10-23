@@ -10,4 +10,5 @@ cp -R assets dist/assets                           # shared styles and logos
 cp -R body-comp dist/body-comp                     # the Nutrition screen opens this
 cp player-report/support.js dist/player-report/support.js   # the page runtime the app is built on
 cp training-site/index.html training-site/_headers training-site/robots.txt dist/
+python3 training-site/for-training.py dist     # what differs from the coaches' copy of the app: see that file
 echo "dist ready: $(find dist -type f | wc -l | tr -d ' ') files, $(du -sk dist | cut -f1) KB"
