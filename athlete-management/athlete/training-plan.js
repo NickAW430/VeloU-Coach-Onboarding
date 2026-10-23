@@ -871,13 +871,13 @@ div.aa-exh{cursor:default}
 .aa-di svg{flex:none;width:22px;height:22px;opacity:.85}
 .aa-di+.aa-di{border-top:1px solid rgba(255,255,255,.07)}
 .aa-di:active{background:rgba(255,255,255,.08)}
-/* the athlete's name (capitals: the first name thin and white, the last name heavy and red), the quote of the day and a hairline that fades out at both ends */
+/* the athlete's name (capitals: the first name thin and white, the last name heavy and red), the quote of the day and a one-pixel white line */
 .aa-who{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 0 0;text-align:center}
 .aa-wn{margin:0;color:#fff;line-height:1.05;text-align:center;text-transform:uppercase;overflow-wrap:anywhere}
 .aa-wn .f{font:300 1em/1 var(--body);letter-spacing:.16em;color:#fff}
 .aa-wn .l{font:400 1em/1 'Anton',var(--body);letter-spacing:.08em;color:#E10600}
 .aa-quote{display:flex;align-items:center;justify-content:center;min-height:2.3em;max-width:310px;margin:0;text-align:center;font:500 19px/1.15 'Caveat','Bradley Hand','Segoe Script',cursive;color:#d3cfc6}
-.aa-gl{display:block;width:100%;height:1px;margin-top:8px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.85) 50%,rgba(255,255,255,0) 100%)}
+.aa-gl{display:block;width:100%;height:1px;margin-top:8px;background:#fff}
 /* the date, in Today's training style */
 .aa-dr{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 0 12px}
 .aa-dr .aa-title{font-size:40px}
@@ -915,12 +915,29 @@ div.aa-exh{cursor:default}
 .aa-band.rest:active{transform:none}
 .aa-band.rest .ico svg{color:var(--aa-teal)}
 .aa-band.rest .ttl{font-size:26px}
-.aa-chips{display:flex;flex-wrap:wrap;gap:8px}
-.aa-chip{display:flex;align-items:center;gap:8px;min-height:36px;padding:0 12px 0 10px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:9px;color:#fff;font:600 13px var(--body);cursor:pointer}
+/* one row: the other parts of the day as small buttons and, in light translucent white so it stands out, the button to begin */
+.aa-chips{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.aa-chip{display:flex;align-items:center;gap:7px;min-height:36px;padding:0 10px 0 9px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:9px;color:#fff;font:600 13px var(--body);cursor:pointer}
 .aa-chip i{display:block;width:9px;height:9px;border-radius:3px;background:var(--lane)}
 .aa-chip em{font:700 11.5px var(--body);font-style:normal;color:var(--aa-mut)}
-.aa-cta{display:block;width:100%;min-height:42px;padding:0 16px;border:0;border-radius:9px;background:var(--aa-red);color:#fff;font:400 15px 'Anton',var(--body);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-.aa-cta.done{background:var(--aa-teal);color:#000}
+.aa-cta{flex:1 1 108px;display:flex;align-items:center;justify-content:center;min-height:36px;padding:4px 8px;border:1px solid rgba(255,255,255,.9);border-radius:9px;background:rgba(255,255,255,.86);color:#000;font:700 13px/1.15 var(--body);text-align:center;text-wrap:balance;cursor:pointer}
+.aa-cta:active{background:rgba(255,255,255,.95)}
+.aa-cta.done{background:rgba(136,224,198,.85);border-color:var(--aa-teal)}
+/* the two containers: today (the date down to the button to begin) and the week */
+.aa-ctr{margin-top:14px;padding:12px 10px;background:rgba(10,14,17,.78);border:1px solid var(--aa-line2);border-radius:18px}
+.aa-ctr .aa-dr{padding:2px 4px 12px}
+.aa-ctr .aa-wsec{margin-top:0}
+.aa-ctr .aa-band{border-radius:12px}
+.aa-ctr .aa-note{margin:0}
+@media (max-width:360px){
+  .aa-dr .aa-title{font-size:34px}
+  .aa-band{gap:10px;padding:12px 10px 12px 14px}
+  .aa-band .med{width:62px;height:62px}
+  .aa-band .ico{width:42px;height:42px}
+  .aa-band .ico img{width:40px}
+  .aa-band .ico svg{width:36px;height:36px}
+  .aa-band .ttl{font-size:20px}
+}
 /* the week */
 .aa-wsec{margin-top:26px;display:flex;flex-direction:column;gap:10px}
 .aa-wsec .aa-mvb{scroll-margin-top:72px}
@@ -4108,7 +4125,7 @@ function aaBandRest(nx){
   lb.append(el('b',null,'Rest day'));
   tx.append(lb,el('span','ttl','Recover well'),el('span','sub','Nothing planned today.'+(nx?' Next: '+aaDay(nx.d,{weekday:'long'})+' · '+nx.lanes.join(', ')+'.':'')));
   b.append(med,tx); return b }
-// today: a band for the throwing and one for the lifting, the other parts as small buttons, and a slim button to begin
+// today: a band for the throwing and one for the lifting, then one row: the other parts as small buttons and, next to them, the button to begin
 function aaToday2(app,S,st,weeks,todayK){
   const sec=el('section','aa-tdy'), dt=day0(todayK), off=Math.round((dt-st)/864e5);
   if(off<0){ app.append(aaNote('Your program starts '+aaDay(st,{weekday:'long',month:'long',day:'numeric'}),'Tap the week below to look ahead.')); return }
@@ -4116,11 +4133,11 @@ function aaToday2(app,S,st,weeks,todayK){
   const m=avModel(dt), T=aaLane(m,'throw'), Lf=aaLane(m,'lift'), others=['prep','pat','corr'].map(l=>aaLane(m,l)).filter(Boolean);
   if(!T&&!Lf&&!others.length){ sec.append(aaBandRest(aaAhead(dt,st,weeks))); app.append(sec); return }
   if(T||Lf){ const bands=el('div','aa-bands'); if(T) bands.append(aaBand(S,'throw',T,todayK,m)); if(Lf) bands.append(aaBand(S,'lift',Lf,todayK,m)); sec.append(bands) }
-  if(others.length){ const row=el('div','aa-chips'); for(const L of others){ const c=el('button','aa-chip'); c.type='button'; c.style.setProperty('--lane',AALANE[L.l]||'#fff'); c.append(el('i'),el('span',null,L.s.name),el('em',null,String(L.work.length||L.s.rows.length)));
-      c.setAttribute('aria-label',L.s.name+', '+L.s.head); c.addEventListener('click',()=>aaOpen(S,todayK,L.l)); row.append(c) } sec.append(row) }
-  const t=avTotals(m), fin=!!((AVS.logs[m.dk]||{})._fin), all=fin||(t.all>0&&t.done>=t.all), go=el('button','aa-cta'+(all?' done':'')); go.type='button';
+  const row=el('div','aa-chips'); for(const L of others){ const c=el('button','aa-chip'); c.type='button'; c.style.setProperty('--lane',AALANE[L.l]||'#fff'); c.append(el('i'),el('span',null,L.s.name),el('em',null,String(L.work.length||L.s.rows.length)));
+      c.setAttribute('aria-label',L.s.name+', '+L.s.head); c.addEventListener('click',()=>aaOpen(S,todayK,L.l)); row.append(c) }
+  const t=avTotals(m), fin=!!((AVS.logs[m.dk]||{})._fin), all=fin||(t.all>0&&t.done>=t.all), go=el('button','aa-cta'+(all?' done':'')); go.type='button';   // the button to begin sits in the row of the other parts, in light translucent white
   go.textContent=all?'Workout complete ✓':t.done?'Continue · '+t.done+' of '+t.all+' sets':'Start today’s training'; go.addEventListener('click',()=>aaOpen(S,todayK,''));
-  sec.append(go); app.append(sec) }
+  row.append(go); sec.append(row); app.append(sec) }
 
 // ---- the week: seven days, each with its throwing and lifting, and a way to swap one day with another ----
 function aaMoveTo(S,a,b){ aaSwapGo(a,b,()=>{ S.hmv=''; S.hsel=ymd(b); S.flash=[ymd(a),ymd(b)]; render(); aaToast('Swapped '+aaDay(a,{weekday:'long'})+' and '+aaDay(b,{weekday:'long'}),'Undo',()=>{ avSwapDays(a,b); S.flash=[ymd(a),ymd(b)]; render() }) }) }
@@ -4218,13 +4235,14 @@ function aaHome(app,S){
   const meta=[]; let wk=null;
   if(st&&weeks.length){ const off=Math.round((day0(todayK)-st)/864e5), soff=Math.round((avSrc(day0(todayK))-st)/864e5); wk=weeks[Math.max(0,Math.min(weeks.length-1,Math.floor(soff/7)))];
     if(off>=0&&off<weeks.length*7){ meta.push(el('span',null,'Week '+wk.n+' · Day '+(((soff%7)+7)%7+1))); const ph=wk.off?(wk.deload?'Deload':'Off week'):wk.code; if(ph) meta.push(el('b',null,ph)) } }
-  app.append(aaDateRow(todayD,meta));
-  if(!st){ app.append(aaNote('Your program has no start date yet','Your coach will set it up.')); return }
-  if(!weeks.length){ app.append(aaNote('Your program is not ready yet','Check back soon.')); return }
-  if(!aaReady()){ app.append(aaNote('Loading your program…')); S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected&&AAS().screen==='home') render() },700); return }
+  // two containers: today (the date down to the button to begin) and the week
+  const c1=el('section','aa-ctr'); c1.append(aaDateRow(todayD,meta)); app.append(c1);
+  if(!st){ c1.append(aaNote('Your program has no start date yet','Your coach will set it up.')); return }
+  if(!weeks.length){ c1.append(aaNote('Your program is not ready yet','Check back soon.')); return }
+  if(!aaReady()){ c1.append(aaNote('Loading your program…')); S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected&&AAS().screen==='home') render() },700); return }
   S.wait=0;
-  aaToday2(app,S,st,weeks,todayK);
-  aaWeek2(app,S,st,weeks,todayK) }
+  aaToday2(c1,S,st,weeks,todayK);
+  const c2=el('section','aa-ctr'); app.append(c2); aaWeek2(c2,S,st,weeks,todayK) }
 
 // ================= Messages: the chat between an athlete and their coaches =================
 // One thread for each athlete, kept in the database. The Athlete App's chat screen is the athlete's side and the coach's Messages tab is the other:
