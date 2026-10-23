@@ -7,6 +7,7 @@
 // Secrets:    SHEET_ATHLETES, SHEET_TRACKMAN, SHEET_INSEASON   (the three Google Sheet IDs)
 // Variables:  TEAM_DOMAIN  e.g. velouniversity.cloudflareaccess.com
 //             POLICY_AUD   the Application Audience (AUD) tag of the Access application
+//             TRAINING_AUD the AUD tag of the Access application on velou.training (coaches and athletes sign in there)
 //
 // Cloudflare Access already blocks anyone who is not signed in before a request reaches here.
 // The Worker re-checks the Access token anyway, so a request that skips Access still gets nothing.
@@ -74,8 +75,10 @@ async function verifyAccess(request, env) {
     if (payload.nbf && payload.nbf > now + 60) return false;
     if (payload.iss !== `https://${env.TEAM_DOMAIN}`) return false;
     const aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
-    if (!aud.includes(env.POLICY_AUD)) return false;
-    return true;
+    const coachApp = aud.includes(env.POLICY_AUD);
+    const trainingApp = !!env.TRAINING_AUD && aud.includes(env.TRAINING_AUD);
+    if (!coachApp && !trainingApp) return false;
+    return { email: payload.email || '', training: trainingApp && !coachApp };
   } catch (e) {
     return false;
   }
@@ -83,7 +86,49 @@ async function verifyAccess(request, env) {
 
 // ---- Proxy ----------------------------------------------------------------------------
 
+// ---- Athletes (velou.training) --------------------------------------------------------------------
+// Coaches and athletes sign in on velou.training through its own Access application (TRAINING_AUD). A coach (a coach record,
+// or a @velouniversity.com address) gets the sheets as before. An athlete is exactly one athlete's email, and what they get is
+// their own rows: the Worker keeps only the columns they asked for and replaces the "where" with their own name.
+// Needs the D1 binding DB (the same database as velou-api).
+const COACH_DOMAIN = '@velouniversity.com';
+const ATHLETE_TABS = new Set(['Athlete Mainframe', 'Athlete Score Comparison', 'Program Board', 'VeloU On-Site Athlete Evaluation',
+  'CMJ', 'IMTP', 'Squat Jump', 'CMJR', 'Plyo Pushup', 'Energy Interference', 'Energy Transference']);
+
+async function whoIs(env, email) {
+  const e = email.toLowerCase().trim();
+  if (e.endsWith(COACH_DOMAIN) || await env.DB.prepare('SELECT 1 AS x FROM coaches WHERE email = ?').bind(e).first()) return 'coach';
+  const { results } = await env.DB.prepare('SELECT first_name, last_name FROM athletes WHERE lower(trim(email)) = ? LIMIT 2').bind(e).all();
+  return results.length === 1 ? { name: `${results[0].first_name} ${results[0].last_name}` } : null;
+}
+
+// the same pattern the athlete app builds for the name (a quote mark may be any quote mark, spaces may repeat)
+function namePattern(name) {
+  return name.replace(/"/g, '').trim().toLowerCase().split('').map(ch => /['’‘`´]/.test(ch) ? "['’‘`´]?" : /\s/.test(ch) ? ' *' : /[.*+?^${}()|[\]\\]/.test(ch) ? '[' + ch + ']' : ch).join('').replace(/( \*)+/g, ' *');
+}
+
 export default {
+  async fetch(request, env) {
+    if (request.method !== 'GET' || new URL(request.url).pathname !== '/api/sheets') return proxy.fetch(request, env);
+    const who = await verifyAccess(request, env);
+    if (!who || !who.training) return proxy.fetch(request, env);
+    if (!env.DB) return reply(503, { status: 'error', errors: ['not set up'] });
+    const me = await whoIs(env, who.email);
+    if (me === 'coach') return proxy.fetch(request, env);
+    if (!me) return reply(403, { status: 'error', errors: ['not set up for VeloU Training'] });
+
+    const url = new URL(request.url);
+    const src = url.searchParams.get('src'), sheet = url.searchParams.get('sheet');
+    const asked = /^\s*select\s+(\*|[A-Z]{1,2}(\s*,\s*[A-Z]{1,2})*)(\s+where\b[\s\S]*)?$/i.exec(url.searchParams.get('tq') || '');
+    if (!asked || !((src === 'athletes' && ATHLETE_TABS.has(sheet)) || (src === 'trackman' && !sheet))) {
+      return reply(403, { status: 'error', errors: ['not available'] });
+    }
+    url.searchParams.set('tq', `select ${asked[1]} where lower(A) matches " *${namePattern(me.name)} *"`);
+    return proxy.fetch(new Request(url.toString(), request), env);
+  },
+};
+
+const proxy = {
   async fetch(request, env) {
     if (request.method !== 'GET') return reply(405, { status: 'error', errors: ['method'] });
 

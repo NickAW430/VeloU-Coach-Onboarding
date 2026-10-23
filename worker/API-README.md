@@ -77,12 +77,25 @@ photos and videos. Attachments live in the R2 bucket under `messages/<athlete id
 `athlete` or `coach`, with the coach's name), which `channel` carried it (`app` today; `imessage` and `sms` are reserved for the
 text-message bridge), and when each side read it. `GET /api/v1/overview` adds `unread_messages` for each athlete and in the
 counts, which the Athletes page shows as a chip.
-Until athletes sign in for themselves, the athlete's side is the Athlete App preview in a coach's browser. What it sends is saved
-with `is_test = 1`, shows as a test in the thread, never counts as unread for the coaches, and can be cleared from the Messages
-tab. The preview does not mark the coaches' messages as read, because no athlete has seen them. When athlete logins exist, their
-own routes will send and read as the athlete, and a text-message bridge will write rows with `channel = 'imessage'`.
+The athlete's side is either an athlete signed in on velou.training (see Athletes signing in) or the Athlete App preview in a coach's
+browser. What the preview sends is saved with `is_test = 1`, shows as a test in the thread, never counts as unread for the coaches,
+and can be cleared from the Messages tab; an athlete never sees those. The preview does not mark the coaches' messages as read,
+because no athlete has seen them. A text-message bridge will write rows with `channel = 'imessage'`.
+
+## Athletes signing in (velou.training)
+velou.training is its own Access application (its AUD is the Worker variable `TRAINING_AUD`; `POLICY_AUD` stays the coaches' app on
+velou.coach). Coaches and athletes both sign in there with an email code. The Worker decides who is who from the email:
+- a coach record, or any `@velouniversity.com` address, is a coach and gets every route above;
+- otherwise the email must be on exactly one athlete (`athletes.email`), and that person gets only their own app (`athleteRoute`):
+  `me` (with `role: "athlete"`, `athlete_id`, `athlete_name`), the program library, their overview row, a roster of ids without names,
+  their scores, their message thread (read, write, upload, mark read), their message files, and their own plan and history keys.
+  Anything else answers 403. An unknown email answers 403 and is never turned into a coach.
+- an athlete's message is saved as `sender = 'athlete'`, no coach, and not a test.
+The sheets Worker (`velou-sheets-proxy`) follows the same rule: for an athlete it keeps the columns asked for and replaces the
+`where` with the athlete's own name. It reads the same database, so it needs the D1 binding `DB` and the same `TRAINING_AUD`.
+To let an athlete in: put their email on their athlete record and in the velou.training Access policy.
 
 ## Notes
-- Writes only work from https://velou.coach (the Worker checks the `Origin`), so another website cannot post with a coach's login.
+- Writes only work from the sites listed in `ALLOWED_ORIGIN` (the Worker checks the `Origin`), so another website cannot post with someone's login.
 - No secrets live in this repo. The AUD tag and the database binding are set in Cloudflare.
-- The athlete portal on the other site will need its own athlete login and its own routes. Coach access and athlete access should stay separate.
+- The Black Label athlete portal on the other site has its own athlete login and routes. Coach access and athlete access stay separate there too.

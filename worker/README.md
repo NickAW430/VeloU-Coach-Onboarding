@@ -26,6 +26,9 @@ Cloudflare secrets, never in this repo.
 5. **Publish the site** (commit and push the repo), then open https://velou.coach/player-report/
    after signing in.
 
+6. **For velou.training** (athletes signing in): add the D1 binding `DB` (`velou`) and the variable `TRAINING_AUD` (the AUD tag of the
+   velou.training Access application), and route `velou.training/api/sheets*` to this Worker as well. See `API-README.md`.
+
 ## Check it
 - Signed in, the Player Report loads an athlete with scores and pitches.
 - In a private window, `https://velou.coach/api/sheets?src=athletes` asks you to sign in instead of

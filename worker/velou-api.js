@@ -5,6 +5,7 @@
 //             FILES         the R2 bucket for photos, videos and reports
 // Variables:  TEAM_DOMAIN   e.g. velouniversity.cloudflareaccess.com
 //             POLICY_AUD    the Application Audience (AUD) tag of the Access application
+//             TRAINING_AUD  the AUD tag of the Access application on velou.training (coaches and athletes sign in there)
 //             ALLOWED_ORIGIN  optional, defaults to https://velou.coach (writes must come from this origin; several can be listed, comma separated)
 //
 // Cloudflare Access blocks anyone who is not signed in before a request reaches here. The Worker checks the
@@ -105,7 +106,10 @@ async function verifyAccess(request, env) {
     if (payload.nbf && payload.nbf > now + 60) return null;
     if (payload.iss !== `https://${env.TEAM_DOMAIN}`) return null;
     const aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
-    if (!aud.includes(env.POLICY_AUD)) return null;
+    const coachApp = aud.includes(env.POLICY_AUD);
+    const trainingApp = !!env.TRAINING_AUD && aud.includes(env.TRAINING_AUD);
+    if (!coachApp && !trainingApp) return null;
+    payload.training = trainingApp && !coachApp;
     if (!payload.email) return null;
     return payload;
   } catch (e) {
@@ -1286,8 +1290,9 @@ async function listMessages(env, athleteId, url) {
   return Object.assign({ messages: results.map(messageOut) }, await messageState(env, athleteId));
 }
 
-// a coach writes to the athlete; with as: 'athlete' the Athlete App preview writes as the athlete, as a test
-async function sendMessage(env, athleteId, body, coach) {
+// a coach writes to the athlete; with as: 'athlete' the Athlete App preview writes as the athlete, as a test;
+// real is the athlete themselves (signed in on velou.training): an athlete's message, no coach, and not a test
+async function sendMessage(env, athleteId, body, coach, real) {
   await getAthlete(env, athleteId);
   if (!isObj(body)) throw new HttpError(400, 'body must be an object');
   const text = str(body.body, 'body', { max: MAX_MESSAGE_TEXT }) || '';
@@ -1303,12 +1308,12 @@ async function sendMessage(env, athleteId, body, coach) {
     if (env.FILES && !(await env.FILES.head(key))) throw new HttpError(400, 'the attachment was not uploaded');
   }
   if (!text && !att) throw new HttpError(400, 'write a message or attach a video or photo');
-  const asAthlete = body.as === 'athlete';
+  const asAthlete = real || body.as === 'athlete';
   const res = await env.DB.prepare(
     `INSERT INTO messages (athlete_id, sender, coach_id, coach_name, body, att_key, att_type, att_size, att_name, channel, is_test, created_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'app', ?, ?)`
-  ).bind(athleteId, asAthlete ? 'athlete' : 'coach', coach.id, asAthlete ? null : coachLabel(coach), text,
-    att ? att.key : null, att ? att.type : null, att ? att.size : null, att ? att.name : null, asAthlete ? 1 : 0, nowIso()).run();
+  ).bind(athleteId, asAthlete ? 'athlete' : 'coach', real ? null : coach.id, asAthlete ? null : coachLabel(coach), text,
+    att ? att.key : null, att ? att.type : null, att ? att.size : null, att ? att.name : null, asAthlete && !real ? 1 : 0, nowIso()).run();
   const row = await env.DB.prepare('SELECT * FROM messages WHERE id = ?').bind(res.meta.last_row_id).first();
   return { message: messageOut(row) };
 }
@@ -1446,6 +1451,86 @@ async function route(request, env, coach, url) {
   throw new HttpError(404, 'not found');
 }
 
+// ---- Athletes signing in (velou.training) -----------------------------------------------------------
+// velou.training has its own Access application (TRAINING_AUD), where coaches and athletes sign in with the same email code.
+// Whoever has a coach record, or a @velouniversity.com address, is a coach and gets everything above.
+// Anyone else must be exactly one athlete's email, and gets only that athlete's own app: the routes in athleteRoute and nothing else.
+const COACH_DOMAIN = '@velouniversity.com';
+
+async function identify(env, email) {
+  const e = email.toLowerCase().trim();
+  if (e.endsWith(COACH_DOMAIN) || await env.DB.prepare('SELECT 1 AS x FROM coaches WHERE email = ?').bind(e).first()) {
+    return { coach: await currentCoach(env, e) };
+  }
+  const { results } = await env.DB.prepare(
+    'SELECT id, first_name, last_name, email FROM athletes WHERE lower(trim(email)) = ? LIMIT 2').bind(e).all();
+  if (results.length !== 1) throw new HttpError(403, 'this email is not set up for VeloU Training yet');
+  return { athlete: results[0] };
+}
+
+async function athleteRoute(request, env, me, url) {
+  const parts = url.pathname.replace(/^\/api\/v1\/?/, '').split('/').filter(Boolean);
+  const method = request.method;
+  const [a, b, c, d] = parts;
+  const id = me.id;
+  const name = `${me.first_name} ${me.last_name}`;
+
+  // name is a coach's name in the app (it signs their notes); an athlete has none, their own name is athlete_name
+  if (a === 'me' && !b && method === 'GET') return [200, { role: 'athlete', athlete_id: id, athlete_name: name, name: '' }];
+  if (a === 'library' && b === 'tab' && !c && method === 'GET') return [200, await libraryTab(env, url), true];
+
+  // the app finds its athlete in the overview and the roster: the overview answers with this athlete alone,
+  // and the roster with ids only (the daily quote is spread over the ids)
+  if (a === 'overview' && !b && method === 'GET') {
+    const o = await overview(env, url);
+    return [200, { athletes: o.athletes.filter(x => x.id === id) }];
+  }
+  if (a === 'athletes' && !b && method === 'GET') {
+    const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') || '50', 10) || 50, 1), 200);
+    const offset = Math.max(parseInt(url.searchParams.get('offset') || '0', 10) || 0, 0);
+    const { results } = await env.DB.prepare('SELECT id FROM athletes ORDER BY last_name, first_name LIMIT ? OFFSET ?').bind(limit, offset).all();
+    return [200, { athletes: results.map(r => ({ id: r.id, first_name: '', last_name: '' })), limit, offset }];
+  }
+
+  if (a === 'athletes' && b === id) {
+    if (c === 'scores' && !d && method === 'GET') return [200, await athleteScores(env, id)];
+    if (c === 'messages') {
+      if (!d && method === 'GET') {
+        const r = await listMessages(env, id, url);
+        r.messages = r.messages.filter(m => !m.test); // what a coach tried from the Athlete App preview is not part of the thread
+        return [200, r];
+      }
+      if (!d && method === 'POST') return [201, await sendMessage(env, id, await readJson(request), null, true)];
+      if (d === 'read' && method === 'POST') return [200, await markMessagesRead(env, id, { reader: 'athlete' })];
+      if (d === 'upload' && method === 'POST') return [201, await uploadMessageFile(env, request, id, url)];
+    }
+  }
+  if (a === 'messages' && String(parseInt(b, 10)) === b && c === 'file' && method === 'GET') {
+    const m = await env.DB.prepare('SELECT athlete_id FROM messages WHERE id = ?').bind(parseInt(b, 10)).first();
+    if (!m || m.athlete_id !== id) throw new HttpError(404, 'file not found');
+    return [200, await serveMessageFile(env, request, parseInt(b, 10)), true];
+  }
+
+  // the plan and the workout history, this athlete's own two keys only (the shared drill library is read only)
+  if (a === 'plans' && !b) {
+    if (method === 'GET') {
+      url.searchParams.set('athlete', id);
+      const r = await listPlans(env, url);
+      r.items = r.items.map(i => ({ scope: i.scope, key: i.key, data: i.data, updated_at: i.updated_at, seed: i.seed }));
+      return [200, r];
+    }
+    if (method === 'PUT' || method === 'DELETE') {
+      const body = await readJson(request);
+      if (!isObj(body) || String(body.athlete || '') !== id || (body.key !== 'velou.plan.' + name && body.key !== 'velou.history.' + name)) {
+        throw new HttpError(403, 'that is not your plan');
+      }
+      return [200, method === 'PUT' ? await savePlan(env, body, { email: me.email }) : await deletePlan(env, body)];
+    }
+  }
+
+  throw new HttpError(403, 'not available');
+}
+
 export default {
   // cron trigger: keep the database in step with the sheets
   async scheduled(event, env, ctx) {
@@ -1467,8 +1552,8 @@ export default {
         if (!allowed.includes(request.headers.get('Origin'))) throw new HttpError(403, 'bad origin');
       }
 
-      const coach = await currentCoach(env, token.email);
-      const [status, body, raw] = await route(request, env, coach, url);
+      const who = token.training ? await identify(env, token.email) : { coach: await currentCoach(env, token.email) };
+      const [status, body, raw] = who.athlete ? await athleteRoute(request, env, who.athlete, url) : await route(request, env, who.coach, url);
       return raw ? body : reply(status, body);
     } catch (e) {
       if (e instanceof HttpError) return reply(e.status, { error: e.message });
