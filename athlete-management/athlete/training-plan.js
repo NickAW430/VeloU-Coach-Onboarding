@@ -551,6 +551,7 @@ button.rr:hover{background:var(--sunk)}
 .aa-tile:active{transform:scale(.98)}
 @media (hover:hover){.aa-tile:hover::before{transform:scaleX(1)}.aa-tile:hover{transform:translateY(-3px);background:linear-gradient(180deg,#202020 0%,rgba(32,32,32,0) 100%)}}
 .aa-tile:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.aa-tile.wide{grid-column:1/-1;aspect-ratio:auto;min-height:128px}
 .aa-tile .eb{display:flex;align-items:center;justify-content:space-between;gap:6px;font:700 11px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:#fff}
 .aa-tile .eb em.new{border-color:#E10600;background:#E10600;color:#fff}
 .aa-tile .eb em{flex:0 1 auto;min-width:0;max-width:100%;padding:2px 7px;border:1px solid var(--tc);border-radius:10px;font:600 10px/1.2 var(--body);font-style:normal;letter-spacing:.01em;text-transform:none;color:var(--tc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -3859,6 +3860,10 @@ const AAICON={
   today:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg>',
   week:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M12 14h2M16 14h.01M8 17.5h2M12 17.5h2"/></svg>',
   chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1h-8l-4.5 3.5V17H4a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1Z"/></svg>'};
+// the Nutrition square: what the planner page saved for this athlete in this browser (set up or not, and the training-day calories), and the address of that page
+function aaNutKey(){ return 'bcp-summary:'+(chId()||('name:'+String(host.dataset.athlete||''))) }
+function aaNut(){ try{ const j=JSON.parse(localStorage.getItem(aaNutKey())||'null'); return j&&j.done&&j.kcal?j:null }catch(e){ return null } }
+function aaNutUrl(){ const id=chId(); return '/body-comp/?app=1'+(id?'&id='+encodeURIComponent(id):'')+'&athlete='+encodeURIComponent(String(host.dataset.athlete||'')) }
 // the opening page, in the look of the portal home: the VeloU New York logo, the athlete (the dashboard's left-hand block), and four gradient squares
 function aaHome(app,S){
   const p=aaProf();
@@ -3880,11 +3885,11 @@ function aaHome(app,S){
     else { S.wait=0; const td=day0(ymd(new Date(new Date().setHours(12,0,0,0)))), off=Math.round((td-st)/864e5);
       if(off>=0&&off<weeks.length*7){ const dl=lnDay('lift',avSrc(td)), rows=dl&&!dl.out&&!dl.loading?(dl.rows||[]).filter(r=>!r.info):[];
         if(rows.length){ todayEb='Lift'; todayPill=abbrFocus(dl.title||'')||'Lift day' } else { const sx=aaStat(td,st,weeks); todayPill=sx&&sx.rest?'Rest day':'No lift today' } } } }
-  const tiles=el('nav','aa-tiles'), un=chState().peek||0;
-  for(const [id,eyebrow,name,desc,cta,col,stat] of [['dash','Progress','Athlete Dashboard','Your energy profile and scores','Open Dashboard →','#E10600',''],['today',todayEb,'Today’s Training','Today’s workout, step by step','Open Today →','#56B7E6',todayPill],['week','Calendar','Training for the Week','Your week at a glance','Open Week →','#88E0C6',''],['chat','Messages','Chat with Your Coach',un?un+' new message'+(un>1?'s':'')+' from your coach':'Message and share video','Open Chat →','#FFFFFF',un?un+' new':'']]){
-    const b=el('button','aa-tile'); b.type='button'; b.style.setProperty('--tc',col); b.setAttribute('aria-label',name);
+  const tiles=el('nav','aa-tiles'), un=chState().peek||0, nut=aaNut();
+  for(const [id,eyebrow,name,desc,cta,col,stat] of [['dash','Progress','Athlete Dashboard','Your energy profile and scores','Open Dashboard →','#E10600',''],['today',todayEb,'Today’s Training','Today’s workout, step by step','Open Today →','#56B7E6',todayPill],['week','Calendar','Training for the Week','Your week at a glance','Open Week →','#88E0C6',''],['chat','Messages','Chat with Your Coach',un?un+' new message'+(un>1?'s':'')+' from your coach':'Message and share video','Open Chat →','#FFFFFF',un?un+' new':''],['nutrition','Fuel','Nutrition',nut?'Your daily needs, meals and shopping list':'Build your plan in about 5 minutes',nut?'Open Nutrition →':'Start →','#98A2AA',nut?nut.kcal.toLocaleString('en-US')+' kcal':'Set up']]){
+    const b=el('button','aa-tile'+(id==='nutrition'?' wide':'')); b.type='button'; b.style.setProperty('--tc',col); b.setAttribute('aria-label',name);
     const eb=el('span','eb'); eb.append(el('span',null,eyebrow)); if(stat) eb.append(el('em',id==='chat'?'new':null,stat));
-    b.append(eb,el('b',null,name),el('span','ds',desc),el('span','cta',cta)); b.addEventListener('click',()=>{ if(id==='today') AVN.dk=''; aaGo(id) }); tiles.append(b) }
+    b.append(eb,el('b',null,name),el('span','ds',desc),el('span','cta',cta)); b.addEventListener('click',()=>{ if(id==='nutrition'){ location.href=aaNutUrl(); return } if(id==='today') AVN.dk=''; aaGo(id) }); tiles.append(b) }
   app.append(tiles);
   // while the home screen is open, look every half minute for what the coach has written
   clearInterval(S.pk); chPeek(); S.pk=setInterval(()=>{ if(!host.isConnected||AAS().screen!=='home'){ clearInterval(S.pk); return } chPeek() },30000) }

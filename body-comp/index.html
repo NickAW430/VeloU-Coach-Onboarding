@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="VeloU Body Comp Planner: objective, calories, macros, meals, shopping and prep from your week.">
+<script>try{if(/[?&]app=1(&|$)/.test(location.search))document.documentElement.setAttribute("data-app","1")}catch(e){}</script>
 <title>VeloU Body Comp Planner</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
 <style>
@@ -342,9 +343,102 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
   .mealrow { grid-template-columns: 1fr 1fr; }
   .mealrow .field:first-child { grid-column: 1 / -1; }
 }
+
+/* ---- Athlete app mode (?app=1): the athlete's own Nutrition screen. The same planner, set out for a phone: a bar with a back arrow, a guided first-time assessment, then a dashboard and a shopping list. ---- */
+.appbar, .wizhead, .wizbar { display: none; }
+html[data-app] .topbar, html[data-app] header.top { display: none; }
+html[data-app] .wrap { max-width: 520px; }
+html[data-app] main { padding-block: 14px 56px; }
+html[data-app] section.panel { gap: 18px; }
+html[data-app] .appbar { display: flex; position: sticky; top: 0; z-index: 30; align-items: center; gap: 8px; height: 56px; padding: 0 max(14px, env(safe-area-inset-right, 0px)) 0 max(6px, env(safe-area-inset-left, 0px)); background: rgba(0,0,0,.92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+html[data-app] .appbar .bk { flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; color: #fff; background: none; border: 0; cursor: pointer; text-decoration: none; }
+html[data-app] .appbar .bk svg { width: 24px; height: 24px; }
+html[data-app] .appbar .bt { flex: 1; text-align: center; font-family: var(--display); font-weight: 400; font-size: 1.35rem; letter-spacing: .02em; text-transform: uppercase; color: #fff; }
+html[data-app] .appbar .me { flex: none; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px; border: 1px solid #2b373e; background: #10161a; color: #fff; font: 600 13px var(--body); }
+html[data-app] nav.tabs { top: 56px; }
+html[data-app] nav.tabs .wrap { display: grid; grid-template-columns: 1fr 1fr; overflow: visible; }
+html[data-app] nav.tabs button { text-align: center; padding: 12px 8px 9px; }
+html[data-app] #tab-intake, html[data-app] #tab-meals, html[data-app] #tab-prep, html[data-app] #tab-progress { display: none; }
+html[data-app][data-wiz="1"] nav.tabs { display: none; }
+html[data-app][data-wiz="1"] main { padding-bottom: 150px; }
+/* the guided assessment: one step at a time */
+html[data-app][data-wiz="1"] .wizhead { display: grid; gap: 6px; padding-bottom: 14px; }
+.wizhead h2 { font-size: 2.1rem; }
+.wizhead .wbar { height: 4px; background: var(--sunk); border-radius: 2px; overflow: hidden; margin-top: 6px; }
+.wizhead .wbar i { display: block; height: 100%; background: var(--blue); border-radius: 2px; transition: width .25s; }
+html[data-app] #panel-intake > .block:first-child, html[data-app] #panel-intake > .toolbar, html[data-app] #panel-meals > .block:first-child, html[data-app] #panel-meals .toolbar .field { display: none; }
+html[data-app] #panel-intake > .sheet { display: none; }
+html[data-app][data-step="1"] #sheet-body, html[data-app][data-step="2"] #sheet-day, html[data-app][data-step="3"] #sheet-foods { display: grid; }
+html[data-app] #sheet-body > .sheet-head, html[data-app] #sheet-day > .sheet-head, html[data-app] #sheet-foods > .sheet-head h3 { display: none; }
+html[data-app] .typetabs { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+html[data-app] .typetab { padding: 8px 8px; font-size: .98rem; }
+html[data-app] .daymap { grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); }
+html[data-app] .summary { grid-template-columns: repeat(2, 1fr); }
+html[data-app] .shop-groups { grid-template-columns: 1fr; }
+html[data-app][data-wiz="1"] .wizbar { display: grid; gap: 6px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 8px max(16px, env(safe-area-inset-left, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(0,0,0,.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top: 1px solid var(--line); }
+.wizbar .inner { display: flex; gap: 10px; width: 100%; max-width: 520px; margin: 0 auto; }
+.wizbar .btn { flex: 1; padding: 13px 14px; font-size: 1rem; border-radius: 10px; }
+.wizbar .btn.primary { flex: 2; }
+.wizbar .btn[hidden] { display: none; }
+.wizmsg { width: 100%; max-width: 520px; margin: 0 auto; min-height: 1.1em; font-size: .82rem; color: var(--muted); text-align: center; }
+.wizmsg[data-tone="warn"] { color: var(--warn); }
+/* the dashboard */
+.nd-goal { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 12px; padding: 16px; display: grid; gap: 6px; }
+.nd-goal .name { font-family: var(--display); font-size: 2.4rem; line-height: .98; }
+.nd-goal .pace { color: var(--muted); font-size: .92rem; }
+.nd-goal details { font-size: .9rem; margin-top: 4px; }
+.nd-goal summary { cursor: pointer; color: var(--blue); font-weight: 600; }
+.nd-goal ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; }
+.nd-sec { display: grid; gap: 12px; }
+.nd-sec > h3 { font-size: 1.6rem; }
+.nd-need { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
+.nd-need[data-today="true"] { border-color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
+.nd-need .hd { display: flex; align-items: baseline; gap: 4px 10px; flex-wrap: wrap; }
+.nd-need .hd b { font-family: var(--display); font-weight: 400; font-size: 1.25rem; }
+.nd-need .hd span { color: var(--muted); font-size: .85rem; }
+.nd-need .hd i { margin-left: auto; font: 700 10px var(--body); font-style: normal; letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--blue); color: #000; }
+.nd-need .kc { display: flex; align-items: baseline; gap: 8px; }
+.nd-need .kc b { font-family: var(--display); font-weight: 400; font-size: 3rem; line-height: 1; }
+.nd-need .kc small { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; }
+.nd-need .m3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; border-top: 1px dashed var(--line); padding-top: 10px; }
+.nd-need .m3 b { display: block; font-family: var(--display); font-weight: 400; font-size: 1.5rem; line-height: 1; }
+.nd-need .m3 small { color: var(--muted); font-size: .78rem; }
+.nd-type { font-family: var(--display); font-weight: 400; font-size: 1.2rem; border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin: 8px 0 0; }
+.nd-type small { font-family: var(--body); font-size: .82rem; color: var(--muted); margin-left: 10px; }
+.nd-slot { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
+.nd-slot .hd { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 10px; flex-wrap: wrap; }
+.nd-slot .hd b { font-family: var(--display); font-weight: 400; font-size: 1.3rem; }
+.nd-slot .hd span, .nd-slot .tg { color: var(--muted); font-size: .8rem; }
+.nd-meal { border-top: 1px solid var(--line); padding-top: 8px; }
+.nd-meal summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: baseline; }
+.nd-meal summary::-webkit-details-marker { display: none; }
+.nd-meal .nm { font-weight: 600; line-height: 1.3; }
+.nd-meal .sv { font-size: .82rem; font-weight: 600; color: var(--blue); white-space: nowrap; }
+.nd-meal .mc { grid-column: 1 / -1; color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.nd-meal .ing { padding: 8px 0 2px; }
+.nd-warn { font-size: .82rem; color: var(--warn); }
+.nd-acts { display: grid; gap: 10px; }
+.nd-acts .btn { padding: 13px; font-size: 1rem; border-radius: 10px; }
+/* foods: the five minimums as a checklist, categories that open one at a time, two columns */
+.foodreq { display: none; }
+html[data-app] .foodreq { display: flex; flex-wrap: wrap; gap: 6px; }
+.foodreq .req { border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: .8rem; color: var(--muted); }
+.foodreq .req[data-ok="true"] { border-color: var(--ok); color: var(--ok); background: var(--ok-soft); }
+html[data-app] .foods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+html[data-app] .foodcat-head { cursor: pointer; flex-wrap: nowrap; align-items: center; }
+html[data-app] .foodcat-head h3 { flex: 1; }
+html[data-app] .foodcat-head::after { content: ""; flex: none; width: 9px; height: 9px; margin: 0 4px 3px 6px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .15s; }
+html[data-app] .foodcat[data-open="true"] .foodcat-head::after { transform: rotate(-135deg); margin-bottom: -3px; }
+html[data-app] .foodcat .foods, html[data-app] .foodcat details.addfood { display: none; }
+html[data-app] .foodcat[data-open="true"] .foods { display: grid; }
+html[data-app] .foodcat[data-open="true"] details.addfood { display: block; }
+html[data-app] .foodcat { padding-top: 12px; }
+@media (pointer: coarse) { html[data-app] input, html[data-app] select, html[data-app] textarea { font-size: 16px; } }
 </style>
 </head>
 <body>
+
+<header class="appbar" id="appbar"><a class="bk" id="appBack" href="#" aria-label="Back to the athlete app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><b class="bt">Nutrition</b><span class="me" id="appMe"></span></header>
 
 <header class="topbar">
   <a class="brand" href="../index.html"><img src="../assets/velou-wordmark.png" alt="VeloU" width="110" height="34"></a>
@@ -376,13 +470,14 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
 </nav>
 
 <main class="wrap">
+  <div class="wizhead" id="wizHead"></div>
   <section class="panel" id="panel-intake" role="tabpanel" aria-labelledby="tab-intake" hidden>
     <div class="block">
       <h2>Intake</h2>
       <p class="muted">Enter the numbers and your typical day. Everything saves as you type, and the dashboard, meals and shopping list rebuild from it.</p>
     </div>
 
-    <div class="sheet">
+    <div class="sheet" id="sheet-body">
       <div class="sheet-head"><h3>Body</h3><span class="eyebrow">Sets the objective and calorie targets</span></div>
       <div class="fields">
         <div class="field"><span>Sex</span>
@@ -421,7 +516,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
       <div class="derived" id="bodyDerived"></div>
     </div>
 
-    <div class="sheet">
+    <div class="sheet" id="sheet-day">
       <div class="sheet-head"><h3>Activity and daily schedule</h3><span class="eyebrow">Times drive the meal schedule</span></div>
       <p class="muted" style="font-size:0.88rem">Tell us what each day of the week looks like, then fill in the meal times and activity times for each kind of day. Length of time comes from the start and end you enter.</p>
       <div class="fields">
@@ -439,9 +534,10 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
       </div>
     </div>
 
-    <div class="sheet">
+    <div class="sheet" id="sheet-foods">
       <div class="sheet-head"><h3>Foods you'll eat</h3><span class="muted" style="font-size:0.85rem" id="foodTotal"></span></div>
       <p class="muted" style="font-size:0.88rem">Check everything you would happily eat. Meal options are built only from these. Minimum: 2 proteins, 2 carbs or legumes, 2 vegetables, 2 fruits, 1 fat. Missing something? Use Add your own under any section.</p>
+      <div class="foodreq" id="foodReq"></div>
       <div id="foodcats"></div>
     </div>
 
@@ -534,11 +630,18 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
   </section>
 </main>
 
+<div class="wizbar" id="wizBar"><div class="wizmsg" id="wizMsg" role="status"></div><div class="inner"><button class="btn" id="wizBack" type="button">Back</button><button class="btn primary" id="wizNext" type="button">Next</button></div></div>
+
 <div id="printDoc" aria-hidden="true"></div>
 
 <script>
 (function () {
   "use strict";
+
+  /* ATHLETE APP MODE (?app=1): the athlete's own Nutrition screen. What the athlete enters is kept per athlete in this browser. */
+  var Q = new URLSearchParams(location.search), APP = Q.get("app") === "1", ANAME = Q.get("athlete") || "", AID = APP ? (Q.get("id") || "name:" + ANAME) : "";
+  function NS(k) { return APP && AID && k.indexOf("bcp-") === 0 ? k + ":" + AID : k; }
+  var W = { step: 0, view: "dash", edit: false, from: 1 };
 
   /* FOOD LIBRARY: id, name, unit, kcal, protein, carbs, fat, step, min, max, prep, buy, roles, fixed amount */
   var FOODS = {}, CATS = [];
@@ -769,8 +872,8 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
   function addDaysISO(iso, n) { var d = isoToDate(iso); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
   function daysBetween(a, b) { return Math.round((isoToDate(b) - isoToDate(a)) / 86400000); }
   function mondayOf(iso) { var d = isoToDate(iso), wd = (d.getUTCDay() + 6) % 7; d.setUTCDate(d.getUTCDate() - wd); return d.toISOString().slice(0, 10); }
-  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function lsGet(k) { try { return localStorage.getItem(NS(k)); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(NS(k), v); } catch (e) {} }
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
   function lc(s) { return s.charAt(0).toLowerCase() + s.slice(1); }
   function qtyText(fid, a) {
@@ -804,7 +907,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
       sex: "", age: null, heightFt: null, heightInch: null, weightLb: null, bfPct: null, bfMethod: "",
       bfEst: null, startPhoto: null, job: "desk",
       dayMap: ["wd", "wd", "wd", "wd", "wd", "we", "we"], types: types,
-      foods: [], customFoods: [], resp: {}, objectiveOverride: "auto", notes: "", startDate: todayISO()
+      foods: [], customFoods: [], resp: {}, objectiveOverride: "auto", notes: "", startDate: todayISO(), doneAt: ""
     };
   }
   function numOrNull(v) { if (v === "" || v == null) return null; var n = Number(v); return isFinite(n) ? n : null; }
@@ -862,6 +965,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
     b.customFoods = normCustom(d.customFoods); registerCustom(b.customFoods);
     b.foods = Array.isArray(b.foods) ? b.foods.filter(function (id) { return FOODS[id]; }) : [];
     b.resp = b.resp && typeof b.resp === "object" ? b.resp : {};
+    b.doneAt = str(b.doneAt);
     return b;
   }
   var S = { profile: blankProfile(), plan: { weekOf: mondayOf(addDaysISO(todayISO(), 1)), picks: {} }, checkins: [] };
@@ -873,6 +977,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
   try { var lp = JSON.parse(lsGet("bcp-profile") || "null"); if (lp) S.profile = normProfile(lp); } catch (e) {}
   try { var lq = JSON.parse(lsGet("bcp-plan") || "null"); if (lq) S.plan = normPlan(lq); } catch (e) {}
   try { var lc2 = JSON.parse(lsGet("bcp-checkins") || "null"); if (Array.isArray(lc2)) S.checkins = lc2; } catch (e) {}
+  if (APP) { var wkNow = mondayOf(addDaysISO(todayISO(), 1)); if (S.plan.weekOf < wkNow) S.plan.weekOf = wkNow; }
 
   /* DERIVED PLAN */
   var RATIO_LINE = 2.75, RATIO_BAND = 0.05, BF_LINE = 15;
@@ -1427,7 +1532,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
   }
 
   /* INTAKE */
-  var ui = { type: lsGet("bcp-type"), openCat: null };
+  var ui = { type: lsGet("bcp-type"), openCat: null, openFood: "pro" };
   if (!TYPE_BY[ui.type]) ui.type = "wd";
   function fillIntake() {
     var p = S.profile;
@@ -1510,17 +1615,20 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
     var sel = S.profile.foods;
     $("foodcats").innerHTML = CATS.map(function (c) {
       var n = c.ids.filter(function (id) { return sel.indexOf(id) >= 0; }).length;
-      return '<div class="foodcat"><div class="foodcat-head"><h3>' + esc(c.label) + '</h3><span class="cnt" data-cnt="' + c.id + '">' + n + ' of ' + c.ids.length + '</span>' +
+      return '<div class="foodcat" data-cat="' + c.id + '"><div class="foodcat-head"><h3>' + esc(c.label) + '</h3><span class="cnt" data-cnt="' + c.id + '">' + n + ' of ' + c.ids.length + '</span>' +
         '<button type="button" class="linkbtn" data-allcat="' + c.id + '">Select all</button><button type="button" class="linkbtn" data-nonecat="' + c.id + '">Clear</button></div>' +
         '<div class="foods">' + c.ids.map(function (id) { return foodBox(id, sel); }).join("") + '</div>' + addForm(c) + '</div>';
     }).join("");
     ui.openCat = null;
     $("foodTotal").textContent = sel.length + " selected";
+    renderFoodReq();
+    if (APP) foodOpen(ui.openFood);
   }
   function updateFoodCounts() {
     var sel = S.profile.foods;
     CATS.forEach(function (c) { var el = document.querySelector('[data-cnt="' + c.id + '"]'); if (el) el.textContent = c.ids.filter(function (id) { return sel.indexOf(id) >= 0; }).length + " of " + c.ids.length; });
     $("foodTotal").textContent = sel.length + " selected";
+    renderFoodReq();
   }
   var pendingPhoto = null;
   function renderPhotoControls() {
@@ -1889,9 +1997,142 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
     try { navigator.clipboard.writeText(text).then(function () { fb.hidden = true; toast.textContent = "Copied"; setTimeout(function () { toast.textContent = ""; }, 2000); }, fallback); } catch (e) { fallback(); }
   }
 
-  function renderAll() { D = derive(); renderIntakeDerived(); renderDash(); renderMeals(); renderShop(); renderPrep(); renderProgress(); }
+  function renderAll() {
+    D = derive();
+    if (APP) { renderIntakeDerived(); renderAppDash(); renderMeals(); renderShop(); appChrome(); return; }
+    renderIntakeDerived(); renderDash(); renderMeals(); renderShop(); renderPrep(); renderProgress();
+  }
   var renderTimer = null;
   function renderSoon() { clearTimeout(renderTimer); renderTimer = setTimeout(renderAll, 150); }
+
+  /* ATHLETE APP: a guided first-time assessment, then the dashboard and the shopping list */
+  var STEPINFO = [null,
+    { t: "About you", d: "Your size and body fat set your goal and your daily calories." },
+    { t: "Your week", d: "Tell us what your days look like. Your meal times come from this." },
+    { t: "Foods you like", d: "Tick everything you would happily eat. Your meals are built only from these." },
+    { t: "Choose your meals", d: "We picked a starting set for you. Tick the ones you want this week and set the servings." }];
+  function applyPanel(id) {
+    document.querySelectorAll('[role="tab"]').forEach(function (x) { x.setAttribute("aria-selected", String(x.id === id)); });
+    document.querySelectorAll('[role="tabpanel"]').forEach(function (p) { p.hidden = p.getAttribute("aria-labelledby") !== id; });
+  }
+  function appChrome() {
+    var root = document.documentElement, wiz = W.step > 0;
+    root.setAttribute("data-wiz", wiz ? "1" : ""); root.setAttribute("data-step", wiz ? String(W.step) : "");
+    applyPanel(wiz ? (W.step === 4 ? "tab-meals" : "tab-intake") : (W.view === "shop" ? "tab-shop" : "tab-dash"));
+    if (wiz) { renderWizHead(); updateWizBar(); }
+  }
+  function renderWizHead() {
+    var s = STEPINFO[W.step];
+    $("wizHead").innerHTML = '<span class="eyebrow">Step ' + W.step + ' of 4' + (W.edit ? ' · editing' : '') + '</span><h2>' + esc(s.t) + '</h2><p class="muted">' + esc(s.d) + '</p><div class="wbar"><i style="width:' + (W.step * 25) + '%"></i></div>';
+  }
+  /* what is still missing for a step: step 1 the body numbers, step 2 the schedule times, step 3 the foods, step 4 anything at all */
+  function missingFor(step) {
+    var m = (D && D.missing) || [];
+    if (step === 4) return D && D.ready ? [] : m;
+    return m.filter(function (x) {
+      var body = x === "Sex" || x === "Age" || x === "Height" || x === "Weight" || x.indexOf("Body fat") === 0, foods = x.indexOf("At least") === 0;
+      return step === 1 ? body : step === 3 ? foods : step === 2 ? !body && !foods : false;
+    });
+  }
+  function updateWizBar() {
+    var miss = missingFor(W.step), next = $("wizNext"), back = $("wizBack"), msg = $("wizMsg"), note = "";
+    next.disabled = miss.length > 0;
+    next.textContent = W.step < 4 ? "Next" : W.edit ? "Save my meals" : "Build my plan";
+    back.hidden = !W.edit && W.step === 1;
+    back.textContent = W.edit && W.step === W.from ? "Close" : "Back";
+    if (miss.length) note = W.step === 2 ? scheduleNote(miss) : "Still needed: " + miss.slice(0, 4).join(", ") + (miss.length > 4 ? " and " + (miss.length - 4) + " more" : "");
+    else if (W.step === 2) { var q = (D.suggestions || []).filter(function (s) { return s.yes && !s.resp; }).length; if (q) note = q + (q === 1 ? " question" : " questions") + " below could use an answer"; }
+    msg.textContent = note; msg.dataset.tone = miss.length ? "warn" : "";
+  }
+  /* "Weekday training: wake time", "Weekday training: dinner time", ... become one short line for the first kind of day */
+  function scheduleNote(miss) {
+    var by = {}, order = [];
+    miss.forEach(function (x) { var i = x.indexOf(": "), k = i > 0 ? x.slice(0, i) : "Your schedule", w = i > 0 ? x.slice(i + 2) : x; if (!by[k]) { by[k] = []; order.push(k); } by[k].push(w.replace(/ time$/, "").replace(" start and end times", " times")); });
+    return order[0] + " still needs: " + by[order[0]].join(", ") + (order.length > 1 ? " (and " + (order.length - 1) + " more kind" + (order.length > 2 ? "s" : "") + " of day)" : "");
+  }
+  function wizTop() { window.scrollTo({ top: 0 }); }
+  function wizGo(step, edit) { W.step = step; W.edit = !!edit; W.from = step; renderAll(); wizTop(); }
+  function wizNext() {
+    if (missingFor(W.step).length) return;
+    if (W.step < 4) { W.step++; renderAll(); wizTop(); return; }
+    S.profile.doneAt = new Date().toISOString(); saveProfile();
+    W.step = 0; W.edit = false; W.view = "dash"; lsSet("bcp-tab", "tab-dash"); renderAll(); wizTop();
+  }
+  function wizBack() {
+    if (W.edit && W.step === W.from) { W.step = 0; W.edit = false; renderAll(); wizTop(); return; }
+    if (W.step > 1) { W.step--; renderAll(); wizTop(); }
+  }
+  /* a short summary the Athlete App home screen reads for its Nutrition square */
+  function summarySave(d) {
+    var done = !!(S.profile.doneAt && d.ready);
+    try { localStorage.setItem(NS("bcp-summary"), JSON.stringify({ done: done, kcal: done ? Math.round(d.trainKcal) : null, goal: done ? OBJ[d.objective].label : "" })); } catch (e) {}
+  }
+  function renderAppDash() {
+    var d = D, p = S.profile, el = $("panel-dash");
+    summarySave(d);
+    if (!p.doneAt || !d.ready) {
+      el.innerHTML = '<div class="empty-state"><h2>' + (p.doneAt ? "Finish your answers" : "Build your nutrition plan") + '</h2><p class="muted">' + (p.doneAt ? "Something your plan needs is missing. Open your answers to finish it." : "Answer a few questions about you, your week and the foods you like. You get your daily needs, your meals for the week and a shopping list.") + '</p><div class="toolbar"><button class="btn primary" type="button" data-wiz="1">' + (p.doneAt ? "Open my answers" : "Start") + '</button></div></div>';
+      return;
+    }
+    var o = OBJ[d.objective], dayIdx = (new Date().getDay() + 6) % 7, tt = TYPE_BY[p.dayMap[dayIdx]], todayTrain = !!(tt && tt.train);
+    var rateTxt = d.rateLb.map(function (x) { return signed(x, 1); }).join(" to ") + " lb a week";
+    var goal = '<div class="nd-goal"><span class="eyebrow">Your goal</span><div class="name">' + esc(o.label) + '</div><div class="pace">Pace: ' + esc(rateTxt) + '</div>' +
+      '<details><summary>How this works</summary><ul>' + o.approach.slice(0, 3).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + '</ul></details></div>';
+    var td = [], rd = [], groups = [];
+    d.types.forEach(function (T) { T.days.forEach(function (i) { (T.train ? td : rd).push(i); }); });
+    td.sort(function (a, b) { return a - b; }); rd.sort(function (a, b) { return a - b; });
+    if (td.length) groups.push({ name: "Training days", days: td, k: d.trainKcal, c: d.carbTrain, today: todayTrain });
+    if (rd.length) groups.push({ name: "Rest days", days: rd, k: d.restKcal, c: d.carbRest, today: !todayTrain });
+    var needs = '<div class="nd-sec"><h3>Daily needs</h3>' + groups.map(function (g) {
+      return '<div class="nd-need" data-today="' + g.today + '"><div class="hd"><b>' + g.name + '</b><span>' + esc(fmtDays(g.days)) + '</span>' + (g.today ? '<i>Today</i>' : '') + '</div>' +
+        '<div class="kc"><b class="num">' + n0(g.k) + '</b><small>calories</small></div>' +
+        '<div class="m3"><div><b class="num">' + n0(d.protein) + ' g</b><small>Protein</small></div><div><b class="num">' + n0(g.c) + ' g</b><small>Carbs</small></div><div><b class="num">' + n0(d.fat) + ' g</b><small>Fat</small></div></div></div>';
+    }).join("") + '</div>';
+    var lastT = null, meals = '<div class="nd-sec"><h3>Your meals this week</h3><p class="muted" style="font-size:.88rem">Tap a meal to see what goes in it.</p>';
+    d.slots.forEach(function (s) {
+      if (d.types.length > 1 && s.dayType !== lastT) { lastT = s.dayType; meals += '<h4 class="nd-type">' + esc(s.typeName) + '<small>' + esc(fmtDays(s.daysList)) + '</small></h4>'; }
+      var picks = d.options[s.id].filter(function (x) { return d.picks[x.key]; }), got = assigned(d, s);
+      meals += '<div class="nd-slot"><div class="hd"><b>' + esc(s.label) + '</b><span>' + fmtT(s.t) + (d.types.length > 1 ? '' : ' · ' + esc(fmtDays(s.daysList))) + '</span></div>' +
+        '<div class="tg">Target ' + n0(s.tgt.k) + ' kcal · P ' + n0(s.tgt.p) + ' · C ' + n0(s.tgt.c) + ' · F ' + n0(s.tgt.f) + '</div>';
+      if (!picks.length) meals += '<p class="muted" style="font-size:.88rem">No meal chosen yet.</p>';
+      picks.forEach(function (x) {
+        meals += '<details class="nd-meal"><summary><span class="nm">' + esc(x.name) + '</span><span class="sv">' + d.picks[x.key] + (d.picks[x.key] === 1 ? ' serving' : ' servings') + '</span><span class="mc">' + n0(x.m.k) + ' kcal · P ' + n0(x.m.p) + ' · C ' + n0(x.m.c) + ' · F ' + n0(x.m.f) + '</span></summary><ul class="ing">' +
+          x.parts.map(function (pt) { return '<li><span>' + esc(FOODS[pt.fid].n) + '</span><span>' + esc(qtyText(pt.fid, pt.amt)) + '</span></li>'; }).join("") + '</ul></details>';
+      });
+      if (picks.length && got !== s.need) meals += '<p class="nd-warn">' + got + ' of ' + s.need + ' servings chosen for the week.</p>';
+      meals += '</div>';
+    });
+    meals += '</div>';
+    el.innerHTML = goal + needs + meals + '<div class="nd-acts"><button class="btn primary" type="button" data-wiz="4">Change my meals</button><button class="btn" type="button" data-wiz="1">Update my answers</button></div>';
+  }
+  function appInit() {
+    var ini = ANAME.split(/\s+/).filter(Boolean).map(function (w) { return w.charAt(0); }).slice(0, 2).join("").toUpperCase();
+    $("appMe").textContent = ini; document.title = "Nutrition · VeloU";
+    $("appBack").href = "/athlete-management/athlete/?" + (Q.get("id") ? "id=" + encodeURIComponent(Q.get("id")) + "&" : "") + "athlete=" + encodeURIComponent(ANAME) + "&app=1#home";
+    $("tab-shop").firstChild.nodeValue = "Shopping list";
+    var bf = $("in-bf").closest("label").querySelector("span"); if (bf) bf.textContent = "Body fat % (a best guess is fine)";
+    if (W.step === 0 && !S.profile.doneAt) W.step = 1;
+    appChrome();
+  }
+  /* foods: the five minimums as a checklist, and the categories open one at a time */
+  function renderFoodReq() {
+    var el = $("foodReq"); if (!el) return;
+    var c = foodCounts(), req = [["Proteins", c.pro, 2], ["Carbs", c.carb, 2], ["Vegetables", c.veg, 2], ["Fruits", c.fruit, 2], ["Fats", c.fat, 1]];
+    el.innerHTML = req.map(function (r) { var ok = r[1] >= r[2]; return '<span class="req" data-ok="' + ok + '">' + (ok ? "✓ " : "") + r[0] + " " + Math.min(r[1], r[2]) + "/" + r[2] + "</span>"; }).join("");
+  }
+  function foodOpen(id) {
+    ui.openFood = id;
+    document.querySelectorAll(".foodcat").forEach(function (f) { f.dataset.open = String(f.dataset.cat === id); });
+  }
+  document.addEventListener("click", function (e) {
+    if (!APP) return;
+    var hd = e.target.closest(".foodcat-head");
+    if (hd && !e.target.closest("button")) { var fc = hd.closest(".foodcat"); foodOpen(fc.dataset.open === "true" ? "" : fc.dataset.cat); return; }
+    var t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.wiz) { wizGo(Number(t.dataset.wiz), !!S.profile.doneAt); return; }
+    if (t.id === "wizNext") { wizNext(); return; }
+    if (t.id === "wizBack") { wizBack(); return; }
+  });
 
   /* EVENTS */
   for (var ii = 0; ii < 12; ii++) { var op = document.createElement("option"); op.value = String(ii); op.textContent = ii + " in"; $("in-inch").appendChild(op); }
@@ -2044,6 +2285,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
     }, function () { st.textContent = "That check-in didn't save. Try again."; st.dataset.tone = "bad"; $("ci-save").disabled = false; });
   });
   function showTab(id) {
+    if (APP) { W.view = id === "tab-shop" ? "shop" : "dash"; lsSet("bcp-tab", id); appChrome(); window.scrollTo({ top: 0 }); return; }
     document.querySelectorAll('[role="tab"]').forEach(function (x) { x.setAttribute("aria-selected", String(x.id === id)); });
     document.querySelectorAll('[role="tabpanel"]').forEach(function (p) { p.hidden = p.getAttribute("aria-labelledby") !== id; });
     lsSet("bcp-tab", id); window.scrollTo({ top: 0 });
@@ -2051,10 +2293,14 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
 
   /* BOOT */
   fillIntake();
+  if (APP) { W.step = S.profile.doneAt ? 0 : 1; W.view = lsGet("bcp-tab") === "tab-shop" ? "shop" : "dash"; }
   renderAll();
-  var hashTab = { intake: "tab-intake", dashboard: "tab-dash", meals: "tab-meals", shopping: "tab-shop", prep: "tab-prep", progress: "tab-progress" }[(location.hash || "").replace("#", "")];
-  var startTab = hashTab || lsGet("bcp-tab") || (D && D.objective ? "tab-dash" : "tab-intake");
-  if ($(startTab)) showTab(startTab);
+  if (APP) appInit();
+  else {
+    var hashTab = { intake: "tab-intake", dashboard: "tab-dash", meals: "tab-meals", shopping: "tab-shop", prep: "tab-prep", progress: "tab-progress" }[(location.hash || "").replace("#", "")];
+    var startTab = hashTab || lsGet("bcp-tab") || (D && D.objective ? "tab-dash" : "tab-intake");
+    if ($(startTab)) showTab(startTab);
+  }
   startCapabilities();
   window.__bcp = { S: S, derive: derive, planText: function () { D = derive(); return planText(); }, setProfile: function (p) { S.profile = normProfile(p); D = derive(); } };
 })();
