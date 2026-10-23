@@ -920,9 +920,13 @@ div.aa-exh{cursor:default}
 .aa-chip{display:flex;align-items:center;gap:7px;min-height:36px;padding:0 10px 0 9px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:9px;color:#fff;font:600 13px var(--body);cursor:pointer}
 .aa-chip i{display:block;width:9px;height:9px;border-radius:3px;background:var(--lane)}
 .aa-chip em{font:700 11.5px var(--body);font-style:normal;color:var(--aa-mut)}
-.aa-cta{flex:1 1 108px;display:flex;align-items:center;justify-content:center;min-height:36px;padding:4px 8px;border:1px solid rgba(255,255,255,.9);border-radius:9px;background:rgba(255,255,255,.86);color:#000;font:700 13px/1.15 var(--body);text-align:center;text-wrap:balance;cursor:pointer}
-.aa-cta:active{background:rgba(255,255,255,.95)}
-.aa-cta.done{background:rgba(136,224,198,.85);border-color:var(--aa-teal)}
+.aa-cta{flex:1 1 112px;display:flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:4px 8px;border:1px solid rgba(255,255,255,.55);border-radius:9px;background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(255,255,255,.7));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#000;text-align:left;cursor:pointer}
+.aa-cta .bdg{flex:none;width:22px;height:20px;color:#000}
+.aa-cta .tx{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.aa-cta b{font:700 13px/1.15 var(--body);text-wrap:balance}
+.aa-cta small{font:600 11px/1.2 var(--body);color:rgba(0,0,0,.66)}
+.aa-cta:active{background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.76))}
+.aa-cta.done{background:linear-gradient(180deg,rgba(136,224,198,.8),rgba(136,224,198,.62));border-color:rgba(136,224,198,.7)}
 /* the two containers: today (the date down to the button to begin) and the week */
 .aa-ctr{margin-top:14px;padding:12px 10px;background:rgba(10,14,17,.78);border:1px solid var(--aa-line2);border-radius:18px}
 .aa-ctr .aa-dr{padding:2px 4px 12px}
@@ -4053,12 +4057,25 @@ const AAGLY={
 const AAFAM={ML:'Movement Literacy',TL:'Tension Literacy',FC:'Force Control',AP:'Applied Power',AC:'Acceleration'};
 const AAPOS={throw:'#E10600',lift:'#56B7E6',rest:'#88E0C6'};
 
-// ---- the quote of the day: one from the list each day, in order (the list is quotes.json next to this page) ----
+// ---- the quote under the name: every athlete has a different one, in a random-looking order, and it changes every day (the list is quotes.json next to this page) ----
+// The athletes are put in order by their id; an athlete's place in that order, plus the day, picks a quote from one fixed shuffle of the list. Two athletes never share a quote on a day (up to as many athletes as there are quotes), an athlete never gets the same one two days running, and the same athlete sees the same quote on every device.
 const AAQBAN=['Leave the facility better than you found it.'];   // the coach does not want this one shown, ever
-let AAQ=null;
+let AAQ=null, AAR=null;
 function aaQuotes(){ if(AAQ!==null) return; AAQ=[];
   fetch('/athlete-management/athlete/quotes.json?v=2',{credentials:'same-origin'}).then(r=>{ if(!r.ok) throw new Error('quotes '+r.status); return r.json() }).then(j=>{ AAQ=((j&&j.quotes)||[]).map(q=>String(q.text||'').trim()).filter(t=>t&&!AAQBAN.includes(t)); if(AAQ.length&&host.isConnected&&AAS().screen==='home') render() }).catch(e=>console.warn(e)) }
-function aaQuote(){ aaQuotes(); if(!AAQ.length) return ''; const n=new Date(), day=Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5); return AAQ[((day%AAQ.length)+AAQ.length)%AAQ.length] }
+const aaKey=s=>String(s||'').trim().toLowerCase().replace(/\s+/g,' ');
+const aaHash=s=>{ let h=0x811C9DC5; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,0x01000193) } return h>>>0 };
+// the same shuffled order of n places everywhere (a fixed seed)
+function aaShuffle(n){ const a=Array.from({length:n},(_,i)=>i); let s=0x56454C4F; const rnd=()=>{ s=(s+0x6D2B79F5)|0; let t=Math.imul(s^(s>>>15),1|s); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296 }; for(let i=n-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)), x=a[i]; a[i]=a[j]; a[j]=x } return a }
+// every athlete's id and name, in id order (kept for half an hour in this tab); without it the quote falls back to a pick from the athlete's own id or name
+function aaRoster(){ if(AAR!==null) return; AAR={list:[],done:false};
+  try{ const c=JSON.parse(sessionStorage.getItem('velou.roster.v1')||'null'); if(c&&Array.isArray(c.list)&&Date.now()-c.at<18e5){ AAR.list=c.list; AAR.done=true; return } }catch(e){}
+  const got=[], page=off=>fetch('/api/v1/athletes?limit=200&offset='+off,{credentials:'same-origin'}).then(r=>{ if(!r.ok) throw new Error('roster '+r.status); return r.json() }).then(j=>{ const a=(j&&j.athletes)||[]; for(const x of a) got.push({id:String(x.id),n:aaKey(x.first_name+' '+x.last_name)}); if(a.length>=200&&got.length<2000) return page(off+200) });
+  page(0).then(()=>{ got.sort((p,q)=>p.id<q.id?-1:p.id>q.id?1:0); AAR.list=got; try{ sessionStorage.setItem('velou.roster.v1',JSON.stringify({at:Date.now(),list:got})) }catch(e){} }).catch(e=>console.warn(e)).then(()=>{ AAR.done=true; if(host.isConnected&&AAS().screen==='home') render() }) }
+function aaQuote(){ aaQuotes(); aaRoster(); if(!AAQ.length||!AAR.done) return '';
+  const id=String(chId()||''), nm=aaKey(host.dataset.athlete), L=AAR.list; let k=id?L.findIndex(x=>x.id===id):-1; if(k<0&&nm) k=L.findIndex(x=>x.n===nm);
+  const n=AAQ.length, d=new Date(), day=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5), slot=k>=0?k:aaHash(id||nm);
+  return AAQ[aaShuffle(n)[(slot+day)%n]] }
 
 // ---- the bar at the bottom of every screen, and the menu in the header ----
 const AAFOOT=[['dash','Dashboard'],['train','Training'],['nut','Nutrition'],['chat','Chat']];
@@ -4135,8 +4152,9 @@ function aaToday2(app,S,st,weeks,todayK){
   if(T||Lf){ const bands=el('div','aa-bands'); if(T) bands.append(aaBand(S,'throw',T,todayK,m)); if(Lf) bands.append(aaBand(S,'lift',Lf,todayK,m)); sec.append(bands) }
   const row=el('div','aa-chips'); for(const L of others){ const c=el('button','aa-chip'); c.type='button'; c.style.setProperty('--lane',AALANE[L.l]||'#fff'); c.append(el('i'),el('span',null,L.s.name),el('em',null,String(L.work.length||L.s.rows.length)));
       c.setAttribute('aria-label',L.s.name+', '+L.s.head); c.addEventListener('click',()=>aaOpen(S,todayK,L.l)); row.append(c) }
-  const t=avTotals(m), fin=!!((AVS.logs[m.dk]||{})._fin), all=fin||(t.all>0&&t.done>=t.all), go=el('button','aa-cta'+(all?' done':'')); go.type='button';   // the button to begin sits in the row of the other parts, in light translucent white
-  go.textContent=all?'Workout complete ✓':t.done?'Continue · '+t.done+' of '+t.all+' sets':'Start today’s training'; go.addEventListener('click',()=>aaOpen(S,todayK,''));
+  const t=avTotals(m), fin=!!((AVS.logs[m.dk]||{})._fin), all=fin||(t.all>0&&t.done>=t.all), go=el('button','aa-cta'+(all?' done':'')), tx=el('span','tx'); go.type='button';   // the button to begin sits in the row of the other parts, in see-through white, with the VeloU badge in black
+  tx.append(el('b',null,all?'Workout complete ✓':t.done?'Continue':'Start Training')); if(!all&&t.done) tx.append(el('small',null,t.done+' of '+t.all+' sets'));
+  go.setAttribute('aria-label',all?'Workout complete':t.done?'Continue today’s training, '+t.done+' of '+t.all+' sets done':'Start today’s training'); go.append(el('span','bdg'),tx); go.addEventListener('click',()=>aaOpen(S,todayK,''));
   row.append(go); sec.append(row); app.append(sec) }
 
 // ---- the week: seven days, each with its throwing and lifting, and a way to swap one day with another ----
