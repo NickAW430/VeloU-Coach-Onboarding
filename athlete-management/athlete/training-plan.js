@@ -4058,7 +4058,7 @@ const AAFAM={ML:'Movement Literacy',TL:'Tension Literacy',FC:'Force Control',AP:
 const AAPOS={throw:'#E10600',lift:'#56B7E6',rest:'#88E0C6'};
 
 // ---- the quote under the name: every athlete has a different one, in a random-looking order, and it changes every day (the list is quotes.json next to this page) ----
-// The athletes are put in order by their id; an athlete's place in that order, plus the day, picks a quote from one fixed shuffle of the list. Two athletes never share a quote on a day (up to as many athletes as there are quotes), an athlete never gets the same one two days running, and the same athlete sees the same quote on every device.
+// The athletes are put in order by their id, and the order is cut into groups as long as the list of quotes. An athlete's place in the group picks a spot in one fixed shuffle of the list and every day they move on by their group's step, so: inside a group nobody shares a quote on a day, nobody gets the same quote two days running, two athletes in different groups share one on about one day in a hundred, and the same athlete sees the same quote on every device. (With more athletes than quotes some sharing is unavoidable.)
 const AAQBAN=['Leave the facility better than you found it.'];   // the coach does not want this one shown, ever
 let AAQ=null, AAR=null;
 function aaQuotes(){ if(AAQ!==null) return; AAQ=[];
@@ -4072,10 +4072,12 @@ function aaRoster(){ if(AAR!==null) return; AAR={list:[],done:false};
   try{ const c=JSON.parse(sessionStorage.getItem('velou.roster.v1')||'null'); if(c&&Array.isArray(c.list)&&Date.now()-c.at<18e5){ AAR.list=c.list; AAR.done=true; return } }catch(e){}
   const got=[], page=off=>fetch('/api/v1/athletes?limit=200&offset='+off,{credentials:'same-origin'}).then(r=>{ if(!r.ok) throw new Error('roster '+r.status); return r.json() }).then(j=>{ const a=(j&&j.athletes)||[]; for(const x of a) got.push({id:String(x.id),n:aaKey(x.first_name+' '+x.last_name)}); if(a.length>=200&&got.length<2000) return page(off+200) });
   page(0).then(()=>{ got.sort((p,q)=>p.id<q.id?-1:p.id>q.id?1:0); AAR.list=got; try{ sessionStorage.setItem('velou.roster.v1',JSON.stringify({at:Date.now(),list:got})) }catch(e){} }).catch(e=>console.warn(e)).then(()=>{ AAR.done=true; if(host.isConnected&&AAS().screen==='home') render() }) }
+// the daily steps, one per group of athletes: each step and each difference between two steps has no factor in common with n, so a group runs through every quote and two groups meet only now and then
+function aaSteps(n){ const g=(a,b)=>b?g(b,a%b):a, out=[]; for(let c=1;c<n&&out.length<8;c++) if(g(c,n)===1&&out.every(s=>g(c-s,n)===1)) out.push(c); return out.length?out:[1] }
 function aaQuote(){ aaQuotes(); aaRoster(); if(!AAQ.length||!AAR.done) return '';
   const id=String(chId()||''), nm=aaKey(host.dataset.athlete), L=AAR.list; let k=id?L.findIndex(x=>x.id===id):-1; if(k<0&&nm) k=L.findIndex(x=>x.n===nm);
-  const n=AAQ.length, d=new Date(), day=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5), slot=k>=0?k:aaHash(id||nm);
-  return AAQ[aaShuffle(n)[(slot+day)%n]] }
+  const n=AAQ.length, d=new Date(), day=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5), slot=k>=0?k:aaHash(id||nm), st=aaSteps(n);
+  return AAQ[aaShuffle(n)[(slot%n+st[Math.floor(slot/n)%st.length]*day)%n]] }
 
 // ---- the bar at the bottom of every screen, and the menu in the header ----
 const AAFOOT=[['dash','Dashboard'],['train','Training'],['nut','Nutrition'],['chat','Chat']];
