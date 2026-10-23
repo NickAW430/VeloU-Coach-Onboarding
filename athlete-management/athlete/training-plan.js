@@ -742,6 +742,62 @@ div.aa-exh{cursor:default}
 .aa-sheet .btn{min-height:48px;border-radius:8px;font:600 15px var(--body)}
 .aa-sheet .btn.primary{background:#E10600;border-color:#E10600;color:#fff}
 .aa-sheet .avmsg{margin:0;font:500 14.5px/1.45 var(--body);color:#b6c0c6}
+.aa-cnav{display:flex;align-items:center;gap:8px;margin:16px 0 10px}
+.aa-cnav>button{flex:none;width:44px;height:44px;padding:0;background:none;border:1px solid var(--aa-line2);border-radius:10px;color:#fff;font:400 24px/1 var(--body);cursor:pointer}
+.aa-cnav>button:disabled{opacity:.25;cursor:default}
+.aa-cnav .t{flex:1;min-width:0;text-align:center}
+.aa-cnav .t b{display:block;font:400 26px/1.05 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
+.aa-cnav .t span{display:block;margin-top:3px;font:600 12px var(--body);letter-spacing:.1em;color:var(--aa-mut);text-transform:uppercase}
+.aa-cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:6px 4px 8px;background:var(--aa-card);border:1px solid var(--aa-line);border-radius:12px}
+.aa-ch{display:flex;flex-direction:column;align-items:center;gap:3px;margin:0 1px 4px;padding:7px 0 7px;background:none;border:0;border-radius:8px;color:#fff;cursor:pointer;min-width:0}
+.aa-ch small{font:600 10px/1 var(--body);letter-spacing:.1em;color:var(--aa-mut);text-transform:uppercase}
+.aa-ch b{font:400 21px/1 'Anton',var(--body);letter-spacing:.01em}
+.aa-ch i{display:block;width:7px;height:7px;border-radius:50%;border:1.5px solid transparent}
+.aa-ch.part i{border-color:var(--aa-teal);background:linear-gradient(90deg,var(--aa-teal) 50%,transparent 50%)}
+.aa-ch.done i{border-color:var(--aa-teal);background:var(--aa-teal)}
+.aa-ch.rest i{width:8px;height:2px;border:0;border-radius:0;background:#3a464d}
+.aa-ch.today small{color:var(--aa-blue)}
+.aa-ch.today b{color:var(--aa-blue)}
+.aa-ch.off{opacity:.35}
+.aa-ch.sel{background:#fff;color:#000}
+.aa-ch.sel small{color:#3a464d}
+.aa-ch.sel b{color:#000}
+.aa-ch.sel.part i{border-color:#0a8a6a;background:linear-gradient(90deg,#0a8a6a 50%,transparent 50%)}
+.aa-ch.sel.done i{border-color:#0a8a6a;background:#0a8a6a}
+.aa-cc{display:flex;align-items:center;justify-content:center;min-height:38px;margin:0 1px;padding:0;background:none;border:0;border-radius:6px;cursor:pointer}
+.aa-cc.sel{background:rgba(255,255,255,.07)}
+.aa-cb{position:relative;display:block;width:30px;height:24px;border:1.5px solid var(--lane);border-radius:6px;background:color-mix(in srgb,var(--lane) 16%,transparent)}
+.aa-cb.part{background:linear-gradient(90deg,var(--lane) 50%,color-mix(in srgb,var(--lane) 16%,transparent) 50%)}
+.aa-cb.done{background:var(--lane)}
+.aa-cb.done::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#000;font:700 13px/1 var(--body)}
+.aa-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 2px 0;font:600 11.5px var(--body);color:var(--aa-sub)}
+.aa-leg span{display:flex;align-items:center;gap:6px}
+.aa-leg i{display:block;width:12px;height:12px;border:1.5px solid var(--lane);border-radius:3px;background:color-mix(in srgb,var(--lane) 30%,transparent)}
+.aa-cday{margin-top:16px;padding:16px 14px;background:var(--aa-card);border:1px solid var(--aa-line2);border-radius:12px}
+.aa-cdh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.aa-cdh h2{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 10px;font:400 34px/1 'Anton',var(--body);letter-spacing:.01em;text-transform:uppercase;color:#fff}
+.aa-cdh h2 em{font-style:normal;font-size:18px;letter-spacing:.05em;color:var(--aa-blue)}
+.aa-cdh .tg{flex:none;padding:2px 9px;border:1px solid var(--aa-blue);border-radius:11px;font:700 10.5px var(--body);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--aa-blue)}
+.aa-cdm{margin:6px 0 0;font:600 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--aa-mut)}
+.aa-cdn{margin:10px 0 0;font:500 14.5px/1.45 var(--body);color:var(--aa-sub)}
+.aa-cdb{margin-top:14px;padding-left:12px;border-left:4px solid var(--lane)}
+.aa-cdbh{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 10px}
+.aa-cdbh b{font:400 20px/1.1 'Anton',var(--body);letter-spacing:.03em;text-transform:uppercase}
+.aa-cdbh span{flex:1;min-width:0;font:500 12.5px/1.3 var(--body);color:var(--aa-mut)}
+.aa-cdbh .ct{flex:none;font:600 12.5px var(--body);font-style:normal;color:var(--aa-sub)}
+.aa-cdbh .ct.done{color:var(--aa-teal)}
+.aa-cdb ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+.aa-cdb li{display:flex;align-items:baseline;gap:8px;font:500 14.5px/1.3 var(--body);color:#fff}
+.aa-cdb li i{flex:none;min-width:24px;font:700 11.5px var(--body);font-style:normal;letter-spacing:.04em;color:var(--lane)}
+.aa-cdb li span{flex:1;min-width:0;overflow-wrap:anywhere}
+.aa-cdb li em{flex:none;font:600 12.5px var(--body);font-style:normal;color:var(--aa-mut);white-space:nowrap}
+.aa-cda{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.aa-cda button{min-height:40px;padding:0 16px;border:1px solid var(--aa-line2);border-radius:20px;background:none;color:var(--aa-sub);font:600 13px var(--body);cursor:pointer}
+.aa-cda button.y{background:var(--aa-blue);border-color:var(--aa-blue);color:#000;font-weight:700}
+.aa-swl{display:flex;flex-direction:column}
+.aa-swi{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 4px;background:none;border:0;border-bottom:1px solid var(--aa-line);color:#fff;text-align:left;font-family:inherit;cursor:pointer}
+.aa-swi b{font:600 15.5px var(--body)}
+.aa-swi span{font:500 13px var(--body);color:var(--aa-mut)}
 .avapp.aa-dash{padding-bottom:0}
 .wrap.aa-wdash{padding-bottom:0}
 .ldcell{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
@@ -3685,11 +3741,61 @@ function aaToday(app,S){
   app.append(rest); paint();
   S.tick=setInterval(()=>{ if(!host.isConnected){ clearInterval(S.tick); return } restPaint() },1000) }
 
+// ---- Training for the week: a calendar. Every day is a column with a coloured block for each part of its training; tap a day and it pulls out underneath ----
+const AALN=[['prep','Prep'],['pat','Patterning'],['throw','Throwing'],['lift','Lifting'],['corr','Corrective']];
+// how far one block of a day is: its sets done and its sets in all
+function aaLaneStat(m,s){ let ok=0,n=0; for(const r of s.rows){ const x=aaExStat(m,r); ok+=x.ok; n+=x.n } return {ok,n,done:n>0&&ok>=n} }
+// the line beside an exercise in the pulled-out day: 3 × 8 @ 70%
+function aaDoseTxt(r){ if(r.info) return ''; const e=r.eff, nSet=avSetN(e.sets,e.reps), N=nSet.n||1, sets=nSet.bonus?(N-nSet.bonus)+'+'+nSet.bonus:String(N); return sets+' × '+aaReps(aaRepsNote(e.reps).main)+(e.int?' @ '+e.int:'') }
+// pick the day to swap the pulled-out day with
+function aaSwapPick(S,d,days){ const b=avSheet('Swap '+aaDay(d,{weekday:'long'})+'’s training with…','aaswp'), list=el('div','aa-swl');
+  for(const x of days){ if(x.dk===ymd(d)||!x.inr) continue; const bt=el('button','aa-swi'); bt.type='button'; bt.append(el('b',null,aaDay(x.d,{weekday:'long',month:'short',day:'numeric'})),el('span',null,x.m&&x.m.secs.length?x.m.secs.map(s=>s.name).join(' · '):'Rest day'));
+    bt.addEventListener('click',()=>{ avClose(); aaSwapGo(d,x.d,()=>render()) }); list.append(bt) }
+  b.append(list) }
+function aaCal(app,S){
+  const today=ymd(new Date(new Date().setHours(12,0,0,0))), st=day0(A.startDate);
+  if(!st){ app.append(aaNote('Your program has no start date yet','Your coach will set it up.')); return }
+  const weeks=planWeeks(); if(!weeks.length){ app.append(aaNote('Your program is not ready yet','Check back soon.')); return }
+  if((A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading)){ app.append(aaNote('Loading your program…')); S.wait=(S.wait||0)+1; if(S.wait<45) setTimeout(()=>{ if(host.isConnected&&AAS().screen==='week') render() },700); return }
+  S.wait=0;
+  const total=weeks.length*7; let sel=day0(S.cal)||day0(today);
+  { const o=Math.round((sel-st)/864e5); if(o<0) sel=st; else if(o>=total) sel=addD(st,total-1) }
+  const selk=ymd(sel), off=Math.round((sel-st)/864e5), wi=Math.floor(off/7), base=addD(st,wi*7), end=addD(base,6), w=weeks[wi];
+  // the week's navigation
+  const go=n=>{ S.cal=ymd(addD(sel,n)); render() }, nav=el('div','aa-cnav'), mk=(t,lab,n,dis)=>{ const b=el('button',null,t); b.type='button'; b.setAttribute('aria-label',lab); b.disabled=!!dis; b.addEventListener('click',()=>go(n)); return b };
+  { const t=el('div','t'), ph=w.off?(w.deload?'Deload':'Off week'):w.code; t.append(el('b',null,'Week '+w.n+(ph?' · '+ph:'')),el('span',null,aaDay(base,{month:'short',day:'numeric'})+' – '+aaDay(end,{month:'short',day:'numeric'})));
+    nav.append(mk('‹','Previous week',-7,wi<=0),t,mk('›','Next week',7,wi>=weeks.length-1)) }
+  app.append(nav);
+  // the calendar: a column per day, a row per part of the day (only the parts this week has)
+  const days=[]; for(let k=0;k<7;k++){ const d=addD(base,k), inr=Math.round((d-st)/864e5)<total; days.push({d,dk:ymd(d),inr,m:inr?avModel(d):null,sx:inr?aaStat(d,st,weeks):null}) }
+  const used=AALN.filter(([l])=>days.some(x=>x.m&&x.m.secs.some(s=>s.l===l&&s.rows.length)));
+  const pick=dk=>{ S.cal=dk; render() }, grid=el('div','aa-cal');
+  for(const x of days){ const b=el('button','aa-ch'+(x.dk===selk?' sel':'')+(x.dk===today?' today':'')+(x.inr?'':' off')); b.type='button'; b.setAttribute('aria-label',aaDay(x.d,{weekday:'long',month:'long',day:'numeric'}));
+    b.append(el('small',null,aaDay(x.d,{weekday:'short'}).slice(0,3)),el('b',null,String(x.d.getDate())),el('i')); aaMark(b,x.sx); b.addEventListener('click',()=>pick(x.dk)); grid.append(b) }
+  for(const [l,name] of used) for(const x of days){ const s=x.m&&x.m.secs.find(q=>q.l===l&&q.rows.length), c=el('button','aa-cc'+(x.dk===selk?' sel':'')); c.type='button'; c.setAttribute('aria-label',(s?name:'No '+name.toLowerCase())+', '+aaDay(x.d,{weekday:'long',month:'long',day:'numeric'}));
+    if(s){ const q=aaLaneStat(x.m,s), i=el('i','aa-cb'+(q.done?' done':q.ok?' part':'')); i.style.setProperty('--lane',AALANE[l]||'#fff'); c.append(i) } c.addEventListener('click',()=>pick(x.dk)); grid.append(c) }
+  app.append(grid);
+  { const lg=el('div','aa-leg'); for(const [l,name] of used){ const s=el('span'); s.style.setProperty('--lane',AALANE[l]||'#fff'); s.append(el('i'),name); lg.append(s) } app.append(lg) }
+  // the day, pulled out
+  const x=days.find(q=>q.dk===selk), d=sel, card=el('section','aa-cday'), hd=el('div','aa-cdh'), tt=el('h2'), isToday=selk===today;
+  tt.append(el('span',null,aaDay(d,{weekday:'long'})),el('em',null,aaDay(d,{month:'short',day:'numeric'}))); hd.append(tt); if(isToday) hd.append(el('i','tg','Today')); card.append(hd);
+  const sd=avSrc(d), moved=ymd(sd)!==selk, soff=Math.round((sd-st)/864e5), sw=weeks[Math.floor(soff/7)]||w, meta=el('p','aa-cdm');
+  if(x.sx&&x.sx.rest){ meta.textContent='Rest day'; card.append(meta); const nx=aaAhead(d,st,weeks); card.append(el('p','aa-cdn','Nothing planned. Recover well.'+(nx?' Next: '+aaDay(nx.d,{weekday:'long'})+' · '+nx.lanes.join(', ')+'.':''))) }
+  else if(x.m){ const t=avTotals(x.m); meta.textContent='Week '+sw.n+' · Day '+(soff%7+1)+(t.all?' · '+(t.done>=t.all?'all done':t.done+' of '+t.all+' sets'):''); card.append(meta);
+    for(const s of x.m.secs){ if(!s.rows.length) continue; const blk=el('div','aa-cdb'), h=el('div','aa-cdbh'), q=aaLaneStat(x.m,s); blk.style.setProperty('--lane',AALANE[s.l]||'#fff');
+      h.append(el('b',null,s.name),el('span',null,s.head)); if(q.n) h.append(el('i','ct'+(q.done?' done':''),q.done?'Done':q.ok+' / '+q.n)); blk.append(h);
+      const ul=el('ul'); for(const r of s.rows){ const li=el('li'); if(r.slot&&r.lane!=='throw'&&!r.info) li.append(el('i',null,r.slot)); li.append(el('span',null,r.info?r.name:aaName(r))); const dz=r.info?(r.prog||''):aaDoseTxt(r); if(dz) li.append(el('em',null,dz)); ul.append(li) } blk.append(ul); card.append(blk) } }
+  if(moved){ const mb=el('div','aa-mvd'); mb.append(el('span',null,'This is '+aaDay(sd,{weekday:'long'})+'’s training, moved here.')); const pb=el('button',null,'Put it back'); pb.type='button'; pb.addEventListener('click',()=>aaPutBack(d)); mb.append(pb); card.append(mb) }
+  const act=el('div','aa-cda'), open=el('button','y','Open this day'); open.type='button'; open.addEventListener('click',()=>{ AVN.dk=selk; aaGo('today') }); act.append(open);
+  if(!isToday){ const mt=el('button',null,'Make this day today'); mt.type='button'; mt.addEventListener('click',()=>aaMakeToday(d,today)); act.append(mt) }
+  { const sp=el('button',null,'Swap with another day'); sp.type='button'; sp.addEventListener('click',()=>aaSwapPick(S,d,days)); act.append(sp) }
+  card.append(act); app.append(card) }
+
 // ---- the app: an opening page, and the screens behind its four squares ----
 const AASCR=['today','week','dash','chat'];
 const aaScreen=()=>{ const h=String(location.hash||'').replace('#',''); return AASCR.includes(h)?h:'home' };
 const aaTell=scr=>{ try{ window.dispatchEvent(new CustomEvent('velou-app-screen',{detail:scr==='home'?'':scr})) }catch(e){} };
-function aaGo(screen){ const S=AAS(); S.screen=screen; if(screen==='today'){ S.view='day'; S.mv='' } try{ history.pushState({aa:1},'',location.pathname+location.search+(screen==='home'?'':'#'+screen)) }catch(e){} aaTell(screen); window.scrollTo(0,0); render() }
+function aaGo(screen){ const S=AAS(); S.screen=screen; if(screen==='today'){ S.view='day'; S.mv='' } if(screen==='week') S.cal=''; try{ history.pushState({aa:1},'',location.pathname+location.search+(screen==='home'?'':'#'+screen)) }catch(e){} aaTell(screen); window.scrollTo(0,0); render() }
 function aaBack(){ if(history.state&&history.state.aa) history.back(); else aaGo('home') }
 const aaReady=()=>!((A.str.on&&!SDATA&&sLoading)||(A.pat.on&&!PAT&&pLoading));
 const AAICON={
@@ -3722,7 +3828,7 @@ function aaHome(app,S){
   for(const [id,eyebrow,name,desc,cta,col,stat] of [['dash','Progress','Athlete Dashboard','Your energy profile and scores','Open Dashboard →','#E10600',''],['today',todayEb,'Today’s Training','Today’s workout, step by step','Open Today →','#56B7E6',todayPill],['week','Calendar','Training for the Week','Your week at a glance','Open Week →','#88E0C6',''],['chat','Messages','Chat with Your Coach','Message and share video','Open Chat →','#FFFFFF','']]){
     const b=el('button','aa-tile'); b.type='button'; b.style.setProperty('--tc',col); b.setAttribute('aria-label',name);
     const eb=el('span','eb'); eb.append(el('span',null,eyebrow)); if(stat) eb.append(el('em',null,stat));
-    b.append(eb,el('b',null,name),el('span','ds',desc),el('span','cta',cta)); b.addEventListener('click',()=>aaGo(id)); tiles.append(b) }
+    b.append(eb,el('b',null,name),el('span','ds',desc),el('span','cta',cta)); b.addEventListener('click',()=>{ if(id==='today') AVN.dk=''; aaGo(id) }); tiles.append(b) }
   app.append(tiles) }
 // the screens that are not built yet say what will live there
 const AASOON={dash:['Your athlete dashboard','Your energy profile, scores and progress, laid out for your phone.'],week:['Your week at a glance','Every day of your week in a calendar: what is planned and what is done.'],chat:['Message your coach','Chat with your coach and share videos. If you both have a phone number on file, messages also reach iMessage; otherwise they stay in the app.']};
@@ -3738,6 +3844,7 @@ function aaRender(){
   app.append(aaBar(AATITLE[scr]));
   if(scr==='today') return aaToday(app,S);
   if(scr==='dash') return;   // the page shows the dashboard's own contents under this bar
+  if(scr==='week') return aaCal(app,S);
   aaSoon(app,scr) }
 
 window.addEventListener('velou-plan-change',e=>{ if(!DV||!host.isConnected||!e.detail||e.detail.src===host||!cur) return; let o=null; try{o=JSON.parse(localStorage.getItem(key())||'null')}catch(_){} if(!o) return;
