@@ -348,7 +348,7 @@ details.addfood summary { cursor: pointer; font-weight: 600; font-size: 0.88rem;
 .appbar, .wizhead, .wizbar { display: none; }
 html[data-app] .topbar, html[data-app] header.top { display: none; }
 html[data-app] .wrap { max-width: 520px; }
-html[data-app] main { padding-block: 14px 56px; }
+html[data-app] main { padding-block: 14px calc(104px + env(safe-area-inset-bottom, 0px)); }
 html[data-app] section.panel { gap: 18px; }
 html[data-app] .appbar { display: flex; position: sticky; top: 0; z-index: 30; align-items: center; gap: 8px; height: 56px; padding: 0 max(14px, env(safe-area-inset-right, 0px)) 0 max(6px, env(safe-area-inset-left, 0px)); background: rgba(0,0,0,.92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 html[data-app] .appbar .bk { flex: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; color: #fff; background: none; border: 0; cursor: pointer; text-decoration: none; }
@@ -360,7 +360,7 @@ html[data-app] nav.tabs .wrap { display: grid; grid-template-columns: 1fr 1fr; o
 html[data-app] nav.tabs button { text-align: center; padding: 12px 8px 9px; }
 html[data-app] #tab-intake, html[data-app] #tab-meals, html[data-app] #tab-prep, html[data-app] #tab-progress { display: none; }
 html[data-app][data-wiz="1"] nav.tabs { display: none; }
-html[data-app][data-wiz="1"] main { padding-bottom: 150px; }
+html[data-app][data-wiz="1"] main { padding-bottom: calc(210px + env(safe-area-inset-bottom, 0px)); }
 /* the guided assessment: one step at a time */
 html[data-app][data-wiz="1"] .wizhead { display: grid; gap: 6px; padding-bottom: 14px; }
 .wizhead h2 { font-size: 2.1rem; }
@@ -375,7 +375,7 @@ html[data-app] .typetab { padding: 8px 8px; font-size: .98rem; }
 html[data-app] .daymap { grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); }
 html[data-app] .summary { grid-template-columns: repeat(2, 1fr); }
 html[data-app] .shop-groups { grid-template-columns: 1fr; }
-html[data-app][data-wiz="1"] .wizbar { display: grid; gap: 6px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 8px max(16px, env(safe-area-inset-left, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(0,0,0,.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top: 1px solid var(--line); }
+html[data-app][data-wiz="1"] .wizbar { display: grid; gap: 6px; position: fixed; left: 0; right: 0; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); z-index: 40; padding: 8px max(16px, env(safe-area-inset-left, 0px)) 8px; background: rgba(0,0,0,.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top: 1px solid var(--line); }
 .wizbar .inner { display: flex; gap: 10px; width: 100%; max-width: 520px; margin: 0 auto; }
 .wizbar .btn { flex: 1; padding: 13px 14px; font-size: 1rem; border-radius: 10px; }
 .wizbar .btn.primary { flex: 2; }
@@ -433,6 +433,15 @@ html[data-app] .foodcat .foods, html[data-app] .foodcat details.addfood { displa
 html[data-app] .foodcat[data-open="true"] .foods { display: grid; }
 html[data-app] .foodcat[data-open="true"] details.addfood { display: block; }
 html[data-app] .foodcat { padding-top: 12px; }
+/* the bar at the bottom of every screen, the same as in the rest of the Athlete App */
+.appfoot { display: none; }
+html[data-app] .appfoot { display: grid; position: fixed; left: 50%; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; width: min(496px, calc(100% - 20px)); padding: 5px; background: rgba(20,22,24,.92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.55); }
+.appfoot a { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 58px; padding: 7px 2px 6px; border-radius: 8px; color: rgba(255,255,255,.78); text-decoration: none; }
+.appfoot a svg { width: 23px; height: 23px; }
+.appfoot a span { font: 700 10px/1 var(--body); letter-spacing: .09em; text-transform: uppercase; }
+.appfoot a.on { background: rgba(255,255,255,.14); color: #fff; }
+.appfoot .bd { position: absolute; top: 5px; left: calc(50% + 7px); min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #E10600; color: #fff; font: 700 10px/16px var(--body); font-style: normal; text-align: center; }
+.appfoot .bd[hidden] { display: none; }
 @media (pointer: coarse) { html[data-app] input, html[data-app] select, html[data-app] textarea { font-size: 16px; } }
 </style>
 </head>
@@ -631,6 +640,8 @@ html[data-app] .foodcat { padding-top: 12px; }
 </main>
 
 <div class="wizbar" id="wizBar"><div class="wizmsg" id="wizMsg" role="status"></div><div class="inner"><button class="btn" id="wizBack" type="button">Back</button><button class="btn primary" id="wizNext" type="button">Next</button></div></div>
+
+<nav class="appfoot" id="appFoot" aria-label="Main"><a data-k="dash" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12.5" rx="1.6"/><path d="M8.5 20.5h7M12 16.5v4"/><path d="M6.8 12.8l3-3 2.4 2.2 4.2-4.4" stroke-width="1.5"/></svg><span>Dashboard</span></a><a data-k="train" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.6" r="1.7"/><path d="M12 6.9v6.1"/><path d="M12 13l-2.4 7.2M12 13l2.4 7.2"/><path d="M12 8.2 9.2 13.8M12 8.2 14.8 13.8"/><path d="M4 13.8h16"/><rect x="2.2" y="10.8" width="2.4" height="6" rx=".7"/><rect x="19.4" y="10.8" width="2.4" height="6" rx=".7"/></svg><span>Training</span></a><a class="on" data-k="nut" href="#" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8.2c-1.3-1.5-3.3-2.1-5-1.2-2.5 1.3-3 4.7-1.6 8 1.3 3 3.2 5.2 5 5.2.8 0 1-.4 1.6-.4s.8.4 1.6.4c1.8 0 3.7-2.2 5-5.2 1.4-3.3.9-6.7-1.6-8-1.7-.9-3.7-.3-5 1.2Z"/><path d="M12 8.2c0-2.2.9-3.9 2.6-4.9"/></svg><span>Nutrition</span></a><a data-k="chat" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16a1.2 1.2 0 0 1 1.2 1.2v9.6A1.2 1.2 0 0 1 20 17h-8.2l-4.6 3.6V17H4a1.2 1.2 0 0 1-1.2-1.2V6.2A1.2 1.2 0 0 1 4 5Z"/><circle cx="8.2" cy="11" r=".6" fill="currentColor"/><circle cx="12" cy="11" r=".6" fill="currentColor"/><circle cx="15.8" cy="11" r=".6" fill="currentColor"/></svg><i class="bd" hidden></i><span>Chat</span></a></nav>
 
 <div id="printDoc" aria-hidden="true"></div>
 
@@ -2110,6 +2121,9 @@ html[data-app] .foodcat { padding-top: 12px; }
     $("appMe").textContent = ini; document.title = "Nutrition · VeloU";
     $("appBack").href = "/athlete-management/athlete/?" + (Q.get("id") ? "id=" + encodeURIComponent(Q.get("id")) + "&" : "") + "athlete=" + encodeURIComponent(ANAME) + "&app=1#home";
     $("tab-shop").firstChild.nodeValue = "Shopping list";
+    var base = "/athlete-management/athlete/?" + (Q.get("id") ? "id=" + encodeURIComponent(Q.get("id")) + "&" : "") + "athlete=" + encodeURIComponent(ANAME) + "&app=1";
+    document.querySelectorAll("#appFoot a").forEach(function (a) { var k = a.dataset.k; a.href = k === "dash" ? base + "#dash" : k === "train" ? base + "#today" : k === "chat" ? base + "#chat" : "#"; if (k === "nut") a.addEventListener("click", function (e) { e.preventDefault(); wizTop(); }); });
+    if (Q.get("id")) fetch("/api/v1/athletes/" + encodeURIComponent(Q.get("id")) + "/messages?after=2147483647&limit=1", { credentials: "same-origin", headers: { Accept: "application/json" } }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { var n = j && j.unread && j.unread.athlete || 0, b = document.querySelector("#appFoot .bd"); if (b && n > 0) { b.textContent = n > 9 ? "9+" : String(n); b.hidden = false; } }).catch(function () {});
     var bf = $("in-bf").closest("label").querySelector("span"); if (bf) bf.textContent = "Body fat % (a best guess is fine)";
     if (W.step === 0 && !S.profile.doneAt) W.step = 1;
     appChrome();
