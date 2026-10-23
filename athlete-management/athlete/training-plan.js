@@ -3908,7 +3908,7 @@ function aaToday(app,S){
   for(const s of m.secs){ const bl={s,units:[]}; for(const g of avGroups(s.rows)){ if(g.ss) bl.units.push({id:'g:'+s.l+':'+g.L,ss:true,L:g.L,rows:g.rows,lane:s.l}); else for(const r of g.rows) bl.units.push({id:r.key,ss:false,rows:[r],lane:s.l}) } blocks.push(bl); units.push(...bl.units) }
   if(S.dk!==m.dk){ S.dk=m.dk; S.open={}; S.blk={}; S.ins={}; S.init=false }
   if(!S.init){ S.init=true; const nx=aaNext(m,units); if(nx) S.open[nx.u.id]=true;
-    for(const bl of blocks) if(bl.units.every(u=>u.rows.every(r=>aaExStat(m,r).done))) S.blk[bl.s.l]=true }
+    for(const bl of blocks) S.blk[bl.s.l]=true }   // a day opens with every section (prep, patterning, throwing, lifting) collapsed
   const REG={last:avTotals(m).done};
 
   if(miss) app.append(aaNote('Part of your program did not load','Reload the page to try again.'));
