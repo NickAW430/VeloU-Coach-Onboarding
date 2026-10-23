@@ -3,7 +3,7 @@
 // The Player Report page asks this Worker for Google Sheet data instead of calling Google
 // directly, so the sheet IDs never appear in the public repo or in the page.
 //
-// Route:      coachesvelou.com/api/sheets*   (the Cloudflare Access app already covers the hostname)
+// Route:      velou.coach/api/sheets*   (the Cloudflare Access app already covers the hostname)
 // Secrets:    SHEET_ATHLETES, SHEET_TRACKMAN, SHEET_INSEASON   (the three Google Sheet IDs)
 // Variables:  TEAM_DOMAIN  e.g. velouniversity.cloudflareaccess.com
 //             POLICY_AUD   the Application Audience (AUD) tag of the Access application

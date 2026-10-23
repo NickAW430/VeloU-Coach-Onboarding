@@ -1,11 +1,11 @@
 // VeloU API (Cloudflare Worker + D1). Stores athletes, assessments and measurements.
 //
-// Route:      coachesvelou.com/api/v1/*   (the Cloudflare Access app already covers the hostname)
+// Route:      velou.coach/api/v1/*   (the Cloudflare Access app already covers the hostname)
 // Bindings:   DB            the D1 database (schema in schema.sql)
 //             FILES         the R2 bucket for photos, videos and reports
 // Variables:  TEAM_DOMAIN   e.g. velouniversity.cloudflareaccess.com
 //             POLICY_AUD    the Application Audience (AUD) tag of the Access application
-//             ALLOWED_ORIGIN  optional, defaults to https://coachesvelou.com (writes must come from this origin)
+//             ALLOWED_ORIGIN  optional, defaults to https://velou.coach (writes must come from this origin; several can be listed, comma separated)
 //
 // Cloudflare Access blocks anyone who is not signed in before a request reaches here. The Worker checks the
 // Access token again, and uses the email inside it to know which coach is acting.
@@ -1462,8 +1462,9 @@ export default {
 
       // Writes must come from the site itself, so another website cannot post using a signed-in coach's cookie.
       if (request.method !== 'GET' && request.method !== 'HEAD') {
-        const allowed = env.ALLOWED_ORIGIN || 'https://coachesvelou.com';
-        if (request.headers.get('Origin') !== allowed) throw new HttpError(403, 'bad origin');
+        // one address, or several separated by commas (e.g. https://velou.coach,https://velou.training)
+        const allowed = (env.ALLOWED_ORIGIN || 'https://velou.coach').split(',').map((o) => o.trim());
+        if (!allowed.includes(request.headers.get('Origin'))) throw new HttpError(403, 'bad origin');
       }
 
       const coach = await currentCoach(env, token.email);

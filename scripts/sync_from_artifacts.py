@@ -164,7 +164,7 @@ def fix_subpage_home_links(html: str) -> str:
     )
 
 
-SITE_URL = "https://coachesvelou.com"
+SITE_URL = "https://velou.coach"
 SHARE_IMAGE = SITE_URL + "/assets/og-image.png"
 
 

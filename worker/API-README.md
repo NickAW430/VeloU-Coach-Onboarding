@@ -22,13 +22,13 @@ It is separate from `sheets-proxy.js`, which keeps feeding the Player Report fro
    - R2 bucket: variable name exactly `FILES`, choose `velou-files`.
 5. **Add the two variables** (type **Text**, the same values the sheets Worker uses):
    - `TEAM_DOMAIN` = `velouniversity.cloudflareaccess.com`
-   - `POLICY_AUD` = the Application Audience (AUD) tag from Zero Trust -> Access -> Applications -> `coachesvelou.com`.
-6. **Route it.** Worker -> Settings -> Domains & Routes -> Add -> Route: `coachesvelou.com/api/v1/*`, zone `coachesvelou.com`.
+   - `POLICY_AUD` = the Application Audience (AUD) tag from Zero Trust -> Access -> Applications -> `velou.coach`.
+6. **Route it.** Worker -> Settings -> Domains & Routes -> Add -> Route: `velou.coach/api/v1/*`, zone `velou.coach`.
    Turn off the `workers.dev` URL.
 
 ## Check it
-- Signed in, open https://coachesvelou.com/api/v1/me. It should show your coach record (email, id, role).
-- Open https://coachesvelou.com/api/v1/athletes. It should show `{"athletes":[],...}`.
+- Signed in, open https://velou.coach/api/v1/me. It should show your coach record (email, id, role).
+- Open https://velou.coach/api/v1/athletes. It should show `{"athletes":[],...}`.
 - In a private window the same address should send you to the sign-in page, not return data.
 
 ## Routes (all JSON)
@@ -83,6 +83,6 @@ tab. The preview does not mark the coaches' messages as read, because no athlete
 own routes will send and read as the athlete, and a text-message bridge will write rows with `channel = 'imessage'`.
 
 ## Notes
-- Writes only work from https://coachesvelou.com (the Worker checks the `Origin`), so another website cannot post with a coach's login.
+- Writes only work from https://velou.coach (the Worker checks the `Origin`), so another website cannot post with a coach's login.
 - No secrets live in this repo. The AUD tag and the database binding are set in Cloudflare.
 - The athlete portal on the other site will need its own athlete login and its own routes. Coach access and athlete access should stay separate.

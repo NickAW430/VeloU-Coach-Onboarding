@@ -1,7 +1,7 @@
 # Player Report data proxy (Cloudflare Worker)
 
 `sheets-proxy.js` is the only thing that knows the Google Sheet IDs. The Player Report page calls
-`/api/sheets` on coachesvelou.com, and this Worker fetches the data from Google. The IDs live as
+`/api/sheets` on velou.coach, and this Worker fetches the data from Google. The IDs live as
 Cloudflare secrets, never in this repo.
 
 ## Set it up (about 15 minutes, in the Cloudflare dashboard)
@@ -20,15 +20,15 @@ Cloudflare secrets, never in this repo.
 3. **Add the two variables** (type **Text**):
    - `TEAM_DOMAIN` = `velouniversity.cloudflareaccess.com`
    - `POLICY_AUD`  = the Application Audience (AUD) tag. Zero Trust -> Access -> Applications ->
-     `coachesvelou.com` -> Edit -> Overview -> copy "Application Audience (AUD) Tag".
+     `velou.coach` -> Edit -> Overview -> copy "Application Audience (AUD) Tag".
 4. **Route it.** Worker -> Settings -> Domains & Routes -> Add -> Route:
-   route `coachesvelou.com/api/sheets*`, zone `coachesvelou.com`. Turn off the `workers.dev` URL.
-5. **Publish the site** (commit and push the repo), then open https://coachesvelou.com/player-report/
+   route `velou.coach/api/sheets*`, zone `velou.coach`. Turn off the `workers.dev` URL.
+5. **Publish the site** (commit and push the repo), then open https://velou.coach/player-report/
    after signing in.
 
 ## Check it
 - Signed in, the Player Report loads an athlete with scores and pitches.
-- In a private window, `https://coachesvelou.com/api/sheets?src=athletes` asks you to sign in instead of
+- In a private window, `https://velou.coach/api/sheets?src=athletes` asks you to sign in instead of
   returning data.
 
 ## Hardening later
