@@ -23,6 +23,19 @@ export const EXTRA_TESTS = [
     pose: { elev: 90, plane: 0, er: 120, elbow: 90 }, arrow: { from: ['F', 0, -20, 0], dir: [0, 0, 1], text: 'Passive ER to end range' },
     steps: ['Same position: supine, 90° abduction, elbow at 90°.', 'Stabilise the shoulder blade and rotate the forearm back toward the table.', 'Measure at end range. Stop at the first firm resistance.'],
     pos: 'Throwers typically show more ER on the throwing side.', sug: 'Added ER is normal (retroversion). Total arc (ER + IR) is what you compare.', note: 'Add ER and IR for each arm. The difference between arms is the number that matters.' },
+
+  { id: 'slp-120', cat: 'Stretch', name: 'Sleeper stretch at 120°', targets: ['infraspinatus', 'teres-minor', 'deltoid-post'], ligs: ['ighl-p'],
+    pose: { elev: 120, plane: 0, er: -50, elbow: 90 }, arrow: { from: ['F', 0, -20, 0], dir: [0, 0, -1], text: 'Press forearm toward the table (IR)' },
+    steps: ['Side-lying on the throwing side, trunk rolled slightly back so the table holds the shoulder blade.', 'Upper arm at 120° of abduction from the side, elbow at 90°, forearm pointing up.', 'The other hand slowly presses the forearm toward the table until the stretch builds at the back of the shoulder.'],
+    rows: [['Feel it', 'At the back of the shoulder, not the front. Note where it is strongest at this angle.'], ['Dose', 'Slow press and hold about 30 seconds, a few times at this angle. Adjust to the athlete.'], ['Stop if', 'Pinching at the front of the shoulder, pain (not stretch), tingling, or the blade rolls forward off the table.'], ['Then', 'Re-measure IR and total arc.']] },
+  { id: 'slp-90', cat: 'Stretch', name: 'Sleeper stretch at 90°', targets: ['infraspinatus', 'teres-minor', 'deltoid-post'], ligs: ['ighl-p'],
+    pose: { elev: 90, plane: 0, er: -50, elbow: 90 }, arrow: { from: ['F', 0, -20, 0], dir: [0, 0, -1], text: 'Press forearm toward the table (IR)' },
+    steps: ['Side-lying on the throwing side, trunk rolled slightly back so the table holds the shoulder blade.', 'Upper arm at 90° of abduction from the side, elbow at 90°, forearm pointing up.', 'The other hand slowly presses the forearm toward the table until the stretch builds at the back of the shoulder.'],
+    rows: [['Feel it', 'At the back of the shoulder, not the front. Note where it is strongest at this angle.'], ['Dose', 'Slow press and hold about 30 seconds, a few times at this angle. Adjust to the athlete.'], ['Stop if', 'Pinching at the front of the shoulder, pain (not stretch), tingling, or the blade rolls forward off the table.'], ['Then', 'Re-measure IR and total arc.']] },
+  { id: 'slp-60', cat: 'Stretch', name: 'Sleeper stretch at 60°', targets: ['infraspinatus', 'teres-minor', 'deltoid-post'], ligs: ['ighl-p'],
+    pose: { elev: 60, plane: 0, er: -50, elbow: 90 }, arrow: { from: ['F', 0, -20, 0], dir: [0, 0, -1], text: 'Press forearm toward the table (IR)' },
+    steps: ['Side-lying on the throwing side, trunk rolled slightly back so the table holds the shoulder blade.', 'Upper arm at 60° of abduction from the side, elbow at 90°, forearm pointing up.', 'The other hand slowly presses the forearm toward the table until the stretch builds at the back of the shoulder.'],
+    rows: [['Feel it', 'At the back of the shoulder, not the front. Note where it is strongest at this angle.'], ['Dose', 'Slow press and hold about 30 seconds, a few times at this angle. Adjust to the athlete.'], ['Stop if', 'Pinching at the front of the shoulder, pain (not stretch), tingling, or the blade rolls forward off the table.'], ['Then', 'Re-measure IR and total arc.']] },
 ];
 const ALL_TESTS = [...LAB_TESTS, ...EXTRA_TESTS];
 
@@ -87,7 +100,7 @@ export function testStage(root, ids, opts = {}) {
   const stage = h('div', { class: 'stage', style: `--c:${color}` }), panel = h('div', { class: 'vpanel', style: `--c:${color}` });
   root.append(stage, panel);
   const tip = tooltip(stage), ro = stageReadout(stage), tools = stageTools(stage);
-  stageHint(stage, 'Pick a test · drag to rotate');
+  stageHint(stage, opts.hint || 'Pick a test · drag to rotate');
   const list = h('div', { class: 'list' }), detail = h('div', { class: 'vcard' });
   const btns = tests.map(t => {
     const b = h('button', { class: 'item', type: 'button' }, h('span', { class: 'sw-c' }), h('span', null, t.name));
@@ -101,7 +114,7 @@ export function testStage(root, ids, opts = {}) {
     btns.forEach((b, i) => b.classList.toggle('on', tests[i] === t));
     detail.replaceChildren(h('h3', null, t.name),
       h('ol', null, ...t.steps.map(s => h('li', null, s))),
-      kv([['Positive if', t.pos], ['Suggests', t.sug], ['Keep in mind', t.note]]),
+      kv(t.rows || [['Positive if', t.pos], ['Suggests', t.sug], ['Keep in mind', t.note]]),
       h('div', { class: 'btns' }, t.positive ? posBtn : null, t.sweep ? sweepBtn : null,
         h('button', { class: 'btn', type: 'button', onclick: () => place(t) }, '↺ Reset position')));
     if (V) place(t);

@@ -384,12 +384,15 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
 <section class="blk">
   <span class="num">05 · What to do</span>
   <h2>Restore the arc, support the scapula, watch the load</h2>
+  <h3>The sleeper stretch at three angles</h3>
+  <p style="color:var(--muted);font-size:16px">Pick an angle and the model takes the arm position. Changing the angle moves the stretch to a different part of the posterior shoulder. The glowing band is the posterior capsule. In the real stretch the athlete is side-lying and the table holds the shoulder blade.</p>
+  <div class="vis" id="v-th-slp"></div>
   <div class="two">
     <div class="card">
       <h3>Adjust today</h3>
       <ul class="tight">
         <li><b>Measure ROM before and after</b> a session. Is the drop recovering by the next day?</li>
-        <li>Cross-body stretch with the scapula held, and a gentle sleeper stretch (stay out of pinching; stop if it hurts at the front)</li>
+        <li><b>Sleeper stretch at three angles:</b> 120°, 90° and 60° of abduction (see the model above). Find where it's tight and spend the time there.</li>
         <li>Soft-tissue work on the back of the shoulder (ball or manual release) before throwing</li>
         <li>If velocity or command fade late, <b>cut the volume</b> before you chase mechanics</li>
         <li>Keep the arm warm and the scapula engaged in the throwing warm-up</li>
@@ -422,7 +425,7 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
   <div class="card live">
     <ul class="tight">
       <li>Measure ER and IR on a partner, both arms, and calculate total arc. Do your numbers agree with a second measurer?</li>
-      <li>Compare cross-body reach on both sides. Where does the stretch feel?</li>
+      <li>Do the sleeper stretch on a partner at 120°, 90° and 60° of abduction. Where does each angle bring the stretch on?</li>
       <li>Watch a partner raise their arms from behind. Spot protraction or winging.</li>
       <li>Scenario: a pitcher has 20° less IR but a matching total arc, and feels fine. What do you do? What changes if the total arc is 10° down and the back hurts?</li>
       <li>Write down one question you'd want answered before the session.</li>
@@ -522,7 +525,7 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
 </script>
 <script type="module">
 // 3D visuals load only for the case on screen (each one is a live WebGL view).
-import { muscleStage, testStage, clearanceStage, rotatorStage, syndromeStage, romCalc } from './embed.js?v=3';
+import { muscleStage, testStage, clearanceStage, rotatorStage, syndromeStage, romCalc } from './embed.js?v=6';
 
 const WR_MUSCLES = [
   { name: 'Serratus anterior', sub: 'The main driver of upward rotation', ids: ['serratus'], view: 'lat', pose: { elev: 120, plane: 40, er: 30, elbow: 0 },
@@ -566,7 +569,7 @@ const TH_MUSCLES = [
   { name: 'Posterior deltoid', sub: 'Joins the stiffness', ids: ['deltoid-post'], view: 'post', pose: { elev: 90, plane: 0, er: 90, elbow: 90 },
     job: 'Extends and horizontally abducts the arm.',
     here: 'It shares the tight posterior tissue and loads in follow-through.',
-    look: 'Back-of-shoulder tightness that shows up in cross-body stretch.' },
+    look: 'Back-of-shoulder tightness that shows up in the sleeper stretch.' },
   { name: 'Serratus and lower trap', sub: 'Keep the socket under the ball', ids: ['serratus', 'trapezius-lower'], view: 'post', pose: { elev: 90, plane: 0, er: 90, elbow: 90 },
     job: 'Position the shoulder blade so the socket meets the ball through the whole throw.',
     here: 'If they\'re weak or late, the blade drifts forward and tips, and the back of the shoulder takes more load.',
@@ -618,6 +621,7 @@ function initCase(id) {
   } else {
     muscleStage(document.getElementById('v-th-mus'), TH_MUSCLES, { color: 'var(--green)' });
     testStage(document.getElementById('v-th-test'), ['rom-ir', 'rom-er', 'pimp', 'reloc', 'sat'], { color: 'var(--green)' });
+    testStage(document.getElementById('v-th-slp'), ['slp-120', 'slp-90', 'slp-60'], { color: 'var(--green)', hint: 'Pick an angle · drag to rotate' });
     romCalc(document.getElementById('v-th-calc'));
   }
 }
