@@ -1,0 +1,58 @@
+/* Visuals for the Team Ed shoulder cases. Scoped to .vis so it can't touch the portal styles.
+   Stage, label and control looks are borrowed from the Shoulder Lab (shoulder/shoulder.css). */
+:root{--panel-2:#231E1A;--faint:#766B63;--lime:#D4F57A;--cool:#7EB6FF;--amber:#E0C04A;--teal:#59D2C0;--label:"Barlow",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.vis{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,1fr);gap:14px;align-items:start}
+@media (max-width:860px){.vis{grid-template-columns:1fr}}
+.vis .stage{position:relative;border:1px solid var(--line);background:radial-gradient(120% 90% at 50% 20%,#241c17 0%,#14100d 70%);aspect-ratio:4/3.3;min-height:360px;overflow:hidden;touch-action:pan-y}
+.vis .stage canvas{display:block;width:100%;height:100%;cursor:grab}
+.vis .stage canvas:active{cursor:grabbing}
+.vis .stage .hint{position:absolute;left:12px;bottom:10px;font-family:var(--label);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);pointer-events:none}
+.vis .stage .tools{position:absolute;top:10px;left:10px;right:10px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.vis .stage .tools>*{pointer-events:auto}
+.vis .stage .readout{position:absolute;right:10px;bottom:10px;background:rgba(16,13,11,.82);border:1px solid var(--line);padding:8px 12px;font-family:var(--label);font-size:15px;letter-spacing:.04em;max-width:62%}
+.vis .stage .readout b{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.02em}
+.vis .stage.loading::after{content:"Loading anatomy…";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-size:15px}
+.vis .lbl-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.vis .lbl{position:absolute;left:0;top:0;white-space:nowrap}
+.vis .lbl span{position:absolute;transform:translate(10px,-50%);background:rgba(16,13,11,.88);border:1px solid var(--red);color:var(--text);font-family:var(--label);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:13px;padding:2px 8px}
+.vis .lbl i{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--red);transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(225,6,0,.28)}
+.vis .lbl.lime span{border-color:var(--lime)}.vis .lbl.lime i{background:var(--lime);box-shadow:0 0 0 4px rgba(212,245,122,.25)}
+.vis .lbl.dim span{border-color:var(--line);color:var(--muted)}.vis .lbl.dim i{background:var(--faint);box-shadow:none}
+.vis .vpanel{display:grid;gap:10px;align-content:start}
+.vis .btns{display:flex;flex-wrap:wrap;gap:6px}
+.vis .btn{font-family:var(--label);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;background:var(--panel-2);color:var(--text);border:1px solid var(--line);padding:7px 12px;cursor:pointer;line-height:1.1;display:inline-block;text-decoration:none}
+.vis .btn:hover{border-color:var(--muted);background:var(--panel-2)}
+.vis .btn.ghost{background:rgba(16,13,11,.78)}
+.vis .btn.sm{padding:5px 9px;font-size:12.5px}
+.vis .btn.on{background:var(--c,var(--red));border-color:var(--c,var(--red));color:#101010}
+.vis .list{display:grid;gap:6px}
+.vis .item{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;text-align:left;background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:9px 12px;cursor:pointer;font-family:var(--body);font-size:15.5px}
+.vis .item:hover{border-color:var(--muted)}
+.vis .item.on{border-color:var(--c,var(--red));background:#2a1d1b}
+.vis .item .sw-c{width:12px;height:12px;border-radius:50%;background:var(--c,var(--red))}
+.vis .item small{display:block;color:var(--muted);font-size:13.5px;line-height:1.3}
+.vis .vcard{background:var(--panel);border:1px solid var(--line);padding:14px 16px;display:grid;gap:8px}
+.vis .vcard h3{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.01em;text-transform:uppercase;margin:0;color:var(--text)}
+.vis .vcard p{margin:0;color:var(--muted);font-size:15.5px}
+.vis .vcard ol{margin:0;padding-left:20px;display:grid;gap:3px;color:var(--muted);font-size:15.5px}
+.vis .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:15.5px;margin:0}
+.vis .kv dt{font-family:var(--label);text-transform:uppercase;letter-spacing:.1em;font-size:12.5px;color:var(--faint);padding-top:3px}
+.vis .kv dd{margin:0;color:var(--text)}
+.vis .sl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.vis .sl label{font-family:var(--label);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.vis .sl output{font-family:var(--label);font-weight:700;font-size:16px;font-variant-numeric:tabular-nums}
+.vis .sl input[type=range]{grid-column:1/-1;width:100%;max-width:none;height:28px;margin:0;padding:0;border:0;background:none;accent-color:var(--red)}
+.vis .sl .ends{grid-column:1/-1;display:flex;justify-content:space-between;font-family:var(--label);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:-6px}
+.vis .sw{display:flex;align-items:center;gap:10px;font-family:var(--label);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:14px;color:var(--muted);cursor:pointer}
+.vis .sw input{accent-color:var(--red);width:18px;height:18px}
+
+/* total arc calculator */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.calc{grid-template-columns:1fr}}
+.calc .vcard label{font:600 13px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;gap:4px}
+.calc input[type=number]{max-width:none}
+.calc .out{grid-column:1/-1;border-left:3px solid var(--c,var(--green))}
+.calc .out b{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:.02em}
+.bar{position:relative;height:22px;background:var(--bg);border:1px solid var(--line);margin-top:2px}
+.bar i{position:absolute;top:0;bottom:0;left:0;background:var(--c,var(--blue));opacity:.85}
+.bar span{position:absolute;left:8px;top:0;line-height:22px;font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#101010}
