@@ -36,6 +36,10 @@ export const EXTRA_TESTS = [
     pose: { elev: 60, plane: 0, er: -50, elbow: 90 }, arrow: { from: ['F', 0, -20, 0], dir: [0, 0, -1], text: 'Press forearm toward the table (IR)' },
     steps: ['Side-lying on the throwing side, trunk rolled slightly back so the table holds the shoulder blade.', 'Upper arm at 60° of abduction from the side, elbow at 90°, forearm pointing up.', 'The other hand slowly presses the forearm toward the table until the stretch builds at the back of the shoulder.'],
     rows: [['Feel it', 'At the back of the shoulder, not the front. Note where it is strongest at this angle.'], ['Dose', 'Slow press and hold about 30 seconds, a few times at this angle. Adjust to the athlete.'], ['Stop if', 'Pinching at the front of the shoulder, pain (not stretch), tingling, or the blade rolls forward off the table.'], ['Then', 'Re-measure IR and total arc.']] },
+  { id: 'ir-str', cat: 'Strength', name: 'Resisted IR at the side', targets: ['subscapularis', 'pec-major-stern', 'latissimus'],
+    pose: { elev: 0, plane: 40, er: -10, elbow: 90 }, arrow: { from: ['F', 0, -22, 0], dir: [1, 0, 0], space: 'arm', text: 'Push toward ER' },
+    steps: ['Elbow tucked at the side, bent 90°, towel roll if available.', 'Athlete turns the forearm in against your hand at the wrist.', 'Look at strength, pain, and how long they can hold. Do the same for resisted ER and compare.'],
+    pos: 'Weaker or more painful than the other arm, or ER is much weaker than IR on the throwing side.', sug: 'Internal rotators drive acceleration. The relationship between ER and IR strength matters more than either alone.', note: 'In the research we reviewed, ER and IR strength tracked velocity better than range of motion did. Compare both sides and re-test across the season.' },
 ];
 const ALL_TESTS = [...LAB_TESTS, ...EXTRA_TESTS];
 
@@ -266,7 +270,8 @@ export function rotatorStage(root) {
 }
 
 /* ---------------- downward-rotation patterns: see it, clear it, prep for it ---------------- */
-export function syndromeStage(root, items) {
+export function syndromeStage(root, items, opts = {}) {
+  const rotators = opts.rotators !== false;
   let V = null, cur = items[0], elevV = 0, showMus = true;
   const stage = h('div', { class: 'stage' }), panel = h('div', { class: 'vpanel' }), detail = h('div', { class: 'vcard syn', style: 'grid-column:1/-1' });
   root.append(stage, panel, detail);
@@ -274,7 +279,7 @@ export function syndromeStage(root, items) {
   stageHint(stage, 'Back view · drag to rotate');
   const bs = items.map(it => { const b = h('button', { class: 'btn', type: 'button' }, it.short); b.addEventListener('click', () => { cur = it; apply(); }); return b; });
   const el = slider({ label: 'Elevate the arm', min: 0, max: 160, value: 0, onInput: v => { elevV = v; apply(); } });
-  const mus = toggle('Show upward (green) and downward (red) rotators', true, on => { showMus = on; apply(); });
+  const mus = toggle(rotators ? 'Show upward (green) and downward (red) rotators' : 'Show the short (red) and weak (green) muscles', true, on => { showMus = on; apply(); });
   const note = h('p', null, '');
   panel.append(h('div', { class: 'vcard' }, h('h3', null, 'Pick a pattern'), h('div', { class: 'btns' }, ...bs), el.el, mus.el, note));
   const col = (c, t, arr) => h('div', { style: `border-top:3px solid ${c};padding-top:6px` }, h('div', { class: 'cap', style: `color:${c}` }, t), h('ul', null, ...arr.map(i => h('li', null, i))));
@@ -285,7 +290,7 @@ export function syndromeStage(root, items) {
         cur.img ? h('img', { src: cur.img, alt: cur.name + ' example', loading: 'lazy' }) : null,
         h('div', null, h('div', { class: 'cap' }, 'What you see'), h('ul', null, ...cur.look.map(i => h('li', null, i)))),
         h('div', null, h('div', { class: 'cap' }, 'How to clear it'), h('ul', null, ...cur.clear.map(i => h('li', null, i))))),
-      h('div', { class: 'syn4' }, col('#E5534B', 'Inhibit · short', cur.inh), col('#A6E84A', 'Activate · weak', cur.act), col('#D4F57A', 'Prep before pressing', cur.use), col('#E0C04A', 'Watch out for', cur.watch)));
+      h('div', { class: 'syn4' }, col('#E5534B', 'Inhibit · short', cur.inh), col('#A6E84A', 'Activate · weak', cur.act), col('#D4F57A', opts.useLabel || 'Prep before pressing', cur.use), col('#E0C04A', 'Watch out for', cur.watch)));
     note.textContent = cur.note || '';
     bs.forEach((b, i) => b.classList.toggle('on', items[i] === cur));
   }
@@ -295,7 +300,8 @@ export function syndromeStage(root, items) {
     const r = V.rig;
     r.resetMuscles(); r.resetLigs();
     r.muscleDefs.forEach(d => {
-      const up = showMus && UP_IDS.includes(d.id), dn = showMus && DOWN_IDS.includes(d.id);
+      const upIds = rotators ? UP_IDS : (cur.actIds || []), dnIds = rotators ? DOWN_IDS : (cur.inhIds || []);
+      const up = showMus && upIds.includes(d.id), dn = showMus && dnIds.includes(d.id);
       r.setMuscle(d.id, { visible: showMus, opacity: up || dn ? 1 : 0.12, glow: up || dn ? 0.5 : 0, ...(up ? { color: UP_COL } : dn ? { color: DOWN_COL } : {}) });
     });
     r.showContext && r.showContext(false);
@@ -381,6 +387,60 @@ export function arcStage(root) {
     detach() { V = null; ov = null; },
   });
   render();
+}
+
+/* ---------------- the throw, phase by phase ---------------- */
+export function throwStage(root, phases) {
+  let V = null, cur = phases[0], playing = false;
+  const stage = h('div', { class: 'stage' }), panel = h('div', { class: 'vpanel' });
+  root.append(stage, panel);
+  const tip = tooltip(stage), tools = stageTools(stage);
+  stageHint(stage, 'Pick a phase or play the throw · drag to rotate');
+  const list = h('div', { class: 'list' }), detail = h('div', { class: 'vcard' });
+  const btns = phases.map((p, i) => {
+    const b = h('button', { class: 'item', type: 'button' }, h('span', { class: 'sw-c' }), h('span', null, (i + 1) + '. ' + p.name));
+    b.addEventListener('click', () => { playing = false; select(p, 700); }); list.append(b); return b;
+  });
+  const playBtn = h('button', { class: 'btn', type: 'button' }, '▶ Play the throw');
+  panel.append(h('div', { class: 'btns' }, playBtn), list, detail);
+  function select(p, ms) {
+    cur = p;
+    btns.forEach((b, i) => b.classList.toggle('on', phases[i] === p));
+    detail.replaceChildren(h('h3', null, p.name), kv([['What\'s happening', p.what], ['What it loads', p.loads], ['Look for', p.look]]));
+    if (!V) return;
+    const r = V.rig;
+    applyStyles(r, p.ids || [], 0.2);
+    showLigs(r, p.ligs);
+    tweenPose(V, { ...REST, ...p.pose }, ms);
+    V.invalidate();
+  }
+  playBtn.addEventListener('click', () => {
+    if (!V) return;
+    playing = true; let i = 0;
+    const next = () => {
+      if (!playing || i >= phases.length) { playing = false; return; }
+      const p = phases[i++]; cur = p;
+      btns.forEach((b, k) => b.classList.toggle('on', phases[k] === p));
+      detail.replaceChildren(h('h3', null, p.name), kv([['What\'s happening', p.what], ['What it loads', p.loads], ['Look for', p.look]]));
+      applyStyles(V.rig, p.ids || [], 0.2); showLigs(V.rig, p.ligs);
+      tweenPose(V, { ...REST, ...p.pose }, p.ms || 900, null, () => setTimeout(next, 450));
+    };
+    tweenPose(V, { ...REST, elev: 30, plane: 0, er: 0, elbow: 90 }, 500, null, next);
+  });
+  mountStage(stage, {
+    view: 'obl',
+    attach(v) {
+      V = v;
+      baseline(v, { muscles: true, lig: false, left: false, bone: 0.8 });
+      v.onFrame = null;
+      tools.replaceChildren(...viewBtns(v));
+      hoverTips(v, tip);
+      v.setView({ pos: [100, 28, 125], tgt: [36, -2, -2] }, 0);
+      select(cur, 1);
+    },
+    detach() { V = null; },
+  });
+  select(phases[0], 1);
 }
 
 /* ---------------- ROM calculator (throwing) ---------------- */
