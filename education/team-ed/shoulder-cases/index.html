@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
 <link rel="stylesheet" href="/assets/portal.css?v=2">
-<link rel="stylesheet" href="vis.css?v=1">
+<link rel="stylesheet" href="vis.css?v=2">
 <script type="importmap">{"imports":{"three":"/shoulder/vendor/three.module.min.js"}}</script>
 <style>
 .wrap{max-width:900px}
@@ -210,7 +210,28 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
 </section>
 
 <section class="blk">
-  <span class="num">05 · What to do</span>
+  <span class="num">05 · Clear it</span>
+  <h2>Is a downward rotator holding them back?</h2>
+  <div class="card">
+    <p>Before you blame the cuff, ask whether the blade can turn up at all. Three common patterns park the shoulder blade in some level of <b>downward rotation</b>: <b>military posture</b>, <b>scapular depression</b>, and <b>scapular downward rotation</b> itself. Each limits overhead movement a little differently, so the prep for each is different. Pick a pattern below to see it on the model, how to tell if it's the thing in the way, and how to prepare for pressing around it.</p>
+  </div>
+  <div class="vis" id="v-wr-syn"></div>
+  <h3>The clearing routine (about two minutes)</h3>
+  <div class="card">
+    <ol class="tight" style="list-style:decimal;padding-left:22px">
+      <li><b>Baseline.</b> Pick one number to beat: the angle where the pinch starts, the height the athlete can reach overhead, or pain on a 0–10 scale during an empty-bar press.</li>
+      <li><b>Look.</b> Standing, from behind and from the side. Which pattern is closest?</li>
+      <li><b>Test.</b> Watch the blade as they raise both arms. Run the scapular assistance test. Check thoracic rotation and push-up plus for military posture.</li>
+      <li><b>Prep.</b> 30–60 seconds to calm the short muscles, then 5–8 slow reps to wake up the weak ones (the lists above).</li>
+      <li><b>Retest the same baseline.</b> Better means the downward rotators or the posture were in the way, and you now have your prep for the day. No change means look elsewhere: thoracic extension, the cuff, the joint itself.</li>
+    </ol>
+  </div>
+  <div class="callout"><b>Keep it honest:</b> posture on its own doesn't tell you who will hurt, and a quiet shoulder isn't proof of a healthy one. What matters is whether the prep changes how the athlete moves and feels right now. If pain doesn't change, or any referral flag from the last section is present, stop and refer.</div>
+  <div class="links"><a href="/shoulder/#s8">Lab: scapular and humeral syndromes</a><a href="/shoulder/#s7">Lab: posture</a></div>
+</section>
+
+<section class="blk">
+  <span class="num">06 · What to do</span>
   <h2>Keep them training, change what bothers them</h2>
   <div class="two">
     <div class="card">
@@ -238,14 +259,14 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
 </section>
 
 <section class="blk">
-  <span class="num">06 · Check yourself</span>
+  <span class="num">07 · Check yourself</span>
   <h2>Four quick questions</h2>
   <div id="quiz-wr" class="blk" style="padding:0"></div>
   <div class="score" id="score-wr" aria-live="polite"></div>
 </section>
 
 <section class="blk">
-  <span class="num">07 · Bring to the live session</span>
+  <span class="num">08 · Bring to the live session</span>
   <h2>What we'll do together</h2>
   <div class="card live">
     <ul class="tight">
@@ -501,7 +522,7 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
 </script>
 <script type="module">
 // 3D visuals load only for the case on screen (each one is a live WebGL view).
-import { muscleStage, testStage, clearanceStage, rotatorStage, romCalc } from './embed.js?v=2';
+import { muscleStage, testStage, clearanceStage, rotatorStage, syndromeStage, romCalc } from './embed.js?v=3';
 
 const WR_MUSCLES = [
   { name: 'Serratus anterior', sub: 'The main driver of upward rotation', ids: ['serratus'], view: 'lat', pose: { elev: 120, plane: 40, er: 30, elbow: 0 },
@@ -560,12 +581,38 @@ const TH_MUSCLES = [
     look: 'Deep, vague pain at the top or back of the shoulder in layback.' },
 ];
 
+const SYNDROMES = [
+  { short: 'Military posture', name: 'Military posture', noLeft: true,
+    pose: { kyph: 18, fwd: 0, prot: -0.9, scapTilt: 5, er: 6, shrug: -1.4 },
+    note: 'In this model the whole trunk is posed, so there is no normal side to compare to.',
+    look: ['Chest up, shoulders pulled back and down, a flat upper back', 'Lower ribs flare and the upper chest rises when they breathe', 'Looks "good" standing, but the blade is fixed back and the arm goes overhead with little glide'],
+    clear: ['Seated thoracic rotation: a flat upper back rotates poorly, often with a side-bend instead', 'Push-up plus or serratus punch: the blade is hard to protract', 'Raise both arms: ribs flare, the low back arches, the blade barely glides forward', 'Retest after the prep: does the reach or the pinch improve?'],
+    inh: ['Rhomboids', 'Latissimus dorsi', 'Middle and lower trapezius, if they\'re held tight'], act: ['Serratus anterior', 'Pec minor (length, not strength)'],
+    use: ['Thoracic flexion and rotation: cat-camel, quadruped rock-back, open book', 'Scapular protraction: push-up plus, serratus punch, wall slide with reach', 'Ribs-down breathing (90/90)', 'Press with a soft setup: let the blades protract and turn up, and reach to the ceiling'],
+    watch: ['The "chest up, shoulders back and down" cue right before overhead work', 'Heavy rows or retraction work straight before pressing'] },
+  { short: 'Scapular depression', name: 'Scapular depression', img: '/onboarding/assets/shoulder/depression.jpg',
+    pose: { shrug: -2.4, gain: 0.75 },
+    look: ['Long neck, shoulders low, and the top corner of the blade below the level of T2', 'Rhomboids and levator usually aren\'t short here', 'Lat dominance gets in the way of elevation'],
+    clear: ['Active-assisted scapular elevation: does the reach or the pain change?', 'The upper trap doesn\'t lift the shoulder as the arm goes up', 'Supine flexion to 180° with ribs down stops short', 'Retest after the prep'],
+    inh: ['Pectoralis minor', 'Latissimus dorsi', 'Pectoralis major'], act: ['Upper trapezius', 'Middle trapezius', 'Levator scapulae'],
+    use: ['Wall-assisted flexion', 'Quadruped moves', 'Wall slide variations', 'Landmine press', 'Overhead carry'],
+    watch: ['Heavy carries and frequent heavy deadlifts drag the blade down', 'Heavy pull-ups and chin-ups in the same week', 'Prone trap raises that add depression'] },
+  { short: 'Downward rotation', name: 'Scapular downward rotation', img: '/onboarding/assets/shoulder/downward-rotation.jpg',
+    pose: { scapUp: -9, shrug: -0.8, gain: 0.45 },
+    look: ['The lower end of the blade sits closer to the spine than the upper end', 'Shoulders sit lower at the acromion than at the neck'],
+    clear: ['As the arm rises past about 30° out to the side or 60° forward, the blade turns back down instead of continuing up', 'The lower tip of the blade doesn\'t reach the side of the ribcage at the top', 'The arm stops short at the end of the raise', 'Scapular assistance test eases it'],
+    inh: ['Rhomboids', 'Levator scapulae', 'Pec minor', 'Latissimus dorsi', 'Deltoid'], act: ['Upper trapezius', 'Lower trapezius', 'Serratus anterior'],
+    use: ['Vertical shrugs', 'Quadruped moves', 'Wall slide variations', 'Landmine press', 'Shoulder flexion'],
+    watch: ['Heavy carries', 'Frequent deadlifting', 'Pull-ups and chin-ups', 'Too much scapular pinching (adduction)'] },
+];
+
 const done = {};
 function initCase(id) {
   if (done[id]) return; done[id] = true;
   if (id === 'wr') {
     clearanceStage(document.getElementById('v-wr-gap'));
     rotatorStage(document.getElementById('v-wr-rot'));
+    syndromeStage(document.getElementById('v-wr-syn'), SYNDROMES);
     muscleStage(document.getElementById('v-wr-mus'), WR_MUSCLES, { color: 'var(--blue)' });
     testStage(document.getElementById('v-wr-test'), ['arc', 'sat', 'hawk', 'neer', 'rer'], { color: 'var(--blue)' });
   } else {
