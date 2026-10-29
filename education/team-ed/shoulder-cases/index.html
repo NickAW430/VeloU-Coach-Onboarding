@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Team Ed: two shoulder cases from the floor. Start with what you see, work back to the anatomy, confirm with tests, and know what to do.">
+<title>Shoulder Cases · Team Ed · VeloU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/portal.css?v=2">
+<style>
+.wrap{max-width:900px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.tab{background:transparent;color:var(--muted);border:1px solid var(--line);padding:10px 16px;font:700 13px var(--body);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;text-align:left}
+.tab small{display:block;font-weight:500;letter-spacing:.02em;text-transform:none;font-size:14px;color:var(--muted);margin-top:2px}
+.tab:hover{border-color:#fff;color:#fff}
+.tab[aria-selected=true]{border-color:var(--c);color:#fff;background:var(--panel)}
+.tab[aria-selected=true] small{color:var(--muted)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-block:6px 0}
+.how div{background:var(--panel);border:1px solid var(--line);padding:14px 16px;font-size:15px;color:var(--muted)}
+.how b{display:block;color:var(--text);font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+@media (max-width:640px){.how{grid-template-columns:1fr}}
+.case{display:none;--c:var(--blue)}
+.case.on{display:block}
+.case.throw{--c:var(--green)}
+.blk{padding-block:34px 4px;display:grid;gap:14px}
+.num{font:700 13px var(--body);letter-spacing:.14em;color:var(--c);text-transform:uppercase}
+.blk h2{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.6vw,34px);text-transform:uppercase;line-height:1.08;margin:0}
+.blk h3{font:700 13px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:6px 0 0}
+.card{background:var(--panel);border:1px solid var(--line);padding:18px 20px;display:grid;gap:10px}
+.card.scn{border-left:3px solid var(--c);font-size:18px}
+.card.scn em{color:var(--text);font-style:normal;font-weight:600}
+ul.tight{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--muted);max-width:70ch}
+ul.tight b,.card p b{color:var(--text)}
+.card p{color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+details.deep{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--c);padding:12px 16px}
+details.deep summary{cursor:pointer;font:700 13px var(--body);letter-spacing:.12em;text-transform:uppercase}
+details.deep[open] summary{margin-bottom:10px}
+details.deep p,details.deep li{color:var(--muted);font-size:16px}
+details.deep ul{margin:6px 0 0;padding-left:20px;display:grid;gap:4px}
+table{width:100%;border-collapse:collapse;font-size:15.5px}
+th{font:700 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid rgba(53,45,40,.6);vertical-align:top;color:var(--muted)}
+td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+.tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line)}
+@media (max-width:640px){td:first-child{white-space:normal}}
+.test{display:grid;gap:4px;border-top:1px solid var(--line);padding-top:10px}
+.test:first-child{border-top:0;padding-top:0}
+.test b{font-size:16px}
+.test span{color:var(--muted);font-size:15.5px}
+.test .pos{color:var(--text)}
+.callout{background:var(--panel);border-left:3px solid var(--red);padding:14px 18px;color:var(--muted)}
+.callout b{color:var(--text)}
+.refer{border-left-color:#FF8A3D}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.links a{font:600 13px var(--body);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:6px 12px;color:var(--muted);text-decoration:none;background:var(--panel)}
+.links a:hover{border-color:#fff;color:#fff}
+.q{background:var(--panel);border:1px solid var(--line);padding:16px 18px;display:grid;gap:10px}
+.q .qt{font-weight:600;font-size:17px;line-height:1.4}
+.q .qn{font:700 12px var(--body);letter-spacing:.14em;color:var(--c);text-transform:uppercase}
+.q .why{display:none;font-size:15.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
+.q.done .why{display:block}
+.q.done .opt{cursor:default}
+.opt.right{border-color:var(--green)}
+.opt.wrong{border-color:var(--red)}
+.score{font:700 14px var(--body);letter-spacing:.06em;color:var(--muted);min-height:20px}
+.live li{margin-bottom:4px}
+footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;font-size:14px;color:#766B63;max-width:70ch}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="homebar">
+  <a class="homelink" href="/education/team-ed/">← Team Ed</a>
+  <a class="homelink" href="/education/">Education</a>
+</div>
+
+<header>
+  <div class="crumbs"><span class="chip">Education</span><span class="chip">Team Ed</span><span class="chip on">Shoulder Cases</span></div>
+  <h1>Shoulder Cases</h1>
+  <p class="lede">We start with what you see on the floor, then work back to the anatomy that explains it, how to confirm it, and what to do about it. Read both cases before the live session (about 10 minutes each). Then we'll put hands on each other and work through scenarios.</p>
+  <div class="tabs" role="tablist" aria-label="Choose a case">
+    <button class="tab" role="tab" id="t-wr" aria-controls="wr" aria-selected="true" style="--c:var(--blue)">Weight room<small>The pinchy press</small></button>
+    <button class="tab" role="tab" id="t-th" aria-controls="th" aria-selected="false" style="--c:var(--green)">Throwing floor<small>The tight back of the shoulder</small></button>
+  </div>
+</header>
+
+<section style="padding-block:24px 0">
+  <div class="how">
+    <div><b>Every case</b>See it → find the structure → confirm → act.</div>
+    <div><b>Need to know / Go deeper</b>Everyone reads the first layer. Open "Go deeper" if you want more.</div>
+    <div><b>Scope</b>We screen, modify training, and refer. We don't diagnose. Education only.</div>
+  </div>
+</section>
+
+<!-- ============================ CASE 1: WEIGHT ROOM ============================ -->
+<main>
+<article class="case on" id="wr" role="tabpanel" aria-labelledby="t-wr">
+
+<section class="blk">
+  <span class="num">01 · On the floor</span>
+  <h2>The pinchy press</h2>
+  <div class="card scn">
+    <p>Your athlete is pressing overhead. The bar comes off the rack fine, but around the middle of the press something catches. <em>"It's pinchy on the side of my shoulder."</em> At the top it eases off. Lowering the bar, it pinches again on the way down.</p>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h3>What you see and hear</h3>
+      <ul class="tight">
+        <li>Pain on the side or front of the shoulder, usually between about <b>60° and 120°</b> of raising the arm (a "painful arc")</li>
+        <li>Worse with overhead press, lateral raises, upright rows, and sometimes wide-grip bench</li>
+        <li>Aches at night, especially lying on that side</li>
+        <li>Hard to reach behind the back or overhead on that side</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>How athletes compensate</h3>
+      <ul class="tight">
+        <li><b>Shrugging</b> to get the arm up (upper trap takes over)</li>
+        <li><b>Arching the low back</b> and flaring the ribs to fake overhead range</li>
+        <li>Bar drifts forward, elbows flare, or the press turns into an incline bench</li>
+        <li>Shortening the range, or avoiding overhead entirely</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="num">02 · What's going on</span>
+  <h2>A crowded space under the roof of the shoulder</h2>
+  <div class="card">
+    <p>Raise your arm and the top of the humerus has to pass under a bony roof (the <b>acromion</b>). Between them sit the <b>supraspinatus tendon</b>, the <b>subacromial bursa</b>, and part of the <b>biceps tendon</b>. The gap is only about a centimeter. When the shoulder blade doesn't rotate up enough, or the rotator cuff doesn't hold the ball centered, that gap gets tighter and those tissues take a beating, especially at mid-range where the space is smallest.</p>
+    <p><b>The takeaway:</b> pain here is usually a load problem: tissues asked to do more than they've been prepared for, in a position where the space is tight. It is rarely just "one bad muscle."</p>
+  </div>
+  <details class="deep">
+    <summary>Go deeper: why the name keeps changing</summary>
+    <p>You'll hear "impingement," "subacromial pain," "rotator cuff tendinopathy," and "rotator cuff–related shoulder pain." Current thinking prefers the last one. The tendon is often irritated by load, and it isn't always being pinched. The tests we use can't tell these apart reliably, which is why we cluster them, and why the treatment answer is usually the same: manage load, restore the movement, and build capacity.</p>
+  </details>
+</section>
+
+<section class="blk">
+  <span class="num">03 · The anatomy</span>
+  <h2>Who's involved</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Structure</th><th>Normal job</th><th>In this case</th></tr></thead>
+    <tbody>
+      <tr><td>Supraspinatus</td><td>Cuff muscle; helps start raising the arm and keeps the ball in the socket</td><td>Tendon runs right under the acromion. Most commonly irritated.</td></tr>
+      <tr><td>Subacromial bursa</td><td>Cushion that lets the tendon glide</td><td>Gets compressed and irritated when the space narrows.</td></tr>
+      <tr><td>Acromion and coracoacromial arch</td><td>Bony and ligament roof over the joint</td><td>Doesn't move. The arm and scapula have to move around it.</td></tr>
+      <tr><td>Infraspinatus, teres minor, subscapularis</td><td>The rest of the cuff; pull the ball down and in as the arm rises</td><td>If weak or fatigued, the ball rides up and the space closes.</td></tr>
+      <tr><td>Serratus anterior, lower and upper trap</td><td>Rotate the shoulder blade upward so the socket faces the ceiling</td><td>If late or weak, the acromion doesn't clear out of the way.</td></tr>
+      <tr><td>Thoracic spine and rib cage</td><td>Extend so the shoulder blade has a platform to ride on</td><td>A stiff upper back forces the shoulder and low back to compensate.</td></tr>
+      <tr><td>Biceps (long head) tendon</td><td>Runs through the joint and over the head of the humerus</td><td>Often irritated alongside the supraspinatus.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="links">
+    <a href="/shoulder/#s3">Lab: the rotator cuff</a>
+    <a href="/shoulder/#s2">Lab: motion of the shoulder</a>
+    <a href="/shoulder/#s8">Lab: scapular syndromes</a>
+  </div>
+  <details class="deep">
+    <summary>Go deeper: the scapulohumeral rhythm</summary>
+    <p>For every 3° of arm elevation, about 2° comes from the glenohumeral joint and 1° from the scapula rotating upward. That rhythm is what keeps the acromion out of the way. Look from behind while the athlete raises the arm: a shoulder blade that shrugs early, winds up late, or tips forward (anterior tilt) is changing the size of the space.</p>
+    <ul>
+      <li><b>Upper trap dominance</b> shows as an early shrug.</li>
+      <li><b>Serratus or lower trap weakness</b> shows as less upward rotation and a prominent inferior angle.</li>
+      <li><b>Tight pec minor and lats</b> pull the scapula forward and down, so the arm can't get overhead cleanly.</li>
+    </ul>
+  </details>
+</section>
+
+<section class="blk">
+  <span class="num">04 · Confirm it</span>
+  <h2>A short cluster, not one test</h2>
+  <div class="card">
+    <div class="test"><b>Painful arc</b><span>Athlete raises the arm out to the side (or in the scapular plane) and back down.</span><span class="pos"><b>Positive:</b> pain mostly through the middle range (about 60–120°), easier at the start and end.</span></div>
+    <div class="test"><b>Hawkins–Kennedy</b><span>Arm at 90° forward, elbow bent. Examiner gently rotates the forearm down (internal rotation).</span><span class="pos"><b>Positive:</b> pain at the front or side of the shoulder.</span></div>
+    <div class="test"><b>Neer</b><span>Examiner holds the scapula and passively raises the arm in the scapular plane with the arm turned in.</span><span class="pos"><b>Positive:</b> pain at the end of the raise.</span></div>
+    <div class="test"><b>Resisted external rotation at the side</b><span>Elbow at the side, bent 90°. Athlete pushes out against your hand.</span><span class="pos"><b>Positive:</b> pain or weakness compared to the other side.</span></div>
+  </div>
+  <div class="callout"><b>How much to trust them:</b> Hawkins and Neer are sensitive but not specific. Plenty of front-of-shoulder problems hurt in those positions. Painful arc, Hawkins–Kennedy, and weak or painful resisted external rotation <b>together</b> tell you much more than any one alone. If the cluster is negative but the athlete is still sore, keep looking (neck, AC joint, biceps, instability).</div>
+  <div class="links"><a href="/shoulder/#s10">Lab: manual testing with live models</a></div>
+</section>
+
+<section class="blk">
+  <span class="num">05 · What to do</span>
+  <h2>Keep them training, change what bothers them</h2>
+  <div class="two">
+    <div class="card">
+      <h3>Adjust today</h3>
+      <ul class="tight">
+        <li>Stay <b>pain-free to mild</b> and settling within a day. Don't push through sharp pain.</li>
+        <li>Press in the <b>scapular plane</b> (arm slightly in front of the body) instead of straight out to the side</li>
+        <li>Swap strict overhead for <b>landmine press</b> or a high-incline press with neutral grip</li>
+        <li>Narrow the bench grip, use a floor press or board press, and cut depth if the painful range is the bottom</li>
+        <li>Drop volume and pause upright rows and lateral-raise volume above 90°</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Build over the next weeks</h3>
+      <ul class="tight">
+        <li><b>Load the cuff</b> progressively. Start with isometric external rotation at the side if movement hurts.</li>
+        <li><b>Serratus and lower trap:</b> wall slides, push-up plus, scapular-plane raises</li>
+        <li><b>Thoracic extension and rotation</b> work. Restore overhead without the low-back arch.</li>
+        <li>Soften what's tight: pec minor, lats, posterior shoulder</li>
+        <li>Reassess in 1–2 weeks: arc, strength, and how overhead feels</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout refer"><b>Stop and refer</b> to the athletic trainer, physical therapist, or physician if any of these show up: pain after a fall or sudden "pop"; can't lift the arm; a clear drop in strength; numbness or tingling into the hand; neck pain that reproduces the arm symptoms; pain that wakes them up every night; fever, swelling, or deformity; chest pain or shortness of breath with arm pain (call emergency services); no change after a couple of weeks of sensible changes.</div>
+</section>
+
+<section class="blk">
+  <span class="num">06 · Check yourself</span>
+  <h2>Four quick questions</h2>
+  <div id="quiz-wr" class="blk" style="padding:0"></div>
+  <div class="score" id="score-wr" aria-live="polite"></div>
+</section>
+
+<section class="blk">
+  <span class="num">07 · Bring to the live session</span>
+  <h2>What we'll do together</h2>
+  <div class="card live">
+    <ul class="tight">
+      <li>Palpate the acromion, the greater tubercle, and the scapular spine on a partner</li>
+      <li>Run the painful arc and the resisted ER test on each other. What does a positive feel like?</li>
+      <li>Watch a partner raise their arms from behind. Spot early shrug, winging, and low-back arch.</li>
+      <li>Scenario: an athlete has "pinchy" shoulder and a 3-week hypertrophy block with overhead press. What do you change and what don't you?</li>
+      <li>Write down one question you'd want answered before the session.</li>
+    </ul>
+  </div>
+</section>
+
+</article>
+
+<!-- ============================ CASE 2: THROWING FLOOR ============================ -->
+<article class="case throw" id="th" role="tabpanel" aria-labelledby="t-th">
+
+<section class="blk">
+  <span class="num">01 · On the floor</span>
+  <h2>The tight back of the shoulder</h2>
+  <div class="card scn">
+    <p>A pitcher is three weeks into the throwing program. Velocity is down a couple of ticks late in the session, and command fades in the last 15 throws. <em>"My shoulder's tight in the back, and I can't get it to loosen up."</em> Sleeping on that side is uncomfortable. Their arm feels late through the layback.</p>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h3>What you see and hear</h3>
+      <ul class="tight">
+        <li>Achy or tight <b>back of the shoulder</b> that doesn't settle after throwing</li>
+        <li>Less <b>internal rotation</b> than the other arm, and often less cross-body reach</li>
+        <li>Velocity or command slips as the session goes on</li>
+        <li>Arm feels late, heavy, or "stuck" at the top of layback</li>
+        <li>Shoulder blade sits forward and tipped on the throwing side</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>How athletes compensate</h3>
+      <ul class="tight">
+        <li>Lean the trunk to the glove side or open early to get the arm through</li>
+        <li>Lay the arm back too far (horizontal abduction) to find range</li>
+        <li>Rush the arm, leaving the lower body behind</li>
+        <li>Lose follow-through length</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="num">02 · What's going on</span>
+  <h2>A shifted arc is normal. A smaller arc is the flag.</h2>
+  <div class="card">
+    <p>Years of throwing reshape the shoulder. The humerus twists back (<b>retroversion</b>), so throwers gain external rotation and lose internal rotation <b>without losing total motion</b>. That's an adaptation, and it isn't the problem. The problem is a tight <b>posterior capsule and cuff</b> that shrinks the <b>total arc</b>. Then the ball glides forward and up, the scapula protracts to make up for it, and the back of the shoulder takes more load.</p>
+    <p><b>The takeaway:</b> don't chase internal rotation alone. Compare <b>total arc</b> (ER + IR) on both sides.</p>
+  </div>
+  <details class="deep">
+    <summary>Go deeper: what the numbers mean</summary>
+    <ul>
+      <li><b>IR deficit</b> (non-throwing IR minus throwing IR) beyond about 18–20° is the traditional "GIRD" flag.</li>
+      <li><b>Total arc deficit</b> of about 5° or more compared to the other arm is the number that matters more.</li>
+      <li>These are thresholds that get your attention, not diagnoses. The athlete's own baseline beats population numbers.</li>
+      <li>Range drops after throwing and recovers. It matters when it stays down day after day.</li>
+      <li>In youth players, the growth plate of the upper arm is a weak link. Pain there gets referred (see below).</li>
+    </ul>
+  </details>
+</section>
+
+<section class="blk">
+  <span class="num">03 · The anatomy</span>
+  <h2>Who's involved</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Structure</th><th>Normal job</th><th>In this case</th></tr></thead>
+    <tbody>
+      <tr><td>Posterior capsule</td><td>Passive restraint at the back of the joint; slows the ball down in follow-through</td><td>Thickens and tightens with repeated throwing. Limits IR and cross-body reach.</td></tr>
+      <tr><td>Infraspinatus and teres minor</td><td>Rotate the arm out; brake internal rotation at release</td><td>Absorb the highest eccentric load in the body. Tight and fatigued by late session.</td></tr>
+      <tr><td>Posterior deltoid</td><td>Extends and horizontally abducts the arm</td><td>Joins the posterior tissue stiffness.</td></tr>
+      <tr><td>Humeral retroversion (bone)</td><td>Twist of the humeral head relative to the elbow</td><td>Shifts the arc toward ER. Not trainable after growth, so we don't stretch it.</td></tr>
+      <tr><td>Scapular stabilizers (serratus, lower trap)</td><td>Position the socket under the ball through the whole throw</td><td>Weak or late stabilizers let the scapula drift forward (protract) and tip.</td></tr>
+      <tr><td>Posterior-superior labrum and cuff undersurface</td><td>Stabilize and cushion the ball at late cocking</td><td>Contact and strain here at full layback is the "internal impingement" pattern.</td></tr>
+      <tr><td>Trunk, thoracic spine, hips</td><td>Create most of the energy before the arm</td><td>Poor rotation or stride-leg control sends more demand to the shoulder.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="links">
+    <a href="/shoulder/#s9">Lab: what throwing does</a>
+    <a href="/shoulder/#s8">Lab: scapular syndromes</a>
+    <a href="/shoulder/#s3">Lab: the rotator cuff</a>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="num">04 · Confirm it</span>
+  <h2>Measure both sides, then check the scapula</h2>
+  <div class="card">
+    <div class="test"><b>ER and IR range, both arms</b><span>Athlete lies on their back, arm at 90° out, elbow bent 90°. Hold the shoulder blade still with one hand and rotate with the other. Measure the angle at end range with a goniometer or phone level. Same person, same method, both sides.</span><span class="pos"><b>Look for:</b> total arc (ER + IR) smaller than the other arm by about 5° or more, or an IR deficit that keeps growing.</span></div>
+    <div class="test"><b>Cross-body reach (horizontal adduction)</b><span>Arm at 90° forward, scapula held. Bring the arm across the chest. Measure the distance from the elbow to the opposite side.</span><span class="pos"><b>Look for:</b> a clear difference from the other side.</span></div>
+    <div class="test"><b>Scapular dyskinesis test</b><span>Athlete raises and lowers the arm with light weights. Watch from behind.</span><span class="pos"><b>Positive:</b> winging, early shrug, or uneven motion compared to the other side.</span></div>
+    <div class="test"><b>Posterior impingement sign and relocation</b><span>Arm laid back at 90°/90° (the cocked position). Examiner adds gentle pressure forward, then a posterior hold.</span><span class="pos"><b>Positive:</b> deep back-of-shoulder pain that eases with the hold. Some contact is normal in throwers. Reproducing their pain is the point.</span></div>
+  </div>
+  <div class="callout"><b>Careful:</b> these are screening tools. Pain with the layback tests, a clicking or catching shoulder, or any instability feeling moves this from "screen and manage" to "refer."</div>
+  <div class="links">
+    <a href="/shoulder/#s10">Lab: manual testing with live models</a>
+    <a href="/shoulder/#s9">Lab: ROM calculator</a>
+  </div>
+</section>
+
+<section class="blk">
+  <span class="num">05 · What to do</span>
+  <h2>Restore the arc, support the scapula, watch the load</h2>
+  <div class="two">
+    <div class="card">
+      <h3>Adjust today</h3>
+      <ul class="tight">
+        <li><b>Measure ROM before and after</b> a session. Is the drop recovering by the next day?</li>
+        <li>Cross-body stretch with the scapula held, and a gentle sleeper stretch (stay out of pinching; stop if it hurts at the front)</li>
+        <li>Soft-tissue work on the back of the shoulder (ball or manual release) before throwing</li>
+        <li>If velocity or command fade late, <b>cut the volume</b> before you chase mechanics</li>
+        <li>Keep the arm warm and the scapula engaged in the throwing warm-up</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Build over the next weeks</h3>
+      <ul class="tight">
+        <li><b>Eccentric ER and cuff endurance</b> for the deceleration job</li>
+        <li><b>Serratus and lower trap</b> work to keep the socket under the ball</li>
+        <li><b>Thoracic rotation and hip mobility</b> (lead hip internal rotation) so the arm isn't doing the trunk's work</li>
+        <li>Check stride length, trunk tilt, and early opening when arm speed fades</li>
+        <li>Re-measure weekly. Total arc should stay level with the other side.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout refer"><b>Stop and refer</b> to the athletic trainer, physical therapist, or physician if: pain with throwing lasts more than a few days or keeps getting worse; a sudden "pop" or sharp pain during a throw; clicking, catching, or the arm feeling like it slips; swelling; numbness or tingling in the hand; elbow pain along with the shoulder; velocity doesn't come back after a rest block; or <b>a youth thrower with pain in the upper arm just below the shoulder</b> (possible growth-plate stress). Total arc is more than 5° smaller than the other side and not recovering.</div>
+</section>
+
+<section class="blk">
+  <span class="num">06 · Check yourself</span>
+  <h2>Four quick questions</h2>
+  <div id="quiz-th" class="blk" style="padding:0"></div>
+  <div class="score" id="score-th" aria-live="polite"></div>
+</section>
+
+<section class="blk">
+  <span class="num">07 · Bring to the live session</span>
+  <h2>What we'll do together</h2>
+  <div class="card live">
+    <ul class="tight">
+      <li>Measure ER and IR on a partner, both arms, and calculate total arc. Do your numbers agree with a second measurer?</li>
+      <li>Compare cross-body reach on both sides. Where does the stretch feel?</li>
+      <li>Watch a partner raise their arms from behind. Spot protraction or winging.</li>
+      <li>Scenario: a pitcher has 20° less IR but a matching total arc, and feels fine. What do you do? What changes if the total arc is 10° down and the back hurts?</li>
+      <li>Write down one question you'd want answered before the session.</li>
+    </ul>
+  </div>
+</section>
+
+</article>
+</main>
+
+<footer class="fine">Education and screening only, not a diagnosis. Thresholds are guides that get your attention, and an athlete's own baseline matters more than any population number. If something is painful, unstable, or numb, it goes to a clinician.</footer>
+</div>
+
+<script>
+(function(){
+  var QUIZ = {
+    wr: [
+      { q: "A lifter is pain-free at the start and end of a lateral raise, but gets a sharp pinch around the middle of the range. What does that pattern fit best?",
+        o: ["A painful arc: tissues under the acromion are irritated where the space is smallest", "A torn labrum", "A tight hamstring", "Nothing worth acting on"],
+        a: 0, why: "A painful arc through the middle of the range is the classic sign of a crowded subacromial space. It tells you where to look, not what to call it." },
+      { q: "Which result tells you more?",
+        o: ["A positive Hawkins–Kennedy alone", "A positive painful arc, positive Hawkins–Kennedy, and weak or painful resisted ER together", "A positive Neer alone", "The athlete's opinion alone"],
+        a: 1, why: "Individual shoulder tests are weak. A cluster that agrees is far more informative than any one test." },
+      { q: "A lifter has a pinchy shoulder with overhead press and has a program built around it. What's the best first adjustment?",
+        o: ["Push through it. It will warm up.", "Stop training the shoulder completely for a month", "Move to scapular-plane or landmine pressing, keep pain-free to mild, and keep loading the cuff", "Add more upright rows to strengthen the shoulder"],
+        a: 2, why: "Change the position and keep the shoulder loaded at a tolerable level. Total rest rarely helps, and pushing through a sharp pinch usually makes it worse." },
+      { q: "Which finding means stop and refer rather than modify and monitor?",
+        o: ["Mild pinch only in the top half of a press", "Tight pecs", "Sudden loss of strength after a fall, with tingling into the hand", "Soreness the day after pressing"],
+        a: 2, why: "Trauma plus a clear loss of strength or nerve symptoms (tingling) needs a clinician. The others can be managed on the floor." }
+    ],
+    th: [
+      { q: "A pitcher's throwing arm measures ER 120° and IR 35° (total 155°). The other arm is ER 100° and IR 55° (total 155°). He feels fine. What do you conclude?",
+        o: ["A 20° IR deficit means he needs stretching right away", "The arc is shifted but total motion matches: likely a normal adaptation. Monitor it.", "Something is wrong with the other shoulder", "He should stop throwing"],
+        a: 1, why: "The IR deficit matches the traditional 'GIRD' threshold, but total arc is equal, so this looks like adaptation (retroversion), not a problem. Individual baseline and symptoms matter." },
+      { q: "A different pitcher's throwing arm measures ER 105° and IR 40° (total 145°). The other arm is ER 108° and IR 55° (total 163°). The back of his shoulder aches after throwing. What now?",
+        o: ["Do nothing", "Total arc is down 18°. That's a flag: restore the arc, reduce load, and re-measure. Refer if it doesn't recover.", "Add more throwing volume to stretch it out", "Only stretch the front of the shoulder"],
+        a: 1, why: "A total arc deficit around 5° or more, with symptoms, is the flag. Reduce load, work on the posterior tissue and scapula, and re-measure." },
+      { q: "Why do we avoid trying to 'stretch out' humeral retroversion?",
+        o: ["It's bone, not soft tissue, so stretching can't change it", "Stretching is dangerous for everyone", "It only exists in adults", "It doesn't affect throwing"],
+        a: 0, why: "Retroversion is a bony adaptation that develops while the skeleton is maturing. Stretching targets the soft-tissue deficit in the total arc." },
+      { q: "A 13-year-old pitcher has pain in the upper arm just below the shoulder that gets worse with throwing. What do you do?",
+        o: ["Stretch it and keep throwing", "Cut the stretching and add weight", "Stop throwing and refer. The growth plate may be stressed.", "Wait to see if it settles in a month"],
+        a: 2, why: "Pain at the upper arm growth plate in a young thrower needs a clinician. Don't train through it." }
+    ]
+  };
+
+  function renderQuiz(key){
+    var host = document.getElementById('quiz-' + key);
+    var score = document.getElementById('score-' + key);
+    var answered = 0, right = 0, total = QUIZ[key].length;
+    QUIZ[key].forEach(function(item, i){
+      var box = document.createElement('div'); box.className = 'q';
+      var n = document.createElement('div'); n.className = 'qn'; n.textContent = 'Question ' + (i + 1);
+      var t = document.createElement('div'); t.className = 'qt'; t.textContent = item.q;
+      var opts = document.createElement('div'); opts.className = 'opts';
+      var why = document.createElement('div'); why.className = 'why'; why.textContent = item.why;
+      item.o.forEach(function(text, j){
+        var lab = document.createElement('label'); lab.className = 'opt';
+        var inp = document.createElement('input'); inp.type = 'radio'; inp.name = key + i; inp.value = j;
+        var sp = document.createElement('span'); sp.textContent = text;
+        lab.appendChild(inp); lab.appendChild(sp); opts.appendChild(lab);
+        inp.addEventListener('change', function(){
+          if (box.classList.contains('done')) return;
+          box.classList.add('done');
+          answered++;
+          var labels = opts.children;
+          for (var k = 0; k < labels.length; k++){
+            labels[k].querySelector('input').disabled = true;
+          }
+          labels[item.a].classList.add('right');
+          if (j === item.a) right++; else lab.classList.add('wrong');
+          score.textContent = answered === total
+            ? 'You got ' + right + ' of ' + total + '. Bring anything that surprised you to the live session.'
+            : answered + ' of ' + total + ' answered';
+        });
+      });
+      box.appendChild(n); box.appendChild(t); box.appendChild(opts); box.appendChild(why);
+      host.appendChild(box);
+    });
+  }
+  renderQuiz('wr'); renderQuiz('th');
+
+  var tabs = { wr: document.getElementById('t-wr'), th: document.getElementById('t-th') };
+  function show(id, push){
+    Object.keys(tabs).forEach(function(k){
+      var on = k === id;
+      tabs[k].setAttribute('aria-selected', on ? 'true' : 'false');
+      document.getElementById(k).classList.toggle('on', on);
+    });
+    if (push) { try { history.replaceState(null, '', '#' + id); } catch (e) {} }
+  }
+  tabs.wr.addEventListener('click', function(){ show('wr', true); });
+  tabs.th.addEventListener('click', function(){ show('th', true); });
+  var h = location.hash.replace('#', '');
+  if (h === 'th' || h === 'wr') show(h, false);
+})();
+</script>
+</body>
+</html>
