@@ -516,7 +516,7 @@ export function step9(host, panel, factsHost, calcHost, outHost) {
 
 /* ======================= STEP 10 · SPECIAL TESTS ======================= */
 const DOWN = [0, -1, 0], UP = [0, 1, 0], POST = [0, 0, 1], ANT = [0, 0, -1], MED = [-1, 0, 0];
-const TESTS = [
+export const TESTS = [
   // Rotator cuff
   { id: 'jobe', cat: 'Cuff', name: 'Empty can (Jobe)', targets: ['supraspinatus'],
     pose: { elev: 90, plane: 35, er: -30, elbow: 0, pron: 180 }, arrow: { from: ['F', 0, -22, 0], dir: DOWN, text: 'Resist downward' },
