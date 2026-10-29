@@ -199,6 +199,113 @@ export function clearanceStage(root) {
   });
 }
 
+/* ---------------- upward vs downward rotators ---------------- */
+const UP_IDS = ['trapezius-upper', 'trapezius-lower', 'serratus'];
+const DOWN_IDS = ['rhomboids', 'levator', 'pec-minor'];
+const UP_COL = 0xd4f57a, DOWN_COL = 0xe5534b;
+export function rotatorStage(root) {
+  let V = null, show = 'both';
+  const stage = h('div', { class: 'stage' }), panel = h('div', { class: 'vpanel' });
+  root.append(stage, panel);
+  const tip = tooltip(stage), ro = stageReadout(stage), tools = stageTools(stage);
+  stageHint(stage, 'Raise the arm · drag to rotate');
+  const el = slider({ label: 'Arm elevation', min: 0, max: 180, value: 0, ends: ['At side', 'Overhead'], onInput: () => apply() });
+  const modes = [['both', 'Both'], ['up', 'Upward rotators'], ['down', 'Downward rotators']];
+  const bs = modes.map(([id, label]) => { const b = h('button', { class: 'btn', type: 'button' }, label); b.addEventListener('click', () => { show = id; apply(); }); return b; });
+  const key = (c, t) => h('div', { class: 'sw', style: 'cursor:default' }, h('span', { style: `width:14px;height:14px;border-radius:50%;background:#${c.toString(16).padStart(6, '0')};display:inline-block` }), t);
+  panel.append(
+    h('div', { class: 'vcard' }, h('h3', null, 'Two teams, one shoulder blade'),
+      h('div', { class: 'btns' }, ...bs),
+      key(UP_COL, 'Upward rotators: upper trap, lower trap, serratus anterior'),
+      key(DOWN_COL, 'Downward rotators: rhomboids, levator scapulae, pec minor'),
+      el.el,
+      h('p', null, 'Raise the arm. The blade should turn so the socket faces up, and the green muscles do that work while the red ones have to let it happen. Lats pull the blade down through the arm too.')),
+    h('div', { class: 'vcard' },
+      h('p', null, h('b', { style: 'color:var(--text)' }, 'Why it matters here: '), 'when the red team is tight and the green team is weak or late, the blade stays down-rotated and the roof stays in the way. Fix: loosen the red, wake up the green, then train the arm overhead.')));
+  function apply() {
+    if (!V) return;
+    const r = V.rig;
+    r.resetMuscles(); r.resetLigs();
+    r.muscleDefs.forEach(d => {
+      const up = UP_IDS.includes(d.id) && show !== 'down', dn = DOWN_IDS.includes(d.id) && show !== 'up';
+      r.setMuscle(d.id, { visible: true, opacity: up || dn ? 1 : 0.12, glow: up || dn ? 0.55 : 0, ...(up ? { color: UP_COL } : dn ? { color: DOWN_COL } : {}) });
+    });
+    r.showContext && r.showContext(false);
+    r.show('muscles', true);
+    bs.forEach((b, i) => b.classList.toggle('on', modes[i][0] === show));
+    r.setPose({ ...REST, elev: el.get(), plane: 40, er: 20, elbow: 0, rhythm: true });
+    V.invalidate(); readout();
+  }
+  function readout() { if (!V) return; ro.innerHTML = `<b>${Math.round(V.rig.pose.elev)}°</b> arm · <b style="color:var(--lime)">${Math.round(V.rig.scapularUp())}°</b> blade up`; }
+  mountStage(stage, {
+    view: 'post',
+    attach(v) {
+      V = v;
+      baseline(v, { muscles: true, lig: false, left: false, bone: 0.8 });
+      tools.replaceChildren(...viewBtns(v));
+      hoverTips(v, tip);
+      v.afterRig = (prev => () => { prev && prev(); readout(); })(v.afterRig);
+      v.setView('post');
+      apply();
+    },
+    detach() { V = null; },
+  });
+}
+
+/* ---------------- downward-rotation patterns: see it, clear it, prep for it ---------------- */
+export function syndromeStage(root, items) {
+  let V = null, cur = items[0], elevV = 0, showMus = true;
+  const stage = h('div', { class: 'stage' }), panel = h('div', { class: 'vpanel' }), detail = h('div', { class: 'vcard syn', style: 'grid-column:1/-1' });
+  root.append(stage, panel, detail);
+  const tip = tooltip(stage), tools = stageTools(stage);
+  stageHint(stage, 'Back view · drag to rotate');
+  const bs = items.map(it => { const b = h('button', { class: 'btn', type: 'button' }, it.short); b.addEventListener('click', () => { cur = it; apply(); }); return b; });
+  const el = slider({ label: 'Elevate the arm', min: 0, max: 160, value: 0, onInput: v => { elevV = v; apply(); } });
+  const mus = toggle('Show upward (green) and downward (red) rotators', true, on => { showMus = on; apply(); });
+  const note = h('p', null, '');
+  panel.append(h('div', { class: 'vcard' }, h('h3', null, 'Pick a pattern'), h('div', { class: 'btns' }, ...bs), el.el, mus.el, note));
+  const col = (c, t, arr) => h('div', { style: `border-top:3px solid ${c};padding-top:6px` }, h('div', { class: 'cap', style: `color:${c}` }, t), h('ul', null, ...arr.map(i => h('li', null, i))));
+  function draw() {
+    detail.replaceChildren(
+      h('h3', null, cur.name),
+      h('div', { class: 'syn2' },
+        cur.img ? h('img', { src: cur.img, alt: cur.name + ' example', loading: 'lazy' }) : null,
+        h('div', null, h('div', { class: 'cap' }, 'What you see'), h('ul', null, ...cur.look.map(i => h('li', null, i)))),
+        h('div', null, h('div', { class: 'cap' }, 'How to clear it'), h('ul', null, ...cur.clear.map(i => h('li', null, i))))),
+      h('div', { class: 'syn4' }, col('#E5534B', 'Inhibit · short', cur.inh), col('#A6E84A', 'Activate · weak', cur.act), col('#D4F57A', 'Prep before pressing', cur.use), col('#E0C04A', 'Watch out for', cur.watch)));
+    note.textContent = cur.note || '';
+    bs.forEach((b, i) => b.classList.toggle('on', items[i] === cur));
+  }
+  function apply() {
+    draw();
+    if (!V) return;
+    const r = V.rig;
+    r.resetMuscles(); r.resetLigs();
+    r.muscleDefs.forEach(d => {
+      const up = showMus && UP_IDS.includes(d.id), dn = showMus && DOWN_IDS.includes(d.id);
+      r.setMuscle(d.id, { visible: showMus, opacity: up || dn ? 1 : 0.12, glow: up || dn ? 0.5 : 0, ...(up ? { color: UP_COL } : dn ? { color: DOWN_COL } : {}) });
+    });
+    r.showContext && r.showContext(false);
+    r.show('muscles', showMus);
+    r.show('left', !cur.noLeft);
+    V.rig.setPose({ scapUp: 0, scapTilt: 0, scapIR: 0, prot: 0, shrug: 0, gain: 1, antGlide: 0, supGlide: 0, er: 0, elbow: 20, pron: 90, kyph: 35, fwd: 0, rhythm: true, ...cur.pose, elev: elevV, plane: 40 });
+    V.invalidate();
+  }
+  mountStage(stage, {
+    view: 'post',
+    attach(v) {
+      V = v;
+      baseline(v, { muscles: true, lig: false, left: true, bone: 0.9 });
+      tools.replaceChildren(...viewBtns(v));
+      hoverTips(v, tip);
+      v.setView({ pos: [70, 12, 92], tgt: [16, 0, 2] }, 0);
+      apply();
+    },
+    detach() { V = null; },
+  });
+  draw();
+}
+
 /* ---------------- ROM calculator (throwing) ---------------- */
 export function romCalc(root) {
   const mk = (id, label, val) => h('label', null, label, h('input', { type: 'number', inputmode: 'numeric', id, value: val, min: 0, max: 200 }));

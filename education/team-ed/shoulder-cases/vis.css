@@ -56,3 +56,13 @@
 .bar{position:relative;height:22px;background:var(--bg);border:1px solid var(--line);margin-top:2px}
 .bar i{position:absolute;top:0;bottom:0;left:0;background:var(--c,var(--blue));opacity:.85}
 .bar span{position:absolute;left:8px;top:0;line-height:22px;font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:#101010}
+
+/* downward-rotation patterns */
+.syn .cap{font:700 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.syn ul{margin:0;padding-left:18px;display:grid;gap:3px;color:var(--muted);font-size:15.5px}
+.syn .syn2{display:grid;grid-template-columns:minmax(0,.8fr) 1fr 1fr;gap:16px;align-items:start}
+.syn .syn2:not(:has(img)){grid-template-columns:1fr 1fr}
+.syn .syn2 img{width:100%;max-height:240px;object-fit:contain;background:#fff;border:1px solid var(--line)}
+.syn .syn4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+@media (max-width:860px){.syn .syn2,.syn .syn2:not(:has(img)){grid-template-columns:1fr}.syn .syn4{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.syn .syn4{grid-template-columns:1fr}}
