@@ -320,6 +320,8 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
     <p>Years of throwing reshape the shoulder. The humerus twists back (<b>retroversion</b>), so throwers gain external rotation and lose internal rotation <b>without losing total motion</b>. That's an adaptation, and it isn't the problem. The problem is a tight <b>posterior capsule and cuff</b> that shrinks the <b>total arc</b>. Then the ball glides forward and up, the scapula protracts to make up for it, and the back of the shoulder takes more load.</p>
     <p><b>The takeaway:</b> don't chase internal rotation alone. Compare <b>total arc</b> (ER + IR) on both sides.</p>
   </div>
+  <h3>Try it: bone or soft tissue?</h3>
+  <div class="vis" id="v-th-arc"></div>
   <details class="deep">
     <summary>Go deeper: what the numbers mean</summary>
     <ul>
@@ -525,7 +527,7 @@ footer.fine{margin-top:44px;border-top:1px solid var(--line);padding-top:16px;fo
 </script>
 <script type="module">
 // 3D visuals load only for the case on screen (each one is a live WebGL view).
-import { muscleStage, testStage, clearanceStage, rotatorStage, syndromeStage, romCalc } from './embed.js?v=6';
+import { muscleStage, testStage, clearanceStage, rotatorStage, syndromeStage, arcStage, romCalc } from './embed.js?v=8';
 
 const WR_MUSCLES = [
   { name: 'Serratus anterior', sub: 'The main driver of upward rotation', ids: ['serratus'], view: 'lat', pose: { elev: 120, plane: 40, er: 30, elbow: 0 },
@@ -619,6 +621,7 @@ function initCase(id) {
     muscleStage(document.getElementById('v-wr-mus'), WR_MUSCLES, { color: 'var(--blue)' });
     testStage(document.getElementById('v-wr-test'), ['arc', 'sat', 'hawk', 'neer', 'rer'], { color: 'var(--blue)' });
   } else {
+    arcStage(document.getElementById('v-th-arc'));
     muscleStage(document.getElementById('v-th-mus'), TH_MUSCLES, { color: 'var(--green)' });
     testStage(document.getElementById('v-th-test'), ['rom-ir', 'rom-er', 'pimp', 'reloc', 'sat'], { color: 'var(--green)' });
     testStage(document.getElementById('v-th-slp'), ['slp-120', 'slp-90', 'slp-60'], { color: 'var(--green)', hint: 'Pick an angle · drag to rotate' });
