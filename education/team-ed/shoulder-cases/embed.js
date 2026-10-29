@@ -319,6 +319,70 @@ export function syndromeStage(root, items) {
   draw();
 }
 
+/* ---------------- bone vs soft tissue: the shifted arc (throwing) ---------------- */
+export function arcStage(root) {
+  let V = null, ov = null;
+  const S = { retro: 42, soft: 0 };
+  const ND = { retro: 30, er: 100, ir: 70 };
+  const stage = h('div', { class: 'stage' }), panel = h('div', { class: 'vpanel' });
+  root.append(stage, panel);
+  const tip = tooltip(stage), ro = stageReadout(stage), tools = stageTools(stage);
+  stageHint(stage, 'Top view of the head · drag to rotate');
+  const sRetro = slider({ label: 'Humeral retroversion · throwing arm', min: 20, max: 55, value: 42, ends: ['20°', '55°'], onInput: v => { S.retro = v; render(); } });
+  const sSoft = slider({ label: 'Posterior tissue tightness (loss of IR)', min: 0, max: 30, value: 0, onInput: v => { S.soft = v; render(); } });
+  const svg = h('div'), verdict = h('div', { class: 'vcard', style: 'border-left:3px solid var(--c,var(--green))' });
+  panel.append(h('div', { class: 'vcard' }, h('h3', null, 'Bone or soft tissue?'),
+    h('p', null, 'Both arms start with a 170° arc at 90° abduction (100° ER, 70° IR). The other arm has 30° of retroversion. Turn the throwing arm\'s retroversion up and the whole arc slides toward ER. Then add tightness and watch the total shrink.'),
+    sRetro.el, sSoft.el, svg, verdict));
+  function render() {
+    const shift = S.retro - ND.retro;
+    const er = ND.er + shift, ir = ND.ir - shift - S.soft, tot = er + ir, ndTot = ND.er + ND.ir;
+    const irDef = ND.ir - ir, arcDef = ndTot - tot;
+    const W = 500, sc = 2.2, x0 = 22;
+    const bar = (y, e, i, lab) => `<text x="${x0}" y="${y - 6}" fill="#aa9f97" font-size="13" letter-spacing="1.2">${lab.toUpperCase()}</text>
+      <rect x="${x0}" y="${y}" width="${i * sc}" height="26" fill="#7EB6FF"/><rect x="${x0 + i * sc}" y="${y}" width="${e * sc}" height="26" fill="#E5534B"/>
+      <text x="${x0 + 6}" y="${y + 18}" fill="#101418" font-size="15" font-weight="700">IR ${Math.round(i)}°</text><text x="${x0 + i * sc + 6}" y="${y + 18}" fill="#fff" font-size="15" font-weight="700">ER ${Math.round(e)}°</text>
+      <text x="${x0 + (i + e) * sc + 8}" y="${y + 18}" fill="#f1e9e4" font-size="15">${Math.round(i + e)}° total</text>`;
+    svg.innerHTML = `<svg viewBox="0 0 ${W} 140" width="100%" role="img" aria-label="Range of motion arcs for both arms">
+      ${bar(26, ND.er, ND.ir, 'Other arm (30° retro)')}${bar(88, er, ir, 'Throwing arm (' + Math.round(S.retro) + '° retro)')}</svg>`;
+    const flagA = arcDef >= 5, flagI = irDef >= 18;
+    verdict.style.setProperty('--c', flagA ? 'var(--red)' : flagI ? 'var(--amber)' : 'var(--green)');
+    verdict.replaceChildren(h('p', { style: 'color:var(--text)' }, h('b', null, `IR deficit ${Math.round(irDef)}° · total arc deficit ${Math.round(arcDef)}°. `),
+      flagA ? 'Total arc is down by about 5° or more. That is the soft tissue flag. Work on the posterior tissue and scapula, and re-measure.'
+        : flagI ? 'A big IR deficit with a matching total arc is mostly bone (retroversion). Don\'t chase the IR range.'
+          : 'Looks like a normal adaptation: the arc slid toward ER and the total matches.'));
+    const sg = x => (x > 0 ? '+' : x < 0 ? '−' : '±') + Math.abs(Math.round(x)) + '°';
+    ro.innerHTML = `ER <b style="color:var(--red)">${sg(er - ND.er)}</b> · IR <b style="color:#7EB6FF">${sg(ir - ND.ir)}</b> vs the other arm`;
+    if (V) { V.rig.setPose({ retro: S.retro }); V.invalidate(); }
+  }
+  mountStage(stage, {
+    view: 'sup',
+    attach(v) {
+      V = v;
+      baseline(v, { muscles: false, lig: false, left: false, thorax: false, bone: 0.55, pose: { elev: 0, plane: 40, er: 0, elbow: 90, retro: S.retro, rhythm: true } });
+      v.rig.setPose({ elev: 0, plane: 40, er: 0, elbow: 90, rhythm: true, retro: S.retro });
+      v.rig.update();
+      ov = new Overlay(v);
+      if (v.rig.headAxis) {
+        const hc = () => v.rig.headAxis().c;
+        const ext = (from, to) => () => { const e = v.rig.epicondyleLine(); const a = e[from], b2 = e[to]; return a.clone().sub(b2).normalize().multiplyScalar(13).add(a); };
+        ov.line([ext('m', 'l'), ext('l', 'm')], { color: 0xd9cfc8, r: 0.4 });
+        ov.line([() => hc(), () => { const hh = v.rig.headAxis(); return hh.c.clone().addScaledVector(hh.a, 20); }], { color: 0xe5534b, r: 0.55 });
+        ov.marker(hc, { color: 0xf1e9e4, r: 0.8 });
+        ov._addLabel('Line through the elbow', 'dim', () => ext('l', 'm')());
+        ov._addLabel('Head faces here', '', () => { const hh = v.rig.headAxis(); return hh.c.clone().addScaledVector(hh.a, 20); });
+      }
+      tools.replaceChildren(...viewBtns(v));
+      hoverTips(v, tip);
+      const h0 = v.rig.pt(['R', 0, 0, 0]);
+      v.setView({ pos: [h0.x + 4, h0.y + 82, h0.z + 14], tgt: [h0.x - 1, h0.y - 20, h0.z + 2] }, 0);
+      render();
+    },
+    detach() { V = null; ov = null; },
+  });
+  render();
+}
+
 /* ---------------- ROM calculator (throwing) ---------------- */
 export function romCalc(root) {
   const mk = (id, label, val) => h('label', null, label, h('input', { type: 'number', inputmode: 'numeric', id, value: val, min: 0, max: 200 }));
