@@ -199,6 +199,59 @@ export function clearanceStage(root) {
   });
 }
 
+/* ---------------- upward vs downward rotators ---------------- */
+const UP_IDS = ['trapezius-upper', 'trapezius-lower', 'serratus'];
+const DOWN_IDS = ['rhomboids', 'levator', 'pec-minor'];
+const UP_COL = 0xd4f57a, DOWN_COL = 0xe5534b;
+export function rotatorStage(root) {
+  let V = null, show = 'both';
+  const stage = h('div', { class: 'stage' }), panel = h('div', { class: 'vpanel' });
+  root.append(stage, panel);
+  const tip = tooltip(stage), ro = stageReadout(stage), tools = stageTools(stage);
+  stageHint(stage, 'Raise the arm · drag to rotate');
+  const el = slider({ label: 'Arm elevation', min: 0, max: 180, value: 0, ends: ['At side', 'Overhead'], onInput: () => apply() });
+  const modes = [['both', 'Both'], ['up', 'Upward rotators'], ['down', 'Downward rotators']];
+  const bs = modes.map(([id, label]) => { const b = h('button', { class: 'btn', type: 'button' }, label); b.addEventListener('click', () => { show = id; apply(); }); return b; });
+  const key = (c, t) => h('div', { class: 'sw', style: 'cursor:default' }, h('span', { style: `width:14px;height:14px;border-radius:50%;background:#${c.toString(16).padStart(6, '0')};display:inline-block` }), t);
+  panel.append(
+    h('div', { class: 'vcard' }, h('h3', null, 'Two teams, one shoulder blade'),
+      h('div', { class: 'btns' }, ...bs),
+      key(UP_COL, 'Upward rotators: upper trap, lower trap, serratus anterior'),
+      key(DOWN_COL, 'Downward rotators: rhomboids, levator scapulae, pec minor'),
+      el.el,
+      h('p', null, 'Raise the arm. The blade should turn so the socket faces up, and the green muscles do that work while the red ones have to let it happen. Lats pull the blade down through the arm too.')),
+    h('div', { class: 'vcard' },
+      h('p', null, h('b', { style: 'color:var(--text)' }, 'Why it matters here: '), 'when the red team is tight and the green team is weak or late, the blade stays down-rotated and the roof stays in the way. Fix: loosen the red, wake up the green, then train the arm overhead.')));
+  function apply() {
+    if (!V) return;
+    const r = V.rig;
+    r.resetMuscles(); r.resetLigs();
+    r.muscleDefs.forEach(d => {
+      const up = UP_IDS.includes(d.id) && show !== 'down', dn = DOWN_IDS.includes(d.id) && show !== 'up';
+      r.setMuscle(d.id, { visible: true, opacity: up || dn ? 1 : 0.12, glow: up || dn ? 0.55 : 0, ...(up ? { color: UP_COL } : dn ? { color: DOWN_COL } : {}) });
+    });
+    r.showContext && r.showContext(false);
+    r.show('muscles', true);
+    bs.forEach((b, i) => b.classList.toggle('on', modes[i][0] === show));
+    r.setPose({ ...REST, elev: el.get(), plane: 40, er: 20, elbow: 0, rhythm: true });
+    V.invalidate(); readout();
+  }
+  function readout() { if (!V) return; ro.innerHTML = `<b>${Math.round(V.rig.pose.elev)}°</b> arm · <b style="color:var(--lime)">${Math.round(V.rig.scapularUp())}°</b> blade up`; }
+  mountStage(stage, {
+    view: 'post',
+    attach(v) {
+      V = v;
+      baseline(v, { muscles: true, lig: false, left: false, bone: 0.8 });
+      tools.replaceChildren(...viewBtns(v));
+      hoverTips(v, tip);
+      v.afterRig = (prev => () => { prev && prev(); readout(); })(v.afterRig);
+      v.setView('post');
+      apply();
+    },
+    detach() { V = null; },
+  });
+}
+
 /* ---------------- ROM calculator (throwing) ---------------- */
 export function romCalc(root) {
   const mk = (id, label, val) => h('label', null, label, h('input', { type: 'number', inputmode: 'numeric', id, value: val, min: 0, max: 200 }));
